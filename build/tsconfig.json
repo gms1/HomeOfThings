@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "types": ["node"],
+    "rootDir": ".",
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "allowJs": true,
+    "esModuleInterop": false
+  }
+}

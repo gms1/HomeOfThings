@@ -1,0 +1,37 @@
+#!/bin/bash
+BN=$(basename "$0")
+DN=$(dirname "$0")
+. "${DN}/sh/common"
+#--------------------------------------------------------------
+
+usage() {
+  cat <<EOT
+  usage: $0 <package-name>
+EOT
+  exit 1
+}
+
+PACKAGE_NAME=$1
+
+[ -n "${PACKAGE_NAME}" ] || usage
+
+PACKAGE_DIR="ng/libs"
+PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_NAME}/package.json"
+
+CMD=( npx nx generate @nrwl/angular:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --publishable --buildable --prefix=hot --style=scss --routing=true --lazy --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
+
+echo "${CMD[@]}"
+"${CMD[@]}" || die "failed"
+
+cat >"${PACKAGE_JSON}" <<EOT
+{
+  "name": "@homeofthings/${PACKAGE_NAME}",
+  "description": "HomeOfThings - ${PACKAGE_NAME}",
+  "version": "0.0.1"
+}
+EOT
+[ $? -eq 0 ] || die "failed to create '${PACKAGE_JSON}'"
+
+"${DN}/project.ts" rename "ng-libs-${PACKAGE_NAME}" "${PACKAGE_NAME}" || exit 1
+
+succeeded

@@ -1,0 +1,14 @@
+{
+  "search.exclude": {
+    "node_modules": true,
+    ".git": true,
+    "build": true
+  },
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true,
+    ".vscode": true
+  }
+}

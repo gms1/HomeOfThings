@@ -1,0 +1,47 @@
+#!/bin/bash
+BN=$(basename "$0")
+DN=$(dirname "$0")
+. "${DN}/sh/common"
+#--------------------------------------------------------------
+
+usage() {
+  cat <<EOT
+  usage: $0 <package-name> [nest|node]
+EOT
+  exit 1
+}
+
+PACKAGE_NAME=$1
+PACKAGE_TYPE=$2
+
+[ -n "${PACKAGE_NAME}" ] || usage
+[ -z "${PACKAGE_TYPE}" -o "${PACKAGE_TYPE}" = "nest" -o "${PACKAGE_TYPE}" = "node"  ] || usage
+
+PACKAGE_DIR="node/libs"
+PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_NAME}/package.json"
+
+case "${PACKAGE_TYPE}" in
+  nest)
+    CMD=( npx nx generate @nrwl/nest:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict --global )
+    ;;
+  *)
+    PACKAGE_TYPE=node
+    CMD=( npx nx generate @nrwl/node:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
+    ;;
+esac
+
+echo "${CMD[@]}"
+"${CMD[@]}" || die "failed"
+
+cat >"${PACKAGE_JSON}" <<EOT
+{
+  "name": "@homeofthings/${PACKAGE_NAME}",
+  "description": "HomeOfThings - ${PACKAGE_NAME}",
+  "version": "0.0.1"
+}
+EOT
+[ $? -eq 0 ] || die "failed to create '${PACKAGE_JSON}'"
+
+"${DN}/project.ts" rename "node-libs-${PACKAGE_NAME}" "${PACKAGE_NAME}" || exit 1
+
+succeeded

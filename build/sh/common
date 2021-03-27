@@ -1,0 +1,14 @@
+#!/bin/bash
+
+WORKSPACE_DIR=$(realpath $(dirname "${BASH_SOURCE}")/../..);
+
+
+die() {
+  echo "ERROR: $@"
+  exit 1
+}
+
+succeeded() {
+  echo "succeeded"
+  exit 0
+}
