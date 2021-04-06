@@ -22,7 +22,11 @@
       }
     }
   },
-  "projects": {},
+  "projects": {
+    "logger": {
+      "tags": ["scope:backend"]
+    }
+  },
   "workspaceLayout": {
     "appsDir": "projects",
     "libsDir": "projects"

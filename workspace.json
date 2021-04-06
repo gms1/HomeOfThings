@@ -1,7 +1,41 @@
 {
   "version": 2,
-  "projects": {},
+  "projects": {
+    "logger": {
+      "root": "projects/node/libs/logger",
+      "sourceRoot": "projects/node/libs/logger/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["projects/node/libs/logger/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/projects/node/libs/logger"],
+          "options": {
+            "jestConfig": "projects/node/libs/logger/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/projects/node/libs/logger",
+            "tsConfig": "projects/node/libs/logger/tsconfig.lib.json",
+            "packageJson": "projects/node/libs/logger/package.json",
+            "main": "projects/node/libs/logger/src/index.ts",
+            "assets": ["projects/node/libs/logger/*.md"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nstudio/xplat"
-  }
+  },
+  "defaultProject": "api-gateway"
 }

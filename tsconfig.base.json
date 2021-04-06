@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@homeofthings/logger": ["projects/node/libs/logger/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
