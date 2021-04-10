@@ -1,0 +1,15 @@
+language: node_js
+
+node_js:
+  - 10
+  - lts/*
+  - node
+
+install:
+  - bash build/travis_install
+
+script:
+  - npm run test:ci
+
+after_script:
+  - bash build/coveralls
