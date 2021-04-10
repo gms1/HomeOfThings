@@ -18,7 +18,7 @@ PACKAGE_NAME=$1
 PACKAGE_DIR="ng/libs"
 PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_NAME}/package.json"
 
-CMD=( npx nx generate @nrwl/angular:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --publishable --buildable --prefix=hot --style=scss --routing=true --lazy --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
+CMD=( npx nx generate @nrwl/angular:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --simpleModuleName=true  --publishable --buildable --prefix=hot --style=scss --routing=true --lazy --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
 
 echo "${CMD[@]}"
 "${CMD[@]}" || die "failed"

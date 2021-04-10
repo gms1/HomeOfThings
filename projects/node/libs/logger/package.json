@@ -1,5 +1,25 @@
 {
   "name": "@homeofthings/logger",
-  "description": "HomeOfThings - logger",
-  "version": "0.0.1"
+  "description": "HomeOfThings - logger: a logger for NestJs based on winston",
+  "version": "0.0.1",
+  "keywords": [
+    "nestjs",
+    "nest",
+    "winston",
+    "logger",
+    "logging"
+  ],
+  "author": {
+    "email": "www.gms@gmx.at",
+    "name": "Guenter Sandner"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gms1/HomeOfThings.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gms1/HomeOfThings/issues"
+  },
+  "homepage": "https://github.com/gms1/HomeOfThings"
 }

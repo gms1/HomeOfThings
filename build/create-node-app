@@ -18,7 +18,7 @@ PACKAGE_NAME=$1
 PACKAGE_DIR="node/apps"
 PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_NAME}/package.json"
 
-CMD=( npx nx generate @nrwl/nest:application "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --strict )
+CMD=( npx nx generate @nrwl/nest:application "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --simpleModuleName=true  --strict )
 
 echo "${CMD[@]}"
 "${CMD[@]}" || die "failed"

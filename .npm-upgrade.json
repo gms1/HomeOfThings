@@ -1,0 +1,12 @@
+{
+  "ignore": {
+    "prettier": {
+      "versions": ">=2.0",
+      "reason": "does not preserve wrapped lines"
+    },
+    "typescript": {
+      "versions": ">=4.2",
+      "reason": "@angular/cli v11 peer dependency"
+    }
+  }
+}

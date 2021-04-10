@@ -22,11 +22,11 @@ PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_NAME}/package.j
 
 case "${PACKAGE_TYPE}" in
   nest)
-    CMD=( npx nx generate @nrwl/nest:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict --global )
+    CMD=( npx nx generate @nrwl/nest:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --simpleModuleName=true  --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict --global )
     ;;
   *)
     PACKAGE_TYPE=node
-    CMD=( npx nx generate @nrwl/node:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
+    CMD=( npx nx generate @nrwl/node:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --simpleModuleName=true  --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
     ;;
 esac
 

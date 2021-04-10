@@ -18,7 +18,7 @@ BACKEND_PROJECT_NAME=$2
 PACKAGE_DIR="ng/apps"
 PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_NAME}/package.json"
 
-CMD=( npx nx generate @nrwl/angular:application  "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --style=scss --routing=true --prefix=hot --strict )
+CMD=( npx nx generate @nrwl/angular:application  "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --simpleModuleName=true --style=scss --routing=true --prefix=hot --strict )
 [ -z "${BACKEND_PROJECT_NAME}" ] || CMD+=( --backendProject="${BACKEND_PROJECT_NAME}" )
 
 echo "${CMD[@]}"
