@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as util from 'util';
 import * as _dbg from 'debug';
 
-const debug = _dbg('build:fs');
+const debug = _dbg('build:utils:fs');
 
 export const BOM_CODE = 0xfeff;
 export const DEFAULT_INDENT = 2;
@@ -11,6 +11,7 @@ const _readFilePromised = util.promisify(fs.readFile);
 const _writeFilePromised = util.promisify(fs.writeFile);
 const _renamePromised = util.promisify(fs.rename);
 const _statPromised = util.promisify(fs.stat);
+const _unlinkPromised = util.promisify(fs.unlink);
 
 // -----------------------------------------------------------------------------------------
 export function readTextFilePromised(path: fs.PathLike | number, options: { encoding: BufferEncoding; flag?: string } | string): Promise<string> {
@@ -39,4 +40,9 @@ export function renameFilePromised(oldPath: fs.PathLike, newPath: fs.PathLike): 
 // -----------------------------------------------------------------------------------------
 export function statFilePromised(path: fs.PathLike): Promise<fs.Stats | undefined> {
   return _statPromised(path).catch((err) => undefined);
+}
+
+// -----------------------------------------------------------------------------------------
+export function unlinkPromised(path: fs.PathLike): Promise<fs.Stats | undefined> {
+  return _unlinkPromised(path).catch((err) => undefined);
 }

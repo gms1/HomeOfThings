@@ -7,7 +7,7 @@ const INDENT = 2;
 
 // -----------------------------------------------------------------------------------------
 export function setApplication(filename: string) {
-  appname = path.basename(__filename);
+  appname = path.basename(filename);
 }
 
 // -----------------------------------------------------------------------------------------
