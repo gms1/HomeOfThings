@@ -6,7 +6,7 @@ const colorizer = winston.format.colorize();
 
 // unit test should not depend on the provided terminal
 /* istanbul ignore next */
-const supportsColor = supports_color.stdout || supports_color.stderr;
+const supportsColor = (supports_color.stdout || supports_color.stderr || process.env.FORCE_COLOR) && !process.env.NO_COLORS;
 
 function fileLevelFormat(level: string) {
   return (level + ':      ').substr(0, 8);
