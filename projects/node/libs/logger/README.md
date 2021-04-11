@@ -102,20 +102,20 @@ That way, the calls to this.logger.log() from MyService would result in calls to
 
 #### console
 
-<pre>21:52:08.655 <b class=BLU>debug:  </b><b class="BOLD"></b><b class="BOLD" style="color:#00cc00;"> [Logger]</b><b class="BOLD"></b> Logger initialized
-21:52:08.917 <b class=GRN>info:   </b><b class="BOLD"></b><b class="BOLD" style="color:#3366cc;"> [NestFactory]</b><b class="BOLD"></b> Starting Nest application...
-21:52:08.931 <b class=BLU>debug:  </b><b class="BOLD"></b><b class="BOLD" style="color:#6633ff;"> [AppModule]</b><b class="BOLD"></b> AppModule created
-21:52:08.932 <b class=GRN>info:   </b><b class="BOLD"></b><b class="BOLD" style="color:#66cc00;"> [InstanceLoader]</b><b class="BOLD"></b> AppModule dependencies initialized
-21:52:08.935 <b class=BLU>debug:  </b><b class="BOLD"></b><b class="BOLD" style="color:#66cc00;"> [Application]</b><b class="BOLD"></b> Application created
-21:52:08.935 <b class=BLU>debug:  </b><b class="BOLD"></b><b class="BOLD" style="color:#66cc00;"> [Application]</b><b class="BOLD"></b> Configuration:
-21:52:08.936 <b class=BLU>debug:  </b><b class="BOLD"></b><b class="BOLD" style="color:#66cc00;"> [Application]</b><b class="BOLD"></b>   environment: development
-21:52:08.936 <b class=BLU>debug:  </b><b class="BOLD"></b><b class="BOLD" style="color:#66cc00;"> [Application]</b><b class="BOLD"></b>   directory: /home/gms/work/HOT/HomeOfThings/workspace/config
-21:52:08.942 <b class=GRN>info:   </b><b class="BOLD"></b><b class="BOLD" style="color:#ff3300;"> [RoutesResolver]</b><b class="BOLD"></b> AppController {/api}:
-21:52:08.946 <b class=GRN>info:   </b><b class="BOLD"></b><b class="BOLD" style="color:#0066cc;"> [RouterExplorer]</b><b class="BOLD"></b> Mapped {/api, GET} route
-21:52:08.948 <b class=GRN>info:   </b><b class="BOLD"></b><b class="BOLD" style="color:#3399cc;"> [NestApplication]</b><b class="BOLD"></b> Nest application successfully started
-21:52:08.956 <b class=GRN>info:   </b><b class="BOLD"></b><b class="BOLD" style="color:#66cc00;"> [Application]</b><b class="BOLD"></b> Listening on http://localhost:8080/api
+<pre>
+22:07:22.698 <b style="color: #0000aa;">debug:  </b><b style="color:#00cc00;font-weight: bold;"> [Logger]</b> Logger initialized
+22:07:22.914 <b style="color: #00aa00;">info:   </b><b style="color:#3366cc;font-weight: bold;"> [NestFactory]</b> Starting Nest application...
+22:07:22.932 <b style="color: #0000aa;">debug:  </b><b style="color:#6633ff;font-weight: bold;"> [AppModule]</b> AppModule created
+22:07:22.934 <b style="color: #00aa00;">info:   </b><b style="color:#66cc00;font-weight: bold;"> [InstanceLoader]</b> AppModule dependencies initialized
+22:07:22.937 <b style="color: #0000aa;">debug:  </b><b style="color:#66cc00;font-weight: bold;"> [Application]</b> Application created
+22:07:22.937 <b style="color: #0000aa;">debug:  </b><b style="color:#66cc00;font-weight: bold;"> [Application]</b> Configuration:
+22:07:22.938 <b style="color: #0000aa;">debug:  </b><b style="color:#66cc00;font-weight: bold;"> [Application]</b>   environment: development
+22:07:22.938 <b style="color: #0000aa;">debug:  </b><b style="color:#66cc00;font-weight: bold;"> [Application]</b>   directory: /home/gms/work/HOT/HomeOfThings/workspace/config
+22:07:22.943 <b style="color: #00aa00;">info:   </b><b style="color:#ff3300;font-weight: bold;"> [RoutesResolver]</b> AppController {/api}:
+22:07:22.947 <b style="color: #00aa00;">info:   </b><b style="color:#0066cc;font-weight: bold;"> [RouterExplorer]</b> Mapped {/api, GET} route
+22:07:22.950 <b style="color: #00aa00;">info:   </b><b style="color:#3399cc;font-weight: bold;"> [NestApplication]</b> Nest application successfully started
+22:07:22.958 <b style="color: #00aa00;">info:   </b><b style="color:#66cc00;font-weight: bold;"> [Application]</b> Listening on http://localhost:8080/api
 </pre>
-
 
 #### file
 
