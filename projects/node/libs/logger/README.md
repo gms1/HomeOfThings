@@ -6,6 +6,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/gms1/HomeOfThings/badge.svg)](https://snyk.io/test/github/gms1/HomeOfThings)
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![License](https://img.shields.io/npm/l/@homeofthings/logger.svg?style=flat-square)](./LICENSE)
 
 # HomeOfThings - Logger
 
@@ -14,7 +15,7 @@ a logging module for [NestJS](https://docs.nestjs.com/) based on [winston](https
 ## installation
 
 ```bash
-npm install @homeofthings/logger winston
+npm install @homeofthings/logger
 ```
 
 ## quick start
@@ -62,7 +63,7 @@ bootstrap();
 ### using as Nest Logger and for bootstrapping
 
 ```TypeScript
-const logger: LoggerModule.createLogger({
+const logger = LoggerModule.createLoggerService({
       // provide your options
     });
 async function bootstrap() {

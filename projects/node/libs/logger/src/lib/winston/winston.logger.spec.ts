@@ -1,3 +1,7 @@
+import * as winston from 'winston';
+import { LOGLEVEL } from '../model';
+import { WinstonLogger } from './winston-logger';
+
 jest.mock('winston', () => ({
   format: {
     printf: jest.fn(),
@@ -24,26 +28,22 @@ jest.mock('winston', () => ({
   },
 }));
 
-import * as winston from 'winston';
-import { LOGLEVEL } from '../model';
-import { WinstonLogger } from './winston-logger';
-
 describe('WinstonLogger with file logging and logLevels', () => {
   let winstonLogger: WinstonLogger;
-  let mockCreateLogger: jest.SpyInstance<winston.Logger, [options?: winston.LoggerOptions]>;
+  let spyCreateLogger: jest.SpyInstance<winston.Logger, [options?: winston.LoggerOptions]>;
 
   beforeAll(() => {
-    mockCreateLogger = jest.spyOn(winston, 'createLogger');
+    spyCreateLogger = jest.spyOn(winston, 'createLogger');
     winstonLogger = new WinstonLogger({
       consoleLogLevel: LOGLEVEL.verbose,
       fileLogFileName: 'winston.logger.spec.log',
       fileLogLevel: LOGLEVEL.verbose,
     });
-    expect(mockCreateLogger).toHaveBeenCalledTimes(1);
+    expect(spyCreateLogger).toHaveBeenCalledTimes(1);
   });
 
   beforeEach(() => {
-    mockCreateLogger.mockClear();
+    spyCreateLogger.mockClear();
   });
 
   afterAll(() => {
@@ -113,18 +113,18 @@ describe('WinstonLogger with file logging and logLevels', () => {
 
 describe('WinstonLogger with file logging and logLevels', () => {
   let winstonLogger: WinstonLogger;
-  let mockCreateLogger: jest.SpyInstance<winston.Logger, [options?: winston.LoggerOptions]>;
+  let spyCreateLogger: jest.SpyInstance<winston.Logger, [options?: winston.LoggerOptions]>;
 
   beforeAll(() => {
-    mockCreateLogger = jest.spyOn(winston, 'createLogger');
+    spyCreateLogger = jest.spyOn(winston, 'createLogger');
     winstonLogger = new WinstonLogger({
       fileLogFileName: 'winston.logger.spec.log',
     });
-    expect(mockCreateLogger).toHaveBeenCalledTimes(1);
+    expect(spyCreateLogger).toHaveBeenCalledTimes(1);
   });
 
   beforeEach(() => {
-    mockCreateLogger.mockClear();
+    spyCreateLogger.mockClear();
   });
 
   afterAll(() => {
@@ -140,18 +140,18 @@ describe('WinstonLogger with file logging and logLevels', () => {
 
 describe('WinstonLogger without file logging', () => {
   let winstonLogger: WinstonLogger;
-  let mockCreateLogger: jest.SpyInstance<winston.Logger, [options?: winston.LoggerOptions]>;
+  let spyCreateLogger: jest.SpyInstance<winston.Logger, [options?: winston.LoggerOptions]>;
 
   beforeAll(() => {
-    mockCreateLogger = jest.spyOn(winston, 'createLogger');
+    spyCreateLogger = jest.spyOn(winston, 'createLogger');
     winstonLogger = new WinstonLogger({
       consoleLogLevel: LOGLEVEL.verbose,
     });
-    expect(mockCreateLogger).toHaveBeenCalledTimes(1);
+    expect(spyCreateLogger).toHaveBeenCalledTimes(1);
   });
 
   beforeEach(() => {
-    mockCreateLogger.mockClear();
+    spyCreateLogger.mockClear();
   });
 
   afterAll(() => {

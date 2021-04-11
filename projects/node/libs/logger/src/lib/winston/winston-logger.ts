@@ -1,8 +1,11 @@
 import * as _dbg from 'debug';
-import * as winston from 'winston';
 import { LoggerModuleOptions } from '../model';
 import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
 import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LOGLEVEL } from '../model/logger.constants';
+
+import * as winston from 'winston';
+const debug = _dbg('Logger');
+debug('Module "winston" imported');
 
 export class WinstonLogger {
   private static _instance: WinstonLogger;
@@ -87,6 +90,7 @@ export class WinstonLogger {
   }
 
   private init(options: LoggerModuleOptions): winston.Logger {
+    debug(`creating winston logger....`);
     this._consoleTransport = new winston.transports.Console({
       silent: options.consoleLogSilent,
       level: options.consoleLogLevel || DEFAULT_CONSOLE_LOGLEVEL,
@@ -107,7 +111,6 @@ export class WinstonLogger {
         format: winston.format.combine(winston.format.timestamp(), winston.format.errors({ stack: true }), DEFAULT_FILE_FORMAT),
       });
     }
-
     this._logger = winston.createLogger({
       transports: [this._consoleTransport],
     });
@@ -115,6 +118,7 @@ export class WinstonLogger {
     if (this._fileTransport) {
       this._logger.add(this._fileTransport);
     }
+    debug(`creating winston logger: done`);
     return this._logger;
   }
 }
