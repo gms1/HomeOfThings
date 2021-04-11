@@ -13,3 +13,5 @@
 
 - [@homeofthings/logger](projects/node/libs/logger/README.md)
 a logging module for [NestJS](https://docs.nestjs.com/) based on [winston](https://www.npmjs.com/package/winston)
+- [@homeofthings/config](projects/node/libs/config/README.md)
+a configuration module for [NestJS](https://docs.nestjs.com/) based on [node-config](https://www.npmjs.com/package/config)
