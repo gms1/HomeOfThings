@@ -18,16 +18,30 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ]
       }
     }
   },
   "projects": {
     "config": {
-      "tags": ["scope:backend"]
+      "tags": [
+        "scope:backend"
+      ]
+    },
+    "api-gateway": {
+      "tags": [
+        "scope:backend"
+      ]
     },
     "logger": {
-      "tags": ["scope:backend"]
+      "tags": [
+        "scope:backend"
+      ]
     }
   },
   "workspaceLayout": {
