@@ -1,0 +1,10 @@
+logging:
+  console:
+    level: 'debug'
+  file:
+    path: 'var/log/gateway.log'
+    silent: true
+
+listening:
+  port: 8080
+  address: 'localhost'

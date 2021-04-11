@@ -1,6 +1,38 @@
 {
   "version": 2,
   "projects": {
+    "config": {
+      "root": "projects/node/libs/config",
+      "sourceRoot": "projects/node/libs/config/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["projects/node/libs/config/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/projects/node/libs/config"],
+          "options": {
+            "jestConfig": "projects/node/libs/config/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/projects/node/libs/config",
+            "tsConfig": "projects/node/libs/config/tsconfig.lib.json",
+            "packageJson": "projects/node/libs/config/package.json",
+            "main": "projects/node/libs/config/src/index.ts",
+            "assets": ["projects/node/libs/config/*.md"]
+          }
+        }
+      }
+    },
     "logger": {
       "root": "projects/node/libs/logger",
       "sourceRoot": "projects/node/libs/logger/src",

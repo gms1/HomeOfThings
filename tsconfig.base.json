@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@homeofthings/config": ["projects/node/libs/config/src/index.ts"],
       "@homeofthings/logger": ["projects/node/libs/logger/src/index.ts"]
     }
   },

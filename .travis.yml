@@ -9,6 +9,7 @@ install:
   - bash build/travis_install
 
 script:
+  - npm run build:all
   - npm run test:ci
 
 after_script:

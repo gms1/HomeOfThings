@@ -23,6 +23,9 @@
     }
   },
   "projects": {
+    "config": {
+      "tags": ["scope:backend"]
+    },
     "logger": {
       "tags": ["scope:backend"]
     }
