@@ -1,5 +1,32 @@
 {
   "name": "@homeofthings/config",
   "description": "HomeOfThings - config",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "keywords": [
+    "nestjs",
+    "nest",
+    "node",
+    "conf",
+    "config",
+    "configuration",
+    "settings",
+    "node-config",
+    "env",
+    "environment",
+    "json",
+    "yaml"
+  ],
+  "author": {
+    "email": "www.gms@gmx.at",
+    "name": "Guenter Sandner"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gms1/HomeOfThings.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gms1/HomeOfThings/issues"
+  },
+  "homepage": "https://github.com/gms1/HomeOfThings"
 }

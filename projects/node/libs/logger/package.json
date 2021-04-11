@@ -5,9 +5,12 @@
   "keywords": [
     "nestjs",
     "nest",
+    "node",
     "winston",
     "logger",
-    "logging"
+    "logging",
+    "logs",
+    "loglevel"
   ],
   "author": {
     "email": "www.gms@gmx.at",
