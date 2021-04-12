@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'node-apps-api-gateway',
+  displayName: 'node-apps-gateway',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../../coverage/projects/node/apps/api-gateway',
+  coverageDirectory: '../../../../coverage/projects/node/apps/gateway',
 };

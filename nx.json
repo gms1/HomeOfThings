@@ -33,12 +33,12 @@
         "scope:backend"
       ]
     },
-    "api-gateway": {
+    "logger": {
       "tags": [
         "scope:backend"
       ]
     },
-    "logger": {
+    "gateway": {
       "tags": [
         "scope:backend"
       ]

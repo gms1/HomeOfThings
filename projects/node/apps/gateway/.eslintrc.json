@@ -2,7 +2,7 @@
   "extends": "../../../../.eslintrc.json",
   "ignorePatterns": ["!**/*"],
   "overrides": [
-    { "files": ["*.ts", "*.tsx", "*.js", "*.jsx"], "parserOptions": { "project": ["projects/node/apps/api-gateway/tsconfig.*?.json"] }, "rules": {} },
+    { "files": ["*.ts", "*.tsx", "*.js", "*.jsx"], "parserOptions": { "project": ["projects/node/apps/gateway/tsconfig.*?.json"] }, "rules": {} },
     { "files": ["*.ts", "*.tsx"], "rules": {} },
     { "files": ["*.js", "*.jsx"], "rules": {} }
   ]
