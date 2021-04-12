@@ -20,8 +20,8 @@ const debug = _dbg('Config');
 
 @Injectable()
 export class ConfigService {
-  readonly environment: String;
-  readonly configDirectory: String;
+  readonly environment: string;
+  readonly configDirectory: string;
 
   constructor(@Inject(CONFIG_MODULE_OPTIONS_TOKEN) private _opts: ConfigModuleOptions) {
     this.environment = process.env.NODE_CONFIG_ENV || '';

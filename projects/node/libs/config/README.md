@@ -60,8 +60,8 @@ bootstrap();
 
 ```TypeScript
 export declare class ConfigService {
-    readonly environment: String;
-    readonly configDirectory: String;
+    readonly environment: string;
+    readonly configDirectory: string;
     constructor(_opts: ConfigModuleOptions);
     getString(key: string, defaultValue: string): string;
     getNumber(key: string, defaultValue: number): number;
