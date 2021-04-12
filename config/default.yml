@@ -5,6 +5,14 @@ logging:
     path: 'var/log/gateway.log'
     silent: true
 
-listening:
-  port: 8080
-  address: 'localhost'
+service:
+  http:
+    port: 8080
+    address: 'localhost'
+    disabled: 'false'
+  https:
+    port: 8443
+    address: 'localhost'
+    key: './secrets/private-key.pem'
+    cert: './secrets/public-certificate.pem'
+    disabled: 'false'

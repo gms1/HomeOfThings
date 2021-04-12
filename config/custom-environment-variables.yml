@@ -1,2 +1,5 @@
-listening:
-  port: 'PORT'
+service:
+  http:
+    port: 'PORT'
+  https:
+    port: 'PORTS'
