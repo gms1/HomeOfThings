@@ -11,6 +11,7 @@
 # HomeOfThings - Logger
 
 a logging module for [NestJS](https://docs.nestjs.com/) based on [winston](https://www.npmjs.com/package/winston)
+which provides a reasonable configured logger for the application-wide use by all the NestJs loggers.
 
 ## installation
 
