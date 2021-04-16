@@ -9,7 +9,7 @@ describe('LoggerService', () => {
 
   beforeAll(() => {
     const givenOptions = {};
-    const logger = new WinstonLogger(givenOptions); // returns the singleton
+    const logger = new WinstonLogger(givenOptions); // provide the singleton
     logger.info = jest.fn();
     logger.error = jest.fn();
     logger.warn = jest.fn();
@@ -19,6 +19,7 @@ describe('LoggerService', () => {
     logger.setFileLogLevel = jest.fn();
     logger.setConsoleLogSilent = jest.fn();
     logger.setFileLogSilent = jest.fn();
+    (LoggerService as any)._instance = logger; // set the singleton
 
     loggerService = new LoggerService({});
     loggerService.context = givenContext;

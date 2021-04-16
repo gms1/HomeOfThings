@@ -4,11 +4,16 @@ import { WinstonLogger } from './winston/winston-logger';
 import { NestLoggerService } from './nest-logger.service';
 
 export class LoggerService implements NestLoggerService {
+  private static _instance: WinstonLogger;
+
+  static get instance(): WinstonLogger {
+    return LoggerService._instance;
+  }
+
   private _context?: string;
-  private _logger: WinstonLogger;
 
   get logger(): WinstonLogger {
-    return this._logger;
+    return LoggerService.instance;
   }
 
   get context(): string | undefined {
@@ -19,7 +24,9 @@ export class LoggerService implements NestLoggerService {
   }
 
   constructor(@Inject(LOGGER_MODULE_OPTIONS_TOKEN) _options: LoggerModuleOptions) {
-    this._logger = new WinstonLogger(_options);
+    if (!LoggerService._instance) {
+      LoggerService._instance = new WinstonLogger(_options);
+    }
   }
 
   setContext(context: string | undefined): void {

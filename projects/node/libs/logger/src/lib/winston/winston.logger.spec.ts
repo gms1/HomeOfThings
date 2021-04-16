@@ -50,10 +50,6 @@ describe('WinstonLogger with file logging and logLevels', () => {
     (WinstonLogger as any)._instance = undefined;
   });
 
-  it('instantiated logger should be same as singleton logger', () => {
-    expect(winstonLogger).toBe(WinstonLogger.instance);
-  });
-
   it('should log error-message', () => {
     const givenMessage = 'test error message';
     winstonLogger.error(givenMessage);

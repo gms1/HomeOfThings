@@ -9,11 +9,6 @@ const debug = _dbg('Logger');
 debug('Module "winston" imported');
 
 export class WinstonLogger {
-  private static _instance: WinstonLogger;
-  static get instance(): WinstonLogger {
-    return WinstonLogger._instance;
-  }
-
   private _logger!: winston.Logger;
 
   get logger(): winston.Logger {
@@ -24,15 +19,7 @@ export class WinstonLogger {
   private _fileTransport?: winston.transports.FileTransportInstance;
 
   constructor(_options: LoggerOptions) {
-    if (!WinstonLogger._instance) {
-      // initialize the 'singleton'
-      WinstonLogger._instance = this;
-      this.init(_options);
-      WinstonLogger._instance.debug('Logger initialized', { context: 'Logger' });
-    } else {
-      WinstonLogger._instance.debug(`Logger already exist`, { context: 'Logger' });
-    }
-    return WinstonLogger._instance;
+    this.init(_options);
   }
 
   setConsoleLogLevel(level: LOGLEVEL): LOGLEVEL | undefined {
