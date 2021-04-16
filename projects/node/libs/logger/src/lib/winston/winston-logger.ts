@@ -1,8 +1,9 @@
 import * as _dbg from 'debug';
-import { LoggerModuleOptions } from '../model';
+import * as path from 'path';
+import * as mkdirp from 'mkdirp';
+import { LoggerOptions } from '../model';
 import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
 import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LOGLEVEL } from '../model/logger.constants';
-
 import * as winston from 'winston';
 const debug = _dbg('Logger');
 debug('Module "winston" imported');
@@ -22,7 +23,7 @@ export class WinstonLogger {
   private _consoleTransport!: winston.transports.ConsoleTransportInstance;
   private _fileTransport?: winston.transports.FileTransportInstance;
 
-  constructor(_options: LoggerModuleOptions) {
+  constructor(_options: LoggerOptions) {
     if (!WinstonLogger._instance) {
       // initialize the 'singleton'
       WinstonLogger._instance = this;
@@ -89,7 +90,7 @@ export class WinstonLogger {
     return this;
   }
 
-  private init(options: LoggerModuleOptions): winston.Logger {
+  private init(options: LoggerOptions): winston.Logger {
     debug(`creating winston logger....`);
     this._consoleTransport = new winston.transports.Console({
       silent: options.consoleLogSilent,
@@ -104,6 +105,7 @@ export class WinstonLogger {
     });
 
     if (options.fileLogFileName) {
+      mkdirp(path.dirname(options.fileLogFileName));
       this._fileTransport = new winston.transports.File({
         silent: options.fileLogSilent,
         level: options.fileLogLevel || DEFAULT_FILE_LOGLEVEL,
