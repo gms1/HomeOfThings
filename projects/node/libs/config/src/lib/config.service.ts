@@ -1,22 +1,13 @@
 import * as _dbg from 'debug';
 import * as process from 'process';
+import * as path from 'path';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigModuleOptions, CONFIG_MODULE_OPTIONS_TOKEN } from './model';
 
-process.env.SUPPRESS_NO_CONFIG_WARNING = 'ON';
+process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
 import * as config from 'config';
 
 const debug = _dbg('Config');
-
-/*
- * TODO:
- * .) optional support reloading config on 'SIGHUP'
- *      https://www.npmjs.com/package/config-reloadable
- * .) optional support for docker secrets
- *      https://github.com/lee5i3/config-secrets
- * .) (?) optional schema validation
- *     we should be able to validate the resulting config object using JSON validation
- */
 
 @Injectable()
 export class ConfigService {
@@ -40,8 +31,13 @@ export class ConfigService {
     return value != undefined ? value : defaultValue;
   }
 
-  getBoolean(key: string, defaultValue: boolean): boolean | undefined {
+  getBoolean(key: string, defaultValue: boolean): boolean {
     const value = this.getOptionalBoolean(key);
+    return value != undefined ? value : defaultValue;
+  }
+
+  getPath(key: string, defaultValue: string): string {
+    const value = this.getOptionalPath(key);
     return value != undefined ? value : defaultValue;
   }
 
@@ -65,12 +61,20 @@ export class ConfigService {
       return value;
     }
     const stringValue = `${value}`;
-    if (['true', '1'].includes(stringValue)) {
+    if (['true', '1', 'yes', 'y'].includes(stringValue)) {
       return true;
     }
-    if (['false', '0'].includes(stringValue)) {
+    if (['false', '0', 'no', 'n'].includes(stringValue)) {
       return false;
     }
     return undefined;
+  }
+
+  getOptionalPath(key: string): string | undefined {
+    const value = this.getOptionalString(key);
+    if (!value) {
+      return value;
+    }
+    return path.resolve(this.configDirectory, value);
   }
 }

@@ -10,7 +10,7 @@
 
 # HomeOfThings - Config
 
-a configuration module for [NestJS](https://docs.nestjs.com/) based on [node-config](https://www.npmjs.com/package/config)
+a configuration module for [NestJS](https://docs.nestjs.com/) providing a `ConfigurationService` based on [node-config](https://www.npmjs.com/package/config)
 
 ## installation
 
@@ -58,16 +58,23 @@ bootstrap();
 
 ### read configuration values
 
+using one of the methods provided by the `ConfigService`:
+
 ```TypeScript
-export declare class ConfigService {
+declare class ConfigService {
     readonly environment: string;
     readonly configDirectory: string;
+
     constructor(_opts: ConfigModuleOptions);
+
     getString(key: string, defaultValue: string): string;
     getNumber(key: string, defaultValue: number): number;
-    getBoolean(key: string, defaultValue: boolean): boolean | undefined;
+    getBoolean(key: string, defaultValue: boolean): boolean;
+    getPath(key: string, defaultValue: string): string;    
+
     getOptionalString(key: string): string | undefined;
     getOptionalNumber(key: string): number | undefined;
     getOptionalBoolean(key: string): boolean | undefined;
+    getOptionalPath(key: string): string | undefined;    
 }
 ```

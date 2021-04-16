@@ -1,5 +1,5 @@
 service:
   http:
-    port: 'PORT'
+    port: 'HTTP_PORT'
   https:
-    port: 'PORTS'
+    port: 'HTTPS_PORT'

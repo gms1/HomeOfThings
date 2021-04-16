@@ -1,18 +1,37 @@
 logging:
   console:
+    # level: 'silly', 'debug', 'verbose', 'help', 'info' (default), 'warn', 'error'
     level: 'debug'
+    # silent: set to 'true' to turn of logging; default is 'false'
+    # silent: true
   file:
+    # level: 'silly', 'debug', 'verbose', 'help', 'info', 'warn' (default), 'error'
+    level: 'warn'
+    # path to the logfile (absolute or relative to this config directory)
     path: 'var/log/gateway.log'
+    # silent: set to 'true' to turn of logging; default is 'false'
     silent: true
 
 service:
   http:
+    # port: for the http protocol
     port: 8080
+    # address: listening address for the http protocoll
     address: 'localhost'
+    # maxHeaderSize: the maximum length of request headers in bytes; default 8192
+    maxHeaderSize: 8192
+    # disabled: set to 'true' if you want to disable http; default is 'false'
     disabled: 'false'
   https:
+    # port: for the https protocol
     port: 8443
+    # address: listening address for the https protocoll
     address: 'localhost'
+    # key: private key file in PEM format (absolute or relative to this config directory)
     key: './secrets/private-key.pem'
+    # cert: cert chain file in PEM format (absolute or relative to this config directory)
     cert: './secrets/public-certificate.pem'
+    # maxHeaderSize: the maximum length of request headers in bytes; default 8192
+    maxHeaderSize: 8192
+    # disabled: set to 'true' if you want to disable https; default is 'false'
     disabled: 'false'
