@@ -42,6 +42,9 @@
       "tags": [
         "scope:backend"
       ]
+    },
+    "nestjs-utils": {
+      "tags": []
     }
   },
   "workspaceLayout": {

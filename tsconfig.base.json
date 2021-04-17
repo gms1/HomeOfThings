@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@homeofthings/nestjs-config": ["projects/node/libs/nestjs-config/src/index.ts"],
-      "@homeofthings/nestjs-logger": ["projects/node/libs/nestjs-logger/src/index.ts"]
+      "@homeofthings/nestjs-logger": ["projects/node/libs/nestjs-logger/src/index.ts"],
+      "@homeofthings/nestjs-utils": ["projects/node/libs/nestjs-utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

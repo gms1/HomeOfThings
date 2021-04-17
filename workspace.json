@@ -1,6 +1,38 @@
 {
   "version": 2,
   "projects": {
+    "nestjs-utils": {
+      "root": "projects/node/libs/nestjs-utils",
+      "sourceRoot": "projects/node/libs/nestjs-utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["projects/node/libs/nestjs-utils/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/projects/node/libs/nestjs-utils"],
+          "options": {
+            "jestConfig": "projects/node/libs/nestjs-utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/projects/node/libs/nestjs-utils",
+            "tsConfig": "projects/node/libs/nestjs-utils/tsconfig.lib.json",
+            "packageJson": "projects/node/libs/nestjs-utils/package.json",
+            "main": "projects/node/libs/nestjs-utils/src/index.ts",
+            "assets": ["projects/node/libs/nestjs-utils/*.md"]
+          }
+        }
+      }
+    },
     "nestjs-config": {
       "root": "projects/node/libs/nestjs-config",
       "sourceRoot": "projects/node/libs/nestjs-config/src",
