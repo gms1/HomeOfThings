@@ -1,5 +1,5 @@
 {
-  "name": "@homeofthings/config",
+  "name": "@homeofthings/nestjs-config",
   "description": "HomeOfThings - config: a configuration service for NestJs based on node-config",
   "version": "0.0.0",
   "keywords": [

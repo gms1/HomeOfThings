@@ -11,5 +11,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/projects/node/libs/config',
+  coverageDirectory: '../../../../coverage/projects/node/libs/nestjs-config',
 };

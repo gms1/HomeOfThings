@@ -5,7 +5,7 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "parserOptions": {
-        "project": ["projects/node/libs/config/tsconfig.*?.json"]
+        "project": ["projects/node/libs/nestjs-config/tsconfig.*?.json"]
       },
       "rules": {}
     },

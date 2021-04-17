@@ -15,8 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@homeofthings/config": ["projects/node/libs/config/src/index.ts"],
-      "@homeofthings/logger": ["projects/node/libs/logger/src/index.ts"]
+      "@homeofthings/nestjs-config": ["projects/node/libs/nestjs-config/src/index.ts"],
+      "@homeofthings/nestjs-logger": ["projects/node/libs/nestjs-logger/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

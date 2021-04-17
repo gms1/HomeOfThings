@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../../coverage/projects/node/apps/gateway',
+  coverageDirectory: '../../../../coverage/projects/node/apps/hot-gateway',
 };

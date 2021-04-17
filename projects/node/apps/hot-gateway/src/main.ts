@@ -2,8 +2,8 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
-import { ConfigModule } from '@homeofthings/config';
-import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LOGLEVEL, LoggerModule } from '@homeofthings/logger';
+import { ConfigModule } from '@homeofthings/nestjs-config';
+import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LOGLEVEL, LoggerModule } from '@homeofthings/nestjs-logger';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';

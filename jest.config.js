@@ -1,3 +1,3 @@
 module.exports = {
-  projects: ['<rootDir>/projects/node/libs/config', '<rootDir>/projects/node/apps/gateway', '<rootDir>/projects/node/libs/logger'],
+  projects: ['<rootDir>/projects/node/libs/nestjs-config', '<rootDir>/projects/node/apps/hot-gateway', '<rootDir>/projects/node/libs/nestjs-logger'],
 };

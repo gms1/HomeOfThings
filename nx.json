@@ -28,17 +28,17 @@
     }
   },
   "projects": {
-    "config": {
+    "nestjs-config": {
       "tags": [
         "scope:backend"
       ]
     },
-    "logger": {
+    "nestjs-logger": {
       "tags": [
         "scope:backend"
       ]
     },
-    "gateway": {
+    "hot-gateway": {
       "tags": [
         "scope:backend"
       ]
