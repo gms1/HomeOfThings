@@ -20,23 +20,23 @@ npm install @homeofthings/config
 
 ## quick start
 
-### import module by providing options synchronously
+### import module in `AppModule` by providing options synchronously
 
 ```Typescript
 @Module({
   imports: [
-    ConfigModule.forRoot({}),
+    ConfigModule.forRoot(ConfigModule, {}),
   ],
 })
 export class AppModule {}
 ```
 
-### import module by providing options asynchronously
+### import module in `AppModule` by providing options asynchronously
 
 ```Typescript
 @Module({
   imports: [
-    ConfigModule.forRootAsync({
+    ConfigModule.forRootAsync(ConfigModule, {
       imports: [], // optional
       useFactory: (): Promise<ConfigModuleOptions> => Promise.resolve({}),
       inject: [], // optional inject params for useFactory method
@@ -44,6 +44,15 @@ export class AppModule {}
   ],
 })
 export class AppModule {}
+```
+
+### import module in child modules
+
+```Typescript
+  @Module({
+    imports: [ConfigModule.CONFIGURED],
+  })
+  class ChildModule {
 ```
 
 ### using for bootstrapping
@@ -55,6 +64,8 @@ const configService = ConfigModule.createConfigService({});
 bootstrap();
 
 ```
+
+> NOTE: if you decide to combine this method with the imports into `AppModule` from above, only the options given to the first method will be taken into account
 
 ### read configuration values
 

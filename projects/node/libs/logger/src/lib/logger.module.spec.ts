@@ -1,26 +1,41 @@
-import { Injectable, Module } from '@nestjs/common';
+import { Inject, Injectable, Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { LoggerModuleOptions, LOGGER_SERVICE_TOKEN, LOGLEVEL } from './model';
+import { LoggerModuleOptions, LOGLEVEL } from './model';
 import { LoggerModule } from './logger.module';
 import { LoggerService } from './logger.service';
 
-describe('LoggerModule', function () {
+describe('LoggerModule', function() {
+  @Module({
+    imports: [LoggerModule.CONFIGURED],
+  })
+  class ChildModule {
+    static loggerService: LoggerService;
+
+    constructor(loggerService: LoggerService) {
+      ChildModule.loggerService = loggerService;
+    }
+  }
+
   const givenOptions: LoggerModuleOptions = {
     consoleLogLevel: LOGLEVEL.verbose,
   };
 
-  it('for sync options', async function () {
+  beforeEach(() => {
+    ChildModule.loggerService = undefined;
+  });
+
+  it('for sync options', async function() {
     const appModule = await Test.createTestingModule({
-      imports: [LoggerModule.forRoot(givenOptions)],
+      imports: [LoggerModule.forRoot(LoggerModule, givenOptions), ChildModule],
     }).compile();
 
     const loggerService = appModule.get(LoggerService);
     expect(loggerService).toBeInstanceOf(LoggerService);
 
-    expect(appModule.get(LOGGER_SERVICE_TOKEN)).toBe(loggerService);
+    expect(ChildModule.loggerService).toBe(loggerService);
   });
 
-  it('for async options', async function () {
+  it('for async options', async function() {
     @Injectable()
     class ConfigService {
       getLoggerModuleOptions(): Promise<LoggerModuleOptions> {
@@ -38,8 +53,8 @@ describe('LoggerModule', function () {
 
     const appModule = await Test.createTestingModule({
       imports: [
-        LoggerModule.forRootAsync({
-          imports: [ConfigModule],
+        LoggerModule.forRootAsync(LoggerModule, {
+          imports: [ConfigModule, ChildModule],
           useFactory: (cfg: ConfigService) => cfg.getLoggerModuleOptions(),
           inject: [ConfigService],
         }),
@@ -49,19 +64,21 @@ describe('LoggerModule', function () {
     const loggerService = appModule.get(LoggerService);
     expect(loggerService).toBeInstanceOf(LoggerService);
 
-    expect(appModule.get(LOGGER_SERVICE_TOKEN)).toBe(loggerService);
+    expect(ChildModule.loggerService).toBe(loggerService);
   });
 
-  it('create', async function () {
+  it('create', async function() {
     const loggerService = LoggerModule.createLoggerService(givenOptions);
     expect(loggerService).toBeInstanceOf(LoggerService);
 
     const appModule = await Test.createTestingModule({
-      imports: [LoggerModule.forRoot({})], // given option should be ignored
+      imports: [LoggerModule.forRoot(LoggerModule, {}), ChildModule], // given option are ignored
     }).compile();
 
-    const resolvedLoggerService = appModule.get(LOGGER_SERVICE_TOKEN);
+    const resolvedLoggerService = appModule.get(LoggerService);
     expect(resolvedLoggerService).not.toBe(loggerService); // even if LoggerService instance is different
     expect(resolvedLoggerService.logger).toBe(loggerService.logger); // WinstonLogger is a singleton and therefore should be the same
+
+    expect(ChildModule.loggerService).toBe(resolvedLoggerService);
   });
 });

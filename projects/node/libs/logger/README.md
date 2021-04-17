@@ -21,12 +21,12 @@ npm install @homeofthings/logger
 
 ## quick start
 
-### import module by providing options synchronously
+### import module in `AppModule` by providing options synchronously
 
 ```Typescript
 @Module({
   imports: [
-    LoggerModule.forRoot({
+    LoggerModule.forRoot(LoggerModule, {
       // provide your options
     }),
   ],
@@ -34,12 +34,22 @@ npm install @homeofthings/logger
 export class AppModule {}
 ```
 
-### import module by providing options asynchronously
+and set the injected `LoggerService` as the application logger:
+
+```TypeScript
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useLogger(app.get(LoggerService));
+}
+bootstrap();
+```
+
+### import module in `AppModule` by providing options asynchronously
 
 ```Typescript
 @Module({
   imports: [
-    LoggerModule.forRootAsync({
+    LoggerModule.forRootAsync(LoggerModule, {
       imports: [], // optional
       useFactory: (): Promise<LoggerModuleOptions> => Promise.resolve({
         // provide your options
@@ -51,7 +61,7 @@ export class AppModule {}
 export class AppModule {}
 ```
 
-### using as Nest Logger after bootstrapping
+and set the injected `LoggerService` as the application logger:
 
 ```TypeScript
 async function bootstrap() {
@@ -71,8 +81,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {loggger});
 }
 bootstrap();
-
 ```
+
+> NOTE: using this method, there is probably no need for additional imports of the `LoggerModule` in AppModule or any child module, but
+> anyway if you decide to do so, only the options given to the first method will be taken into account
 
 ### application logging
 

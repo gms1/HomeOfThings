@@ -12,8 +12,3 @@ export interface LoggerOptions {
   fileLogSilent?: boolean;
 }
 export type LoggerModuleOptions = LoggerOptions;
-
-export interface LoggerModuleOptionsAsync extends Pick<ModuleMetadata, 'imports'> {
-  useFactory: (...args: any[]) => Promise<LoggerModuleOptions> | LoggerModuleOptions;
-  inject: any[];
-}
