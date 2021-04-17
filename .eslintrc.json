@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "rxjs"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -20,7 +20,47 @@
         ]
       }
     },
-    { "files": ["*.ts", "*.tsx"], "extends": ["plugin:@nrwl/nx/typescript"], "rules": {} },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nrwl/nx/typescript"],
+      "rules": {
+        // eslint-plugin-rxjs:
+        "rxjs/no-async-subscribe": "error",
+        "rxjs/no-ignored-observable": "error",
+        "rxjs/no-ignored-subscription": "error",
+        "rxjs/no-nested-subscribe": "error",
+        "rxjs/no-unbound-methods": "error",
+        "rxjs/throw-error": "error",
+
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": ["default"],
+            "format": ["strictCamelCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": ["typeLike"],
+            "format": ["StrictPascalCase"]
+          },
+          {
+            "selector": ["enum", "enumMember"],
+            "format": ["StrictPascalCase", "UPPER_CASE"]
+          },
+          {
+            "selector": ["variable"],
+            "modifiers": ["global"],
+            "format": ["strictCamelCase", "UPPER_CASE"]
+          },
+          {
+            "selector": ["classProperty"],
+            "modifiers": ["readonly"],
+            "format": ["strictCamelCase", "UPPER_CASE"]
+          }
+        ]
+      }
+    },
     { "files": ["*.js", "*.jsx"], "extends": ["plugin:@nrwl/nx/javascript"], "rules": {} }
   ]
 }

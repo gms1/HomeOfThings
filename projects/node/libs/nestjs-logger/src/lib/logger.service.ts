@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { LoggerModuleOptions, LOGGER_MODULE_OPTIONS_TOKEN, LOGLEVEL } from './model';
+import { LoggerModuleOptions, LOGGER_MODULE_OPTIONS_TOKEN, LogLevel } from './model';
 import { WinstonLogger } from './winston/winston-logger';
 import { NestLoggerService } from './nest-logger.service';
 
@@ -33,11 +33,11 @@ export class LoggerService implements NestLoggerService {
     this._context = context;
   }
 
-  setConsoleLogLevel(level: LOGLEVEL): LOGLEVEL | undefined {
+  setConsoleLogLevel(level: LogLevel): LogLevel | undefined {
     return this.logger.setConsoleLogLevel(level);
   }
 
-  setFileLogLevel(level: LOGLEVEL): LOGLEVEL | undefined {
+  setFileLogLevel(level: LogLevel): LogLevel | undefined {
     return this.logger.setFileLogLevel(level);
   }
 
@@ -50,34 +50,36 @@ export class LoggerService implements NestLoggerService {
   }
 
   log(message: string, context?: string): NestLoggerService {
-    return this.callLogger('info', message, context);
+    context = context || this._context;
+    this.logger.info(message, { context });
+    return this;
   }
 
   error(message: string, trace?: string, context?: string): NestLoggerService {
+    context = context || this._context;
     if (trace) {
-      return this.callLogger('error', message, context, { stack: trace });
+      this.logger.error(message, { context, stack: trace });
     } else {
-      return this.callLogger('error', message, context);
+      this.logger.error(message, { context });
     }
+    return this;
   }
 
   warn(message: string, context?: string): NestLoggerService {
-    return this.callLogger('warn', message, context);
+    context = context || this._context;
+    this.logger.warn(message, { context });
+    return this;
   }
 
   debug(message: string, context?: string): NestLoggerService {
-    return this.callLogger('debug', message, context);
+    context = context || this._context;
+    this.logger.debug(message, { context });
+    return this;
   }
 
   verbose(message: string, context?: string): NestLoggerService {
-    return this.callLogger('verbose', message, context);
-  }
-
-  private callLogger(type: string, message: string, context?: string, meta?: object): NestLoggerService {
     context = context || this._context;
-    meta = { ...meta, context };
-
-    (this.logger as any)[type](message, meta);
+    this.logger.verbose(message, { context });
     return this;
   }
 }

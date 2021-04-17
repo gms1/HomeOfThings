@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as _dbg from 'debug';
 import * as path from 'path';
 import * as mkdirp from 'mkdirp';
 import { LoggerOptions } from '../model';
 import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
-import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LOGLEVEL } from '../model/logger.constants';
+import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LogLevel } from '../model/logger.constants';
 import * as winston from 'winston';
 const debug = _dbg('Logger');
 debug('Module "winston" imported');
@@ -22,19 +23,19 @@ export class WinstonLogger {
     this.init(_options);
   }
 
-  setConsoleLogLevel(level: LOGLEVEL): LOGLEVEL | undefined {
+  setConsoleLogLevel(level: LogLevel): LogLevel | undefined {
     const oldLevel = this._consoleTransport.level;
     this._consoleTransport.level = level;
-    return oldLevel ? (oldLevel as LOGLEVEL) : undefined;
+    return oldLevel ? (oldLevel as LogLevel) : undefined;
   }
 
-  setFileLogLevel(level: LOGLEVEL): LOGLEVEL | undefined {
+  setFileLogLevel(level: LogLevel): LogLevel | undefined {
     if (!this._fileTransport) {
       return undefined;
     }
     const oldLevel = this._fileTransport.level;
     this._fileTransport.level = level;
-    return oldLevel ? (oldLevel as LOGLEVEL) : undefined;
+    return oldLevel ? (oldLevel as LogLevel) : undefined;
   }
 
   setConsoleLogSilent(silent: boolean): boolean | undefined {

@@ -1,5 +1,5 @@
 import { LoggerService } from './logger.service';
-import { LOGLEVEL } from './model';
+import { LogLevel } from './model';
 import { WinstonLogger } from './winston/winston-logger';
 
 describe('LoggerService', () => {
@@ -19,6 +19,7 @@ describe('LoggerService', () => {
     logger.setFileLogLevel = jest.fn();
     logger.setConsoleLogSilent = jest.fn();
     logger.setFileLogSilent = jest.fn();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (LoggerService as any)._instance = logger; // set the singleton
 
     loggerService = new LoggerService({});
@@ -70,13 +71,13 @@ describe('LoggerService', () => {
   });
 
   it('should set console logLevel', () => {
-    const givenLogLevel = LOGLEVEL.error;
+    const givenLogLevel = LogLevel.Error;
     loggerService.setConsoleLogLevel(givenLogLevel);
     expect(loggerService.logger.setConsoleLogLevel).toHaveBeenCalledWith(givenLogLevel);
   });
 
   it('should set file logLevel', () => {
-    const givenLogLevel = LOGLEVEL.error;
+    const givenLogLevel = LogLevel.Error;
     loggerService.setFileLogLevel(givenLogLevel);
     expect(loggerService.logger.setFileLogLevel).toHaveBeenCalledWith(givenLogLevel);
   });

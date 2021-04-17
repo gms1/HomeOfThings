@@ -10,7 +10,8 @@ install:
 
 script:
   - npm run build:all
-  - npm run test:ci
+  - npm run test:all
+  - npm run lint:all
 
 after_script:
   - bash build/coveralls

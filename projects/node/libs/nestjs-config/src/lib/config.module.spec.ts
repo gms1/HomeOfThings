@@ -8,7 +8,7 @@ jest.mock('config', () => ({}));
 
 describe('ConfigModule', function() {
   @Module({
-    imports: [ConfigModule.CONFIGURED],
+    imports: [ConfigModule.forChild()],
   })
   class ChildModule {
     static configService: ConfigService;
@@ -39,7 +39,7 @@ describe('ConfigModule', function() {
     @Injectable()
     class ConfigModuleOptionsProvider {
       getConfigModuleOptions(): Promise<ConfigModuleOptions> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
           setTimeout(resolve, 0, givenOptions);
         });
       }

@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/%40homeofthings%2Fconfig.svg)](https://badge.fury.io/js/%40homeofthings%2Fconfig)
+[![npm version](https://badge.fury.io/js/%40homeofthings%2Fnestjs-config.svg)](https://badge.fury.io/js/%40homeofthings%2Fnestjs-config)
 [![Build Status](https://api.travis-ci.com/gms1/HomeOfThings.svg?branch=master)](https://travis-ci.com/gms1/HomeOfThings)
 [![Coverage Status](https://coveralls.io/repos/github/gms1/HomeOfThings/badge.svg?branch=master&service=github)](https://coveralls.io/github/gms1/HomeOfThings?branch=master)
 [![DeepScan grade](https://deepscan.io/api/teams/439/projects/987/branches/1954/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=439&pid=987&bid=1954)
@@ -8,7 +8,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![License](https://img.shields.io/npm/l/@homeofthings/nestjs-config.svg?style=flat-square)](./LICENSE)
 
-# HomeOfThings - Config
+# HomeOfThings - Config for NestJs
 
 a configuration module for [NestJS](https://docs.nestjs.com/) providing a `ConfigurationService` based on [node-config](https://www.npmjs.com/package/config)
 
@@ -50,7 +50,7 @@ export class AppModule {}
 
 ```Typescript
   @Module({
-    imports: [ConfigModule.CONFIGURED],
+    imports: [ConfigModule.forChild()],
   })
   class ChildModule {
 ```

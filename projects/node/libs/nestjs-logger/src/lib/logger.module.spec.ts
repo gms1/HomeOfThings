@@ -1,12 +1,17 @@
-import { Inject, Injectable, Module } from '@nestjs/common';
+import { Injectable, Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { LoggerModuleOptions, LOGLEVEL } from './model';
+import { LoggerModuleOptions, LogLevel } from './model';
 import { LoggerModule } from './logger.module';
 import { LoggerService } from './logger.service';
 
+export enum Color {
+  Red = '',
+  Blue = '',
+}
+
 describe('LoggerModule', function() {
   @Module({
-    imports: [LoggerModule.CONFIGURED],
+    imports: [LoggerModule.forChild()],
   })
   class ChildModule {
     static loggerService: LoggerService;
@@ -17,7 +22,7 @@ describe('LoggerModule', function() {
   }
 
   const givenOptions: LoggerModuleOptions = {
-    consoleLogLevel: LOGLEVEL.verbose,
+    consoleLogLevel: LogLevel.Verbose,
   };
 
   beforeEach(() => {
@@ -39,7 +44,7 @@ describe('LoggerModule', function() {
     @Injectable()
     class ConfigService {
       getLoggerModuleOptions(): Promise<LoggerModuleOptions> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
           setTimeout(resolve, 0, givenOptions);
         });
       }

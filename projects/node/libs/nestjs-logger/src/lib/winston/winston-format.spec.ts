@@ -51,7 +51,7 @@ describe('Winston Default Console Format', () => {
     };
     const resultInfo = DEFAULT_CONSOLE_FORMAT.transform(givenInfo);
     const message = resultInfo[Object.getOwnPropertySymbols(resultInfo)[0]];
-    expect(message).toMatch(/^timestamp\s+.*debug:.*\s+debug message \{\"meta\":\{\"x\":1\}\}$/);
+    expect(message).toMatch(/^timestamp\s+.*debug:.*\s+debug message \{"meta":\{"x":1\}\}$/);
   });
 });
 

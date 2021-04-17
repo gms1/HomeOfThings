@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import * as winston from 'winston';
-import { LOGLEVEL } from '../model';
+import { LogLevel } from '../model';
 import { WinstonLogger } from './winston-logger';
 
 jest.mock('winston', () => ({
@@ -35,9 +36,9 @@ describe('WinstonLogger with file logging and logLevels', () => {
   beforeAll(() => {
     spyCreateLogger = jest.spyOn(winston, 'createLogger');
     winstonLogger = new WinstonLogger({
-      consoleLogLevel: LOGLEVEL.verbose,
+      consoleLogLevel: LogLevel.Verbose,
       fileLogFileName: 'winston.logger.spec.log',
-      fileLogLevel: LOGLEVEL.verbose,
+      fileLogLevel: LogLevel.Verbose,
     });
     expect(spyCreateLogger).toHaveBeenCalledTimes(1);
   });
@@ -46,9 +47,6 @@ describe('WinstonLogger with file logging and logLevels', () => {
     spyCreateLogger.mockClear();
   });
 
-  afterAll(() => {
-    (WinstonLogger as any)._instance = undefined;
-  });
 
   it('should log error-message', () => {
     const givenMessage = 'test error message';
@@ -81,16 +79,16 @@ describe('WinstonLogger with file logging and logLevels', () => {
   });
 
   it('should set console logLevel', () => {
-    const givenLogLevel = LOGLEVEL.error;
+    const givenLogLevel = LogLevel.Error;
     winstonLogger.setConsoleLogLevel(givenLogLevel);
-    const newLogLevel = winstonLogger.setConsoleLogLevel(LOGLEVEL.warn);
+    const newLogLevel = winstonLogger.setConsoleLogLevel(LogLevel.Warn);
     expect(newLogLevel).toBe(givenLogLevel);
   });
 
   it('should set file logLevel', () => {
-    const givenLogLevel = LOGLEVEL.error;
+    const givenLogLevel = LogLevel.Error;
     winstonLogger.setFileLogLevel(givenLogLevel);
-    const newLogLevel = winstonLogger.setFileLogLevel(LOGLEVEL.warn);
+    const newLogLevel = winstonLogger.setFileLogLevel(LogLevel.Warn);
     expect(newLogLevel).toBe(givenLogLevel);
   });
 
@@ -98,12 +96,14 @@ describe('WinstonLogger with file logging and logLevels', () => {
     const givenSilent = true;
     winstonLogger.setConsoleLogSilent(givenSilent);
     const newSilent = winstonLogger.setConsoleLogSilent(!givenSilent);
+    expect(newSilent).toBe(givenSilent);
   });
 
   it('should set file log silent', () => {
     const givenSilent = true;
     winstonLogger.setFileLogSilent(givenSilent);
     const newSilent = winstonLogger.setFileLogSilent(!givenSilent);
+    expect(newSilent).toBe(givenSilent);
   });
 });
 
@@ -123,9 +123,6 @@ describe('WinstonLogger with file logging and logLevels', () => {
     spyCreateLogger.mockClear();
   });
 
-  afterAll(() => {
-    (WinstonLogger as any)._instance = undefined;
-  });
 
   it('should log error-message', () => {
     const givenMessage = 'test error message';
@@ -141,7 +138,7 @@ describe('WinstonLogger without file logging', () => {
   beforeAll(() => {
     spyCreateLogger = jest.spyOn(winston, 'createLogger');
     winstonLogger = new WinstonLogger({
-      consoleLogLevel: LOGLEVEL.verbose,
+      consoleLogLevel: LogLevel.Verbose,
     });
     expect(spyCreateLogger).toHaveBeenCalledTimes(1);
   });
@@ -150,14 +147,10 @@ describe('WinstonLogger without file logging', () => {
     spyCreateLogger.mockClear();
   });
 
-  afterAll(() => {
-    (WinstonLogger as any)._instance = undefined;
-  });
-
   it('should set file logLevel', () => {
-    const givenLogLevel = LOGLEVEL.error;
+    const givenLogLevel = LogLevel.Error;
     expect(winstonLogger.setFileLogLevel(givenLogLevel)).toBeUndefined();
-    expect(winstonLogger.setFileLogLevel(LOGLEVEL.warn)).toBeUndefined();
+    expect(winstonLogger.setFileLogLevel(LogLevel.Warn)).toBeUndefined();
   });
 
   it('should set file log silent', () => {
