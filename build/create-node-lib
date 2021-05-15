@@ -11,11 +11,11 @@ EOT
   exit 1
 }
 
-PACKAGE_NAME=$1
-PACKAGE_TYPE=$2
+PACKAGE_NAME="$1"
+PACKAGE_TYPE="$2"
 
 [ -n "${PACKAGE_NAME}" ] || usage
-[ -z "${PACKAGE_TYPE}" ] || usage
+[ -n "${PACKAGE_TYPE}" ] || usage
 [ "${PACKAGE_TYPE}" = "nest" -o "${PACKAGE_TYPE}" = "node"  ] || usage
 
 PACKAGE_DIR="node/libs"
@@ -24,7 +24,7 @@ PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_NAME}/package.j
 case "${PACKAGE_TYPE}" in
   nest)
     # TODO: last time --simpleModuleName triggerd IndexOutOfBoundException
-    CMD=( npx nx generate @nrwl/nest:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --simpleModuleName --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
+    CMD=( npx nx generate @nrwl/nest:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
     ;;
   *)
     PACKAGE_TYPE=node

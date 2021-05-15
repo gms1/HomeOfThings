@@ -13,24 +13,28 @@ logging:
     silent: true
 
 service:
+  # address: listening address for the http/https protocoll
+  address: 'localhost'
   http:
-    # port: for the http protocol
+    # port: for the http protocol; default 80
     port: 8080
-    # address: listening address for the http protocoll
-    address: 'localhost'
     # maxHeaderSize: the maximum length of request headers in bytes; default 8192
     maxHeaderSize: 8192
     # disabled: set to 'true' if you want to disable http; default is 'false'
     disabled: 'false'
+    # redirect: set to 'false' if you do not want to redirect to https; default is 'true'
+    redirect: true
+    # redirectCode: the status code for redirecting; default 307
+    redirectCode: 307
+    # redirectLocaltion: the locate to redirect to
+    # redirectLocation: https://localhost:443
   https:
-    # port: for the https protocol
+    # port: for the https protocol; default 443
     port: 8443
-    # address: listening address for the https protocoll
-    address: 'localhost'
     # key: private key file in PEM format (absolute or relative to this config directory)
-    key: './secrets/private-key.pem'
+    key: './secrets/ceritifcates/key.pem'
     # cert: cert chain file in PEM format (absolute or relative to this config directory)
-    cert: './secrets/public-certificate.pem'
+    cert: './secrets/ceritifcates/cert.pem'
     # maxHeaderSize: the maximum length of request headers in bytes; default 8192
     maxHeaderSize: 8192
     # disabled: set to 'true' if you want to disable https; default is 'false'

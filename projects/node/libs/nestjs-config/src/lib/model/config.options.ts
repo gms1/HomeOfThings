@@ -1,2 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-export interface ConfigModuleOptions {}
+export interface ConfigModuleOptions {
+  _dummy?: void;
+}

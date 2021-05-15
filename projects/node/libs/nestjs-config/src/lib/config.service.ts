@@ -1,4 +1,4 @@
-import * as _dbg from 'debug';
+import _debug from 'debug';
 import * as process from 'process';
 import * as path from 'path';
 import { Inject, Injectable } from '@nestjs/common';
@@ -7,7 +7,7 @@ import { ConfigModuleOptions, CONFIG_MODULE_OPTIONS_TOKEN } from './model';
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
 import * as config from 'config';
 
-const debug = _dbg('Config');
+const debug = _debug('Config');
 
 @Injectable()
 export class ConfigService {
@@ -15,8 +15,8 @@ export class ConfigService {
   readonly configDirectory: string;
 
   constructor(@Inject(CONFIG_MODULE_OPTIONS_TOKEN) private _opts: ConfigModuleOptions) {
-    this.environment = process.env.NODE_CONFIG_ENV || '';
-    this.configDirectory = process.env.NODE_CONFIG_DIR || process.cwd() + '/config';
+    this.environment = process.env.NODE_CONFIG_ENV ?? '';
+    this.configDirectory = process.env.NODE_CONFIG_DIR ?? process.cwd() + '/config';
     debug(`config-directory: '${this.configDirectory}'`);
     debug(`environment: '${this.environment}'`);
   }

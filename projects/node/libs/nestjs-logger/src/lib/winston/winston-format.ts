@@ -34,16 +34,13 @@ function consoleContextFormat(context?: string) {
     CONTEXT_COLOR_CACHE.context = context;
     CONTEXT_COLOR_CACHE.color = color;
   }
-  return chalk.bold.ansi256(color)(fileContextFormat(context));
-}
-
-function consoleMessageFormat(level: string, message: string) {
-  // return supportsColor ? colorizer.colorize(level, message) : message;
-  return message;
+  // unit test should not depend on the provided terminal
+  /* istanbul ignore next */
+  return chalk.bold?.ansi256 ? chalk.bold.ansi256(color)(fileContextFormat(context)) : fileContextFormat(context);
 }
 
 export const DEFAULT_CONSOLE_FORMAT = winston.format.printf(({ level, message, timestamp, stack, context, ...meta }) => {
-  let line = `${timestamp} ${consoleLevelFormat(level)}${consoleContextFormat(context)} ${consoleMessageFormat(level, message)}`;
+  let line = `${timestamp} ${consoleLevelFormat(level)}${consoleContextFormat(context)} ${message}`;
   if (Object.keys(meta).length) {
     line += ' ' + JSON.stringify(meta);
   }

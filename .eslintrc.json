@@ -56,7 +56,8 @@
           {
             "selector": ["classProperty"],
             "modifiers": ["readonly"],
-            "format": ["strictCamelCase", "UPPER_CASE"]
+            "format": ["strictCamelCase", "UPPER_CASE"],
+            "leadingUnderscore": "allow"
           }
         ]
       }

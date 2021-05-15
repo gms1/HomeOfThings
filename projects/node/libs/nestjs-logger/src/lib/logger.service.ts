@@ -50,13 +50,13 @@ export class LoggerService implements NestLoggerService {
   }
 
   log(message: string, context?: string): NestLoggerService {
-    context = context || this._context;
+    context = context ?? this._context;
     this.logger.info(message, { context });
     return this;
   }
 
   error(message: string, trace?: string, context?: string): NestLoggerService {
-    context = context || this._context;
+    context = context ?? this._context;
     if (trace) {
       this.logger.error(message, { context, stack: trace });
     } else {
@@ -66,19 +66,19 @@ export class LoggerService implements NestLoggerService {
   }
 
   warn(message: string, context?: string): NestLoggerService {
-    context = context || this._context;
+    context = context ?? this._context;
     this.logger.warn(message, { context });
     return this;
   }
 
   debug(message: string, context?: string): NestLoggerService {
-    context = context || this._context;
+    context = context ?? this._context;
     this.logger.debug(message, { context });
     return this;
   }
 
   verbose(message: string, context?: string): NestLoggerService {
-    context = context || this._context;
+    context = context ?? this._context;
     this.logger.verbose(message, { context });
     return this;
   }

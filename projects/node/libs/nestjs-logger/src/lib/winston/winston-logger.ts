@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as _dbg from 'debug';
+import _debug from 'debug';
+import mkdirp from 'mkdirp';
 import * as path from 'path';
-import * as mkdirp from 'mkdirp';
-import { LoggerOptions } from '../model';
-import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
-import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LogLevel } from '../model/logger.constants';
 import * as winston from 'winston';
-const debug = _dbg('Logger');
+import { LoggerOptions } from '../model';
+import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LogLevel } from '../model/logger.constants';
+import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
+
+// NOTE: to be able to use WinstonLogger for 'debug'
+// waiting for
+//   "Pluggable log handler" (2018-03) https://github.com/visionmedia/debug/issues/556
+//   "5.x Roadmap" (2018-12) https://github.com/visionmedia/debug/issues/656
+
+const debug = _debug('Logger');
 debug('Module "winston" imported');
 
 export class WinstonLogger {
@@ -82,7 +88,7 @@ export class WinstonLogger {
     debug(`creating winston logger....`);
     this._consoleTransport = new winston.transports.Console({
       silent: options.consoleLogSilent,
-      level: options.consoleLogLevel || DEFAULT_CONSOLE_LOGLEVEL,
+      level: options.consoleLogLevel ?? DEFAULT_CONSOLE_LOGLEVEL,
       format: winston.format.combine(
         winston.format.timestamp({
           format: 'HH:mm:ss.SSS',
@@ -96,7 +102,7 @@ export class WinstonLogger {
       mkdirp(path.dirname(options.fileLogFileName));
       this._fileTransport = new winston.transports.File({
         silent: options.fileLogSilent,
-        level: options.fileLogLevel || DEFAULT_FILE_LOGLEVEL,
+        level: options.fileLogLevel ?? DEFAULT_FILE_LOGLEVEL,
         filename: options.fileLogFileName,
         format: winston.format.combine(winston.format.timestamp(), winston.format.errors({ stack: true }), DEFAULT_FILE_FORMAT),
       });
