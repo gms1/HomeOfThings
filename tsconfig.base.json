@@ -10,14 +10,16 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
       "@homeofthings/nestjs-config": ["projects/node/libs/nestjs-config/src/index.ts"],
       "@homeofthings/nestjs-logger": ["projects/node/libs/nestjs-logger/src/index.ts"],
-      "@homeofthings/nestjs-utils": ["projects/node/libs/nestjs-utils/src/index.ts"]
+      "@homeofthings/hot-express": ["projects/node/libs/hot-express/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

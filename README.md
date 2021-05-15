@@ -7,11 +7,14 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 # HomeOfThings
 
-
-
-## packages
+## packages for external and internal use
 
 - [@homeofthings/nestjs-logger](projects/node/libs/nestjs-logger/README.md)
 a logging module for [NestJS](https://docs.nestjs.com/) based on [winston](https://www.npmjs.com/package/winston)
 - [@homeofthings/nestjs-config](projects/node/libs/nestjs-config/README.md)
 a configuration module for [NestJS](https://docs.nestjs.com/) based on [node-config](https://www.npmjs.com/package/config)
+
+## packages for internal use
+
+- [@homeofthings/hot-express](projects/node/libs/hot-express/README.md)
+our express application

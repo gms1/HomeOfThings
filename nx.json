@@ -18,33 +18,22 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ]
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
     }
   },
   "projects": {
     "nestjs-config": {
-      "tags": [
-        "scope:backend"
-      ]
+      "tags": ["scope:backend"]
     },
     "nestjs-logger": {
-      "tags": [
-        "scope:backend"
-      ]
+      "tags": ["scope:backend"]
     },
     "hot-gateway": {
-      "tags": [
-        "scope:backend"
-      ]
+      "tags": ["scope:backend"]
     },
-    "nestjs-utils": {
-      "tags": []
+    "hot-express": {
+      "tags": ["scope:backend"]
     }
   },
   "workspaceLayout": {

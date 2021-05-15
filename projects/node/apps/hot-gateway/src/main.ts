@@ -1,33 +1,28 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
+import { ExpressApplication } from '@homeofthings/hot-express';
 import { ConfigModule } from '@homeofthings/nestjs-config';
-import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LOGLEVEL, LoggerModule } from '@homeofthings/nestjs-logger';
+import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LoggerModule, LogLevel } from '@homeofthings/nestjs-logger';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import * as _dbg from 'debug';
-import * as express from 'express';
-import * as fs from 'fs';
-import * as http from 'http';
-import * as https from 'https';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import _debug from 'debug';
 import * as path from 'path';
 import { AppModule } from './app/app.module';
 
-const debug = _dbg('main');
+const debug = _debug('main');
 
 debug('starting');
 
 // create config and logging service
 const configService = ConfigModule.createConfigService({});
 const logger = LoggerModule.createLoggerService({
-  consoleLogLevel: configService.getString('logging.console.level', DEFAULT_CONSOLE_LOGLEVEL) as LOGLEVEL,
+  consoleLogLevel: configService.getString('logging.console.level', DEFAULT_CONSOLE_LOGLEVEL) as LogLevel,
   consoleLogSilent: configService.getOptionalBoolean('logging.console.silent'),
   fileLogFileName: configService.getOptionalString('logging.file.path'),
-  fileLogLevel: configService.getString('logging.file.level', DEFAULT_FILE_LOGLEVEL) as LOGLEVEL,
+  fileLogLevel: configService.getString('logging.file.level', DEFAULT_FILE_LOGLEVEL) as LogLevel,
   fileLogSilent: configService.getBoolean('logging.file.silent', true),
 });
+
+const expressApplication = new ExpressApplication(logger);
 
 // global handlers
 process.on('uncaughtExceptionMonitor', (err) => {
@@ -42,82 +37,21 @@ process.on('exit', (code) => {
   }
 });
 
-/**
- * @description create http server if not disabled
- */
-async function createHttpServer(server: express.Express, appLogger: Logger, globalPrefix: string) {
-  if (configService.getOptionalBoolean('service.http.disabled')) {
-    return;
-  }
-  const port = configService.getNumber('service.http.port', 8080);
-  const address = configService.getString('service.http.address', 'localhost');
-  appLogger.debug(`  http:`);
-  appLogger.debug(`    port: ${port}`);
-  appLogger.debug(`    address: ${address}`);
-  http.createServer(server).listen(port, address, () => {
-    appLogger.log('Listening on http://' + address + ':' + port + '/' + globalPrefix);
-  });
-}
+process.on('SIGTERM', async () => {
+  debug('SIGTERM signal received');
+  await expressApplication.close();
+});
 
-/**
- * @description create https server if not disabled
- */
-async function createHttpsServer(server: express.Express, appLogger: Logger, globalPrefix: string) {
-  if (configService.getOptionalBoolean('service.https.disabled')) {
-    return;
-  }
-  const port = configService.getNumber('service.https.port', 8443);
-  const address = configService.getString('service.https.address', 'localhost');
-  const keyFile = configService.getOptionalString('service.https.key');
-  const certFile = configService.getOptionalString('service.https.cert');
+process.on('SIGINT', async () => {
+  debug('SIGINT signal received');
+  process.kill(process.pid, 'SIGTERM');
+});
 
-  if (!keyFile) {
-    throw new Error(`not starting https: key is not defined`);
-  }
-  if (!certFile) {
-    throw new Error(`not starting https: certFile is not defined`);
-  }
-
-  let key: string;
-  try {
-    key = fs.readFileSync(fs.readFileSync(path.resolve(configService.configDirectory, keyFile)), 'utf-8');
-  } catch (err) {
-    appLogger.error(`failed to read private key file '${keyFile}': ${err}`);
-    return;
-  }
-
-  let cert: string;
-  try {
-    key = fs.readFileSync(fs.readFileSync(path.resolve(configService.configDirectory, certFile)), 'utf-8');
-  } catch (err) {
-    appLogger.error(`failed to read cert chain file '${certFile}': ${err}`);
-    return;
-  }
-
-  appLogger.debug(`  https:`);
-  appLogger.debug(`    port: ${port}`);
-  appLogger.debug(`    address: ${address}`);
-  https
-    .createServer(
-      {
-        key,
-        cert,
-      },
-      server,
-    )
-    .listen(443, address, () => {
-      appLogger.log('Listening on https://' + address + ':' + port + '/' + globalPrefix);
-    });
-}
-
-/**
- * @description bootstrap our application
- */
 async function bootstrap() {
   try {
-    const server = express();
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, expressApplication.adapter, { logger });
+    app.enableCors();
 
-    const app = await NestFactory.create(AppModule, new ExpressAdapter(server), { logger });
     const appLogger = new Logger('Application');
     appLogger.debug(`Application created`);
     appLogger.debug(`Configuration:`);
@@ -126,8 +60,42 @@ async function bootstrap() {
 
     const globalPrefix = 'api';
     app.setGlobalPrefix(globalPrefix);
-    createHttpsServer(server, appLogger, globalPrefix);
-    createHttpServer(server, appLogger, globalPrefix);
+
+    const key = configService.getOptionalString('service.https.key');
+    const cert = configService.getOptionalString('service.https.cert');
+
+    if (
+      !expressApplication.createServer({
+        address: configService.getOptionalString('service.address'),
+        http: {
+          port: configService.getNumber('service.http.port', 80),
+          maxHeaderSize: configService.getOptionalNumber('service.http.maxHeaderSize'),
+          disabled: configService.getOptionalBoolean('service.http.disabled'),
+          redirect: configService.getBoolean('server.http.redirct', true),
+          redirectCode: configService.getOptionalNumber('server.http.redirectCode'),
+          redirectLocation: configService.getOptionalString('server.http.redirectLocation'),
+        },
+        https: {
+          port: configService.getNumber('service.https.port', 443),
+          key: key ? path.resolve(configService.configDirectory, key) : undefined,
+          cert: cert ? path.resolve(configService.configDirectory, cert) : undefined,
+          maxHeaderSize: configService.getOptionalNumber('service.https.maxHeaderSize'),
+          disabled: configService.getOptionalBoolean('service.https.disabled'),
+        },
+      })
+    ) {
+      return;
+    }
+
+    try {
+      await expressApplication.listen((address: string) => {
+        appLogger.log(`Listening on '${address}/${globalPrefix}/'`);
+      });
+    } catch (err) {
+      await expressApplication.close();
+      appLogger.log(`closed`);
+      return;
+    }
   } catch (err) {
     logger.error(`Bootstrapping failed: ${err}`, err.stack, 'main');
   }
