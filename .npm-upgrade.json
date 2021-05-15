@@ -5,8 +5,8 @@
       "reason": "does not preserve wrapped lines"
     },
     "typescript": {
-      "versions": ">=4.2",
-      "reason": "@angular/cli v11 peer dependency"
+      "versions": ">=4.3",
+      "reason": "@angular/cli v12 peer dependency"
     }
   }
 }
