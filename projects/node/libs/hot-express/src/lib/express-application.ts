@@ -8,7 +8,7 @@ import helmet from 'helmet';
 import * as http from 'http';
 import * as https from 'https';
 import * as net from 'net';
-import { TLSSocket } from 'node:tls';
+import { TLSSocket } from 'tls';
 import { ListenOptions } from './model/listen-options';
 
 const debug = _debug('ExpressApplication');
