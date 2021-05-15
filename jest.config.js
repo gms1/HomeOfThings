@@ -1,3 +1,4 @@
+const { defaults } = require('jest-config');
 module.exports = {
   projects: [
     '<rootDir>/projects/node/libs/nestjs-config',
