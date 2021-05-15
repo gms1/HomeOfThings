@@ -5,17 +5,29 @@ import * as winston from 'winston';
 const colorizer = winston.format.colorize();
 
 // unit test should not depend on the provided terminal
+
 /* istanbul ignore next */
 const supportsColor = (supports_color.stdout || supports_color.stderr || process.env.FORCE_COLOR) && !process.env.NO_COLORS;
+
+/* istanbul ignore next */
+const colorizeLevel: (level: string, text: string) => string = supportsColor
+  ? (level: string, text: string) => colorizer.colorize(level, text)
+  : (level: string, text: string) => text;
+
+/* istanbul ignore next */
+const colorizeContext: (context: string, text: string) => string =
+  supportsColor && chalk.bold?.ansi256
+    ? (context: string, text: string) => chalk.bold.ansi256(getContextColor(context))(text)
+    : supportsColor && chalk.ansi256
+    ? (context: string, text: string) => chalk.ansi256(getContextColor(context))(text)
+    : (context: string, text: string) => text;
 
 function fileLevelFormat(level: string) {
   return (level + ':      ').substr(0, 8);
 }
 
 function consoleLevelFormat(level: string) {
-  // unit test should not depend on the provided terminal
-  /* istanbul ignore next */
-  return supportsColor ? colorizer.colorize(level, fileLevelFormat(level)) : fileLevelFormat(level);
+  return colorizeLevel(level, fileLevelFormat(level));
 }
 
 function fileContextFormat(context?: string) {
@@ -26,17 +38,7 @@ function consoleContextFormat(context?: string) {
   if (!context) {
     return fileContextFormat(context);
   }
-  let color: number;
-  if (CONTEXT_COLOR_CACHE.context === context) {
-    color = CONTEXT_COLOR_CACHE.color as number;
-  } else {
-    color = selectColor(context);
-    CONTEXT_COLOR_CACHE.context = context;
-    CONTEXT_COLOR_CACHE.color = color;
-  }
-  // unit test should not depend on the provided terminal
-  /* istanbul ignore next */
-  return chalk.bold?.ansi256 ? chalk.bold.ansi256(color)(fileContextFormat(context)) : fileContextFormat(context);
+  return colorizeContext(context, fileContextFormat(context));
 }
 
 export const DEFAULT_CONSOLE_FORMAT = winston.format.printf(({ level, message, timestamp, stack, context, ...meta }) => {
@@ -62,9 +64,25 @@ export const DEFAULT_FILE_FORMAT = winston.format.printf(({ level, message, time
 });
 
 // ######################################################################################################
-// stolen from https://github.com/visionmedia/debug/blob/master/src/node.js
+const CONTEXT_COLOR_CACHE: { [context: string]: number | undefined } = {};
+const CONTEXT_COLOR_CACHE_SIZE = 10;
 
-const CONTEXT_COLOR_CACHE: { color?: number; context?: string } = {};
+export function getContextColor(context: string): number {
+  let color = CONTEXT_COLOR_CACHE[context];
+  if (color !== undefined) {
+    return color;
+  }
+  const keys = Object.keys(CONTEXT_COLOR_CACHE);
+  /* istanbul ignore if */
+  if (keys.length > CONTEXT_COLOR_CACHE_SIZE - 1) {
+    keys.splice(0, keys.length - CONTEXT_COLOR_CACHE_SIZE + 1).forEach((key) => delete CONTEXT_COLOR_CACHE[key]);
+  }
+  CONTEXT_COLOR_CACHE[context] = color = selectColor(context);
+  return color;
+}
+
+// ######################################################################################################
+// stolen from https://github.com/visionmedia/debug/blob/master/src/node.js
 
 const DEBUG_COLORS = [
   20,

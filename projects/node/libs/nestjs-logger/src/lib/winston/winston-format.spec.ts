@@ -1,5 +1,5 @@
 import * as winston from 'winston';
-import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
+import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT, getContextColor } from './winston-format';
 
 describe('Winston Default Console Format', () => {
   it('should build console log message with context', () => {
@@ -12,22 +12,6 @@ describe('Winston Default Console Format', () => {
     const resultInfo = DEFAULT_CONSOLE_FORMAT.transform(givenInfo);
     const message = resultInfo[Object.getOwnPropertySymbols(resultInfo)[0]];
     expect(message).toMatch(/^timestamp\s+.*info:.*\s+.*\[logger\].* info message$/);
-  });
-
-  it('should build console log message using context color cache', () => {
-    const givenInfo: winston.Logform.TransformableInfo = {
-      timestamp: 'timestamp',
-      level: 'info',
-      message: 'info message',
-      context: 'logger',
-    };
-    const resultInfo1 = DEFAULT_CONSOLE_FORMAT.transform(givenInfo);
-    const message1 = resultInfo1[Object.getOwnPropertySymbols(resultInfo1)[0]];
-
-    // using cached context color
-    const resultInfo2 = DEFAULT_CONSOLE_FORMAT.transform(givenInfo);
-    const message2 = resultInfo1[Object.getOwnPropertySymbols(resultInfo2)[0]];
-    expect(message1).toBe(message2);
   });
 
   it('should build console log message with stack', () => {
@@ -52,6 +36,13 @@ describe('Winston Default Console Format', () => {
     const resultInfo = DEFAULT_CONSOLE_FORMAT.transform(givenInfo);
     const message = resultInfo[Object.getOwnPropertySymbols(resultInfo)[0]];
     expect(message).toMatch(/^timestamp\s+.*debug:.*\s+debug message \{"meta":\{"x":1\}\}$/);
+  });
+
+  it('get context color', () => {
+    const givenContext = 'test context';
+    const firstColor = getContextColor(givenContext);
+    const secondColor = getContextColor(givenContext);
+    expect(firstColor).toBe(secondColor);
   });
 });
 
