@@ -15,4 +15,7 @@ export interface ListenOptions {
     maxHeaderSize?: number;
     disabled?: boolean;
   };
+  limits?: {
+    jsonBody?: string;
+  };
 }

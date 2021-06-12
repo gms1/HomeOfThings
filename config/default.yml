@@ -39,3 +39,10 @@ service:
     maxHeaderSize: 8192
     # disabled: set to 'true' if you want to disable https; default is 'false'
     disabled: 'false'
+  limits:
+    # maximum json body size; default 10kb
+    jsonBody: '10kb'
+email:
+  smtpHost: ''
+  smtpPort:
+  from: ''

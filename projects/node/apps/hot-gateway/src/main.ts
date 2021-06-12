@@ -10,6 +10,8 @@ import { AppModule } from './app/app.module';
 
 const debug = _debug('main');
 
+const DEFAULT_SERVICE_LIMIT_JSON_BODY = '10kb';
+
 debug('starting');
 
 // create config and logging service
@@ -81,6 +83,9 @@ async function bootstrap() {
           cert: cert ? path.resolve(configService.configDirectory, cert) : undefined,
           maxHeaderSize: configService.getOptionalNumber('service.https.maxHeaderSize'),
           disabled: configService.getOptionalBoolean('service.https.disabled'),
+        },
+        limits: {
+          jsonBody: configService.getString('service.limits.jsonBody', DEFAULT_SERVICE_LIMIT_JSON_BODY),
         },
       })
     ) {
