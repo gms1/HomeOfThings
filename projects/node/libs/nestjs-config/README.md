@@ -1,6 +1,6 @@
 [![npm version](https://badge.fury.io/js/%40homeofthings%2Fnestjs-config.svg)](https://badge.fury.io/js/%40homeofthings%2Fnestjs-config)
 [![Build Status](https://api.travis-ci.com/gms1/HomeOfThings.svg?branch=master)](https://travis-ci.com/gms1/HomeOfThings)
-[![Coverage Status](https://codecov.io/gh/gms1/HomeOfThings/branch/master/graph/badge.svg)](https://codecov.io/gh/gms1/HomeOfThings)
+[![Coverage Status](https://codecov.io/gh/gms1/HomeOfThings/branch/master/graph/badge.svg?flag=nestjs-config)](https://codecov.io/gh/gms1/HomeOfThings?flag=nestjs-config)
 [![DeepScan grade](https://deepscan.io/api/teams/439/projects/987/branches/1954/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=439&pid=987&bid=1954)
 [![Dependency Status](https://david-dm.org/gms1/HomeOfThings.svg)](https://david-dm.org/gms1/HomeOfThings)
 [![Known Vulnerabilities](https://snyk.io/test/github/gms1/HomeOfThings/badge.svg)](https://snyk.io/test/github/gms1/HomeOfThings)
