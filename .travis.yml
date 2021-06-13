@@ -13,4 +13,6 @@ script:
   - npm run lint:all
 
 after_script:
+  - npm run coverage:codecov:nestjs-logger
+  - npm run coverage:codecov:nestjs-config
   - npm run coverage:codecov

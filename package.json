@@ -38,7 +38,9 @@
     "lint:nestjs-config": "nx run nestjs-config:lint",
     "lint:hot-express": "nx run hot-express:lint",
     "ci": "npm run build:all && npm run test:all && npm run lint:all",
-    "coverage:codecov": "codecov"
+    "coverage:codecov": "codecov --disable=gcov -f coverage/lcov.info",
+    "coverage:codecov:nestjs-logger": "codecov --disable=gcov -F nestjs-logger -f coverage/projects/node/libs/nestjs-logger/lcov.info",
+    "coverage:codecov:nestjs-config": "codecov --disable=gcov -F nestjs-config -f coverage/projects/node/libs/nestjs-config/lcov.info"
   },
   "private": true,
   "dependencies": {

@@ -1,1 +1,18 @@
+flags:
+  nestjs-logger:
+    paths:
+      - projects/node/libs/nestjs-logger
+  nestjs-config:
+    paths:
+      - projects/node/libs/nestjs-config
 
+# To see status checks based on flags
+coverage:
+  status:
+    project:
+      nestjs-logger:
+        flags:
+          - nestjs-logger
+      nestjs-config:
+        flags:
+          - nestjs-config
