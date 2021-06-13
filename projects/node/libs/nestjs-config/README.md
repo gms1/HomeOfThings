@@ -6,7 +6,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/gms1/HomeOfThings/badge.svg)](https://snyk.io/test/github/gms1/HomeOfThings)
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![License](https://img.shields.io/npm/l/@homeofthings/nestjs-config.svg?style=flat-square)](./LICENSE)
+[![License](https://img.shields.io/npm/l/@homeofthings/nestjs-config.svg?style=flat-square)](../../../../LICENSE)
 
 # HomeOfThings - Config for NestJs
 
