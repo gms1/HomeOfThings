@@ -72,20 +72,24 @@ bootstrap();
 using one of the methods provided by the `ConfigService`:
 
 ```TypeScript
-declare class ConfigService {
-    readonly environment: string;
+export declare class ConfigService {
     readonly configDirectory: string;
+    readonly environment: string;
 
     constructor(_opts: ConfigModuleOptions);
 
     getString(key: string, defaultValue: string): string;
     getNumber(key: string, defaultValue: number): number;
     getBoolean(key: string, defaultValue: boolean): boolean;
-    getPath(key: string, defaultValue: string): string;    
+
+    // resolve path relative to config-directory
+    getPath(key: string, defaultValue: string): string;
 
     getOptionalString(key: string): string | undefined;
     getOptionalNumber(key: string): number | undefined;
     getOptionalBoolean(key: string): boolean | undefined;
-    getOptionalPath(key: string): string | undefined;    
+
+    // resolve path relative to config-directory
+    getOptionalPath(key: string): string | undefined;
 }
 ```

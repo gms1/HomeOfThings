@@ -1,4 +1,5 @@
 import * as config from 'config';
+import * as path from 'path';
 import { ConfigService } from './config.service';
 
 jest.mock('config', () => ({
@@ -211,7 +212,7 @@ describe('ConfigService', () => {
     expect(value).toBe(defaultValue);
   });
 
-  it('getOptionalPath should return path', () => {
+  it('getOptionalPath should return absolute path as is', () => {
     const givenValue = '/foo';
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
@@ -219,6 +220,16 @@ describe('ConfigService', () => {
     expect(has).toBeCalledTimes(1);
     expect(get).toBeCalledTimes(1);
     expect(value).toBe(givenValue);
+  });
+
+  it('getOptionalPath should return resolved path', () => {
+    const givenValue = 'foo';
+    has.mockReturnValueOnce(true);
+    get.mockReturnValueOnce(givenValue);
+    const value = configService.getOptionalPath('testKey');
+    expect(has).toBeCalledTimes(1);
+    expect(get).toBeCalledTimes(1);
+    expect(value).toBe(path.resolve(configService.configDirectory, givenValue));
   });
 
   it('getOptionalPath should return undefined', () => {
@@ -230,7 +241,7 @@ describe('ConfigService', () => {
     expect(value).toBe(givenValue);
   });
 
-  it('getPath should return config value', () => {
+  it('getPath should return absolute path as is', () => {
     const givenValue = '/foo';
     const defaultValue = '/bar';
     has.mockReturnValueOnce(true);
@@ -241,13 +252,33 @@ describe('ConfigService', () => {
     expect(value).toBe(givenValue);
   });
 
-  it('getPath should return default value', () => {
+  it('getPath should return resolved path', () => {
+    const givenValue = 'foo';
+    const defaultValue = '/bar';
+    has.mockReturnValueOnce(true);
+    get.mockReturnValueOnce(givenValue);
+    const value = configService.getPath('testKey', defaultValue);
+    expect(has).toBeCalledTimes(1);
+    expect(get).toBeCalledTimes(1);
+    expect(value).toBe(path.resolve(configService.configDirectory, givenValue));
+  });
+
+  it('getPath should return absolute default path as is', () => {
     const defaultValue = '/bar';
     has.mockReturnValueOnce(false);
     const value = configService.getPath('testKey', defaultValue);
     expect(has).toBeCalledTimes(1);
     expect(get).toBeCalledTimes(0);
     expect(value).toBe(defaultValue);
+  });
+
+  it('getPath should return resolved default path', () => {
+    const defaultValue = 'bar';
+    has.mockReturnValueOnce(false);
+    const value = configService.getPath('testKey', defaultValue);
+    expect(has).toBeCalledTimes(1);
+    expect(get).toBeCalledTimes(0);
+    expect(value).toBe(path.resolve(configService.configDirectory, defaultValue));
   });
 });
 

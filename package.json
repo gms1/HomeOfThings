@@ -40,7 +40,9 @@
     "ci": "npm run build:all && npm run test:all && npm run lint:all",
     "coverage:codecov": "codecov --disable=gcov -f coverage/lcov.info",
     "coverage:codecov:nestjs-logger": "codecov --disable=gcov -F nestjs-logger -f coverage/projects/node/libs/nestjs-logger/lcov.info",
-    "coverage:codecov:nestjs-config": "codecov --disable=gcov -F nestjs-config -f coverage/projects/node/libs/nestjs-config/lcov.info"
+    "coverage:codecov:nestjs-config": "codecov --disable=gcov -F nestjs-config -f coverage/projects/node/libs/nestjs-config/lcov.info",
+    "publish:nestjs-logger": "cd dist/projects/node/libs/nestjs-logger && npm publish --access public",
+    "publish:nestjs-config": "cd dist/projects/node/libs/nestjs-config && npm publish --access public"
   },
   "private": true,
   "dependencies": {
