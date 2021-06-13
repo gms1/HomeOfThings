@@ -121,8 +121,8 @@ export class ExpressApplication {
   private registerGlobalMiddleware() {
     this._app.use(helmet());
     this._app.use(this.httpRedirectHandler.bind(this));
-    if (this._options?.bodyLimit) {
-      this._app.use(express.json({ limit: this._options.bodyLimit }));
+    if (this._options?.limits?.jsonBody) {
+      this._app.use(express.json({ limit: this._options?.limits?.jsonBody }));
     }
     this._app.use(cookieParser());
   }
