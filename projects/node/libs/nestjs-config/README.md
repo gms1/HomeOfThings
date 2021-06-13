@@ -93,3 +93,7 @@ export declare class ConfigService {
     getOptionalPath(key: string): string | undefined;
 }
 ```
+
+## RELEASE NOTES
+
+[CHANGELOG](./CHANGELOG.md)
