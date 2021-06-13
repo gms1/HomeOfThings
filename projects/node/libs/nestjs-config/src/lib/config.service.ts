@@ -11,14 +11,16 @@ const debug = _debug('Config');
 
 @Injectable()
 export class ConfigService {
-  readonly environment: string;
-  readonly configDirectory: string;
+  configDirectory: string;
 
   constructor(@Inject(CONFIG_MODULE_OPTIONS_TOKEN) private _opts: ConfigModuleOptions) {
-    this.environment = process.env.NODE_CONFIG_ENV ?? '';
     this.configDirectory = process.env.NODE_CONFIG_DIR ?? process.cwd() + '/config';
     debug(`config-directory: '${this.configDirectory}'`);
     debug(`environment: '${this.environment}'`);
+  }
+
+  get environment(): string {
+    return process.env.NODE_CONFIG_ENV ?? '';
   }
 
   getString(key: string, defaultValue: string): string {

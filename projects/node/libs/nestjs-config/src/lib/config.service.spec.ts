@@ -250,3 +250,31 @@ describe('ConfigService', () => {
     expect(value).toBe(defaultValue);
   });
 });
+
+describe('ConfigService instantiation', () => {
+  it('environment should be taken from NODE_CONFIG_ENV', () => {
+    const givenEnvironment = 'development';
+    process.env.NODE_CONFIG_ENV = givenEnvironment;
+    const configService = new ConfigService({});
+    expect(configService.environment).toBe(givenEnvironment);
+  });
+
+  it('environment should be empty on default', () => {
+    delete process.env.NODE_CONFIG_ENV;
+    const configService = new ConfigService({});
+    expect(configService.environment).toBe('');
+  });
+
+  it('config-directory should honor NODE_CONFIG_DIR', () => {
+    const givenDirectory = '/foo';
+    process.env.NODE_CONFIG_DIR = givenDirectory;
+    const configService = new ConfigService({});
+    expect(configService.configDirectory).toBe(givenDirectory);
+  });
+
+  it('config-directory should be "config" inside current working directory on default', () => {
+    delete process.env.NODE_CONFIG_DIR;
+    const configService = new ConfigService({});
+    expect(configService.configDirectory).toBe(process.cwd() + '/config');
+  });
+});
