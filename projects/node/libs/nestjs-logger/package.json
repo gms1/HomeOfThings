@@ -1,7 +1,7 @@
 {
   "name": "@homeofthings/nestjs-logger",
   "description": "HomeOfThings - logger: a logger for NestJs based on winston",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": [
     "nestjs",
     "nest",
