@@ -9,7 +9,7 @@
       "reason": "using ESM; breaks unit-tests"
     },
     "typescript": {
-      "versions": ">=4.3",
+      "versions": ">=4.4",
       "reason": "@angular/cli v12 peer dependency"
     }
   }

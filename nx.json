@@ -23,21 +23,29 @@
     }
   },
   "projects": {
-    "nestjs-config": {
-      "tags": ["scope:backend"]
-    },
-    "nestjs-logger": {
+    "hot-express": {
       "tags": ["scope:backend"]
     },
     "hot-gateway": {
       "tags": ["scope:backend"]
     },
-    "hot-express": {
+    "nestjs-config": {
+      "tags": ["scope:backend"]
+    },
+    "nestjs-logger": {
       "tags": ["scope:backend"]
     }
   },
   "workspaceLayout": {
     "appsDir": "projects",
     "libsDir": "projects"
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
   }
 }

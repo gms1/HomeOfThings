@@ -11,4 +11,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../../../coverage/projects/node/apps/hot-gateway',
+  testEnvironment: 'node',
 };
