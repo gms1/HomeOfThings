@@ -32,9 +32,9 @@ export function die(message: string, ...params) {
 }
 
 // -----------------------------------------------------------------------------------------
-export async function readTextFile(filePath: string): Promise<string> {
+export async function readTextFile(filePath: string, encoding: BufferEncoding = 'utf8'): Promise<string> {
   try {
-    return await fs.readTextFilePromised(filePath, { encoding: 'utf8' });
+    return await fs.readTextFilePromised(filePath, encoding);
   } catch (err) {
     error(`reading '${filePath}' failed: ${err}`);
     throw err;

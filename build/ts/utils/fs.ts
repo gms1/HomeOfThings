@@ -14,7 +14,7 @@ const _statPromised = util.promisify(fs.stat);
 const _unlinkPromised = util.promisify(fs.unlink);
 
 // -----------------------------------------------------------------------------------------
-export function readTextFilePromised(path: fs.PathLike | number, options: { encoding: BufferEncoding; flag?: string } | string): Promise<string> {
+export function readTextFilePromised(path: fs.PathLike | number, options: BufferEncoding): Promise<string> {
   return _readFilePromised(path, options).catch((err) => {
     debug(`reading '${path}' failed: ${err}`);
     return Promise.reject(err);
