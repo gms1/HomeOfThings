@@ -6,29 +6,29 @@ DN=$(dirname "$0")
 
 usage() {
   cat <<EOT
-  usage: $0 <package-name> nest|node
+  usage: $0 <package-shortname> nest|node
 EOT
   exit 1
 }
 
-PACKAGE_NAME="$1"
+PACKAGE_SHORTNAME="$1"
 PACKAGE_TYPE="$2"
 
-[ -n "${PACKAGE_NAME}" ] || usage
+[ -n "${PACKAGE_SHORTNAME}" ] || usage
 [ -n "${PACKAGE_TYPE}" ] || usage
 [ "${PACKAGE_TYPE}" = "nest" -o "${PACKAGE_TYPE}" = "node"  ] || usage
 
 PACKAGE_DIR="node/libs"
-PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_NAME}/package.json"
+PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_SHORTNAME}/package.json"
 
 case "${PACKAGE_TYPE}" in
   nest)
     # TODO: last time --simpleModuleName triggerd IndexOutOfBoundException
-    CMD=( npx nx generate @nrwl/nest:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
+    CMD=( npx nx generate @nrwl/nest:lib "${PACKAGE_SHORTNAME}" --name="${PACKAGE_SHORTNAME}" --directory="${PACKAGE_DIR}" --publishable --buildable --importPath="@homeofthings/${PACKAGE_SHORTNAME}" --strict )
     ;;
   *)
     PACKAGE_TYPE=node
-    CMD=( npx nx generate @nrwl/node:lib "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --simpleModuleName  --publishable --buildable --importPath="@homeofthings/${PACKAGE_NAME}" --strict )
+    CMD=( npx nx generate @nrwl/node:lib "${PACKAGE_SHORTNAME}" --name="${PACKAGE_SHORTNAME}" --directory="${PACKAGE_DIR}" --simpleModuleName  --publishable --buildable --importPath="@homeofthings/${PACKAGE_SHORTNAME}" --strict )
     ;;
 esac
 
@@ -37,13 +37,13 @@ echo "${CMD[@]}"
 
 cat >"${PACKAGE_JSON}" <<EOT
 {
-  "name": "@homeofthings/${PACKAGE_NAME}",
-  "description": "HomeOfThings - ${PACKAGE_NAME}",
+  "name": "@homeofthings/${PACKAGE_SHORTNAME}",
+  "description": "HomeOfThings - ${PACKAGE_SHORTNAME}",
   "version": "0.0.1"
 }
 EOT
 [ $? -eq 0 ] || die "failed to create '${PACKAGE_JSON}'"
 
-"${DN}/project.ts" rename "node-libs-${PACKAGE_NAME}" "${PACKAGE_NAME}" || exit 1
+"${DN}/project.ts" rename "node-libs-${PACKAGE_SHORTNAME}" "${PACKAGE_SHORTNAME}" || exit 1
 
 succeeded

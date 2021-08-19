@@ -1,5 +1,11 @@
 {
   "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "project": "./tsconfig.base.json",
+    "sourceType": "module"
+  },
   "ignorePatterns": ["**/*"],
   "plugins": ["@nrwl/nx", "rxjs"],
   "overrides": [

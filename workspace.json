@@ -179,6 +179,86 @@
           }
         }
       }
+    },
+    "nestjs-sqlite3": {
+      "root": "projects/node/libs/nestjs-sqlite3",
+      "sourceRoot": "projects/node/libs/nestjs-sqlite3/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/projects/node/libs/nestjs-sqlite3",
+            "tsConfig": "projects/node/libs/nestjs-sqlite3/tsconfig.lib.json",
+            "packageJson": "projects/node/libs/nestjs-sqlite3/package.json",
+            "main": "projects/node/libs/nestjs-sqlite3/src/index.ts",
+            "assets": [
+              "projects/node/libs/nestjs-sqlite3/*.md"
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/node/libs/nestjs-sqlite3/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/projects/node/libs/nestjs-sqlite3"
+          ],
+          "options": {
+            "jestConfig": "projects/node/libs/nestjs-sqlite3/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "nestjs-utils": {
+      "root": "projects/node/libs/nestjs-utils",
+      "sourceRoot": "projects/node/libs/nestjs-utils/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/projects/node/libs/nestjs-utils",
+            "tsConfig": "projects/node/libs/nestjs-utils/tsconfig.lib.json",
+            "packageJson": "projects/node/libs/nestjs-utils/package.json",
+            "main": "projects/node/libs/nestjs-utils/src/index.ts",
+            "assets": [
+              "projects/node/libs/nestjs-utils/*.md"
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/node/libs/nestjs-utils/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/projects/node/libs/nestjs-utils"
+          ],
+          "options": {
+            "jestConfig": "projects/node/libs/nestjs-utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

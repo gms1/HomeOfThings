@@ -1,16 +1,18 @@
 {
-  "name": "@homeofthings/nestjs-logger",
-  "description": "HomeOfThings - NestJs Logger: a logger for NestJs based on Winston",
-  "version": "1.0.2",
+  "name": "@homeofthings/nestjs-sqlite3",
+  "description": "HomeOfThings - NestJs Sqlite3: Sqlite3 module for NestJs based on 'sqlite3orm'",
+  "version": "1.0.1",
   "keywords": [
     "nestjs",
     "nest",
     "node",
-    "winston",
-    "logger",
-    "logging",
-    "logs",
-    "loglevel"
+    "sqlite",
+    "sqlite3",
+    "sqlcipher",
+    "ORM",
+    "DAO",
+    "schema",
+    "database"
   ],
   "author": {
     "email": "www.gms@gmx.at",

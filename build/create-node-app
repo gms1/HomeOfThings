@@ -6,19 +6,19 @@ DN=$(dirname "$0")
 
 usage() {
   cat <<EOT
-  usage: $0 <package-name>
+  usage: $0 <package-shortname>
 EOT
   exit 1
 }
 
-PACKAGE_NAME=$1
+PACKAGE_SHORTNAME=$1
 
-[ -n "${PACKAGE_NAME}" ] || usage
+[ -n "${PACKAGE_SHORTNAME}" ] || usage
 
 PACKAGE_DIR="node/apps"
-PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_NAME}/package.json"
+PACKAGE_JSON="${WORKSPACE_DIR}/projects/${PACKAGE_DIR}/${PACKAGE_SHORTNAME}/package.json"
 
-CMD=( npx nx generate @nrwl/nest:application "${PACKAGE_NAME}" --name="${PACKAGE_NAME}" --directory="${PACKAGE_DIR}" --simpleModuleName=true  --strict )
+CMD=( npx nx generate @nrwl/nest:application "${PACKAGE_SHORTNAME}" --name="${PACKAGE_SHORTNAME}" --directory="${PACKAGE_DIR}" --simpleModuleName=true  --strict )
 
 echo "${CMD[@]}"
 "${CMD[@]}" || die "failed"
@@ -26,13 +26,13 @@ echo "${CMD[@]}"
 
 cat >"${PACKAGE_JSON}" <<EOT
 {
-  "name": "@homeofthings/${PACKAGE_NAME}",
-  "description": "HomeOfThings - ${PACKAGE_NAME}",
+  "name": "@homeofthings/${PACKAGE_SHORTNAME}",
+  "description": "HomeOfThings - ${PACKAGE_SHORTNAME}",
   "version": "0.0.1"
 }
 EOT
 [ $? -eq 0 ] || die "failed to create '${PACKAGE_JSON}'"
 
-"${DN}/project.ts" rename "node-apps-${PACKAGE_NAME}" "${PACKAGE_NAME}" || exit 1
+"${DN}/project.ts" rename "node-apps-${PACKAGE_SHORTNAME}" "${PACKAGE_SHORTNAME}" || exit 1
 
 succeeded

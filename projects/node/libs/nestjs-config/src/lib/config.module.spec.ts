@@ -42,7 +42,7 @@ describe('ConfigModule', function() {
     class ConfigModuleOptionsProvider {
       getConfigModuleOptions(): Promise<ConfigModuleOptions> {
         return new Promise((resolve, _reject) => {
-          setTimeout(resolve, 0, givenOptions);
+          setTimeout(resolve, 3000, givenOptions);
         });
       }
     }

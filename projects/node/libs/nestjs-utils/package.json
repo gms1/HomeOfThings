@@ -1,16 +1,11 @@
 {
-  "name": "@homeofthings/nestjs-logger",
-  "description": "HomeOfThings - NestJs Logger: a logger for NestJs based on Winston",
-  "version": "1.0.2",
+  "name": "@homeofthings/nestjs-utils",
+  "description": "HomeOfThings - NestJs Utils: various utilities and common types",
+  "version": "1.0.1",
   "keywords": [
     "nestjs",
     "nest",
-    "node",
-    "winston",
-    "logger",
-    "logging",
-    "logs",
-    "loglevel"
+    "node"
   ],
   "author": {
     "email": "www.gms@gmx.at",

@@ -44,7 +44,7 @@ describe('LoggerModule', function() {
     class LoggerModuleOptionsProvider {
       getLoggerModuleOptions(): Promise<LoggerModuleOptions> {
         return new Promise((resolve, _reject) => {
-          setTimeout(resolve, 0, givenOptions);
+          setTimeout(resolve, 4000, givenOptions);
         });
       }
     }
