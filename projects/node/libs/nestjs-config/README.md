@@ -38,7 +38,9 @@ export class AppModule {}
   imports: [
     ConfigModule.forRootAsync(ConfigModule, {
       imports: [], // optional
-      useFactory: (): Promise<ConfigModuleOptions> => Promise.resolve({}),
+      useFactory: (): Promise<ConfigModuleOptions> => Promise.resolve({
+        // provide your options
+      }),
       inject: [], // optional inject params for useFactory method
     }),
   ],

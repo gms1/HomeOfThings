@@ -8,8 +8,8 @@ import { LoggerService } from './logger.service';
   exports: [LoggerService],
 })
 export class LoggerModule extends createConfigurableDynamicRootModule<LoggerModule, LoggerModuleOptions>(LOGGER_MODULE_OPTIONS_TOKEN) {
-  static forChild(): Promise<DynamicModule> {
-    return LoggerModule.externallyConfigured(LoggerModule, 0);
+  static forChild(wait = 0): Promise<DynamicModule> {
+    return LoggerModule.externallyConfigured(LoggerModule, wait);
   }
 
   static createLoggerService(options: LoggerModuleOptions): LoggerService {

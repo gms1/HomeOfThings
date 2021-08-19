@@ -3,11 +3,7 @@ import { Test } from '@nestjs/testing';
 import { LoggerModuleOptions, LogLevel } from './model';
 import { LoggerModule } from './logger.module';
 import { LoggerService } from './logger.service';
-
-export enum Color {
-  Red = '',
-  Blue = '',
-}
+import { WinstonLogger } from './winston/winston-logger';
 
 describe('LoggerModule', function() {
   @Module({
@@ -34,15 +30,18 @@ describe('LoggerModule', function() {
       imports: [LoggerModule.forRoot(LoggerModule, givenOptions), ChildModule],
     }).compile();
 
+    // get appModule provided instance
     const loggerService = appModule.get(LoggerService);
     expect(loggerService).toBeInstanceOf(LoggerService);
+    expect(loggerService.logger).toBeInstanceOf(WinstonLogger);
 
+    // ChildModule should have same instance
     expect(ChildModule.loggerService).toBe(loggerService);
   });
 
   it('for async options', async function() {
     @Injectable()
-    class ConfigService {
+    class LoggerModuleOptionsProvider {
       getLoggerModuleOptions(): Promise<LoggerModuleOptions> {
         return new Promise((resolve, _reject) => {
           setTimeout(resolve, 0, givenOptions);
@@ -51,39 +50,49 @@ describe('LoggerModule', function() {
     }
 
     @Module({
-      providers: [ConfigService],
-      exports: [ConfigService],
+      providers: [LoggerModuleOptionsProvider],
+      exports: [LoggerModuleOptionsProvider],
     })
-    class ConfigModule {}
+    class LoggerOptionsModule {}
 
     const appModule = await Test.createTestingModule({
       imports: [
         LoggerModule.forRootAsync(LoggerModule, {
-          imports: [ConfigModule, ChildModule],
-          useFactory: (cfg: ConfigService) => cfg.getLoggerModuleOptions(),
-          inject: [ConfigService],
+          imports: [LoggerOptionsModule, ChildModule],
+          useFactory: (cfg: LoggerModuleOptionsProvider) => cfg.getLoggerModuleOptions(),
+          inject: [LoggerModuleOptionsProvider],
         }),
       ],
     }).compile();
 
+    // get appModule provided instance
     const loggerService = appModule.get(LoggerService);
     expect(loggerService).toBeInstanceOf(LoggerService);
+    expect(loggerService.logger).toBeInstanceOf(WinstonLogger);
 
+    // ChildModule should have same instance
     expect(ChildModule.loggerService).toBe(loggerService);
   });
 
   it('create', async function() {
-    const loggerService = LoggerModule.createLoggerService(givenOptions);
-    expect(loggerService).toBeInstanceOf(LoggerService);
+    const createdLoggerService = LoggerModule.createLoggerService(givenOptions);
+    expect(createdLoggerService).toBeInstanceOf(LoggerService);
 
     const appModule = await Test.createTestingModule({
       imports: [LoggerModule.forRoot(LoggerModule, {}), ChildModule], // given option are ignored
     }).compile();
 
-    const resolvedLoggerService = appModule.get(LoggerService);
-    expect(resolvedLoggerService).not.toBe(loggerService); // even if LoggerService instance is different
-    expect(resolvedLoggerService.logger).toBe(loggerService.logger); // WinstonLogger is a singleton and therefore should be the same
+    // get appModule provided instance
+    const loggerService = appModule.get(LoggerService);
+    expect(loggerService).toBeInstanceOf(LoggerService);
+    expect(loggerService.logger).toBeInstanceOf(WinstonLogger);
 
-    expect(ChildModule.loggerService).toBe(resolvedLoggerService);
+    // ChildModule should have same instance
+    expect(ChildModule.loggerService).toBe(loggerService);
+
+    // createdLoggerService should be different instance
+    expect(loggerService).not.toBe(createdLoggerService);
+    // but WinstonLogger is a singleton and therefore should be the same
+    expect(loggerService.logger).toBe(createdLoggerService.logger);
   });
 });

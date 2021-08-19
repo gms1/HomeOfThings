@@ -29,9 +29,11 @@ describe('ConfigModule', function() {
       imports: [ConfigModule.forRoot(ConfigModule, givenOptions), ChildModule],
     }).compile();
 
+    // get appModule provided instance
     const configService = appModule.get(ConfigService);
     expect(configService).toBeInstanceOf(ConfigService);
 
+    // ChildModule should have same instance
     expect(ChildModule.configService).toBe(configService);
   });
 
@@ -62,9 +64,11 @@ describe('ConfigModule', function() {
       ],
     }).compile();
 
+    // get appModule provided instance
     const configService = appModule.get(ConfigService);
     expect(configService).toBeInstanceOf(ConfigService);
 
+    // ChildModule should have same instance
     expect(ChildModule.configService).toBe(configService);
   });
 

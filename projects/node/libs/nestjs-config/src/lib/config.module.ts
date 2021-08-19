@@ -8,8 +8,8 @@ import { ConfigService } from './config.service';
   exports: [ConfigService],
 })
 export class ConfigModule extends createConfigurableDynamicRootModule<ConfigModule, ConfigModuleOptions>(CONFIG_MODULE_OPTIONS_TOKEN) {
-  static forChild(): Promise<DynamicModule> {
-    return ConfigModule.externallyConfigured(ConfigModule, 0);
+  static forChild(wait = 0): Promise<DynamicModule> {
+    return ConfigModule.externallyConfigured(ConfigModule, wait);
   }
 
   static createConfigService(options: ConfigModuleOptions): ConfigService {

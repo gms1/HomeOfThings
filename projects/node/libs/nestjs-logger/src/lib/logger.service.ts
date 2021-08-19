@@ -1,8 +1,9 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { LoggerModuleOptions, LOGGER_MODULE_OPTIONS_TOKEN, LogLevel } from './model';
 import { WinstonLogger } from './winston/winston-logger';
 import { NestLoggerService } from './nest-logger.service';
 
+@Injectable()
 export class LoggerService implements NestLoggerService {
   private static _instance: WinstonLogger;
 

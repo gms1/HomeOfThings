@@ -8,7 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2017",
+    "target": "ESNext",
     "module": "es2015",
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
@@ -19,7 +19,8 @@
     "paths": {
       "@homeofthings/hot-express": ["projects/node/libs/hot-express/src/index.ts"],
       "@homeofthings/nestjs-config": ["projects/node/libs/nestjs-config/src/index.ts"],
-      "@homeofthings/nestjs-logger": ["projects/node/libs/nestjs-logger/src/index.ts"]
+      "@homeofthings/nestjs-logger": ["projects/node/libs/nestjs-logger/src/index.ts"],
+      "@homeofthings/nestjs-sqlite3": ["projects/node/libs/nestjs-sqlite3/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
