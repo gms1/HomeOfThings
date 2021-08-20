@@ -1,4 +1,4 @@
-import { Injectable, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { Sqlite3ModuleOptions } from './model';
 import { Sqlite3Module } from './sqlite3.module';
