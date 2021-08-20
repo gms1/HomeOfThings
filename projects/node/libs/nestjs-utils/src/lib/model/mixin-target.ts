@@ -1,4 +1,4 @@
-import { AnyObject, Constructor } from './model/common-types';
+import { AnyObject, Constructor } from './common-types';
 
 // stolen from https://loopback.io/doc/en/lb4/apidocs.core.mixintarget.html
 // https://loopback.io/doc/en/lb4/Mixin.html

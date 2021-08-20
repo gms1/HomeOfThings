@@ -4,15 +4,8 @@ import { Sqlite3ModuleOptions } from './model';
 import { Sqlite3Module } from './sqlite3.module';
 import { Sqlite3Service } from './sqlite3.service';
 
-export enum Color {
-  Red = '',
-  Blue = '',
-}
-
 describe('Sqlite3Module', function() {
-  @Module({
-    // imports: [Sqlite3Module.forChild()],
-  })
+  @Module({})
   class ChildModule {
     static sqlite3Service: Sqlite3Service;
 
@@ -42,28 +35,15 @@ describe('Sqlite3Module', function() {
   });
 
   it('for async options', async function() {
-    @Injectable()
-    class Sqlite3ModuleOptionsProvider {
-      getSqlite3ModuleOptions(): Promise<Sqlite3ModuleOptions> {
-        return new Promise((resolve, _reject) => {
-          setTimeout(resolve, 4000, givenOptions);
-        });
-      }
-    }
-
-    @Module({
-      providers: [Sqlite3ModuleOptionsProvider],
-      exports: [Sqlite3ModuleOptionsProvider],
-    })
-    class Sqlite3OptionsModule {}
-
     const appModule = await Test.createTestingModule({
       imports: [
         Sqlite3Module.forRootAsync(Sqlite3Module, {
-          imports: [Sqlite3OptionsModule, ChildModule],
-          useFactory: (cfg: Sqlite3ModuleOptionsProvider) => cfg.getSqlite3ModuleOptions(),
-          inject: [Sqlite3ModuleOptionsProvider],
+          useFactory: () =>
+            new Promise((resolve, _reject) => {
+              setTimeout(resolve, 500, givenOptions);
+            }),
         }),
+        ChildModule,
       ],
     }).compile();
 

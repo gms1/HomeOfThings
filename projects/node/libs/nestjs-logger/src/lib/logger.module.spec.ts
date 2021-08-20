@@ -40,28 +40,15 @@ describe('LoggerModule', function() {
   });
 
   it('for async options', async function() {
-    @Injectable()
-    class LoggerModuleOptionsProvider {
-      getLoggerModuleOptions(): Promise<LoggerModuleOptions> {
-        return new Promise((resolve, _reject) => {
-          setTimeout(resolve, 4000, givenOptions);
-        });
-      }
-    }
-
-    @Module({
-      providers: [LoggerModuleOptionsProvider],
-      exports: [LoggerModuleOptionsProvider],
-    })
-    class LoggerOptionsModule {}
-
     const appModule = await Test.createTestingModule({
       imports: [
         LoggerModule.forRootAsync(LoggerModule, {
-          imports: [LoggerOptionsModule, ChildModule],
-          useFactory: (cfg: LoggerModuleOptionsProvider) => cfg.getLoggerModuleOptions(),
-          inject: [LoggerModuleOptionsProvider],
+          useFactory: () =>
+            new Promise((resolve, _reject) => {
+              setTimeout(resolve, 500, givenOptions);
+            }),
         }),
+        ChildModule,
       ],
     }).compile();
 

@@ -38,27 +38,13 @@ describe('ConfigModule', function() {
   });
 
   it('for root async ', async function() {
-    @Injectable()
-    class ConfigModuleOptionsProvider {
-      getConfigModuleOptions(): Promise<ConfigModuleOptions> {
-        return new Promise((resolve, _reject) => {
-          setTimeout(resolve, 3000, givenOptions);
-        });
-      }
-    }
-
-    @Module({
-      providers: [ConfigModuleOptionsProvider],
-      exports: [ConfigModuleOptionsProvider],
-    })
-    class ConfigOptionsModule {}
-
     const appModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRootAsync(ConfigModule, {
-          imports: [ConfigOptionsModule],
-          useFactory: (cfg: ConfigModuleOptionsProvider) => cfg.getConfigModuleOptions(),
-          inject: [ConfigModuleOptionsProvider],
+          useFactory: () =>
+            new Promise((resolve, _reject) => {
+              setTimeout(resolve, 500, givenOptions);
+            }),
         }),
         ChildModule,
       ],
