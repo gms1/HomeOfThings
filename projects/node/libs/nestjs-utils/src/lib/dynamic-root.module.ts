@@ -7,8 +7,11 @@ import { AsyncModuleOptions, InjectionToken } from './model/module.options';
 export class DynamicRootBaseModule {}
 
 export type DynamicRootBaseModuleExtended<T, U> = Constructor<DynamicRootBaseModule> & {
-  forRootAsync(moduleCtor: Type<T>, asyncModuleOptions: AsyncModuleOptions<U>): DynamicModule;
+  isRegistered: boolean;
   forRoot(moduleCtor: Type<T>, moduleConfig: U): DynamicModule;
+  forRootAsync(moduleCtor: Type<T>, asyncModuleOptions: AsyncModuleOptions<U>): DynamicModule;
+  register(moduleCtor: Type<T>, moduleConfig: U): DynamicModule;
+  registerAsync(moduleCtor: Type<T>, asyncModuleOptions: AsyncModuleOptions<U>): DynamicModule;
   forChild(): Promise<DynamicModule>;
 };
 
@@ -21,9 +24,16 @@ export function createDynamicRootModule<T, U>(
   moduleProperties: DynamicRootModuleProperties = {},
 ): DynamicRootBaseModuleExtended<T, U> {
   class DynamicRootModule extends DynamicRootBaseModule {
-    static dynamicModule$ = new ReplaySubject<DynamicModule>(1);
+    static readonly dynamicModule$ = new ReplaySubject<DynamicModule>(1);
+    private static _isRegistered: boolean;
+    static get isRegistered(): boolean {
+      return DynamicRootModule._isRegistered;
+    }
+    static set isRegistered(registered: boolean) {
+      DynamicRootModule._isRegistered = registered;
+    }
 
-    static forRootAsync(moduleCtor: Type<T>, asyncModuleOptions: AsyncModuleOptions<U>): DynamicModule {
+    static registerAsync(moduleCtor: Type<T>, asyncModuleOptions: AsyncModuleOptions<U>): DynamicModule {
       const dynamicModule: DynamicModule = {
         module: moduleCtor,
         global: !!moduleProperties.global,
@@ -41,12 +51,20 @@ export function createDynamicRootModule<T, U>(
         ],
       };
 
+      DynamicRootModule.isRegistered = true;
       DynamicRootModule.dynamicModule$.next(dynamicModule);
 
       return dynamicModule;
     }
 
-    static forRoot(moduleCtor: Type<T>, moduleOptions: U): DynamicModule {
+    static forRootAsync(moduleCtor: Type<T>, asyncModuleOptions: AsyncModuleOptions<U>): DynamicModule {
+      if (DynamicRootModule._isRegistered) {
+        throw new Error(`${moduleCtor.name} registered called more than once`);
+      }
+      return DynamicRootModule.registerAsync(moduleCtor, asyncModuleOptions);
+    }
+
+    static register(moduleCtor: Type<T>, moduleOptions: U): DynamicModule {
       const dynamicModule: DynamicModule = {
         module: moduleCtor,
         global: !!moduleProperties.global,
@@ -62,9 +80,17 @@ export function createDynamicRootModule<T, U>(
         ],
       };
 
+      DynamicRootModule.isRegistered = true;
       DynamicRootModule.dynamicModule$.next(dynamicModule);
 
       return dynamicModule;
+    }
+
+    static forRoot(moduleCtor: Type<T>, moduleOptions: U): DynamicModule {
+      if (DynamicRootModule._isRegistered) {
+        throw new Error(`${moduleCtor.name} registered called more than once`);
+      }
+      return DynamicRootModule.register(moduleCtor, moduleOptions);
     }
 
     static forChild(): Promise<DynamicModule> {

@@ -31,7 +31,7 @@ export class MyModule extends createDynamicRootModule<MyModule, MyModuleOptions>
 
 > NOTE: of course the module can also be global scoped by the @Global() decorator
 
-use it synchronously:
+- use it synchronously:
 
 ```Typescript
 const myModuleOptions: MyModuleOptions = {
@@ -45,7 +45,7 @@ export class AppModule {}
 
 ```
 
-or asynchonously:
+- use it asynchonously:
 
 ```Typescript
 const myAsyncModuleOptions: AsyncModuleOptions<MyModuleOptions> = {
@@ -59,7 +59,10 @@ export class AppModule {}
 
 ```
 
-import it in any child module if you like:
+> NOTE: forRoot/forRootAsync throws if the module is already registered.
+> You can call register/registerAsync if you really want to register it more than once
+
+- import it in any child module:
 
 ```Typescript
 @Module({

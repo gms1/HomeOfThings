@@ -1,6 +1,295 @@
 import { Global, Inject, Injectable, Module } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { createDynamicRootModule } from './dynamic-root.module';
+
+describe('createDynamicRootModule', function() {
+  let appModule: TestingModule;
+
+  beforeEach(() => MyService.reset());
+  afterEach(async () => {
+    if (appModule) {
+      await appModule.close();
+    }
+  });
+
+  describe('non global', function() {
+    it('synchronously', async function() {
+      const givenDynamicRootModule = MyNonGlobalSyncDynamicRootModule;
+      @Module({
+        imports: [givenDynamicRootModule.forChild()],
+      })
+      class ChildModule1 {
+        static myService: MyService;
+
+        constructor(sqlite3Service: MyService) {
+          ChildModule1.myService = sqlite3Service;
+        }
+      }
+
+      @Module({
+        imports: [givenDynamicRootModule.forChild()],
+      })
+      class ChildModule2 {
+        static myService: MyService;
+
+        constructor(sqlite3Service: MyService) {
+          ChildModule2.myService = sqlite3Service;
+        }
+      }
+
+      const givenChildModule = ChildModule2;
+      const givenOptions: MyModuleOptions = { value: 'non-global-sync' };
+      appModule = await Test.createTestingModule({
+        imports: [ChildModule1, givenDynamicRootModule.forRoot(givenDynamicRootModule, givenOptions), givenChildModule],
+      }).compile();
+
+      const myService = appModule.get(MyService);
+      expect(MyService.instances.length).toBe(1);
+      expect(MyService.instances[0]).toBe(myService);
+      expect(MyService.instances[0]).toBe(givenChildModule.myService);
+    });
+
+    it('asynchronously', async function() {
+      const givenDynamicRootModule = MyNonGlobalAsyncDynamicRootModule;
+      @Module({
+        imports: [givenDynamicRootModule.forChild()],
+      })
+      class ChildModule1 {
+        static myService: MyService;
+
+        constructor(sqlite3Service: MyService) {
+          ChildModule1.myService = sqlite3Service;
+        }
+      }
+
+      @Module({
+        imports: [givenDynamicRootModule.forChild()],
+      })
+      class ChildModule2 {
+        static myService: MyService;
+
+        constructor(sqlite3Service: MyService) {
+          ChildModule2.myService = sqlite3Service;
+        }
+      }
+
+      const givenChildModule = ChildModule2;
+      const givenOptions: MyModuleOptions = { value: 'non-global-async' };
+      appModule = await Test.createTestingModule({
+        imports: [
+          ChildModule1, // child before
+          givenDynamicRootModule.forRootAsync(givenDynamicRootModule, {
+            // NOTE: using factory without inject
+            useFactory: () =>
+              new Promise((resolve, _reject) => {
+                setTimeout(resolve, 3000, givenOptions);
+              }),
+          }),
+          givenChildModule, // child after
+        ],
+      }).compile();
+
+      const myService = appModule.get(MyService);
+      expect(MyService.instances.length).toBe(1);
+      expect(MyService.instances[0]).toBe(myService);
+      expect(MyService.instances[0]).toBe(givenChildModule.myService);
+    });
+  });
+
+  describe('decorated global', function() {
+    it('synchronously', async function() {
+      const givenDynamicRootModule = MyGlobalDecoratedSyncDynamicRootModule;
+      const givenChildModule = MyGlobalChildModule;
+      const givenOptions: MyModuleOptions = { value: 'global-decorated-sync' };
+      appModule = await Test.createTestingModule({
+        imports: [givenDynamicRootModule.forRoot(givenDynamicRootModule, givenOptions), givenChildModule],
+      }).compile();
+
+      const myService = appModule.get(MyService);
+      expect(MyService.instances.length).toBe(1);
+      expect(MyService.instances[0]).toBe(myService);
+      expect(MyService.instances[0]).toBe(givenChildModule.myService);
+    });
+
+    it('asynchronously', async function() {
+      @Injectable()
+      class MyModuleOptionsProvider {
+        getModuleOptions(): Promise<MyModuleOptions> {
+          return new Promise((resolve, _reject) => {
+            setTimeout(resolve, 3000, givenOptions);
+          });
+        }
+      }
+
+      const givenDynamicRootModule = MyGlobalDecoratedAsyncDynamicRootModule;
+      const givenChildModule = MyGlobalChildModule;
+      const givenOptions: MyModuleOptions = { value: 'global-decorated-async' };
+      appModule = await Test.createTestingModule({
+        imports: [
+          givenDynamicRootModule.forRootAsync(givenDynamicRootModule, {
+            // NOTE: using factory with inject; injected parameter is provided by given providers
+            providers: [MyModuleOptionsProvider],
+            useFactory: (cfg: MyModuleOptionsProvider) => cfg.getModuleOptions(),
+            inject: [MyModuleOptionsProvider],
+          }),
+          givenChildModule,
+        ],
+      }).compile();
+
+      const myService = appModule.get(MyService);
+      expect(MyService.instances.length).toBe(1);
+      expect(MyService.instances[0]).toBe(myService);
+      expect(MyService.instances[0]).toBe(givenChildModule.myService);
+    });
+  });
+
+  describe('global property', function() {
+    it('synchronously', async function() {
+      const givenDynamicRootModule = MyGlobalPropertySyncDynamicRootModule;
+      const givenChildModule = MyGlobalChildModule;
+      const givenOptions: MyModuleOptions = { value: 'global-property-sync' };
+      appModule = await Test.createTestingModule({
+        imports: [givenDynamicRootModule.forRoot(givenDynamicRootModule, givenOptions), givenChildModule],
+      }).compile();
+
+      const myService = appModule.get(MyService);
+      expect(MyService.instances.length).toBe(1);
+      expect(MyService.instances[0]).toBe(myService);
+      expect(MyService.instances[0]).toBe(givenChildModule.myService);
+    });
+
+    it('asynchronously', async function() {
+      @Injectable()
+      class MyModuleOptionsProvider {
+        getModuleOptions(): Promise<MyModuleOptions> {
+          return new Promise((resolve, _reject) => {
+            setTimeout(resolve, 3000, givenOptions);
+          });
+        }
+      }
+      @Module({
+        providers: [MyModuleOptionsProvider],
+        exports: [MyModuleOptionsProvider],
+      })
+      class MyModuleOptionsModule {}
+
+      const givenDynamicRootModule = MyGlobalPropertyAsyncDynamicRootModule;
+      const givenChildModule = MyGlobalChildModule;
+      const givenOptions: MyModuleOptions = { value: 'global-property-async' };
+      appModule = await Test.createTestingModule({
+        imports: [
+          givenDynamicRootModule.forRootAsync(givenDynamicRootModule, {
+            // NOTE: using factory with inject; injected parameter is provided by given import
+            imports: [MyModuleOptionsModule],
+            useFactory: (cfg: MyModuleOptionsProvider) => cfg.getModuleOptions(),
+            inject: [MyModuleOptionsProvider],
+          }),
+          givenChildModule,
+        ],
+      }).compile();
+
+      const myService = appModule.get(MyService);
+      expect(MyService.instances.length).toBe(1);
+      expect(MyService.instances[0]).toBe(myService);
+      expect(MyService.instances[0]).toBe(givenChildModule.myService);
+    });
+  });
+
+  describe('more global', function() {
+    it('unnecessary forChild', async function() {
+      const givenDynamicRootModule = MyGlobalUnnecessaryForChildDynamicRootModule;
+
+      @Module({
+        imports: [givenDynamicRootModule.forChild()],
+      })
+      class ChildModule {
+        static myService: MyService;
+
+        constructor(sqlite3Service: MyService) {
+          ChildModule.myService = sqlite3Service;
+        }
+      }
+
+      const givenChildModule = ChildModule;
+      const givenOptions: MyModuleOptions = { value: 'global-unecessary-forChild' };
+      appModule = await Test.createTestingModule({
+        imports: [givenDynamicRootModule.forRoot(givenDynamicRootModule, givenOptions), givenChildModule],
+      }).compile();
+
+      const myService = appModule.get(MyService);
+      expect(MyService.instances.length).toBe(1);
+      expect(MyService.instances[0]).toBe(myService);
+      expect(MyService.instances[0]).toBe(givenChildModule.myService);
+    });
+
+    it('duplicate forRoot', async function() {
+      const givenDynamicRootModule = MyGlobalDuplicateForRootDynamicRootModule;
+
+      @Module({})
+      class ChildModule {
+        static myService: MyService;
+
+        constructor(sqlite3Service: MyService) {
+          ChildModule.myService = sqlite3Service;
+        }
+      }
+
+      const givenChildModule = ChildModule;
+      const givenOptions1: MyModuleOptions = { value: 'global-duplicate-forRoot-options1' };
+      const givenOptions2: MyModuleOptions = { value: 'global-duplicate-forRoot-options2' };
+
+      try {
+        appModule = await Test.createTestingModule({
+          imports: [givenDynamicRootModule.forRoot(givenDynamicRootModule, givenOptions1), givenDynamicRootModule.forRoot(givenDynamicRootModule, givenOptions2), givenChildModule],
+        }).compile();
+      } catch (e) {
+        expect(givenDynamicRootModule.isRegistered).toBe(true);
+        return;
+      }
+      fail('should have thrown');
+    });
+
+    it('duplicate forRootAsync', async function() {
+      const givenDynamicRootModule = MyGlobalDuplicateForRootDynamicRootModule;
+
+      @Module({})
+      class ChildModule {
+        static myService: MyService;
+
+        constructor(sqlite3Service: MyService) {
+          ChildModule.myService = sqlite3Service;
+        }
+      }
+
+      const givenChildModule = ChildModule;
+      const givenOptions1: MyModuleOptions = { value: 'global-duplicate-forRoot-options1' };
+      const givenOptions2: MyModuleOptions = { value: 'global-duplicate-forRoot-options2' };
+
+      try {
+        appModule = await Test.createTestingModule({
+          imports: [
+            givenDynamicRootModule.forRootAsync(givenDynamicRootModule, {
+              useFactory: () =>
+                new Promise((resolve, _reject) => {
+                  setTimeout(resolve, 3000, givenOptions1);
+                }),
+            }),
+            givenDynamicRootModule.forRootAsync(givenDynamicRootModule, {
+              useFactory: () =>
+                new Promise((resolve, _reject) => {
+                  setTimeout(resolve, 3000, givenOptions2);
+                }),
+            }),
+            givenChildModule,
+          ],
+        }).compile();
+      } catch (e) {
+        return;
+      }
+      fail('should have thrown');
+    });
+  });
+});
 
 const MY_MODULE_OPTIONS_TOKEN = 'MY_MODULE_OPTIONS_TOKEN';
 
@@ -10,8 +299,36 @@ interface MyModuleOptions {
 
 @Injectable()
 class MyService {
-  constructor(@Inject(MY_MODULE_OPTIONS_TOKEN) public options: MyModuleOptions) {}
+  static instances: MyService[] = [];
+
+  constructor(@Inject(MY_MODULE_OPTIONS_TOKEN) public options: MyModuleOptions) {
+    MyService.instances.push(this);
+    if (MyService.instances.length > 1) {
+      console.error(`instantiated service ${MyService.instances.length} using: `, options);
+    }
+  }
+
+  static reset() {
+    MyService.instances.length = 0;
+  }
 }
+@Module({})
+class MyGlobalChildModule {
+  static myService: MyService;
+
+  constructor(sqlite3Service: MyService) {
+    MyGlobalChildModule.myService = sqlite3Service;
+  }
+}
+
+// NOTE: defining multiple root modules, because otherwise Test.createTestingModule got confused when using the same root module for all tests
+// the service singleton was not re-instantiated by the second call even if appModule was closed
+
+@Module({
+  providers: [MyService],
+  exports: [MyService],
+})
+export class MyNonGlobalDynamicRootModule extends createDynamicRootModule<MyNonGlobalDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
 
 @Module({
   providers: [MyService],
@@ -55,171 +372,25 @@ export class MyGlobalPropertyAsyncDynamicRootModule extends createDynamicRootMod
   global: true,
 }) {}
 
-describe('createDynamicRootModule', function() {
-  describe('non global', function() {
-    it('synchronously', async function() {
-      @Module({
-        imports: [MyNonGlobalSyncDynamicRootModule.forChild()],
-      })
-      class ChildModule {
-        static myService: MyService;
+@Global()
+@Module({
+  providers: [MyService],
+  exports: [MyService],
+})
+export class MyGlobalUnnecessaryForChildDynamicRootModule extends createDynamicRootModule<MyGlobalUnnecessaryForChildDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
 
-        constructor(sqlite3Service: MyService) {
-          ChildModule.myService = sqlite3Service;
-        }
-      }
+@Global()
+@Module({
+  providers: [MyService],
+  exports: [MyService],
+})
+export class MyGlobalDuplicateForRootDynamicRootModule extends createDynamicRootModule<MyGlobalDuplicateForRootDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
 
-      const givenOptions: MyModuleOptions = { value: 'non-global-sync' };
-      const appModule = await Test.createTestingModule({
-        imports: [MyNonGlobalSyncDynamicRootModule.forRoot(MyNonGlobalSyncDynamicRootModule, givenOptions), ChildModule],
-      }).compile();
-      expect(appModule.get(MyService).options).toBe(givenOptions);
-      expect(ChildModule.myService.options).toBe(givenOptions);
-    });
-
-    it('asynchronously', async function() {
-      @Module({
-        imports: [MyNonGlobalAsyncDynamicRootModule.forChild()],
-      })
-      class ChildModule {
-        static myService: MyService;
-
-        constructor(sqlite3Service: MyService) {
-          ChildModule.myService = sqlite3Service;
-        }
-      }
-
-      const givenOptions: MyModuleOptions = { value: 'non-global-async' };
-      @Injectable()
-      class MyModuleOptionsProvider {
-        getModuleOptions(): Promise<MyModuleOptions> {
-          return new Promise((resolve, _reject) => {
-            setTimeout(resolve, 3000, givenOptions);
-          });
-        }
-      }
-
-      const appModule = await Test.createTestingModule({
-        imports: [
-          MyNonGlobalAsyncDynamicRootModule.forRootAsync(MyNonGlobalAsyncDynamicRootModule, {
-            // NOTE: using factory with inject; injected parameter is provided by given providers
-            providers: [MyModuleOptionsProvider],
-            useFactory: (cfg: MyModuleOptionsProvider) => cfg.getModuleOptions(),
-            inject: [MyModuleOptionsProvider],
-          }),
-          ChildModule,
-        ],
-      }).compile();
-      expect(appModule.get(MyService).options).toBe(givenOptions);
-      expect(ChildModule.myService.options).toBe(givenOptions);
-    });
-  });
-
-  describe('decorated global', function() {
-    it('synchronously', async function() {
-      @Module({})
-      class ChildModule {
-        static myService: MyService;
-
-        constructor(sqlite3Service: MyService) {
-          ChildModule.myService = sqlite3Service;
-        }
-      }
-
-      const givenOptions: MyModuleOptions = { value: 'global-decorated-sync' };
-      const appModule = await Test.createTestingModule({
-        imports: [MyGlobalDecoratedSyncDynamicRootModule.forRoot(MyGlobalDecoratedSyncDynamicRootModule, givenOptions), ChildModule],
-      }).compile();
-      expect(appModule.get(MyService).options).toBe(givenOptions);
-      expect(ChildModule.myService.options).toBe(givenOptions);
-    });
-
-    it('asynchronously', async function() {
-      @Module({})
-      class ChildModule {
-        static myService: MyService;
-
-        constructor(sqlite3Service: MyService) {
-          ChildModule.myService = sqlite3Service;
-        }
-      }
-
-      const givenOptions: MyModuleOptions = { value: 'global-decorated-async' };
-      const appModule = await Test.createTestingModule({
-        imports: [
-          MyGlobalDecoratedAsyncDynamicRootModule.forRootAsync(MyGlobalDecoratedAsyncDynamicRootModule, {
-            // NOTE: using factory without inject
-            useFactory: () =>
-              new Promise((resolve, _reject) => {
-                setTimeout(resolve, 3000, givenOptions);
-              }),
-          }),
-          ChildModule,
-        ],
-      }).compile();
-      expect(appModule.get(MyService).options).toBe(givenOptions);
-      expect(ChildModule.myService.options).toBe(givenOptions);
-    });
-  });
-
-  describe('global property', function() {
-    it('synchronously', async function() {
-      @Module({})
-      class ChildModule {
-        static myService: MyService;
-
-        constructor(sqlite3Service: MyService) {
-          ChildModule.myService = sqlite3Service;
-        }
-      }
-
-      const givenOptions: MyModuleOptions = { value: 'global-property-sync' };
-      const appModule = await Test.createTestingModule({
-        imports: [MyGlobalPropertySyncDynamicRootModule.forRoot(MyGlobalPropertySyncDynamicRootModule, givenOptions), ChildModule],
-      }).compile();
-      expect(appModule.get(MyService).options).toBe(givenOptions);
-      expect(ChildModule.myService.options).toBe(givenOptions);
-    });
-
-    it('asynchronously', async function() {
-      @Module({})
-      class ChildModule {
-        static myService: MyService;
-
-        constructor(sqlite3Service: MyService) {
-          ChildModule.myService = sqlite3Service;
-        }
-      }
-
-      const givenOptions: MyModuleOptions = { value: 'global-property-async' };
-      @Injectable()
-      class MyModuleOptionsProvider {
-        getModuleOptions(): Promise<MyModuleOptions> {
-          return new Promise((resolve, _reject) => {
-            setTimeout(resolve, 3000, givenOptions);
-          });
-        }
-      }
-
-      @Module({
-        providers: [MyModuleOptionsProvider],
-        exports: [MyModuleOptionsProvider],
-      })
-      class MyModuleOptionsModule {}
-
-      const appModule = await Test.createTestingModule({
-        imports: [
-          MyGlobalPropertyAsyncDynamicRootModule.forRootAsync(MyGlobalPropertyAsyncDynamicRootModule, {
-            // NOTE: using factory with inject; injected parameter is provided by given import
-            imports: [MyModuleOptionsModule],
-            useFactory: (cfg: MyModuleOptionsProvider) => cfg.getModuleOptions(),
-            inject: [MyModuleOptionsProvider],
-          }),
-          ChildModule,
-        ],
-      }).compile();
-      expect(appModule.get(MyService).options).toBe(givenOptions);
-      expect(ChildModule.myService.options).toBe(givenOptions);
-    });
-  });
-});
+@Global()
+@Module({
+  providers: [MyService],
+  exports: [MyService],
+})
+export class MyGlobalDuplicateForRootAsyncDynamicRootModule extends createDynamicRootModule<MyGlobalDuplicateForRootAsyncDynamicRootModule, MyModuleOptions>(
+  MY_MODULE_OPTIONS_TOKEN,
+) {}
