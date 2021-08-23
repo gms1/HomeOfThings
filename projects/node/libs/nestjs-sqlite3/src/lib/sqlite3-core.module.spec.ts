@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SQL_MEMORY_DB_SHARED } from 'sqlite3orm';
 import { Sqlite3ModuleOptions } from './model';
-import { Sqlite3Module } from './sqlite3.module';
+import { Sqlite3CoreModule } from './sqlite3-core.module';
 import { ConnectionManagerService } from './services/connection-manager.service';
 
-describe('Sqlite3Module', function() {
+describe('Sqlite3CoreModule', function() {
   let appModule: TestingModule;
 
   @Module({})
@@ -33,7 +33,7 @@ describe('Sqlite3Module', function() {
 
   it('for sync options', async function() {
     appModule = await Test.createTestingModule({
-      imports: [Sqlite3Module.forRoot(givenOptions), ChildModule],
+      imports: [Sqlite3CoreModule.forRoot(Sqlite3CoreModule, givenOptions), ChildModule],
     }).compile();
     appModule.enableShutdownHooks();
     const connectionManager = appModule.get(ConnectionManagerService);
@@ -45,10 +45,10 @@ describe('Sqlite3Module', function() {
   it('for async options', async function() {
     appModule = await Test.createTestingModule({
       imports: [
-        Sqlite3Module.forRootAsync({
+        Sqlite3CoreModule.forRootAsync(Sqlite3CoreModule, {
           useFactory: () =>
             new Promise((resolve, _reject) => {
-              setTimeout(resolve, 500, givenOptions);
+              setTimeout(resolve, 500, [givenOptions, givenOptions]);
             }),
         }),
         ChildModule,

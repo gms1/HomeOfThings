@@ -1,7 +1,10 @@
 import { SqlDatabaseSettings } from 'sqlite3orm';
 
-export interface Sqlite3ModuleOptions {
-  name: string;
+export interface Sqlite3ConnectionOptions {
+  /**
+   * name - The name for this connection (default: see `SQLITE3_DEFAULT_CONNECTION_NAME`)
+   */
+  name?: string;
   /**
    * file - The database file to open
    */
@@ -28,3 +31,5 @@ export interface Sqlite3ModuleOptions {
    */
   dbSettings?: SqlDatabaseSettings;
 }
+
+export type Sqlite3ModuleOptions = Sqlite3ConnectionOptions | Sqlite3ConnectionOptions[];

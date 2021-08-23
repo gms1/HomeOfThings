@@ -1,11 +1,22 @@
-import { Global, Module } from '@nestjs/common';
-import { Sqlite3ModuleOptions, SQLITE3_MODULE_OPTIONS_TOKEN } from './model';
-import { Sqlite3Service } from './sqlite3.service';
-import { createDynamicRootModule } from '@homeofthings/nestjs-utils';
+import { AsyncModuleOptions } from '@homeofthings/nestjs-utils';
+import { DynamicModule, Global, Module } from '@nestjs/common';
+import { Sqlite3ModuleOptions } from './model';
+import { Sqlite3CoreModule } from './sqlite3-core.module';
 
 @Global()
-@Module({
-  providers: [Sqlite3Service],
-  exports: [Sqlite3Service],
-})
-export class Sqlite3Module extends createDynamicRootModule<Sqlite3Module, Sqlite3ModuleOptions>(SQLITE3_MODULE_OPTIONS_TOKEN) {}
+@Module({})
+export class Sqlite3Module {
+  static forRoot(moduleOptions: Sqlite3ModuleOptions): DynamicModule {
+    return {
+      module: Sqlite3Module,
+      imports: [Sqlite3CoreModule.forRoot(Sqlite3CoreModule, moduleOptions)],
+    };
+  }
+
+  static forRootAsync(asyncModuleOptions: AsyncModuleOptions<Sqlite3ModuleOptions>): DynamicModule {
+    return {
+      module: Sqlite3Module,
+      imports: [Sqlite3CoreModule.forRootAsync(Sqlite3CoreModule, asyncModuleOptions)],
+    };
+  }
+}
