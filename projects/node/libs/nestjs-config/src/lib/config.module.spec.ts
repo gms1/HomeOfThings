@@ -23,6 +23,9 @@ describe('ConfigModule', function() {
   beforeEach(() => {
     ChildModule.configService = undefined;
   });
+  afterEach(() => {
+    ConfigModule.isRegistered = false;
+  });
 
   it('for root sync', async function() {
     const appModule = await Test.createTestingModule({

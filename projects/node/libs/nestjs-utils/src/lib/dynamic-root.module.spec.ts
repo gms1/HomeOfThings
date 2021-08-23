@@ -284,6 +284,7 @@ describe('createDynamicRootModule', function() {
           ],
         }).compile();
       } catch (e) {
+        expect(givenDynamicRootModule.isRegistered).toBe(true);
         return;
       }
       fail('should have thrown');

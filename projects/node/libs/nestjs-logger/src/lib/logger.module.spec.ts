@@ -24,6 +24,9 @@ describe('LoggerModule', function() {
   beforeEach(() => {
     ChildModule.loggerService = undefined;
   });
+  afterEach(() => {
+    LoggerModule.isRegistered = false;
+  });
 
   it('for sync options', async function() {
     const appModule = await Test.createTestingModule({
