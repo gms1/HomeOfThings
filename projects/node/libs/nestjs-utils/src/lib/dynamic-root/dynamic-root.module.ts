@@ -1,8 +1,8 @@
 import { DynamicModule, Type } from '@nestjs/common';
 import { ModuleMetadata } from '@nestjs/common/interfaces';
 import { firstValueFrom, ReplaySubject } from 'rxjs';
-import { Constructor } from './model/common-types';
-import { AsyncModuleOptions, InjectionToken } from './model/module.options';
+import { Constructor } from '../model/common-types';
+import { AsyncModuleOptions, InjectionToken } from '../model/module.options';
 
 export class DynamicRootBaseModule {}
 
