@@ -42,3 +42,10 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+#---------------------------------------
+# temporary files:
+
+*:memory*
+file:sqlite3orm*
+test*.db

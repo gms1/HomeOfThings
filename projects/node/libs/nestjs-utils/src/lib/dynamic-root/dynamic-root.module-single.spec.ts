@@ -2,7 +2,7 @@ import { Global, Inject, Injectable, Module } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createDynamicRootModule } from './dynamic-root.module';
 
-describe('createDynamicRootModule', function() {
+describe('single DynamicRootModule', function() {
   let appModule: TestingModule;
 
   beforeEach(() => MyService.reset());
@@ -292,7 +292,7 @@ describe('createDynamicRootModule', function() {
   });
 });
 
-const MY_MODULE_OPTIONS_TOKEN = 'MY_MODULE_OPTIONS_TOKEN';
+const MY_MODULE_OPTIONS_TOKEN = 'MY_SINGLE_DYNAMIC_MODULE_OPTIONS_TOKEN';
 
 interface MyModuleOptions {
   value: string;
@@ -305,7 +305,7 @@ class MyService {
   constructor(@Inject(MY_MODULE_OPTIONS_TOKEN) public options: MyModuleOptions) {
     MyService.instances.push(this);
     if (MyService.instances.length > 1) {
-      console.error(`instantiated service ${MyService.instances.length} using: `, options);
+      throw new Error(`MyService instantiated multiple times`);
     }
   }
 
@@ -313,6 +313,7 @@ class MyService {
     MyService.instances.length = 0;
   }
 }
+
 @Module({})
 class MyGlobalChildModule {
   static myService: MyService;
