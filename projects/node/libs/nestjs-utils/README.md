@@ -10,7 +10,7 @@ npm install @homeofthings/nestjs-utils
 
 ## Dynamic Modules
 
-easily define your dynamic module:
+## quick start
 
 ```Typescript
 
@@ -28,6 +28,8 @@ export class MyModule extends createDynamicRootModule<MyModule, MyModuleOptions>
 ```
 
 > NOTE: additional module properties for 'imports', 'exports', 'providers' or 'controllers' can be passed as second parameter to this function
+
+<!-- -->
 
 > NOTE: of course the module can also be global scoped by the @Global() decorator
 
@@ -72,3 +74,13 @@ export class ChildModule {}
 ```
 
 > NOTE: no need to do this if the module is global scoped
+
+### examples
+
+- providing single option using either `forRoot` or `forRootAsync`
+
+[@homeofthings/nestjs-logger](https://github.com/gms1/HomeOfThings/tree/master/projects/node/libs/nestjs-logger/)
+
+- providing multiple options using eihter `register` or `registerAsync` (e.g. providing multiple connections)
+
+[@homeofthings/nestjs-sqlite3](https://github.com/gms1/HomeOfThings/tree/master/projects/node/libs/nestjs-sqlite3/)

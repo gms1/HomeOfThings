@@ -18,7 +18,7 @@ describe('multiple DynamicRootModules', function() {
     (appModule as any) = undefined;
   });
 
-  it('', async () => {
+  it('should provide multiple features', async () => {
     const givenDefaultValue = 'defaultValue';
     const givenName1 = 'name1';
     const givenName1Value = 'name1Value';
