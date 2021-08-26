@@ -250,7 +250,7 @@ describe('single DynamicRootModule', function() {
     });
 
     it('duplicate forRootAsync', async function() {
-      const givenDynamicRootModule = MyGlobalDuplicateForRootDynamicRootModule;
+      const givenDynamicRootModule = MyGlobalDuplicateForRootAsyncDynamicRootModule;
 
       @Module({})
       class ChildModule {
@@ -330,39 +330,33 @@ class MyGlobalChildModule {
   providers: [MyService],
   exports: [MyService],
 })
-export class MyNonGlobalDynamicRootModule extends createDynamicRootModule<MyNonGlobalDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
+class MyNonGlobalSyncDynamicRootModule extends createDynamicRootModule<MyNonGlobalSyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
 
 @Module({
   providers: [MyService],
   exports: [MyService],
 })
-export class MyNonGlobalSyncDynamicRootModule extends createDynamicRootModule<MyNonGlobalSyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
-
-@Module({
-  providers: [MyService],
-  exports: [MyService],
-})
-export class MyNonGlobalAsyncDynamicRootModule extends createDynamicRootModule<MyNonGlobalAsyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
+class MyNonGlobalAsyncDynamicRootModule extends createDynamicRootModule<MyNonGlobalAsyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
 
 @Global()
 @Module({
   providers: [MyService],
   exports: [MyService],
 })
-export class MyGlobalDecoratedSyncDynamicRootModule extends createDynamicRootModule<MyGlobalDecoratedSyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
+class MyGlobalDecoratedSyncDynamicRootModule extends createDynamicRootModule<MyGlobalDecoratedSyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
 
 @Global()
 @Module({
   providers: [MyService],
   exports: [MyService],
 })
-export class MyGlobalDecoratedAsyncDynamicRootModule extends createDynamicRootModule<MyGlobalDecoratedAsyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
+class MyGlobalDecoratedAsyncDynamicRootModule extends createDynamicRootModule<MyGlobalDecoratedAsyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
 
 @Module({
   providers: [MyService],
   exports: [MyService],
 })
-export class MyGlobalPropertySyncDynamicRootModule extends createDynamicRootModule<MyGlobalPropertySyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN, {
+class MyGlobalPropertySyncDynamicRootModule extends createDynamicRootModule<MyGlobalPropertySyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN, {
   global: true,
 }) {}
 
@@ -370,7 +364,7 @@ export class MyGlobalPropertySyncDynamicRootModule extends createDynamicRootModu
   providers: [MyService],
   exports: [MyService],
 })
-export class MyGlobalPropertyAsyncDynamicRootModule extends createDynamicRootModule<MyGlobalPropertyAsyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN, {
+class MyGlobalPropertyAsyncDynamicRootModule extends createDynamicRootModule<MyGlobalPropertyAsyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN, {
   global: true,
 }) {}
 
@@ -379,20 +373,18 @@ export class MyGlobalPropertyAsyncDynamicRootModule extends createDynamicRootMod
   providers: [MyService],
   exports: [MyService],
 })
-export class MyGlobalUnnecessaryForChildDynamicRootModule extends createDynamicRootModule<MyGlobalUnnecessaryForChildDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
+class MyGlobalUnnecessaryForChildDynamicRootModule extends createDynamicRootModule<MyGlobalUnnecessaryForChildDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
 
 @Global()
 @Module({
   providers: [MyService],
   exports: [MyService],
 })
-export class MyGlobalDuplicateForRootDynamicRootModule extends createDynamicRootModule<MyGlobalDuplicateForRootDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
+class MyGlobalDuplicateForRootDynamicRootModule extends createDynamicRootModule<MyGlobalDuplicateForRootDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}
 
 @Global()
 @Module({
   providers: [MyService],
   exports: [MyService],
 })
-export class MyGlobalDuplicateForRootAsyncDynamicRootModule extends createDynamicRootModule<MyGlobalDuplicateForRootAsyncDynamicRootModule, MyModuleOptions>(
-  MY_MODULE_OPTIONS_TOKEN,
-) {}
+class MyGlobalDuplicateForRootAsyncDynamicRootModule extends createDynamicRootModule<MyGlobalDuplicateForRootAsyncDynamicRootModule, MyModuleOptions>(MY_MODULE_OPTIONS_TOKEN) {}

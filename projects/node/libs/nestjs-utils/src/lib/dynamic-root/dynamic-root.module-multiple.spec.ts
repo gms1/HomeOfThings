@@ -127,7 +127,7 @@ function getDynamicModuleProperties(modulOptions: MySyncModuleOptions | MyAsyncM
   ],
   exports: [MyManager],
 })
-export class MyCoreDynamicRootModule extends createDynamicRootModule<MyCoreDynamicRootModule, MySyncModuleOptions, MyAsyncModuleOptions>(
+class MyCoreDynamicRootModule extends createDynamicRootModule<MyCoreDynamicRootModule, MySyncModuleOptions, MyAsyncModuleOptions>(
   MY_MODULE_OPTIONS_TOKEN,
   getDynamicModuleProperties,
 ) {}
@@ -138,7 +138,7 @@ function getMyFeatureInjectionToken(name = MY_DEFAULT_OPTIONS_NAME) {
 
 @Global()
 @Module({})
-export class MyDynamicRootModule {
+class MyDynamicRootModule {
   static register(moduleOptions: MySyncModuleOptions): DynamicModule {
     return {
       module: MyDynamicRootModule,
