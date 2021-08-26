@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-const mockedConstructor = jest.fn();
-const mockedGetStore = jest.fn();
-const mockedEnterWith = jest.fn();
-const mockedRun = jest.fn();
+const mockConstructor = jest.fn();
+const mockGetStore = jest.fn();
+const mockEnterWith = jest.fn();
+const mockRun = jest.fn();
 
 jest.mock('async_hooks', () => {
   return {
-    AsyncLocalStorage: mockedConstructor.mockImplementation(() => {
-      return { getStore: mockedGetStore, enterWith: mockedEnterWith, run: mockedRun };
+    AsyncLocalStorage: mockConstructor.mockImplementation(() => {
+      return { getStore: mockGetStore, enterWith: mockEnterWith, run: mockRun };
     }),
   };
 });
@@ -20,9 +20,9 @@ describe('AsyncContext', () => {
 
   beforeEach(() => {
     asyncContext = new AsyncContext(givenDefault);
-    mockedGetStore.mockReset();
-    mockedEnterWith.mockReset();
-    mockedRun.mockReset();
+    mockGetStore.mockReset();
+    mockEnterWith.mockReset();
+    mockRun.mockReset();
   });
 
   it('should get the default value', () => {
@@ -37,31 +37,31 @@ describe('AsyncContext', () => {
 
   it('should get stored value', () => {
     const givenStoreValue = 3;
-    mockedGetStore.mockReturnValue(givenStoreValue);
+    mockGetStore.mockReturnValue(givenStoreValue);
     const value = asyncContext.get();
     expect(value).toBe(givenStoreValue);
   });
 
   it('should get default value if store is undefined', () => {
-    mockedGetStore.mockReturnValue(undefined);
+    mockGetStore.mockReturnValue(undefined);
     const value = asyncContext.get();
     expect(value).toBe(givenDefault);
   });
 
   it('should store value', () => {
     const givenStoreValue = 7;
-    expect(mockedEnterWith).toHaveBeenCalledTimes(0);
+    expect(mockEnterWith).toHaveBeenCalledTimes(0);
     asyncContext.set(givenStoreValue);
-    expect(mockedEnterWith).toHaveBeenCalledTimes(1);
-    expect(mockedEnterWith).toHaveBeenCalledWith(givenStoreValue);
+    expect(mockEnterWith).toHaveBeenCalledTimes(1);
+    expect(mockEnterWith).toHaveBeenCalledWith(givenStoreValue);
   });
 
   it('should run callback', () => {
     const givenStoreValue = 9;
     const givenCallback = () => ({});
-    expect(mockedRun).toHaveBeenCalledTimes(0);
+    expect(mockRun).toHaveBeenCalledTimes(0);
     asyncContext.run(givenStoreValue, givenCallback);
-    expect(mockedRun).toHaveBeenCalledTimes(1);
-    expect(mockedRun).toHaveBeenCalledWith(givenStoreValue, givenCallback);
+    expect(mockRun).toHaveBeenCalledTimes(1);
+    expect(mockRun).toHaveBeenCalledWith(givenStoreValue, givenCallback);
   });
 });

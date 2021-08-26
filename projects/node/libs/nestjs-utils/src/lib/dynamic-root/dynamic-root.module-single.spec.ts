@@ -2,7 +2,7 @@ import { Global, Inject, Injectable, Module } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createDynamicRootModule } from './dynamic-root.module';
 
-describe('single DynamicRootModule', function() {
+describe('single DynamicRootModule', () => {
   let appModule: TestingModule;
 
   beforeEach(() => MyService.reset());
@@ -12,8 +12,8 @@ describe('single DynamicRootModule', function() {
     }
   });
 
-  describe('non global', function() {
-    it('synchronously', async function() {
+  describe('non global', () => {
+    it('synchronously', async () => {
       const givenDynamicRootModule = MyNonGlobalSyncDynamicRootModule;
       @Module({
         imports: [givenDynamicRootModule.forChild()],
@@ -49,7 +49,7 @@ describe('single DynamicRootModule', function() {
       expect(MyService.instances[0]).toBe(givenChildModule.myService);
     });
 
-    it('asynchronously', async function() {
+    it('asynchronously', async () => {
       const givenDynamicRootModule = MyNonGlobalAsyncDynamicRootModule;
       @Module({
         imports: [givenDynamicRootModule.forChild()],
@@ -96,8 +96,8 @@ describe('single DynamicRootModule', function() {
     });
   });
 
-  describe('decorated global', function() {
-    it('synchronously', async function() {
+  describe('decorated global', () => {
+    it('synchronously', async () => {
       const givenDynamicRootModule = MyGlobalDecoratedSyncDynamicRootModule;
       const givenChildModule = MyGlobalChildModule;
       const givenOptions: MyModuleOptions = { value: 'global-decorated-sync' };
@@ -111,7 +111,7 @@ describe('single DynamicRootModule', function() {
       expect(MyService.instances[0]).toBe(givenChildModule.myService);
     });
 
-    it('asynchronously', async function() {
+    it('asynchronously', async () => {
       @Injectable()
       class MyModuleOptionsProvider {
         getModuleOptions(): Promise<MyModuleOptions> {
@@ -143,8 +143,8 @@ describe('single DynamicRootModule', function() {
     });
   });
 
-  describe('global property', function() {
-    it('synchronously', async function() {
+  describe('global property', () => {
+    it('synchronously', async () => {
       const givenDynamicRootModule = MyGlobalPropertySyncDynamicRootModule;
       const givenChildModule = MyGlobalChildModule;
       const givenOptions: MyModuleOptions = { value: 'global-property-sync' };
@@ -158,7 +158,7 @@ describe('single DynamicRootModule', function() {
       expect(MyService.instances[0]).toBe(givenChildModule.myService);
     });
 
-    it('asynchronously', async function() {
+    it('asynchronously', async () => {
       @Injectable()
       class MyModuleOptionsProvider {
         getModuleOptions(): Promise<MyModuleOptions> {
@@ -195,8 +195,8 @@ describe('single DynamicRootModule', function() {
     });
   });
 
-  describe('more global', function() {
-    it('unnecessary forChild', async function() {
+  describe('more global', () => {
+    it('unnecessary forChild', async () => {
       const givenDynamicRootModule = MyGlobalUnnecessaryForChildDynamicRootModule;
 
       @Module({
@@ -222,7 +222,7 @@ describe('single DynamicRootModule', function() {
       expect(MyService.instances[0]).toBe(givenChildModule.myService);
     });
 
-    it('duplicate forRoot', async function() {
+    it('duplicate forRoot', async () => {
       const givenDynamicRootModule = MyGlobalDuplicateForRootDynamicRootModule;
 
       @Module({})
@@ -249,7 +249,7 @@ describe('single DynamicRootModule', function() {
       fail('should have thrown');
     });
 
-    it('duplicate forRootAsync', async function() {
+    it('duplicate forRootAsync', async () => {
       const givenDynamicRootModule = MyGlobalDuplicateForRootAsyncDynamicRootModule;
 
       @Module({})

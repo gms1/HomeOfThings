@@ -6,7 +6,7 @@ import { ConfigModule } from './config.module';
 
 jest.mock('config', () => ({}));
 
-describe('ConfigModule', function() {
+describe('ConfigModule', () => {
   @Module({
     imports: [ConfigModule.forChild()],
   })
@@ -27,7 +27,7 @@ describe('ConfigModule', function() {
     ConfigModule.isRegistered = false;
   });
 
-  it('for root sync', async function() {
+  it('for root sync', async () => {
     const appModule = await Test.createTestingModule({
       imports: [ConfigModule.forRoot(ConfigModule, givenOptions), ChildModule],
     }).compile();
@@ -40,7 +40,7 @@ describe('ConfigModule', function() {
     expect(ChildModule.configService).toBe(configService);
   });
 
-  it('for root async ', async function() {
+  it('for root async ', async () => {
     const appModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRootAsync(ConfigModule, {
@@ -61,7 +61,7 @@ describe('ConfigModule', function() {
     expect(ChildModule.configService).toBe(configService);
   });
 
-  it('create', async function() {
+  it('create', async () => {
     const configService = ConfigModule.createConfigService(givenOptions);
     expect(configService).toBeInstanceOf(ConfigService);
   });

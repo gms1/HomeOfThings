@@ -5,7 +5,7 @@ import { LoggerModule } from './logger.module';
 import { LoggerService } from './logger.service';
 import { WinstonLogger } from './winston/winston-logger';
 
-describe('LoggerModule', function() {
+describe('LoggerModule', () => {
   @Module({
     imports: [LoggerModule.forChild()],
   })
@@ -28,7 +28,7 @@ describe('LoggerModule', function() {
     LoggerModule.isRegistered = false;
   });
 
-  it('for sync options', async function() {
+  it('for sync options', async () => {
     const appModule = await Test.createTestingModule({
       imports: [LoggerModule.forRoot(LoggerModule, givenOptions), ChildModule],
     }).compile();
@@ -42,7 +42,7 @@ describe('LoggerModule', function() {
     expect(ChildModule.loggerService).toBe(loggerService);
   });
 
-  it('for async options', async function() {
+  it('for async options', async () => {
     const appModule = await Test.createTestingModule({
       imports: [
         LoggerModule.forRootAsync(LoggerModule, {
@@ -64,7 +64,7 @@ describe('LoggerModule', function() {
     expect(ChildModule.loggerService).toBe(loggerService);
   });
 
-  it('create', async function() {
+  it('create', async () => {
     const createdLoggerService = LoggerModule.createLoggerService(givenOptions);
     expect(createdLoggerService).toBeInstanceOf(LoggerService);
 

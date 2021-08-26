@@ -5,7 +5,7 @@ import { Dictionary, GenericDictionary } from '../model/common-types';
 import { AsyncModuleOptions } from '../model/module.options';
 import { createDynamicRootModule, DynamicRootModuleProperties } from './dynamic-root.module';
 
-describe('multiple DynamicRootModules', function() {
+describe('multiple DynamicRootModules', () => {
   let appModule: TestingModule;
 
   beforeEach(async () => {
