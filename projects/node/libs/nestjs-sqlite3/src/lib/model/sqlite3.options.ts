@@ -1,10 +1,7 @@
+import { AsyncModuleOptions } from '@homeofthings/nestjs-utils';
 import { SqlDatabaseSettings } from 'sqlite3orm';
 
 export interface Sqlite3ConnectionOptions {
-  /**
-   * name - The name for this connection (default: see `SQLITE3_DEFAULT_CONNECTION_NAME`)
-   */
-  name?: string;
   /**
    * file - The database file to open
    */
@@ -32,4 +29,16 @@ export interface Sqlite3ConnectionOptions {
   dbSettings?: SqlDatabaseSettings;
 }
 
-export type Sqlite3ModuleOptions = Sqlite3ConnectionOptions | Sqlite3ConnectionOptions[];
+export interface Sqlite3SyncModuleOptions extends Sqlite3ConnectionOptions {
+  /**
+   * name - The name for this connection (default: see `SQLITE3_DEFAULT_CONNECTION_NAME`)
+   */
+  name?: string;
+}
+
+export interface Sqlite3AsyncModuleOptions extends AsyncModuleOptions<Sqlite3ConnectionOptions> {
+  /**
+   * name - The name for this connection (default: see `SQLITE3_DEFAULT_CONNECTION_NAME`)
+   */
+  name?: string;
+}

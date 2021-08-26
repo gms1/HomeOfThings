@@ -1,22 +1,33 @@
-import { AsyncModuleOptions } from '@homeofthings/nestjs-utils';
 import { DynamicModule, Global, Module } from '@nestjs/common';
-import { Sqlite3ModuleOptions } from './model';
+import { Sqlite3AsyncModuleOptions, Sqlite3SyncModuleOptions } from './model';
 import { Sqlite3CoreModule } from './sqlite3-core.module';
 
 @Global()
 @Module({})
 export class Sqlite3Module {
-  static forRoot(moduleOptions: Sqlite3ModuleOptions): DynamicModule {
+  static register(moduleOptions: Sqlite3SyncModuleOptions): DynamicModule {
     return {
       module: Sqlite3Module,
-      imports: [Sqlite3CoreModule.forRoot(Sqlite3CoreModule, moduleOptions)],
+      imports: [Sqlite3CoreModule.register(Sqlite3CoreModule, moduleOptions)],
     };
   }
 
-  static forRootAsync(asyncModuleOptions: AsyncModuleOptions<Sqlite3ModuleOptions>): DynamicModule {
+  static registerAsync(asyncModuleOptions: Sqlite3AsyncModuleOptions): DynamicModule {
     return {
       module: Sqlite3Module,
-      imports: [Sqlite3CoreModule.forRootAsync(Sqlite3CoreModule, asyncModuleOptions)],
+      imports: [Sqlite3CoreModule.registerAsync(Sqlite3CoreModule, asyncModuleOptions)],
     };
   }
+  /*
+  static forFeature(entities: any[] = [], connection?: string): DynamicModule {
+    const connectionPoolToken = getConnectionPoolToken(connection);
+    // const providers = createTypeOrmProviders(entities, connection);
+    // const customRepositoryEntities = getCustomRepositoryEntity(entities);
+    return {
+      module: Sqlite3Module,
+      // providers: providers,
+      // exports: providers,
+    };
+  }
+  */
 }
