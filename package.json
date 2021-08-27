@@ -55,7 +55,8 @@
     "publish:nestjs-utils": "cd dist/projects/node/libs/nestjs-utils && npm publish --access public",
     "publish:nestjs-config": "cd dist/projects/node/libs/nestjs-config && npm publish --access public",
     "publish:nestjs-logger": "cd dist/projects/node/libs/nestjs-logger && npm publish --access public",
-    "publish:nestjs-sqlite3": "cd dist/projects/node/libs/nestjs-sqlite3 && npm publish --access public"
+    "publish:nestjs-sqlite3": "cd dist/projects/node/libs/nestjs-sqlite3 && npm publish --access public",
+    "console:hot-gateway": "ts-node -P projects/node/apps/hot-gateway/tsconfig.cli.json projects/node/apps/hot-gateway/src/console.ts --"
   },
   "private": true,
   "dependencies": {
@@ -79,6 +80,7 @@
     "express": "^4.17.1",
     "hash-it": "^5.0.2",
     "helmet": "^4.6.0",
+    "nestjs-console": "^7.0.0",
     "passport": "^0.4.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.3.0",
