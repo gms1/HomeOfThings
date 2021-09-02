@@ -8,11 +8,7 @@ install:
   - bash build/travis_install
 
 script:
-  - npm run build:all
-  - npm run test:all
-  - npm run lint:all
+  - npm run ci
 
 after_script:
-  - npm run coverage:codecov:nestjs-logger
-  - npm run coverage:codecov:nestjs-config
-  - npm run coverage:codecov
+  - npm run codecov
