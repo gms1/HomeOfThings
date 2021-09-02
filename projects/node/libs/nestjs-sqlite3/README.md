@@ -2,8 +2,6 @@
 [![Build Status](https://api.travis-ci.com/gms1/HomeOfThings.svg?branch=master)](https://app.travis-ci.com/gms1/HomeOfThings)
 [![Coverage Status](https://codecov.io/gh/gms1/HomeOfThings/branch/master/graph/badge.svg?flag=nestjs-sqlite3)](https://codecov.io/gh/gms1/HomeOfThings)
 [![DeepScan grade](https://deepscan.io/api/teams/439/projects/987/branches/1954/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=439&pid=987&bid=1954)
-[![Dependency Status](https://david-dm.org/gms1/HomeOfThings.svg)](https://david-dm.org/gms1/HomeOfThings)
-[![Known Vulnerabilities](https://snyk.io/test/github/gms1/HomeOfThings/badge.svg)](https://snyk.io/test/github/gms1/HomeOfThings)
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![License](https://img.shields.io/npm/l/@homeofthings/nestjs-sqlite3.svg?style=flat-square)](https://github.com/gms1/HomeOfThings/blob/master/LICENSE)

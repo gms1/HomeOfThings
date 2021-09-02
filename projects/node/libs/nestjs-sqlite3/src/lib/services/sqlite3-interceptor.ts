@@ -9,12 +9,12 @@ export class Sqlite3Interceptor<T> implements NestInterceptor<T, T> {
   async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<T>> {
     this.connectionManager.openConnectionsContext();
 
-    const release = () => this.connectionManager.closeConnectionsContext();
+    const release = (success: boolean) => () => this.connectionManager.closeConnectionsContext(success);
 
     return next.handle().pipe(
       tap({
-        next: release,
-        error: release,
+        next: release(true),
+        error: release(false),
       }),
     );
   }

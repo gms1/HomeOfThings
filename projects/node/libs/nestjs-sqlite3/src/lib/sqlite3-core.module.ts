@@ -5,18 +5,29 @@ import { ConnectionManager } from './services/connection-manager';
 import { createDynamicRootModule, DynamicRootModuleProperties } from '@homeofthings/nestjs-utils';
 import { Sqlite3Interceptor } from './services/sqlite3-interceptor';
 import { SqlConnectionPool } from 'sqlite3orm';
-import { getConnectionPoolToken } from './common/sqlite3.utils';
+import { getConnectionPoolInjectionToken, getEntityManagerInjectionToken } from './common/sqlite3.utils';
+import { EntityManager } from './services/entity-manager';
 
 function getSqlite3DynamicRootModuleProperties(modulOptions: Sqlite3SyncModuleOptions | Sqlite3AsyncModuleOptions): DynamicRootModuleProperties {
-  const connectionPoolInjectionToken = getConnectionPoolToken(modulOptions.name);
+  // provide connection pool for connection name
+  const connectionPoolInjectionToken = getConnectionPoolInjectionToken(modulOptions.name);
   const connectionPoolProvider: FactoryProvider<Promise<SqlConnectionPool>> = {
     provide: connectionPoolInjectionToken,
     useFactory: (connectionManager: ConnectionManager, connectOptions: Sqlite3ConnectionOptions) => connectionManager.openConnectionPool(modulOptions.name, connectOptions),
     inject: [ConnectionManager, SQLITE3_MODULE_OPTIONS_TOKEN],
   };
+
+  // provide entity manager for connection name
+  const entityManagerInjectionToken = getEntityManagerInjectionToken(modulOptions.name);
+  const entityManagerProvider: FactoryProvider<Promise<EntityManager>> = {
+    provide: entityManagerInjectionToken,
+    useFactory: (connectionManager: ConnectionManager) => connectionManager.getEntityManager(modulOptions.name),
+    inject: [ConnectionManager],
+  };
+
   return {
-    providers: [connectionPoolProvider],
-    exports: [connectionPoolInjectionToken],
+    providers: [connectionPoolProvider, entityManagerProvider],
+    exports: [connectionPoolProvider, entityManagerProvider],
   };
 }
 
