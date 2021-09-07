@@ -46,6 +46,5 @@ Thumbs.db
 #---------------------------------------
 # temporary files:
 
-*:memory*
-file:sqlite3orm*
-test*.db
+/file:*
+/*.db
