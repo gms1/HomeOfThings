@@ -1,12 +1,12 @@
 import { FactoryProvider, Global, Logger, Module, OnApplicationShutdown } from '@nestjs/common';
 import { APP_INTERCEPTOR, ModuleRef } from '@nestjs/core';
 import { Sqlite3AsyncModuleOptions, Sqlite3ConnectionOptions, Sqlite3SyncModuleOptions, SQLITE3_MODULE_OPTIONS_TOKEN } from './model';
-import { ConnectionManager } from './services/connection-manager';
+import { ConnectionManager } from './service/connection-manager';
 import { createDynamicRootModule, DynamicRootModuleProperties } from '@homeofthings/nestjs-utils';
-import { Sqlite3Interceptor } from './services/sqlite3-interceptor';
+import { Sqlite3Interceptor } from './service/sqlite3-interceptor';
 import { SqlConnectionPool } from 'sqlite3orm';
 import { getConnectionPoolInjectionToken, getEntityManagerInjectionToken } from './common/sqlite3.utils';
-import { EntityManager } from './services/entity-manager';
+import { EntityManager } from './service/entity-manager';
 
 function getSqlite3DynamicRootModuleProperties(modulOptions: Sqlite3SyncModuleOptions | Sqlite3AsyncModuleOptions): DynamicRootModuleProperties {
   // provide connection pool for connection name
@@ -36,7 +36,7 @@ function getSqlite3DynamicRootModuleProperties(modulOptions: Sqlite3SyncModuleOp
   providers: [
     {
       provide: ConnectionManager,
-      // NOTE: forceing ConnectionManager to be a singleton; otherwise DI may create multiple instances
+      // NOTE: forcing ConnectionManager to be a singleton; otherwise DI may create multiple instances
       useValue: ConnectionManager.getInstance(),
     },
     {

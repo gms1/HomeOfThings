@@ -1,6 +1,6 @@
 import { GenericDictionary } from '@homeofthings/nestjs-utils';
 import { SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
-import { EntityManager } from '../services/entity-manager';
+import { EntityManager } from '../service/entity-manager';
 import { Sqlite3ConnectionOptions } from './sqlite3.options';
 
 export * from './sqlite3.constants';

@@ -1,16 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/naming-convention */
-const mockConstructor = jest.fn();
-const mockOpenConnectionsContext = jest.fn();
-const mockCloseConnectionsContext = jest.fn();
-
-jest.mock('./connection-manager', () => {
-  return {
-    ConnectionManager: mockConstructor.mockImplementation(() => {
-      return { openConnectionsContext: mockOpenConnectionsContext, closeConnectionsContext: mockCloseConnectionsContext };
-    }),
-  };
-});
+import * as mockedConnectionManager from '../test/mocks/connection-manager';
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConnectionManager } from './connection-manager';
@@ -21,9 +10,10 @@ describe('Sqlite3Interceptor', () => {
   let appModule: TestingModule;
 
   beforeEach(async () => {
-    mockOpenConnectionsContext.mockReset();
-    mockCloseConnectionsContext.mockReset();
+    mockedConnectionManager.mockReset();
+    mockedConnectionManager.closeConnectionContext.mockReturnValue(Promise.resolve());
     appModule = await Test.createTestingModule({ providers: [{ provide: ConnectionManager, useValue: new ConnectionManager() }, Sqlite3Interceptor] }).compile();
+    appModule.enableShutdownHooks();
   });
 
   afterEach(() => {
@@ -36,29 +26,29 @@ describe('Sqlite3Interceptor', () => {
     const interceptor = appModule.get(Sqlite3Interceptor);
     expect(interceptor).toBeInstanceOf(Sqlite3Interceptor);
 
-    expect(mockOpenConnectionsContext).toHaveBeenCalledTimes(0);
-    expect(mockCloseConnectionsContext).toHaveBeenCalledTimes(0);
+    expect(mockedConnectionManager.createConnectionContext).toHaveBeenCalledTimes(0);
+    expect(mockedConnectionManager.closeConnectionContext).toHaveBeenCalledTimes(0);
     const observable$ = await interceptor.intercept({} as any, { handle: () => of<any>({}) });
     await lastValueFrom(observable$);
-    expect(mockOpenConnectionsContext).toHaveBeenCalledTimes(1);
-    expect(mockCloseConnectionsContext).toHaveBeenCalledTimes(1);
-    expect(mockCloseConnectionsContext).toHaveBeenCalledWith(true);
+    expect(mockedConnectionManager.createConnectionContext).toHaveBeenCalledTimes(1);
+    expect(mockedConnectionManager.closeConnectionContext).toHaveBeenCalledTimes(1);
+    expect(mockedConnectionManager.closeConnectionContext).toHaveBeenCalledWith(true);
   });
 
   it('should open and close context on failure', async () => {
     const interceptor = appModule.get(Sqlite3Interceptor);
     expect(interceptor).toBeInstanceOf(Sqlite3Interceptor);
 
-    expect(mockOpenConnectionsContext).toHaveBeenCalledTimes(0);
-    expect(mockCloseConnectionsContext).toHaveBeenCalledTimes(0);
+    expect(mockedConnectionManager.createConnectionContext).toHaveBeenCalledTimes(0);
+    expect(mockedConnectionManager.closeConnectionContext).toHaveBeenCalledTimes(0);
     const observable$ = await interceptor.intercept({} as any, { handle: () => throwError(() => new Error('This is an error!')) });
     try {
       await lastValueFrom(observable$);
     } catch (_e) {
       //
     }
-    expect(mockOpenConnectionsContext).toHaveBeenCalledTimes(1);
-    expect(mockCloseConnectionsContext).toHaveBeenCalledTimes(1);
-    expect(mockCloseConnectionsContext).toHaveBeenCalledWith(false);
+    expect(mockedConnectionManager.createConnectionContext).toHaveBeenCalledTimes(1);
+    expect(mockedConnectionManager.closeConnectionContext).toHaveBeenCalledTimes(1);
+    expect(mockedConnectionManager.closeConnectionContext).toHaveBeenCalledWith(false);
   });
 });

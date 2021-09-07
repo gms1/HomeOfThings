@@ -1,0 +1,193 @@
+import { AsyncContext, GenericDictionary } from '@homeofthings/nestjs-utils';
+import { Injectable, Logger } from '@nestjs/common';
+import { SqlConnectionPool, SqlDatabase, Table } from 'sqlite3orm';
+import { Sqlite3ConnectionOptions, Sqlite3ConnectionPools, Sqlite3Connections, Sqlite3EntityManagers, SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
+import { EntityManager } from './entity-manager';
+
+@Injectable()
+export class ConnectionManager {
+  private static _instance: ConnectionManager;
+  private static tablesPerConnection: GenericDictionary<Set<Table>>;
+
+  private readonly logger = new Logger('ConnectionManager');
+  private readonly _connectionPools: Sqlite3ConnectionPools = {};
+  private readonly _entityManagers: Sqlite3EntityManagers = {};
+  private readonly _context = new AsyncContext<Sqlite3Connections>();
+  private _warnOnConnectionOnRootContext = true;
+
+  constructor() {
+    if (ConnectionManager._instance) {
+      throw new Error(`an instance of ConnectionManager is already initialized`);
+    }
+  }
+
+  /*
+   * opens a connection pool for the given connectionName and connectionOptions
+   *
+   * @param connectionName - The name of the connection
+   * @param connectionOptions - The options for the connection
+   */
+  openConnectionPool(connectionName: string | undefined, connectionOptions: Sqlite3ConnectionOptions): Promise<SqlConnectionPool> {
+    const name = connectionName || SQLITE3_DEFAULT_CONNECTION_NAME;
+    if (this._connectionPools[name]) {
+      const err = new Error(`connection '${name}' already defined`);
+      this.logger.error(err.message, err.stack);
+      return Promise.reject(err);
+    }
+    this._connectionPools[name] = new SqlConnectionPool(name);
+    if (!connectionOptions.file) {
+      const err = new Error(`failed to open '${name}' connection which has no file property defined`);
+      this.logger.error(err.message, err.stack);
+      return Promise.reject(err);
+    }
+    const pool = this._connectionPools[name];
+    return pool
+      .open(connectionOptions.file, connectionOptions.mode, connectionOptions.poolMin, connectionOptions.poolMax, connectionOptions.dbSettings)
+      .then(() => pool)
+      .catch((err: Error) => {
+        this.logger.error(`failed to open '${name}' connection: ${err.message}`, err.stack);
+        return Promise.reject(err);
+      });
+  }
+
+  /*
+   * close all connection pools
+   *    called from Sqlite3CoreModule.onApplicationShutdown()
+   */
+  closeAllConnectionPools(): Promise<void> {
+    return Promise.allSettled(
+      Object.keys(this._connectionPools).map((name) => {
+        const connectionPool = this._connectionPools[name];
+        delete this._connectionPools[name];
+        return connectionPool.close();
+      }),
+    ).then(() => Promise.resolve());
+  }
+
+  /*
+   * get a connection pool
+   *
+   * @param connectionName - The name of the connection
+   */
+  getConnectionPool(connectionName?: string): SqlConnectionPool {
+    const name = connectionName || SQLITE3_DEFAULT_CONNECTION_NAME;
+    if (!this._connectionPools[name]) {
+      throw new Error(`connection '${name}' is not defined`);
+    }
+    return this._connectionPools[name];
+  }
+
+  /*
+   * get entity manager for a given connection name
+   *
+   * @param connectionName - The name of the connection
+   */
+  getEntityManager(connectionName: string | undefined): Promise<EntityManager> {
+    const name = connectionName || SQLITE3_DEFAULT_CONNECTION_NAME;
+    if (this._entityManagers[name]) {
+      return Promise.resolve(this._entityManagers[name]);
+    }
+    this._entityManagers[name] = new EntityManager(this, name);
+    return Promise.resolve(this._entityManagers[name]);
+  }
+
+  createConnectionContext(): Promise<void> {
+    const connections = this._context.get();
+    this._context.set({});
+    if (!connections) {
+      return Promise.resolve();
+    }
+    const names = Object.keys(connections)
+      .filter((name) => connections[name])
+      .join(',');
+    if (names && this._warnOnConnectionOnRootContext) {
+      this.logger.warn(`detected open connections on new connection context: ${names}`);
+      this.logger.warn(`please avoid opening connections on root context`);
+      this._warnOnConnectionOnRootContext = false;
+    }
+    return Promise.resolve();
+  }
+
+  async closeConnectionContext(_commit: boolean): Promise<void> {
+    const connectionDictionary = this._context.get();
+    const connections: SqlDatabase[] = Object.keys(this._context.get())
+      .filter((name) => connectionDictionary[name])
+      .map((name) => connectionDictionary[name] as SqlDatabase);
+    this._context.set((undefined as unknown) as Sqlite3Connections);
+
+    if (_commit) {
+      await Promise.allSettled(connections.map((connection) => connection.endTransaction(_commit)));
+    }
+
+    return Promise.allSettled(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      connections.map((connection) => connection.close()),
+    ).then(() => Promise.resolve());
+  }
+
+  getConnection(name: string): Promise<SqlDatabase> {
+    const connections = this._context.get();
+    if (!connections) {
+      const err = new Error(`connection context not initialized`);
+      this.logger.error(err.message, err.stack);
+      return Promise.reject(err);
+    }
+    if (connections[name]) {
+      return Promise.resolve(connections[name] as SqlDatabase);
+    }
+    if (!this._connectionPools[name]) {
+      const err = new Error(`connection '${name}' is not defined`);
+      this.logger.error(err.message, err.stack);
+      return Promise.reject(err);
+    }
+    return this._connectionPools[name].get().then((conn) => {
+      connections[name] = conn;
+      return conn;
+    });
+  }
+
+  /*
+   * get the instance of the connection manager singleton
+   *
+   */
+  static getInstance(): ConnectionManager {
+    if (!this._instance) {
+      this._initialize();
+    }
+    return this._instance;
+  }
+
+  private static _initialize() {
+    this._instance = new ConnectionManager();
+  }
+
+  /*
+   * register a table for a given connection name
+   *
+   * @param table - The table which should be registered
+   * @param connectionName - The connection name for which this table should be registered
+   */
+
+  static registerTable(table: Table, connectionName: string) {
+    if (!this.tablesPerConnection) {
+      this.tablesPerConnection = {};
+    }
+    if (!this.tablesPerConnection[connectionName]) {
+      this.tablesPerConnection[connectionName] = new Set();
+    }
+    this.tablesPerConnection[connectionName].add(table);
+  }
+
+  /*
+   * get all tables registered for a given connection name
+   *
+   * @param connectionName - The connection name for which this table should be registered
+   */
+
+  static getTables(connectionName: string = SQLITE3_DEFAULT_CONNECTION_NAME): Table[] {
+    if (!this.tablesPerConnection?.[connectionName]) {
+      return [];
+    }
+    return Array.from(this.tablesPerConnection[connectionName]);
+  }
+}
