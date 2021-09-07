@@ -1,18 +1,30 @@
 flags:
-  nestjs-logger:
+  nestjs-utils:
     paths:
-      - projects/node/libs/nestjs-logger
+      - projects/node/libs/nestjs-utils
   nestjs-config:
     paths:
       - projects/node/libs/nestjs-config
+  nestjs-logger:
+    paths:
+      - projects/node/libs/nestjs-logger
+  nestjs-sqlite3:
+    paths:
+      - projects/node/libs/nestjs-sqlite3
 
 # To see status checks based on flags
 coverage:
   status:
     project:
-      nestjs-logger:
+      nestjs-utils:
         flags:
-          - nestjs-logger
+          - nestjs-utils
       nestjs-config:
         flags:
           - nestjs-config
+      nestjs-logger:
+        flags:
+          - nestjs-logger
+      nestjs-sqlite3:
+        flags:
+          - nestjs-sqlite3
