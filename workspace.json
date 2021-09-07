@@ -9,16 +9,13 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "projects/node/libs/hot-express/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["projects/node/libs/hot-express/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/projects/node/libs/hot-express"
-          ],
+          "outputs": ["coverage/projects/node/libs/hot-express"],
           "options": {
             "jestConfig": "projects/node/libs/hot-express/jest.config.js",
             "passWithNoTests": true
@@ -26,17 +23,13 @@
         },
         "build": {
           "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/projects/node/libs/hot-express",
             "tsConfig": "projects/node/libs/hot-express/tsconfig.lib.json",
             "packageJson": "projects/node/libs/hot-express/package.json",
             "main": "projects/node/libs/hot-express/src/index.ts",
-            "assets": [
-              "projects/node/libs/hot-express/*.md"
-            ]
+            "assets": ["projects/node/libs/hot-express/*.md"]
           }
         }
       }
@@ -49,16 +42,12 @@
       "targets": {
         "build": {
           "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/projects/node/apps/hot-gateway",
             "main": "projects/node/apps/hot-gateway/src/main.ts",
             "tsConfig": "projects/node/apps/hot-gateway/tsconfig.app.json",
-            "assets": [
-              "projects/node/apps/hot-gateway/src/assets"
-            ]
+            "assets": ["projects/node/apps/hot-gateway/src/assets"]
           },
           "configurations": {
             "production": {
@@ -83,16 +72,13 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "projects/node/apps/hot-gateway/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["projects/node/apps/hot-gateway/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/projects/node/apps/hot-gateway"
-          ],
+          "outputs": ["coverage/projects/node/apps/hot-gateway"],
           "options": {
             "jestConfig": "projects/node/apps/hot-gateway/jest.config.js",
             "passWithNoTests": true
@@ -108,16 +94,13 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "projects/node/libs/nestjs-config/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["projects/node/libs/nestjs-config/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/projects/node/libs/nestjs-config"
-          ],
+          "outputs": ["coverage/projects/node/libs/nestjs-config"],
           "options": {
             "jestConfig": "projects/node/libs/nestjs-config/jest.config.js",
             "passWithNoTests": true
@@ -125,17 +108,13 @@
         },
         "build": {
           "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/projects/node/libs/nestjs-config",
             "tsConfig": "projects/node/libs/nestjs-config/tsconfig.lib.json",
             "packageJson": "projects/node/libs/nestjs-config/package.json",
             "main": "projects/node/libs/nestjs-config/src/index.ts",
-            "assets": [
-              "projects/node/libs/nestjs-config/*.md"
-            ]
+            "assets": ["projects/node/libs/nestjs-config/*.md"]
           }
         }
       }
@@ -148,16 +127,13 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "projects/node/libs/nestjs-logger/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["projects/node/libs/nestjs-logger/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/projects/node/libs/nestjs-logger"
-          ],
+          "outputs": ["coverage/projects/node/libs/nestjs-logger"],
           "options": {
             "jestConfig": "projects/node/libs/nestjs-logger/jest.config.js",
             "passWithNoTests": true
@@ -165,17 +141,13 @@
         },
         "build": {
           "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/projects/node/libs/nestjs-logger",
             "tsConfig": "projects/node/libs/nestjs-logger/tsconfig.lib.json",
             "packageJson": "projects/node/libs/nestjs-logger/package.json",
             "main": "projects/node/libs/nestjs-logger/src/index.ts",
-            "assets": [
-              "projects/node/libs/nestjs-logger/*.md"
-            ]
+            "assets": ["projects/node/libs/nestjs-logger/*.md"]
           }
         }
       }
@@ -187,32 +159,25 @@
       "targets": {
         "build": {
           "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/projects/node/libs/nestjs-sqlite3",
             "tsConfig": "projects/node/libs/nestjs-sqlite3/tsconfig.lib.json",
             "packageJson": "projects/node/libs/nestjs-sqlite3/package.json",
             "main": "projects/node/libs/nestjs-sqlite3/src/index.ts",
-            "assets": [
-              "projects/node/libs/nestjs-sqlite3/*.md"
-            ]
+            "assets": ["projects/node/libs/nestjs-sqlite3/*.md"]
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "projects/node/libs/nestjs-sqlite3/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["projects/node/libs/nestjs-sqlite3/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/projects/node/libs/nestjs-sqlite3"
-          ],
+          "outputs": ["coverage/projects/node/libs/nestjs-sqlite3"],
           "options": {
             "jestConfig": "projects/node/libs/nestjs-sqlite3/jest.config.js",
             "passWithNoTests": true
@@ -227,32 +192,25 @@
       "targets": {
         "build": {
           "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/projects/node/libs/nestjs-utils",
             "tsConfig": "projects/node/libs/nestjs-utils/tsconfig.lib.json",
             "packageJson": "projects/node/libs/nestjs-utils/package.json",
             "main": "projects/node/libs/nestjs-utils/src/index.ts",
-            "assets": [
-              "projects/node/libs/nestjs-utils/*.md"
-            ]
+            "assets": ["projects/node/libs/nestjs-utils/*.md"]
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "projects/node/libs/nestjs-utils/**/*.ts"
-            ]
-          }
+            "lintFilePatterns": ["projects/node/libs/nestjs-utils/**/*.ts"]
+          },
+          "outputs": ["{options.outputFile}"]
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/projects/node/libs/nestjs-utils"
-          ],
+          "outputs": ["coverage/projects/node/libs/nestjs-utils"],
           "options": {
             "jestConfig": "projects/node/libs/nestjs-utils/jest.config.js",
             "passWithNoTests": true
