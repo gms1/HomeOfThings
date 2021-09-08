@@ -5,7 +5,7 @@
 import * as mockedLogger from '../mocks/logger';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { field, id, SqlConnectionPool, table } from 'sqlite3orm';
+import { SqlConnectionPool } from 'sqlite3orm';
 import {
   ConnectionManager,
   EntityManager,
@@ -15,54 +15,30 @@ import {
   getRepositoryInjectionToken,
   InjectConnectionPool,
   InjectCustomRepository,
-  InjectEntityManager,
   InjectRepository,
   Repository,
   Sqlite3ConnectionOptions,
   Sqlite3Module,
 } from '@homeofthings/nestjs-sqlite3';
+import { User } from './fixtures/entity/user';
+import { Contact } from './fixtures/entity/contact';
+import { UserRepository } from './fixtures/repository/user.repository';
+import { ContactRepositoryService } from './fixtures/service/contact.repository.service';
+import { UserRepositoryService } from './fixtures/service/user.repository.service';
 
-@table()
-class TestEntity1 {
-  @id()
-  id: number;
-
-  @field()
-  data?: string;
-}
-
-@table()
-class TestEntity2 {
-  @id()
-  id: number;
-
-  @field()
-  data?: string;
-}
-
-class TestCustomRepository extends Repository<TestEntity1> {
-  constructor(connectionManager: ConnectionManager, private connectionName: string) {
-    super(TestEntity1, connectionManager, connectionName);
+class ExtendedContactRepositoryService extends ContactRepositoryService {
+  constructor(@InjectConnectionPool() public sqlConnectionPool: SqlConnectionPool, @InjectRepository(Contact) repository: Repository<Contact>) {
+    super(repository);
   }
 }
 
-class TestStandardRepositoryService {
-  constructor(
-    @InjectConnectionPool() public connectionPool: SqlConnectionPool,
-    @InjectEntityManager() public entityManager,
-    @InjectRepository(TestEntity1) public repository: TestEntity1,
-  ) {}
+class ExtendedUserRepositoryService extends UserRepositoryService {
+  constructor(@InjectConnectionPool() public sqlConnectionPool: SqlConnectionPool, @InjectCustomRepository(UserRepository) repository: UserRepository) {
+    super(repository);
+  }
 }
 
-class TestCustomRepositoryService {
-  constructor(
-    @InjectConnectionPool() public connectionPool: SqlConnectionPool,
-    @InjectEntityManager() public entityManager,
-    @InjectCustomRepository(TestCustomRepository) public repository: TestCustomRepository,
-  ) {}
-}
-
-describe('Sqlite3Module', () => {
+describe('Sqlite3Module-Integration', () => {
   let appModule: TestingModule;
 
   const givenDbUrl = 'file:sqlite3.module.spec.db?mode=memory&cache=shared';
@@ -82,8 +58,8 @@ describe('Sqlite3Module', () => {
   it('for sync options', async () => {
     expect(ConnectionManager.getTables().length).toBe(0);
     appModule = await Test.createTestingModule({
-      imports: [Sqlite3Module.register(givenConnectionOptions), Sqlite3Module.forFeature([TestEntity1, TestEntity2])],
-      providers: [TestStandardRepositoryService],
+      imports: [Sqlite3Module.register(givenConnectionOptions), Sqlite3Module.forFeature([User, Contact])],
+      providers: [ExtendedContactRepositoryService],
     })
       .setLogger(mockedLogger.logger)
       .compile();
@@ -99,13 +75,12 @@ describe('Sqlite3Module', () => {
     const entityManager = appModule.get<EntityManager>(getEntityManagerInjectionToken());
     expect(entityManager).toBeInstanceOf(EntityManager);
 
-    const repository = appModule.get<Repository<TestEntity1>>(getRepositoryInjectionToken(TestEntity1.name));
+    const repository = appModule.get<Repository<User>>(getRepositoryInjectionToken(User.name));
     expect(repository).toBeInstanceOf(Repository);
 
-    const service = appModule.get<TestStandardRepositoryService>(TestStandardRepositoryService);
-    expect(service).toBeInstanceOf(TestStandardRepositoryService);
-    expect(service.connectionPool).toBeInstanceOf(SqlConnectionPool);
-    expect(service.entityManager).toBeInstanceOf(EntityManager);
+    const service = appModule.get<ExtendedContactRepositoryService>(ExtendedContactRepositoryService);
+    expect(service).toBeInstanceOf(ExtendedContactRepositoryService);
+    expect(service.sqlConnectionPool).toBeInstanceOf(SqlConnectionPool);
     expect(service.repository).toBeInstanceOf(Repository);
 
     expect(ConnectionManager.getTables().length).toBe(2);
@@ -121,9 +96,9 @@ describe('Sqlite3Module', () => {
               setTimeout(resolve, 500, givenConnectionOptions);
             }),
         }),
-        Sqlite3Module.forFeature([TestCustomRepository, TestEntity2]),
+        Sqlite3Module.forFeature([UserRepository, Contact]),
       ],
-      providers: [TestCustomRepositoryService],
+      providers: [ExtendedUserRepositoryService],
     })
       .setLogger(mockedLogger.logger)
       .compile();
@@ -139,14 +114,13 @@ describe('Sqlite3Module', () => {
     const entityManager = appModule.get<EntityManager>(getEntityManagerInjectionToken());
     expect(entityManager).toBeInstanceOf(EntityManager);
 
-    const repository = appModule.get<TestCustomRepository>(getCustomRepositoryInjectionToken(TestCustomRepository.name));
-    expect(repository).toBeInstanceOf(TestCustomRepository);
+    const repository = appModule.get<UserRepository>(getCustomRepositoryInjectionToken(UserRepository.name));
+    expect(repository).toBeInstanceOf(UserRepository);
 
-    const service = appModule.get<TestCustomRepositoryService>(TestCustomRepositoryService);
-    expect(service).toBeInstanceOf(TestCustomRepositoryService);
-    expect(service.connectionPool).toBeInstanceOf(SqlConnectionPool);
-    expect(service.entityManager).toBeInstanceOf(EntityManager);
-    expect(service.repository).toBeInstanceOf(TestCustomRepository);
+    const service = appModule.get<ExtendedUserRepositoryService>(ExtendedUserRepositoryService);
+    expect(service).toBeInstanceOf(ExtendedUserRepositoryService);
+    expect(service.sqlConnectionPool).toBeInstanceOf(SqlConnectionPool);
+    expect(service.repository).toBeInstanceOf(UserRepository);
 
     expect(ConnectionManager.getTables().length).toBe(2);
   });

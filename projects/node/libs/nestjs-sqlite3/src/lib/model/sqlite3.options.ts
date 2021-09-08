@@ -7,12 +7,12 @@ export interface Sqlite3ConnectionOptions {
    */
   file: string;
   /**
-   * [mode=SQL_OPEN_DEFAULT] - The mode for opening the database file
+   * [mode=SQL_OPEN_DEFAULT_URI] - The mode for opening the database file
    * A bit flag combination of:
    *   SQL_OPEN_CREATE,
    *   SQL_OPEN_READONLY,
    *   SQL_OPEN_READWRITE
-   * SQL_OPEN_DEFAULT = SQL_OPEN_CREATE | SQL_OPEN_READWRITE
+   * SQL_OPEN_DEFAULT_URI = SQL_OPEN_CREATE | SQL_OPEN_READWRITE | SQL_OPEN_URI
    */
   mode?: number;
   /**

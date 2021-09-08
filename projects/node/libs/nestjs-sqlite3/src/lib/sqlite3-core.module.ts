@@ -4,9 +4,12 @@ import { Sqlite3AsyncModuleOptions, Sqlite3ConnectionOptions, Sqlite3SyncModuleO
 import { ConnectionManager } from './service/connection-manager';
 import { createDynamicRootModule, DynamicRootModuleProperties } from '@homeofthings/nestjs-utils';
 import { Sqlite3Interceptor } from './service/sqlite3-interceptor';
-import { SqlConnectionPool } from 'sqlite3orm';
+import { BaseDAO, SqlConnectionPool } from 'sqlite3orm';
 import { getConnectionPoolInjectionToken, getEntityManagerInjectionToken } from './common/sqlite3.utils';
 import { EntityManager } from './service/entity-manager';
+
+BaseDAO.options = BaseDAO.options || {};
+BaseDAO.options.ignoreNoChanges = true;
 
 function getSqlite3DynamicRootModuleProperties(modulOptions: Sqlite3SyncModuleOptions | Sqlite3AsyncModuleOptions): DynamicRootModuleProperties {
   // provide connection pool for connection name

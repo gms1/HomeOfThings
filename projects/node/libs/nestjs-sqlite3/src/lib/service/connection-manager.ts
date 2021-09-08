@@ -1,6 +1,6 @@
 import { AsyncContext, GenericDictionary } from '@homeofthings/nestjs-utils';
 import { Injectable, Logger } from '@nestjs/common';
-import { SqlConnectionPool, SqlDatabase, Table } from 'sqlite3orm';
+import { SqlConnectionPool, SqlDatabase, SQL_OPEN_DEFAULT_URI, Table } from 'sqlite3orm';
 import { Sqlite3ConnectionOptions, Sqlite3ConnectionPools, Sqlite3Connections, Sqlite3EntityManagers, SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
 import { EntityManager } from './entity-manager';
 
@@ -42,7 +42,7 @@ export class ConnectionManager {
     }
     const pool = this._connectionPools[name];
     return pool
-      .open(connectionOptions.file, connectionOptions.mode, connectionOptions.poolMin, connectionOptions.poolMax, connectionOptions.dbSettings)
+      .open(connectionOptions.file, connectionOptions.mode || SQL_OPEN_DEFAULT_URI, connectionOptions.poolMin, connectionOptions.poolMax, connectionOptions.dbSettings)
       .then(() => pool)
       .catch((err: Error) => {
         this.logger.error(`failed to open '${name}' connection: ${err.message}`, err.stack);
