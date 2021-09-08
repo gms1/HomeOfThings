@@ -13,8 +13,8 @@ describe('ConfigModule', () => {
   class ChildModule {
     static configService: ConfigService;
 
-    constructor(loggerService: ConfigService) {
-      ChildModule.configService = loggerService;
+    constructor(configService: ConfigService) {
+      ChildModule.configService = configService;
     }
   }
 

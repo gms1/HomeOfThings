@@ -5,7 +5,7 @@ import { Contact } from '../entity/contact';
 import { User } from '../entity/user';
 
 export class UserRepository extends Repository<User> {
-  constructor(connectionManager: ConnectionManager, private connectionName: string) {
+  constructor(connectionManager: ConnectionManager, connectionName: string) {
     super(User, connectionManager, connectionName);
   }
 

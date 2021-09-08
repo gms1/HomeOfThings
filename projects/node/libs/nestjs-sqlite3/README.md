@@ -14,6 +14,7 @@ This module allows you to map your model, written in JavaScript or TypeScript, t
 > NOTE: Your contribution is highly welcome! Feel free to pick-up a TODO-item or add yours.
 
 This module is based on [sqlite3orm](https://www.npmjs.com/package/sqlite3orm)
+
 supporting [SQLCipher](https://github.com/gms1/node-sqlite3-orm/blob/master/docs/sqlcipher.md)
 
 ## installation
@@ -54,27 +55,41 @@ export class AppModule {}
 
 ### inject connection manager
 
-TODO:
+```Typescript
+@Injectable()
+export class MyService {
+  constructor(connectionManager: ConnectionManager) {}
+}
+```
 
 ### get connection
 
 ```Typescript
-  const connection = await this._connectionManager.getConnection(connectionName);
+  const connection = await this.connectionManager.getConnection(connectionName);
 ```
 
-is using asynchronous context tracking to get the same database connection from the pool throughout the lifetime of a web request or any other asynchronous duration
+This is using asynchronous context tracking to get the same database connection from the pool throughout the lifetime of a web request or any other asynchronous duration
 You can create a new context by calling `ConnectionManager.createConnectionContext()` and close it by calling `ConnectionManager.closeConnectionContext()`.
 For web requests this is automatically accomblished by the provided `Sqlite3Interceptor`.
 
-If you a need for a connection which works independend from the asynchronous context, you can get it from the pool:
+If you need a connection which works independend from the asynchronous connection context (e.g for backup, schema creation/upgrade, ...), you can get it from the pool:
 
 ```Typescript
-  const connection = await this._connectionManager.getConnectionPool(connectionName).get();
+  const connection = await this.connectionManager.getConnectionPool(connectionName).get();
 ```
+
+> NOTE: all repositories as well as the entity-manager require an asynchronous connection context to be created
 
 ### inject connection pool
 
-TODO: using `InjectConnectionPool` decorator
+```Typescript
+@Injectable()
+export class MyService {
+  constructor(@InjectConnectionPool() sqlConnectionPool: SqlConnectionPool) {}
+}
+```
+
+optional you can provide `connectionName` as argument for `@InjectConnectionPool`
 
 ### mapping
 
@@ -82,18 +97,70 @@ please see (https://github.com/gms1/node-sqlite3-orm#mapping-intruduction)
 
 ### inject entity manager
 
-TODO:  using `InjectEntityManager` decorator
+```Typescript
+@Injectable()
+export class MyService {
+  constructor(@InjectEntityManager() entityManager: EntityManager) {}
+}
+```
+
+optional you can provide `connectionName` as argument for `@InjectEntityManager`
 
 ### inject standard repository
 
-TODO: calling `forFeature`
-TODO: using `InjectRepository` decorator
+register repository by providing entity class to the `Sqlite3Module.forFeature` method
+
+```Typescript
+@Module({
+  imports: [
+    Sqlite3Module.forFeature([User]),
+  ],
+})
+export class AppModule {}
+```
+
+thereafter you can inject the standard repository using:
+
+```Typescript
+@Injectable()
+export class MyService {
+  constructor(@InjectRepository(User) repository: Repository<User>) {}
+}
+```
+
+optional you can provide `connectionName` as second argument for `Sqlite3Module.forFeature`
 
 ### inject custom repository
 
-TODO: define custom repository class
-TODO: calling `forFeature`
-TODO: using `InjectCustomRepository` decorator
+define a custom repository:
+
+```Typescript
+export class UserRepository extends Repository<User> {
+  constructor(connectionManager: ConnectionManager, connectionName: string) {
+    super(User, connectionManager, connectionName);
+  }
+}
+```
+
+register the custom Repository using the `Sqlite3Module.forFeature` method:
+
+```Typescript
+@Module({
+  imports: [
+    Sqlite3Module.forFeature([UserRepository]),
+  ],
+})
+export class AppModule {}
+```
+
+inject the custom repository using `InjectCustomRepository` decorator
+
+```Typescript
+@Injectable()
+export class MyService {
+  constructor(@InjectCustomRepository(UserRepository) repository: UserRepository) {}
+}
+```
 
 ### type safe query syntax
 
@@ -105,10 +172,8 @@ please see (https://github.com/gms1/node-sqlite3-orm#schema-creation)
 
 ### ceeate/upgrade schema automatically
 
-TODO
-
 ```Typescript
-  const connection = await this._connectionManager.getConnection(connectionName);
+  const connection = await this.connectionManager.getConnection(connectionName);
   const autoUpgrader = new AutoUpgrader(connection);
 
   // run autoupgrade for all registered tables
@@ -123,10 +188,10 @@ All tables referenced by a `forFeature` call for a specific database can be retr
 
 ### online backup
 
-TODO
+to run the backup in one step you can call:
 
 ```Typescript
-  const connection = await this._connectionManager.getConnection(connectionName);
+  const connection = await this.connectionManager.getConnection(connectionName);
   const backup = await connection.backup('backup.db');
   await backup.step(-1);
   backup.finish();
@@ -134,7 +199,7 @@ TODO
 
 ## tracing
 
-TODO
+**sqlite3orm** uses the `debug` module, so you can turn on the logging by setting the 'DEBUG' environment to "sqlite3orm:*"
 
 ## RELEASE NOTES
 
