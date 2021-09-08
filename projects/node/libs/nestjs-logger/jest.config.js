@@ -12,4 +12,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../../../coverage/projects/node/libs/nestjs-logger',
+  coveragePathIgnorePatterns: ['/test/'],
 };

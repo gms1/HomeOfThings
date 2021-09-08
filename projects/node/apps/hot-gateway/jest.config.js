@@ -6,10 +6,11 @@ module.exports = {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
+  testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../../../coverage/projects/node/apps/hot-gateway',
-  testEnvironment: 'node',
+  coveragePathIgnorePatterns: ['/test/'],
 };
