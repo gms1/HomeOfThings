@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { AutoUpgrader, BaseDAO } from 'sqlite3orm';
 import { ConnectionManager } from '@homeofthings/nestjs-sqlite3';
 import { Contact } from './entity/contact';
