@@ -3,7 +3,7 @@ BN=$(basename "$0")
 DN=$(dirname "$0")
 . "${DN}/sh/common"
 #--------------------------------------------------------------
-TRGDIR="${WORKSPACE_DIR}/secrets/ceritifcates"
+TRGDIR="${WORKSPACE_DIR}/config/secrets/ceritifcates"
 mkdir -p "${TRGDIR}"
 
 openssl req -nodes -x509 -newkey rsa:2048 -keyout "${TRGDIR}/key.pem" -out "${TRGDIR}/cert.pem" -days 365
