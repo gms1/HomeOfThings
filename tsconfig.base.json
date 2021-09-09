@@ -16,8 +16,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
       "@homeofthings/hot-express": ["projects/node/libs/hot-express/src/index.ts"],
@@ -25,7 +23,20 @@
       "@homeofthings/nestjs-logger": ["projects/node/libs/nestjs-logger/src/index.ts"],
       "@homeofthings/nestjs-sqlite3": ["projects/node/libs/nestjs-sqlite3/src/index.ts"],
       "@homeofthings/nestjs-utils": ["projects/node/libs/nestjs-utils/src/index.ts"]
-    }
+    },
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false
   },
   "exclude": ["node_modules", "tmp"]
 }

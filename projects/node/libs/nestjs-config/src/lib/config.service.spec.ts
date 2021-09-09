@@ -45,12 +45,11 @@ describe('ConfigService', () => {
   });
 
   it('getOptionalString should return undefined', () => {
-    const givenValue = undefined;
     has.mockReturnValueOnce(false);
     const value = configService.getOptionalString('testKey');
     expect(has).toBeCalledTimes(1);
     expect(get).toBeCalledTimes(0);
-    expect(value).toBe(givenValue);
+    expect(value).toBeUndefined();
   });
 
   it('getString should return config value', () => {
@@ -95,12 +94,11 @@ describe('ConfigService', () => {
   });
 
   it('getOptionalNumber should return undefined', () => {
-    const givenValue = undefined;
     has.mockReturnValueOnce(false);
     const value = configService.getOptionalNumber('testKey');
     expect(has).toBeCalledTimes(1);
     expect(get).toBeCalledTimes(0);
-    expect(value).toBe(givenValue);
+    expect(value).toBeUndefined();
   });
 
   it('getNumber should return config value', () => {
@@ -184,12 +182,11 @@ describe('ConfigService', () => {
   });
 
   it('getOptionalBoolean should return undefined', () => {
-    const givenValue = undefined;
     has.mockReturnValueOnce(false);
     const value = configService.getOptionalBoolean('testKey');
     expect(has).toBeCalledTimes(1);
     expect(get).toBeCalledTimes(0);
-    expect(value).toBe(givenValue);
+    expect(value).toBeUndefined();
   });
 
   it('getBoolean should return config value', () => {
@@ -233,12 +230,11 @@ describe('ConfigService', () => {
   });
 
   it('getOptionalPath should return undefined', () => {
-    const givenValue = undefined;
     has.mockReturnValueOnce(false);
     const value = configService.getOptionalPath('testKey');
     expect(has).toBeCalledTimes(1);
     expect(get).toBeCalledTimes(0);
-    expect(value).toBe(givenValue);
+    expect(value).toBeUndefined();
   });
 
   it('getPath should return absolute path as is', () => {

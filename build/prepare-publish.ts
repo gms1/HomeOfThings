@@ -27,12 +27,12 @@ program
   });
 program.parse(process.argv);
 
-async function preparePublishing() {
+async function preparePublishing(): Promise<void> {
   try {
     const workspace = await readJson(workspaceJsonPath);
     if (!workspace.projects) {
       warn(`no projects are currently defined`);
-      return;
+      return Promise.resolve();
     }
     await Promise.all(
       Object.keys(workspace.projects)
@@ -43,6 +43,7 @@ async function preparePublishing() {
   } catch (err) {
     return Promise.reject(err);
   }
+  return Promise.resolve();
 }
 
 async function prepareProject(projectName: string, filePath?: string): Promise<void> {

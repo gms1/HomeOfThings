@@ -1,5 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as winston from 'winston';
 import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT, getContextColor } from './winston-format';
+
+function getMessage(format: winston.Logform.Format, info: winston.Logform.TransformableInfo): string | undefined {
+  const resultInfo = format.transform(info);
+  const firstPropertySymbol = Object.getOwnPropertySymbols(resultInfo)[0];
+  return typeof resultInfo === 'object' ? (resultInfo as any)[firstPropertySymbol] : undefined;
+}
 
 describe('Winston Default Console Format', () => {
   it('should build console log message with context', () => {
@@ -9,8 +16,7 @@ describe('Winston Default Console Format', () => {
       message: 'info message',
       context: 'logger',
     };
-    const resultInfo = DEFAULT_CONSOLE_FORMAT.transform(givenInfo);
-    const message = resultInfo[Object.getOwnPropertySymbols(resultInfo)[0]];
+    const message = getMessage(DEFAULT_CONSOLE_FORMAT, givenInfo);
     expect(message).toMatch(/^timestamp\s+.*info:.*\s+.*\[logger\].* info message$/);
   });
 
@@ -21,8 +27,7 @@ describe('Winston Default Console Format', () => {
       message: 'error message',
       stack: 'trace',
     };
-    const resultInfo = DEFAULT_CONSOLE_FORMAT.transform(givenInfo);
-    const message = resultInfo[Object.getOwnPropertySymbols(resultInfo)[0]];
+    const message = getMessage(DEFAULT_CONSOLE_FORMAT, givenInfo);
     expect(message).toMatch(/^timestamp\s+.*error:.*\s+error message\ntrace$/);
   });
 
@@ -33,8 +38,7 @@ describe('Winston Default Console Format', () => {
       message: 'debug message',
       meta: { x: 1 },
     };
-    const resultInfo = DEFAULT_CONSOLE_FORMAT.transform(givenInfo);
-    const message = resultInfo[Object.getOwnPropertySymbols(resultInfo)[0]];
+    const message = getMessage(DEFAULT_CONSOLE_FORMAT, givenInfo);
     expect(message).toMatch(/^timestamp\s+.*debug:.*\s+debug message \{"meta":\{"x":1\}\}$/);
   });
 
@@ -54,8 +58,7 @@ describe('Winston Default File Format', () => {
       message: 'info message',
       context: 'logger',
     };
-    const resultInfo = DEFAULT_FILE_FORMAT.transform(givenInfo);
-    const message = resultInfo[Object.getOwnPropertySymbols(resultInfo)[0]];
+    const message = getMessage(DEFAULT_FILE_FORMAT, givenInfo);
     expect(message).toBe('timestamp info:    [logger] info message');
   });
 
@@ -66,8 +69,7 @@ describe('Winston Default File Format', () => {
       message: 'error message',
       stack: 'trace',
     };
-    const resultInfo = DEFAULT_FILE_FORMAT.transform(givenInfo);
-    const message = resultInfo[Object.getOwnPropertySymbols(resultInfo)[0]];
+    const message = getMessage(DEFAULT_FILE_FORMAT, givenInfo);
     expect(message).toBe('timestamp error:   error message\ntrace');
   });
 
@@ -78,8 +80,7 @@ describe('Winston Default File Format', () => {
       message: 'debug message',
       meta: { x: 1 },
     };
-    const resultInfo = DEFAULT_FILE_FORMAT.transform(givenInfo);
-    const message = resultInfo[Object.getOwnPropertySymbols(resultInfo)[0]];
+    const message = getMessage(DEFAULT_FILE_FORMAT, givenInfo);
     expect(message).toBe('timestamp debug:   debug message {"meta":{"x":1}}');
   });
 });

@@ -9,6 +9,7 @@
     "removeComments": false,
     "preserveConstEnums": true,
     "allowJs": true,
-    "esModuleInterop": false
+    "esModuleInterop": false,
+    "noImplicitAny": false
   }
 }
