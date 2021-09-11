@@ -1,11 +1,12 @@
-import * as config from 'config';
-import * as path from 'path';
-import { ConfigService } from './config.service';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 jest.mock('config', () => ({
   has: jest.fn(),
   get: jest.fn(),
 }));
+
+import * as config from 'config';
+import * as path from 'path';
+import { ConfigService } from './config.service';
 
 describe('ConfigService', () => {
   let configService: ConfigService;
@@ -13,15 +14,18 @@ describe('ConfigService', () => {
   let get: jest.Mock;
 
   beforeAll(() => {
-    expect(config).toBeDefined();
     has = config.has as jest.Mock;
     get = config.get as jest.Mock;
-    configService = new ConfigService({});
   });
 
   beforeEach(() => {
     has.mockReset();
     get.mockReset();
+    configService = new ConfigService({});
+  });
+
+  afterEach(() => {
+    (ConfigService as any)._instance = undefined;
   });
 
   it('getOptionalString should return string', () => {
@@ -279,6 +283,10 @@ describe('ConfigService', () => {
 });
 
 describe('ConfigService instantiation', () => {
+  afterEach(() => {
+    (ConfigService as any)._instance = undefined;
+  });
+
   it('environment should be taken from NODE_CONFIG_ENV', () => {
     const givenEnvironment = 'development';
     process.env.NODE_CONFIG_ENV = givenEnvironment;
@@ -287,12 +295,14 @@ describe('ConfigService instantiation', () => {
   });
 
   it('environment should be empty on default', () => {
+    expect(ConfigService.getInstance()).toBeUndefined();
     delete process.env.NODE_CONFIG_ENV;
     const configService = new ConfigService({});
     expect(configService.environment).toBe('');
   });
 
   it('config-directory should honor NODE_CONFIG_DIR', () => {
+    expect(ConfigService.getInstance()).toBeUndefined();
     const givenDirectory = '/foo';
     process.env.NODE_CONFIG_DIR = givenDirectory;
     const configService = new ConfigService({});

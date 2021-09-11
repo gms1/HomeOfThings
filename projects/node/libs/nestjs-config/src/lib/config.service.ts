@@ -7,15 +7,25 @@ import { ConfigModuleOptions, CONFIG_MODULE_OPTIONS_TOKEN } from './model';
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
 import * as config from 'config';
 
-const debug = _debug('Config');
+const debug = _debug('nestjs-config');
 
 /** ConfigService to read configured values. */
 @Injectable()
 export class ConfigService {
+  private static _instance: ConfigService;
+
   readonly configDirectory: string;
   readonly environment: string;
 
+  get opts(): ConfigModuleOptions {
+    return this._opts;
+  }
+
   constructor(@Inject(CONFIG_MODULE_OPTIONS_TOKEN) private _opts: ConfigModuleOptions) {
+    if (ConfigService._instance) {
+      return ConfigService._instance;
+    }
+    ConfigService._instance = this;
     this.configDirectory = process.env.NODE_CONFIG_DIR ?? process.cwd() + '/config';
     this.environment = process.env.NODE_CONFIG_ENV ?? '';
     debug(`config-directory: '${this.configDirectory}'`);
@@ -123,5 +133,9 @@ export class ConfigService {
       return value;
     }
     return path.resolve(this.configDirectory, value);
+  }
+
+  static getInstance(): ConfigService {
+    return this._instance;
   }
 }

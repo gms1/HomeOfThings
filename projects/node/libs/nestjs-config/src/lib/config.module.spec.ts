@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { ConfigModuleOptions } from './model';
@@ -20,11 +21,10 @@ describe('ConfigModule', () => {
 
   const givenOptions: ConfigModuleOptions = {};
 
-  beforeEach(() => {
-    ChildModule.configService = undefined;
-  });
   afterEach(() => {
     ConfigModule.isRegistered = false;
+    (ConfigService as any)._instance = undefined;
+    ChildModule.configService = undefined;
   });
 
   it('for root sync', async () => {
@@ -64,5 +64,12 @@ describe('ConfigModule', () => {
   it('create', async () => {
     const configService = ConfigModule.createConfigService(givenOptions);
     expect(configService).toBeInstanceOf(ConfigService);
+
+    await Test.createTestingModule({
+      imports: [ConfigModule.forRoot(ConfigModule, givenOptions), ChildModule],
+    }).compile();
+
+    // ChildModule should have same instance
+    expect(ChildModule.configService).toBe(configService);
   });
 });
