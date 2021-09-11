@@ -46,15 +46,6 @@ export class AppModule {}
 export class AppModule {}
 ```
 
-### import module in child modules
-
-```Typescript
-  @Module({
-    imports: [ConfigModule.forChild()],
-  })
-  class ChildModule {
-```
-
 ### using for bootstrapping
 
 ```TypeScript
