@@ -12,7 +12,7 @@ import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
 //   "Pluggable log handler" (2018-03) https://github.com/visionmedia/debug/issues/556
 //   "5.x Roadmap" (2018-12) https://github.com/visionmedia/debug/issues/656
 
-const debug = _debug('Logger');
+const debug = _debug('nestjs-logger');
 debug('Module "winston" imported');
 
 export class WinstonLogger {
