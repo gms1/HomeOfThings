@@ -71,7 +71,7 @@ export function createDynamicRootModule<T, Os, Oa extends AsyncModuleBasicOption
 
     static forRootAsync(moduleCtor: Type<T>, asyncModuleOptions: Oa): DynamicModule {
       if (DynamicRootModule._isRegistered) {
-        throw new Error(`${moduleCtor.name} registered called more than once`);
+        throw new Error(`${moduleCtor.name}: forRoot/forRootAsync called more than once`);
       }
       return DynamicRootModule.registerAsync(moduleCtor, asyncModuleOptions);
     }
@@ -102,7 +102,7 @@ export function createDynamicRootModule<T, Os, Oa extends AsyncModuleBasicOption
 
     static forRoot(moduleCtor: Type<T>, moduleOptions: Os): DynamicModule {
       if (DynamicRootModule._isRegistered) {
-        throw new Error(`${moduleCtor.name} registered called more than once`);
+        throw new Error(`${moduleCtor.name}: forRoot/forRootAsync called more than once`);
       }
       return DynamicRootModule.register(moduleCtor, moduleOptions);
     }
