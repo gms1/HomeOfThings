@@ -1,4 +1,4 @@
-export interface ListenOptions {
+export interface ExpressApplicationOptions {
   address?: string; // listening address
   http?: {
     port?: number;
@@ -14,6 +14,12 @@ export interface ListenOptions {
     cert?: string;
     maxHeaderSize?: number;
     disabled?: boolean;
+  };
+  trustProxy?: string;
+  session: {
+    name: string;
+    secret: string | string[];
+    maxAge: number;
   };
   limits?: {
     jsonBody?: string;

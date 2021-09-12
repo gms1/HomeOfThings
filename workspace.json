@@ -1,49 +1,6 @@
 {
   "version": 2,
   "projects": {
-    "hot-express": {
-      "root": "projects/node/libs/hot-express",
-      "sourceRoot": "projects/node/libs/hot-express/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/node/libs/hot-express/**/*.ts"
-            ]
-          },
-          "outputs": [
-            "{options.outputFile}"
-          ]
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/projects/node/libs/hot-express"
-          ],
-          "options": {
-            "jestConfig": "projects/node/libs/hot-express/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "build": {
-          "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
-          "options": {
-            "outputPath": "dist/projects/node/libs/hot-express",
-            "tsConfig": "projects/node/libs/hot-express/tsconfig.lib.json",
-            "packageJson": "projects/node/libs/hot-express/package.json",
-            "main": "projects/node/libs/hot-express/src/index.ts",
-            "assets": [
-              "projects/node/libs/hot-express/*.md"
-            ]
-          }
-        }
-      }
-    },
     "hot-gateway": {
       "root": "projects/node/apps/hot-gateway",
       "sourceRoot": "projects/node/apps/hot-gateway/src",
@@ -51,6 +8,16 @@
       "prefix": "hot",
       "targets": {
         "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx run hot-gateway:build-main",
+              "nx run hot-gateway:build-post"
+            ],
+            "parallel": false
+          }
+        },
+        "build-main": {
           "executor": "@nrwl/node:build",
           "outputs": [
             "{options.outputPath}"
@@ -61,6 +28,18 @@
             "tsConfig": "projects/node/apps/hot-gateway/tsconfig.app.json",
             "assets": [
               "projects/node/apps/hot-gateway/src/assets"
+            ],
+            "webpackConfig": "projects/node/apps/hot-gateway/custom-webpack.config.js",
+            "tsPlugins": [
+              {
+                "name": "@nestjs/swagger/plugin",
+                "options": {
+                  "dtoFileNameSuffix": [
+                    ".dto.ts",
+                    ".entity.ts"
+                  ]
+                }
+              }
             ]
           },
           "configurations": {
@@ -77,10 +56,19 @@
             }
           }
         },
+        "build-post": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "node ./dist/projects/node/apps/hot-gateway/main.js export-api ./tmp/hot-openapi.json"
+            ],
+            "parallel": false
+          }
+        },
         "serve": {
           "executor": "@nrwl/node:execute",
           "options": {
-            "buildTarget": "hot-gateway:build"
+            "buildTarget": "hot-gateway:build-main"
           }
         },
         "lint": {
@@ -274,6 +262,110 @@
           "options": {
             "jestConfig": "projects/node/libs/nestjs-utils/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "hot-cli": {
+      "root": "projects/node/apps/hot-cli",
+      "sourceRoot": "projects/node/apps/hot-cli/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/projects/node/apps/hot-cli",
+            "main": "projects/node/apps/hot-cli/src/main.ts",
+            "tsConfig": "projects/node/apps/hot-cli/tsconfig.app.json",
+            "assets": [
+              "projects/node/apps/hot-cli/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "projects/node/apps/hot-cli/src/environments/environment.ts",
+                  "with": "projects/node/apps/hot-cli/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "hot-cli:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "projects/node/apps/hot-cli/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/projects/node/apps/hot-cli"
+          ],
+          "options": {
+            "jestConfig": "projects/node/apps/hot-cli/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "hot-server": {
+      "root": "projects/node/libs/hot-express",
+      "sourceRoot": "projects/node/libs/hot-express/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/node/libs/hot-express/**/*.ts"
+            ]
+          },
+          "outputs": [
+            "{options.outputFile}"
+          ]
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/projects/node/libs/hot-express"
+          ],
+          "options": {
+            "jestConfig": "projects/node/libs/hot-express/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/projects/node/libs/hot-express",
+            "tsConfig": "projects/node/libs/hot-express/tsconfig.lib.json",
+            "packageJson": "projects/node/libs/hot-express/package.json",
+            "main": "projects/node/libs/hot-express/src/index.ts",
+            "assets": [
+              "projects/node/libs/hot-express/*.md"
+            ]
           }
         }
       }

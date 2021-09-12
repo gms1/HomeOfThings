@@ -1,6 +1,5 @@
-import { LoggerService } from '@nestjs/common';
+import { LoggerService } from '@homeofthings/nestjs-logger';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import cookieParser from 'cookie-parser';
 import _debug from 'debug';
 import express from 'express';
 import * as fs from 'fs';
@@ -8,16 +7,20 @@ import helmet from 'helmet';
 import * as http from 'http';
 import * as https from 'https';
 import * as net from 'net';
+import passport from 'passport';
+import session from 'express-session';
 import { TLSSocket } from 'tls';
-import { ListenOptions } from './model/listen-options';
+import { ExpressApplicationOptions } from './express-application-options';
 
-const debug = _debug('ExpressApplication');
+const EXPRESS_APPLICATION_CONTEXT = 'hot:express';
+const debug = _debug(EXPRESS_APPLICATION_CONTEXT);
 
 export class ExpressApplication {
-  private _app: express.Express;
-  private _adapter: ExpressAdapter;
+  private readonly _options?: ExpressApplicationOptions;
+  private readonly _logger: LoggerService;
+  private readonly _app: express.Express;
+  private readonly _adapter: ExpressAdapter;
 
-  private _options?: ListenOptions;
   private _httpsServer?: https.Server;
   private _httpServer?: http.Server;
 
@@ -29,43 +32,77 @@ export class ExpressApplication {
     return this._adapter;
   }
 
-  constructor(private _logger: LoggerService) {
+  constructor(logger: LoggerService, options: ExpressApplicationOptions) {
+    this._logger = logger;
+    this._options = options;
     this._app = express();
     this.registerGlobalMiddleware();
     this._adapter = new ExpressAdapter(this._app);
     debug('constructed');
   }
 
-  createServer(options: ListenOptions): boolean | undefined {
-    debug('creating server: ', options);
-    this._options = options;
-    if (options.https && !options.https.disabled) {
+  private registerGlobalMiddleware() {
+    this._app.use(helmet());
+    this._app.use(this.httpRedirectMiddleware.bind(this));
+
+    this._app.use(
+      session({
+        // TODO: store:
+        secret: this._options.session.secret,
+        name: this._options.session.name,
+        rolling: true,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+          httpOnly: true,
+          secure: 'auto',
+          maxAge: this._options.session.maxAge,
+          sameSite: 'strict',
+        },
+      }),
+    );
+
+    this._app.use(passport.initialize());
+    this._app.use(passport.session());
+
+    this._app.use(express.json(this._options?.limits?.jsonBody ? { limit: this._options?.limits?.jsonBody } : {}));
+    this._app.use(express.urlencoded({ extended: true }));
+  }
+
+  createServer(): boolean | undefined {
+    debug('creating server');
+    if (this._options.trustProxy) {
+      // NOTE: req.hostname, req.protocol, req.ip and req.ips will be set accordingly if coming from trusted reverse proxy
+      debug(`set "trust proxy" to '${this._options.trustProxy}'`);
+      this._app.set('trust-proxy', this._options.trustProxy);
+    }
+    if (this._options.https && !this._options.https.disabled) {
       try {
         this._httpsServer = https.createServer(
           {
-            cert: options.https.cert ? fs.readFileSync(options.https.cert, { encoding: 'utf-8' }) : undefined,
-            key: options.https.key ? fs.readFileSync(options.https.key, { encoding: 'utf-8' }) : undefined,
-            maxHeaderSize: options.https.maxHeaderSize,
+            cert: this._options.https.cert ? fs.readFileSync(this._options.https.cert, { encoding: 'utf-8' }) : undefined,
+            key: this._options.https.key ? fs.readFileSync(this._options.https.key, { encoding: 'utf-8' }) : undefined,
+            maxHeaderSize: this._options.https.maxHeaderSize,
           },
           this._app,
         );
         debug('https server created');
       } catch (err) {
-        this._logger.error('failed to create https server', err.stack);
+        this._logger.error('failed to create https server', err.stack, EXPRESS_APPLICATION_CONTEXT);
         return undefined;
       }
     }
-    if (options.http && !options.http?.disabled) {
+    if (this._options.http && !this._options.http?.disabled) {
       try {
         this._httpServer = http.createServer(
           {
-            maxHeaderSize: options.http.maxHeaderSize,
+            maxHeaderSize: this._options.http.maxHeaderSize,
           },
           this._app,
         );
         debug('http server created');
       } catch (err) {
-        this._logger.error('failed to create http server', err.stack);
+        this._logger.error('failed to create http server', err.stack, EXPRESS_APPLICATION_CONTEXT);
         return undefined;
       }
     }
@@ -101,9 +138,9 @@ export class ExpressApplication {
     });
   }
 
-  httpRedirectHandler(req: express.Request, res: express.Response, next: express.NextFunction): void {
+  httpRedirectMiddleware(req: express.Request, res: express.Response, next: express.NextFunction): void {
     // redirect http to https
-    if (this._httpServer && this._options?.http?.redirect !== false && !(req.socket as TLSSocket).encrypted) {
+    if (!(req.socket as TLSSocket).encrypted && this._options?.http?.redirect !== false) {
       let redirectUrl = this._options?.http?.redirectLocation;
       if (!redirectUrl) {
         const port = this._options?.https?.port ?? 443;
@@ -116,15 +153,6 @@ export class ExpressApplication {
       return res.end(redirectUrl);
     }
     return next();
-  }
-
-  private registerGlobalMiddleware() {
-    this._app.use(helmet());
-    this._app.use(this.httpRedirectHandler.bind(this));
-    if (this._options?.limits?.jsonBody) {
-      this._app.use(express.json({ limit: this._options?.limits?.jsonBody }));
-    }
-    this._app.use(cookieParser());
   }
 }
 
