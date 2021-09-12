@@ -25,10 +25,10 @@ jest.mock('sqlite3orm', () => {
   };
 });
 
-export const mockReset = () => {
-  sqlConnectionPoolOpen.mockReset();
-  sqlConnectionPoolClose.mockReset();
-  sqlConnectionPoolGet.mockReset();
-  sqlDatabaseEndTransaction.mockReset();
-  sqlDatabaseClose.mockReset();
+export const mockClear = () => {
+  sqlConnectionPoolOpen.mockClear();
+  sqlConnectionPoolClose.mockClear();
+  sqlConnectionPoolGet.mockClear();
+  sqlDatabaseEndTransaction.mockClear();
+  sqlDatabaseClose.mockClear();
 };

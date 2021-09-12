@@ -10,7 +10,7 @@ describe('Sqlite3Interceptor', () => {
   let appModule: TestingModule;
 
   beforeEach(async () => {
-    mockedConnectionManager.mockReset();
+    mockedConnectionManager.mockClear();
     mockedConnectionManager.closeConnectionContext.mockReturnValue(Promise.resolve());
     appModule = await Test.createTestingModule({ providers: [{ provide: ConnectionManager, useValue: new ConnectionManager() }, Sqlite3Interceptor] }).compile();
     appModule.enableShutdownHooks();

@@ -15,7 +15,7 @@ jest.mock('@homeofthings/nestjs-utils', () => {
   };
 });
 
-export const mockReset = () => {
-  asyncContextGet.mockReset();
-  asyncContextSet.mockReset();
+export const mockClear = () => {
+  asyncContextGet.mockClear();
+  asyncContextSet.mockClear();
 };

@@ -26,10 +26,10 @@ jest.mock('../service/connection-manager', () => {
   };
 });
 
-export const mockReset = () => {
-  openConnectionPool.mockReset();
-  getEntityManager.mockReset();
-  createConnectionContext.mockReset();
-  closeConnectionContext.mockReset();
-  registerTable.mockReset();
+export const mockClear = () => {
+  openConnectionPool.mockClear();
+  getEntityManager.mockClear();
+  createConnectionContext.mockClear();
+  closeConnectionContext.mockClear();
+  registerTable.mockClear();
 };

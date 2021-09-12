@@ -92,13 +92,13 @@ export class ConnectionManager {
   }
 
   createConnectionContext(): Promise<void> {
-    const connections = this._context.get();
+    const connectionDictionary = this._context.get();
     this._context.set({});
-    if (!connections) {
+    if (!connectionDictionary) {
       return Promise.resolve();
     }
-    const names = Object.keys(connections)
-      .filter((name) => connections[name])
+    const names = Object.keys(connectionDictionary)
+      .filter((name) => connectionDictionary[name])
       .join(',');
     if (names && this._warnOnConnectionOnRootContext) {
       this.logger.warn(`detected open connections on new connection context: ${names}`);
@@ -110,10 +110,11 @@ export class ConnectionManager {
 
   async closeConnectionContext(_commit: boolean): Promise<void> {
     const connectionDictionary = this._context.get();
-    const connections: SqlDatabase[] = Object.keys(this._context.get())
+    this._context.set((undefined as unknown) as Sqlite3Connections);
+
+    const connections: SqlDatabase[] = Object.keys(connectionDictionary)
       .filter((name) => connectionDictionary[name])
       .map((name) => connectionDictionary[name] as SqlDatabase);
-    this._context.set((undefined as unknown) as Sqlite3Connections);
 
     if (_commit) {
       await Promise.allSettled(connections.map((connection) => connection.endTransaction(_commit)));
@@ -126,14 +127,14 @@ export class ConnectionManager {
   }
 
   getConnection(name: string): Promise<SqlDatabase> {
-    const connections = this._context.get();
-    if (!connections) {
+    const connectionDictionary = this._context.get();
+    if (!connectionDictionary) {
       const err = new Error(`connection context not initialized`);
       this.logger.error(err.message, err.stack);
       return Promise.reject(err);
     }
-    if (connections[name]) {
-      return Promise.resolve(connections[name] as SqlDatabase);
+    if (connectionDictionary[name]) {
+      return Promise.resolve(connectionDictionary[name] as SqlDatabase);
     }
     if (!this._connectionPools[name]) {
       const err = new Error(`connection '${name}' is not defined`);
@@ -141,7 +142,7 @@ export class ConnectionManager {
       return Promise.reject(err);
     }
     return this._connectionPools[name].get().then((conn) => {
-      connections[name] = conn;
+      connectionDictionary[name] = conn;
       return conn;
     });
   }

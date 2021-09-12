@@ -45,7 +45,7 @@ describe('Repository', () => {
 
   afterEach(() => {
     repository = undefined;
-    mockedConnectionManager.mockReset();
+    mockedConnectionManager.mockClear();
   });
 
   it('should be instance of Repository', async () => {

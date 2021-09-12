@@ -20,9 +20,9 @@ describe('AsyncContext', () => {
 
   beforeEach(() => {
     asyncContext = new AsyncContext(givenDefault);
-    mockGetStore.mockReset();
-    mockEnterWith.mockReset();
-    mockRun.mockReset();
+    mockGetStore.mockClear();
+    mockEnterWith.mockClear();
+    mockRun.mockClear();
   });
 
   it('should get the default value', () => {

@@ -23,8 +23,8 @@ describe('ConnectionManager', () => {
   });
 
   afterEach(() => {
-    mockedNestUtils.mockReset();
-    mockedSqlite3Orm.mockReset();
+    mockedNestUtils.mockClear();
+    mockedSqlite3Orm.mockClear();
   });
 
   describe('instantiation', () => {
@@ -131,6 +131,7 @@ describe('ConnectionManager', () => {
     });
 
     it('`getConnection` should fail outside of connection context', async () => {
+      mockedNestUtils.asyncContextGet.mockReturnValue(undefined);
       try {
         await connectionManager.getConnection(SQLITE3_DEFAULT_CONNECTION_NAME);
         fail('should have thrown');

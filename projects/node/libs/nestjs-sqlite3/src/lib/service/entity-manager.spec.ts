@@ -47,7 +47,7 @@ describe('EntityManager', () => {
 
   afterEach(() => {
     entityManager = undefined;
-    mockedConnectionManager.mockReset();
+    mockedConnectionManager.mockClear();
   });
 
   it('`getRepository` should throw if prototype of given entity has no table-definition', async () => {

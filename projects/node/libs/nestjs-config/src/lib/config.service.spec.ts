@@ -19,8 +19,8 @@ describe('ConfigService', () => {
   });
 
   beforeEach(() => {
-    has.mockReset();
-    get.mockReset();
+    has.mockClear();
+    get.mockClear();
     configService = new ConfigService({});
   });
 
@@ -289,9 +289,11 @@ describe('ConfigService instantiation', () => {
 
   it('environment should be taken from NODE_CONFIG_ENV', () => {
     const givenEnvironment = 'development';
+    const givenOptions = {};
     process.env.NODE_CONFIG_ENV = givenEnvironment;
-    const configService = new ConfigService({});
+    const configService = new ConfigService(givenOptions);
     expect(configService.environment).toBe(givenEnvironment);
+    expect(configService.opts).toBe(givenOptions);
   });
 
   it('environment should be empty on default', () => {
