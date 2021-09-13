@@ -6,18 +6,18 @@ import { ConnectionManager } from './connection-manager';
 import { SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
 import { EntityManager } from './entity-manager';
 import { getEntityManagerInjectionToken } from '../common/sqlite3.utils';
-import { field, id, table } from 'sqlite3orm';
 import { Repository } from './repository';
+import { Column, Entity, PrimaryKeyColumn } from '../common/sqlite3.decorators';
 
 // NOTE: make sure all branches are covered by these unit tests and all methods are covered by integration tests (see test/integration folder)
 // so that there is no need to fully unit-test all methods here
 
-@table()
+@Entity()
 class TestEntity {
-  @id()
+  @PrimaryKeyColumn()
   id: number;
 
-  @field()
+  @Column()
   data?: string;
 }
 class TestNoEntity {

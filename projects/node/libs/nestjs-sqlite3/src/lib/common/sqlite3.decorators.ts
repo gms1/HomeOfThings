@@ -4,6 +4,13 @@ import { Type } from '@homeofthings/nestjs-utils';
 import { Inject } from '@nestjs/common';
 import { RepositoryType, SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
 import { getConnectionPoolInjectionToken, getCustomRepositoryInjectionToken, getEntityManagerInjectionToken, getRepositoryInjectionToken } from './sqlite3.utils';
+import { field, fk, id, index, table } from 'sqlite3orm';
+
+export const Entity = table;
+export const Column = field;
+export const PrimaryKeyColumn = id;
+export const Index = index;
+export const ForeignKey = fk;
 
 export const InjectConnectionPool = (connection: string = SQLITE3_DEFAULT_CONNECTION_NAME) => Inject(getConnectionPoolInjectionToken(connection));
 

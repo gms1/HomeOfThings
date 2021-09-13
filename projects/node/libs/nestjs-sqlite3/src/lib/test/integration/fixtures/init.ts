@@ -5,7 +5,9 @@ import { ConnectionManager } from '@homeofthings/nestjs-sqlite3';
 import { Contact } from './entity/contact';
 import { User } from './entity/user';
 
-export const DONALD_DUCK_FIRST_NAME = 'Donald';
+export const DONALD = 'Donald';
+
+export const DONALD_DUCK_FIRST_NAME = DONALD;
 export const DONALD_DUCK_LAST_NAME = 'Duck';
 export const DONALD_DUCK_EMAIL = 'donald@duck.com';
 export const DONALD_DUCK_LOGIN_NAME = DONALD_DUCK_EMAIL;
@@ -16,7 +18,7 @@ export const CHUCK_NORRIS_EMAIL = 'chuck@ChuckNorris.com';
 export const CHUCK_NORRIS_EMAIL2 = 'chuck.noris@ChuckNorris.com';
 export const CHUCK_NORRIS_LOGIN_NAME = CHUCK_NORRIS_EMAIL;
 
-export const DONALD_TRUMP_FIRST_NAME = 'Donald';
+export const DONALD_TRUMP_FIRST_NAME = DONALD;
 export const DONALD_TRUMP_LAST_NAME = 'Trump';
 export const DONALD_TRUMP_EMAIL = 'donald@trump.com';
 export const DONALD_TRUMP_LOGIN_NAME = DONALD_TRUMP_EMAIL;
@@ -50,7 +52,7 @@ export async function initDatabase(connectionManager: ConnectionManager, connect
     contact = await contactDao.insertPartial({ userId: user.userId, emailAddress: CHUCK_NORRIS_EMAIL });
     contact = await contactDao.insertPartial({ userId: user.userId, emailAddress: CHUCK_NORRIS_EMAIL2 });
 
-    user = await userDao.insertPartial({ userLoginName: DONALD_TRUMP_LOGIN_NAME, userFirstName: DONALD_TRUMP_LOGIN_NAME, userLastName: DONALD_TRUMP_LAST_NAME });
+    user = await userDao.insertPartial({ userLoginName: DONALD_TRUMP_LOGIN_NAME, userFirstName: DONALD_TRUMP_FIRST_NAME, userLastName: DONALD_TRUMP_LAST_NAME });
   } catch (e) {
     console.error(`init database failed: `, e);
     throw e;

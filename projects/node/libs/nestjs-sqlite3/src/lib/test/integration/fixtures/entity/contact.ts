@@ -1,18 +1,18 @@
-import { field, fk, id, index, table } from 'sqlite3orm';
+import { Column, Entity, ForeignKey, Index, PrimaryKeyColumn } from '../../../../common/sqlite3.decorators';
 
-@table({ name: 'CONTACTS', autoIncrement: true })
+@Entity({ name: 'CONTACTS', autoIncrement: true })
 export class Contact {
-  @id({ name: 'contact_id', dbtype: 'INTEGER NOT NULL' })
+  @PrimaryKeyColumn({ name: 'contact_id', dbtype: 'INTEGER NOT NULL' })
   contactId!: number;
 
-  @field({ name: 'contact_email', dbtype: 'TEXT' })
+  @Column({ name: 'contact_email', dbtype: 'TEXT' })
   emailAddress?: string;
 
-  @field({ name: 'contact_mobile', dbtype: 'TEXT' })
+  @Column({ name: 'contact_mobile', dbtype: 'TEXT' })
   mobile?: string;
 
-  @field({ name: 'user_id', dbtype: 'INTEGER NOT NULL' })
-  @fk('fk_user_contacts', 'USERS', 'user_id')
-  @index('idx_contacts_user')
+  @Column({ name: 'user_id', dbtype: 'INTEGER NOT NULL' })
+  @ForeignKey('fk_user_contacts', 'USERS', 'user_id')
+  @Index('idx_contacts_user')
   userId!: number;
 }

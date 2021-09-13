@@ -162,6 +162,33 @@ export class MyService {
 }
 ```
 
+### define entities
+
+for convenience, similar decorators are supported as by typeorm
+
+```Typescript
+@Entity({ name: 'USERS', autoIncrement: true })
+class User {
+  @PrimaryKeyColumn({ name: 'user_id', dbtype: 'INTEGER NOT NULL' })
+  public id?: number;
+
+  @Column({ name: 'user_email', dbtype: 'TEXT NOT NULL' })
+  @Index('idx_users_email', true)
+  public email: string;
+
+  @Column({ name: 'user_firstname', dbtype: 'TEXT NOT NULL' })
+  public firstName: string;
+
+  @Column({ name: 'user_lastname', dbtype: 'TEXT NOT NULL' })
+  public lastName: string;
+
+  @Column()
+  public password: string;
+}
+```
+
+relations can be defined by using the `ForeignKey` decorator
+
 ### type safe query syntax
 
 please see (https://github.com/gms1/node-sqlite3-orm#typesafe-query-syntax)
