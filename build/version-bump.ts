@@ -32,7 +32,7 @@ program
 program.parse(process.argv);
 
 // -----------------------------------------------------------------------------------------
-async function versionBump(version?: string, packageName?: string) {
+async function versionBump(version?: string, packageName?: string): Promise<void> {
   try {
     const workspace = await readJson(workspaceJsonPath);
     if (!workspace.projects) {
@@ -65,6 +65,7 @@ async function versionBump(version?: string, packageName?: string) {
         );
       }
     }
+    return;
   } catch (err) {
     return Promise.reject(err);
   }
