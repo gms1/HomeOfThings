@@ -2,7 +2,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 
 import { InjectCustomRepository } from '@homeofthings/nestjs-sqlite3';
-import { Where } from 'sqlite3orm';
+import { Filter, Where } from 'sqlite3orm';
 import { Contact } from '../entity/contact';
 import { User } from '../entity/user';
 import { UserRepository } from '../repository/user.repository';
@@ -20,6 +20,10 @@ export class UserRepositoryService {
 
   findById(userId: number): Promise<User> {
     return this.repository.findById({ userId });
+  }
+
+  findOne(whereOrFilter?: Where<User> | Filter<User>, params?: Object): Promise<User> {
+    return this.repository.findOne(whereOrFilter, params);
   }
 
   findByChild(contact: Contact): Promise<User> {

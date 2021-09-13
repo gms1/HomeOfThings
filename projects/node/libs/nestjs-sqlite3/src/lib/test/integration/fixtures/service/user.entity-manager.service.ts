@@ -2,7 +2,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 
 import { EntityManager, InjectEntityManager } from '@homeofthings/nestjs-sqlite3';
-import { Where } from 'sqlite3orm';
+import { Filter, Where } from 'sqlite3orm';
 import { Contact } from '../entity/contact';
 import { User } from '../entity/user';
 
@@ -24,6 +24,10 @@ export class UserEntityManagerService {
 
   findById(userId: number): Promise<User> {
     return this.entityManager.findById(User, { userId });
+  }
+
+  findOne(whereOrFilter?: Where<User> | Filter<User>, params?: Object): Promise<User> {
+    return this.entityManager.findOne(User, whereOrFilter, params);
   }
 
   findByChild(contact: Contact): Promise<User> {

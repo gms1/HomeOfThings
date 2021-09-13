@@ -24,62 +24,72 @@ export class Repository<T> {
   }
 
   /**
-   * test if a model exists using an optional filter
+   * test if a row exists using an optional filter
    *
    * @param [whereOrFilter] - An optional Where/Filter-object or
    *                          sql-text which will be added to the select-statement
    *                             e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of true if a model exists or false otherwise
+   * @returns A promise of true if at least one row exists or false otherwise
    */
   exists(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<boolean> {
     return this.dao.then((dao) => dao.exists(whereOrFilter, params));
   }
 
   /**
-   * count all models using an optional filter
+   * count all rows using an optional filter
    *
    * @param [whereOrFilter] - An optional Where/Filter-object or
    *                          sql-text which will be added to the select-statement
    *                             e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of the count number
+   * @returns A promise of the count number of rows
    */
   count(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<number> {
     return this.dao.then((dao) => dao.countAll(whereOrFilter, params));
   }
 
   /**
-   * find by primary key
+   * find entity by primary key
    *
    * @param input - A partial instance of the entity class
-   * @returns A promise of the model instance
+   * @returns A promise of the entity instance
    */
   findById(input: Partial<T>): Promise<T> {
     return this.dao.then((dao) => dao.selectById(input));
   }
 
   /**
-   * find all models using an optional filter
+   * find one entity
+   *
+   * @param input - A partial instance of the entity class
+   * @returns A promise of the entity instance
+   */
+  findOne(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T> {
+    return this.dao.then((dao) => dao.selectOne(whereOrFilter, params));
+  }
+
+  /**
+   * find all entities using an optional filter
    *
    * @param [whereOrFilter] - An optional Where/Filter-object or
    *                          sql-text which will be added to the select-statement
    *                             e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of array of model instances
+   * @returns A promise of array of entity instances
    */
   findAll(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
     return this.dao.then((dao) => dao.selectAll(whereOrFilter, params));
   }
 
   /**
-   * find parent by using a foreign key constraint and a given child instance
+   * find parent entity by using a foreign key constraint and a given child instance
    *
    * @template C - The entity class type mapped to the child table
    * @param constraintName - The foreign key constraint (defined in the child table)
    * @param childEntity - The entity class value mapped to the childtable
    * @param childObj - An instance of the entity class mapped to the child table
-   * @returns A promise of the model instance
+   * @returns A promise of the parent entity instance
    */
 
   findByChild<C extends Object>(constraintName: string, childEntity: Type<C>, childObj: C): Promise<T> {
@@ -87,7 +97,7 @@ export class Repository<T> {
   }
 
   /**
-   * find all childs using a foreign key constraint and a given parent instance
+   * find all child entities using a foreign key constraint and a given parent instance
    *
    * @template P - The entity class type mapped to the parent table
    * @param constraintName - The foreign key constraint
@@ -96,7 +106,7 @@ export class Repository<T> {
    * @param [whereOrFilter] - An optional Where/Filter-object or sql-text which will be added to the select-statement
    *                    e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of array of model instances
+   * @returns A promise of array of child entity instances
    */
   findAllByParent<P extends Object>(constraintName: string, parentEntity: Type<P>, parentObj: P, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
     return this.dao.then((dao) => dao.selectAllOf(constraintName, parentEntity, parentObj, whereOrFilter, params));
@@ -136,8 +146,8 @@ export class Repository<T> {
    * If the given entity does not exist in the database, it will be inserted.
    * If the given entity does exist in he database, it will be updated.
    *
-   * @param model - A model class instance
-   * @returns A promise of the inserted or updated model class instance
+   * @param model - A entity class instance
+   * @returns A promise of the inserted or updated entity class instance
    */
   save(model: T): Promise<T> {
     return this.dao.then((dao) => dao.replace(model));
@@ -161,9 +171,9 @@ export class Repository<T> {
   /**
    * insert
    *
-   * @param model - A model class instance
+   * @param model - A entity class instance
    * @param mode - optional insert mode (default: BaseDAOInsertMode.ForceAutoGeneration)
-   * @returns A promise of the inserted model class instance
+   * @returns A promise of the inserted entity class instance
    */
   insert(model: T, mode = BaseDAOInsertMode.ForceAutoGeneration): Promise<T> {
     return this.dao.then((dao) => dao.insert(model, mode));
@@ -187,8 +197,8 @@ export class Repository<T> {
   /**
    * update
    *
-   * @param model - A model class instance
-   * @returns A promise of the updated model class instance
+   * @param model - A entity class instance
+   * @returns A promise of the updated entity class instance
    */
   update(model: T): Promise<T> {
     return this.dao.then((dao) => dao.update(model));
@@ -210,7 +220,7 @@ export class Repository<T> {
 
   /**
    * update all - please provide a proper sql-condition otherwise all records will be updated!
-   * this updates only columns mapped to the property keys from the partial input model
+   * this updates only columns mapped to the property keys from the partial input entity instance
    *
    * for this to work:
    * all columns mapped to included properties must be nullable or their properties must provide a value
@@ -220,7 +230,7 @@ export class Repository<T> {
    * @param [where] - An optional Where-object or sql-text which will be added to the update-statement
    *                    e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of the updated model class instance
+   * @returns A promise of the number of updated rows
    */
   updatePartialAll(input: Partial<T>, where?: Where<T>, params?: Object): Promise<number> {
     return this.dao.then((dao) => dao.updatePartialAll(input, where, params));
@@ -230,7 +240,7 @@ export class Repository<T> {
    * deleteById
    *
    * @param input - A partial instance of the entity class
-   * @returns A promise
+   * @returns A void promise
    */
 
   deleteById(input: Partial<T>): Promise<void> {
@@ -243,7 +253,7 @@ export class Repository<T> {
    * @param [where] - An optional Where-object or sql-text which will be added to the delete-statement
    *                    e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise
+   * @returns A promise of the number of deleted rows
    */
   deleteAll(where?: Where<T>, params?: Object): Promise<number> {
     return this.dao.then((dao) => dao.deleteAll(where, params));

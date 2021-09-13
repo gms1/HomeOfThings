@@ -43,7 +43,7 @@ export class EntityManager {
   }
 
   /**
-   * test if a model exists using an optional filter
+   * test if a row exists using an optional filter
    *
    * @template T - The entity class type
    * @param entity - The entity class value
@@ -51,14 +51,14 @@ export class EntityManager {
    *                          sql-text which will be added to the select-statement
    *                             e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of true if a model exists or false otherwise
+   * @returns A promise of true if at least one row exists or false otherwise
    */
   exists<T>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<boolean> {
     return this.getDao<T>(entity).then((dao) => dao.exists(whereOrFilter, params));
   }
 
   /**
-   * count all models using an optional filter
+   * count all rows using an optional filter
    *
    * @template T - The entity class type
    * @param entity - The entity class value
@@ -66,26 +66,38 @@ export class EntityManager {
    *                          sql-text which will be added to the select-statement
    *                             e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of the count number
+   * @returns A promise of the count number of rows
    */
   count<T>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<number> {
     return this.getDao<T>(entity).then((dao) => dao.countAll(whereOrFilter, params));
   }
 
   /**
-   * find by primary key
+   * find entity by primary key
    *
    * @template T - The entity class type
    * @param entity - The entity class value
    * @param input - A partial instance of the entity class
-   * @returns A promise of the model instance
+   * @returns A promise of the entity class instance
    */
   findById<T>(entity: Type<T>, input: Partial<T>): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.selectById(input));
   }
 
   /**
-   * find all models using an optional filter
+   * find one entity
+   *
+   * @template T - The entity class type
+   * @param entity - The entity class value
+   * @param input - A partial instance of the entity class
+   * @returns A promise of the entity instance
+   */
+  findOne<T>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T> {
+    return this.getDao<T>(entity).then((dao) => dao.selectOne(whereOrFilter, params));
+  }
+
+  /**
+   * find all entities using an optional filter
    *
    * @template T - The entity class type
    * @param entity - The entity class value
@@ -93,21 +105,21 @@ export class EntityManager {
    *                          sql-text which will be added to the select-statement
    *                             e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of array of model instances
+   * @returns A promise of array of entity class instances
    */
   findAll<T>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
     return this.getDao<T>(entity).then((dao) => dao.selectAll(whereOrFilter, params));
   }
 
   /**
-   * find parent by using a foreign key constraint and a given child instance
+   * find parent entity by using a foreign key constraint and a given child instance
    *
    * @template T - The entity class type of the parent
    * @template C - The entity class type mapped to the child table
    * @param constraintName - The foreign key constraint (defined in the child table)
    * @param childEntity - The entity class value mapped to the childtable
    * @param childObj - An instance of the entity class mapped to the child table
-   * @returns A promise of the model instance
+   * @returns A promise of the parent entity instance
    */
 
   findByChild<T, C extends Object>(entity: Type<T>, constraintName: string, childEntity: Type<C>, childObj: C): Promise<T> {
@@ -115,7 +127,7 @@ export class EntityManager {
   }
 
   /**
-   * find all childs using a foreign key constraint and a given parent instance
+   * find all child entities using a foreign key constraint and a given parent instance
    *
    * @template T - The entity class type of the child
    * @template P - The entity class type mapped to the parent table
@@ -125,7 +137,7 @@ export class EntityManager {
    * @param [whereOrFilter] - An optional Where/Filter-object or sql-text which will be added to the select-statement
    *                    e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of array of model instances
+   * @returns A promise of array of child entity instances
    */
   findAllByParent<T, P extends Object>(
     entity: Type<T>,
@@ -146,7 +158,7 @@ export class EntityManager {
    * @template T - The entity class type
    * @param entity - The entity class value
    * @param model - An entity class instance
-   * @returns A promise of the inserted or updated model class instance
+   * @returns A promise of the inserted or updated entity class instance
    */
   save<T>(entity: Type<T>, model: T): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.replace(model));
@@ -175,7 +187,7 @@ export class EntityManager {
    * @param entity - The entity class value
    * @param model - An entity class instance
    * @param mode - optional insert mode (default: BaseDAOInsertMode.ForceAutoGeneration)
-   * @returns A promise of the inserted model class instance
+   * @returns A promise of the inserted entity class instance
    */
   insert<T>(entity: Type<T>, model: T, mode = BaseDAOInsertMode.ForceAutoGeneration): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.insert(model, mode));
@@ -203,7 +215,7 @@ export class EntityManager {
    * @template T - The entity class type
    * @param entity - The entity class value
    * @param model - An entity class instance
-   * @returns A promise of the updated model class instance
+   * @returns A promise of the updated entity class instance
    */
   update<T>(entity: Type<T>, model: T): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.update(model));
@@ -238,7 +250,7 @@ export class EntityManager {
    * @param [where] - An optional Where-object or sql-text which will be added to the update-statement
    *                    e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise of the updated model class instance
+   * @returns A promise of the number of updated rows
    */
   updatePartialAll<T>(entity: Type<T>, input: Partial<T>, where?: Where<T>, params?: Object): Promise<number> {
     return this.getDao<T>(entity).then((dao) => dao.updatePartialAll(input, where, params));
@@ -250,7 +262,7 @@ export class EntityManager {
    * @template T - The entity class type
    * @param entity - The entity class value
    * @param input - A partial instance of the entity class
-   * @returns A promise
+   * @returns A void promise
    */
   deleteById<T>(entity: Type<T>, input: Partial<T>): Promise<void> {
     return this.getDao<T>(entity).then((dao) => dao.deleteById(input));
@@ -264,7 +276,7 @@ export class EntityManager {
    * @param [where] - An optional Where-object or sql-text which will be added to the delete-statement
    *                    e.g 'WHERE <your condition>'
    * @param [params] - An optional object with additional host parameter
-   * @returns A promise
+   * @returns A promise of the deleted number of rows
    */
   deleteAll<T>(entity: Type<T>, where?: Where<T>, params?: Object): Promise<number> {
     return this.getDao<T>(entity).then((dao) => dao.deleteAll(where, params));

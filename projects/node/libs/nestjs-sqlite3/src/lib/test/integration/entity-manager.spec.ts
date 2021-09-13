@@ -84,6 +84,31 @@ describe('Entity-Manager-Integration', () => {
     fail('should have thrown');
   });
 
+  it('`findOne` should succeed if exist', async () => {
+    const user = await userService.findUserByUserLoginName(init.DONALD_TRUMP_EMAIL);
+    const user2 = await userService.findOne({ userId: user.userId });
+    expect(user2).toBeInstanceOf(User);
+    expect(user2.userId).toBe(user.userId);
+  });
+
+  it('`findOne` should fail if not exist', async () => {
+    try {
+      await userService.findOne({ userId: -1 });
+    } catch (_e) {
+      return;
+    }
+    fail('should have thrown');
+  });
+
+  it('`findOne` should fail if multiple exist', async () => {
+    try {
+      await userService.findOne({ userFirstName: init.DONALD });
+    } catch (_e) {
+      return;
+    }
+    fail('should have thrown');
+  });
+
   it('`findByChild` should succeed if exist', async () => {
     const contacts = await contactService.findAllContacts();
     const user = await userService.findByChild(contacts[0]);
