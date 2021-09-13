@@ -1,6 +1,6 @@
 {
-  "name": "@homeofthings/hot-express",
-  "description": "HomeOfThings - hot-express",
+  "name": "@homeofthings/hot-server",
+  "description": "HomeOfThings - hot-server",
   "version": "0.0.0",
   "scripts": {
     "prepublishOnly": "echo \"ERROR: please call `npm run ci` before publishing\" && exit 1"

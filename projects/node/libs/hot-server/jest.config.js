@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'node-libs-hot-express',
+  displayName: 'node-libs-hot-server',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -11,6 +11,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/projects/node/libs/hot-express',
+  coverageDirectory: '../../../../coverage/projects/node/libs/hot-server',
   coveragePathIgnorePatterns: ['/test/'],
 };

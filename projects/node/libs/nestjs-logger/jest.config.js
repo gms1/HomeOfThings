@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'node-libs-logger',
+  displayName: 'node-libs-nestjs-logger',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {

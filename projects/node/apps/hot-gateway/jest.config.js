@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'node-apps-gateway',
+  displayName: 'node-apps-hot-gateway',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {

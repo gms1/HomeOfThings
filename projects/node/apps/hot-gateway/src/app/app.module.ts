@@ -1,5 +1,5 @@
 import { ConfigModule, ConfigService } from '@homeofthings/nestjs-config';
-import { LoggerModule, LoggerService } from '@homeofthings/nestjs-logger';
+import { LoggerModule } from '@homeofthings/nestjs-logger';
 import { Logger, Module } from '@nestjs/common';
 import { ConsoleModule } from 'nestjs-console';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -15,10 +15,10 @@ const DEFAULT_SERVICE_THROTTLE_LIMIT = 10;
     // NOTE: options ignored because LoggerService manually created in main.ts
     LoggerModule.forRoot(LoggerModule, {}),
     ThrottlerModule.forRootAsync({
-      inject: [LoggerService, ConfigService],
-      useFactory: (logger: LoggerService, config: ConfigService) => ({
-        ttl: config.getNumber('service.throttle.ttl', DEFAULT_SERVICE_THROTTLE_TTL),
-        limit: config.getNumber('service.throttle.limit', DEFAULT_SERVICE_THROTTLE_LIMIT),
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        ttl: config.getNumber('gateway.throttle.ttl', DEFAULT_SERVICE_THROTTLE_TTL),
+        limit: config.getNumber('gateway.throttle.limit', DEFAULT_SERVICE_THROTTLE_LIMIT),
       }),
     }),
     ConsoleModule,

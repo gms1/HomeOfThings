@@ -1,81 +1,31 @@
 {
   "version": 2,
   "projects": {
-    "hot-gateway": {
-      "root": "projects/node/apps/hot-gateway",
-      "sourceRoot": "projects/node/apps/hot-gateway/src",
-      "projectType": "application",
-      "prefix": "hot",
+    "nestjs-utils": {
+      "root": "projects/node/libs/nestjs-utils",
+      "sourceRoot": "projects/node/libs/nestjs-utils/src",
+      "projectType": "library",
       "targets": {
         "build": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": [
-              "nx run hot-gateway:build-main",
-              "nx run hot-gateway:build-post"
-            ],
-            "parallel": false
-          }
-        },
-        "build-main": {
-          "executor": "@nrwl/node:build",
+          "executor": "@nrwl/node:package",
           "outputs": [
             "{options.outputPath}"
           ],
           "options": {
-            "outputPath": "dist/projects/node/apps/hot-gateway",
-            "main": "projects/node/apps/hot-gateway/src/main.ts",
-            "tsConfig": "projects/node/apps/hot-gateway/tsconfig.app.json",
+            "outputPath": "dist/projects/node/libs/nestjs-utils",
+            "tsConfig": "projects/node/libs/nestjs-utils/tsconfig.lib.json",
+            "packageJson": "projects/node/libs/nestjs-utils/package.json",
+            "main": "projects/node/libs/nestjs-utils/src/index.ts",
             "assets": [
-              "projects/node/apps/hot-gateway/src/assets"
-            ],
-            "webpackConfig": "projects/node/apps/hot-gateway/custom-webpack.config.js",
-            "tsPlugins": [
-              {
-                "name": "@nestjs/swagger/plugin",
-                "options": {
-                  "dtoFileNameSuffix": [
-                    ".dto.ts",
-                    ".entity.ts"
-                  ]
-                }
-              }
+              "projects/node/libs/nestjs-utils/*.md"
             ]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "projects/node/apps/hot-gateway/src/environments/environment.ts",
-                  "with": "projects/node/apps/hot-gateway/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "build-post": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": [
-              "node ./dist/projects/node/apps/hot-gateway/main.js export-api ./tmp/hot-openapi.json"
-            ],
-            "parallel": false
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "hot-gateway:build-main"
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "projects/node/apps/hot-gateway/**/*.ts"
+              "projects/node/libs/nestjs-utils/**/*.ts"
             ]
           },
           "outputs": [
@@ -85,10 +35,10 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/projects/node/apps/hot-gateway"
+            "coverage/projects/node/libs/nestjs-utils"
           ],
           "options": {
-            "jestConfig": "projects/node/apps/hot-gateway/jest.config.js",
+            "jestConfig": "projects/node/libs/nestjs-utils/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -223,31 +173,16 @@
         }
       }
     },
-    "nestjs-utils": {
-      "root": "projects/node/libs/nestjs-utils",
-      "sourceRoot": "projects/node/libs/nestjs-utils/src",
+    "hot-server": {
+      "root": "projects/node/libs/hot-server",
+      "sourceRoot": "projects/node/libs/hot-server/src",
       "projectType": "library",
       "targets": {
-        "build": {
-          "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
-          "options": {
-            "outputPath": "dist/projects/node/libs/nestjs-utils",
-            "tsConfig": "projects/node/libs/nestjs-utils/tsconfig.lib.json",
-            "packageJson": "projects/node/libs/nestjs-utils/package.json",
-            "main": "projects/node/libs/nestjs-utils/src/index.ts",
-            "assets": [
-              "projects/node/libs/nestjs-utils/*.md"
-            ]
-          }
-        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "projects/node/libs/nestjs-utils/**/*.ts"
+              "projects/node/libs/hot-server/**/*.ts"
             ]
           },
           "outputs": [
@@ -257,11 +192,26 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/projects/node/libs/nestjs-utils"
+            "coverage/projects/node/libs/hot-server"
           ],
           "options": {
-            "jestConfig": "projects/node/libs/nestjs-utils/jest.config.js",
+            "jestConfig": "projects/node/libs/hot-server/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/projects/node/libs/hot-server",
+            "tsConfig": "projects/node/libs/hot-server/tsconfig.lib.json",
+            "packageJson": "projects/node/libs/hot-server/package.json",
+            "main": "projects/node/libs/hot-server/src/index.ts",
+            "assets": [
+              "projects/node/libs/hot-server/*.md"
+            ]
           }
         }
       }
@@ -327,16 +277,81 @@
         }
       }
     },
-    "hot-server": {
-      "root": "projects/node/libs/hot-express",
-      "sourceRoot": "projects/node/libs/hot-express/src",
-      "projectType": "library",
+    "hot-gateway": {
+      "root": "projects/node/apps/hot-gateway",
+      "sourceRoot": "projects/node/apps/hot-gateway/src",
+      "projectType": "application",
+      "prefix": "hot",
       "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx run hot-gateway:build-main",
+              "nx run hot-gateway:build-post"
+            ],
+            "parallel": false
+          }
+        },
+        "build-main": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/projects/node/apps/hot-gateway",
+            "main": "projects/node/apps/hot-gateway/src/main.ts",
+            "tsConfig": "projects/node/apps/hot-gateway/tsconfig.app.json",
+            "assets": [
+              "projects/node/apps/hot-gateway/src/assets"
+            ],
+            "webpackConfig": "projects/node/apps/hot-gateway/custom-webpack.config.js",
+            "tsPlugins": [
+              {
+                "name": "@nestjs/swagger/plugin",
+                "options": {
+                  "dtoFileNameSuffix": [
+                    ".dto.ts",
+                    ".entity.ts"
+                  ]
+                }
+              }
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "projects/node/apps/hot-gateway/src/environments/environment.ts",
+                  "with": "projects/node/apps/hot-gateway/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "build-post": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "node ./dist/projects/node/apps/hot-gateway/main.js export-api ./tmp/hot-openapi.json"
+            ],
+            "parallel": false
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "hot-gateway:build-main"
+          }
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "projects/node/libs/hot-express/**/*.ts"
+              "projects/node/apps/hot-gateway/**/*.ts"
             ]
           },
           "outputs": [
@@ -346,26 +361,11 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/projects/node/libs/hot-express"
+            "coverage/projects/node/apps/hot-gateway"
           ],
           "options": {
-            "jestConfig": "projects/node/libs/hot-express/jest.config.js",
+            "jestConfig": "projects/node/apps/hot-gateway/jest.config.js",
             "passWithNoTests": true
-          }
-        },
-        "build": {
-          "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
-          "options": {
-            "outputPath": "dist/projects/node/libs/hot-express",
-            "tsConfig": "projects/node/libs/hot-express/tsconfig.lib.json",
-            "packageJson": "projects/node/libs/hot-express/package.json",
-            "main": "projects/node/libs/hot-express/src/index.ts",
-            "assets": [
-              "projects/node/libs/hot-express/*.md"
-            ]
           }
         }
       }

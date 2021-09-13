@@ -1,4 +1,4 @@
-service:
+gateway:
   # address: listening address for the http/https protocoll
   address: 'localhost'
   http:

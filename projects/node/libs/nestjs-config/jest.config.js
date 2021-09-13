@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'node-libs-config',
+  displayName: 'node-libs-nestjs-config',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {

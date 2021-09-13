@@ -25,41 +25,41 @@ debug('starting');
 // create config and logging service
 const configService = ConfigModule.createConfigService({});
 const logger = LoggerModule.createLoggerService({
-  consoleLogLevel: configService.getString('service.logging.console.level', DEFAULT_CONSOLE_LOGLEVEL) as LogLevel,
-  consoleLogSilent: configService.getOptionalBoolean('service.logging.console.silent'),
-  fileLogFileName: configService.getOptionalString('service.logging.file.path'),
-  fileLogLevel: configService.getString('service.logging.file.level', DEFAULT_FILE_LOGLEVEL) as LogLevel,
-  fileLogSilent: configService.getBoolean('service.logging.file.silent', true),
+  consoleLogLevel: configService.getString('gateway.logging.console.level', DEFAULT_CONSOLE_LOGLEVEL) as LogLevel,
+  consoleLogSilent: configService.getOptionalBoolean('gateway.logging.console.silent'),
+  fileLogFileName: configService.getOptionalString('gateway.logging.file.path'),
+  fileLogLevel: configService.getString('gateway.logging.file.level', DEFAULT_FILE_LOGLEVEL) as LogLevel,
+  fileLogSilent: configService.getBoolean('gateway.logging.file.silent', true),
 });
 
-const key = configService.getOptionalString('service.https.key');
-const cert = configService.getOptionalString('service.https.cert');
+const key = configService.getOptionalString('gateway.https.key');
+const cert = configService.getOptionalString('gateway.https.cert');
 
 const expressApplication = new ExpressApplication(logger, {
-  address: configService.getOptionalString('service.address'),
+  address: configService.getOptionalString('gateway.address'),
   http: {
-    port: configService.getNumber('service.http.port', 80),
-    maxHeaderSize: configService.getOptionalNumber('service.http.maxHeaderSize'),
-    disabled: configService.getOptionalBoolean('service.http.disabled'),
-    redirect: configService.getBoolean('server.http.redirct', true),
-    redirectCode: configService.getOptionalNumber('server.http.redirectCode'),
-    redirectLocation: configService.getOptionalString('server.http.redirectLocation'),
+    port: configService.getNumber('gateway.http.port', 80),
+    maxHeaderSize: configService.getOptionalNumber('gateway.http.maxHeaderSize'),
+    disabled: configService.getOptionalBoolean('gateway.http.disabled'),
+    redirect: configService.getBoolean('gateway.http.redirct', true),
+    redirectCode: configService.getOptionalNumber('gateway.http.redirectCode'),
+    redirectLocation: configService.getOptionalString('gateway.http.redirectLocation'),
   },
   https: {
-    port: configService.getNumber('service.https.port', 443),
+    port: configService.getNumber('gateway.https.port', 443),
     key: key ? path.resolve(configService.configDirectory, key) : undefined,
     cert: cert ? path.resolve(configService.configDirectory, cert) : undefined,
-    maxHeaderSize: configService.getOptionalNumber('service.https.maxHeaderSize'),
-    disabled: configService.getOptionalBoolean('service.https.disabled'),
+    maxHeaderSize: configService.getOptionalNumber('gateway.https.maxHeaderSize'),
+    disabled: configService.getOptionalBoolean('gateway.https.disabled'),
   },
-  trustProxy: configService.getOptionalString('service.trustProxy'),
+  trustProxy: configService.getOptionalString('gateway.trustProxy'),
   limits: {
-    jsonBody: configService.getString('service.limits.jsonBody', DEFAULT_SERVICE_LIMIT_JSON_BODY),
+    jsonBody: configService.getString('gateway.limits.jsonBody', DEFAULT_SERVICE_LIMIT_JSON_BODY),
   },
   session: {
-    secret: configService.getString('service.session.secret', DEFAULT_SERVICE_SESSION_SECRET).split(','),
-    name: configService.getString('service.session.name', DEFAULT_SERVICE_SESSION_NAME),
-    maxAge: configService.getNumber('service.session.maxAge', DEFAULT_SERVICE_SESSION_MAX_AGE),
+    secret: configService.getString('gateway.session.secret', DEFAULT_SERVICE_SESSION_SECRET).split(','),
+    name: configService.getString('gateway.session.name', DEFAULT_SERVICE_SESSION_NAME),
+    maxAge: configService.getNumber('gateway.session.maxAge', DEFAULT_SERVICE_SESSION_MAX_AGE),
   },
 });
 
