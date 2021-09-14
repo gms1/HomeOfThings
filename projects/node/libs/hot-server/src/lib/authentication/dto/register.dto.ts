@@ -6,7 +6,13 @@ export class RegisterDto {
 
   @IsString()
   @IsNotEmpty()
-  name: string;
+  shortName: string;
+
+  @IsString()
+  firstName?: string;
+
+  @IsString()
+  lastName?: string;
 
   @IsString()
   @IsNotEmpty()

@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-types */
 import { Body, Req, Controller, HttpCode, Post, UseGuards, UseInterceptors, ClassSerializerInterceptor, Get } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import RegisterDto from './dto/register.dto';
 import { ReAuthenticationGuard } from './re-authentication.guard';
 import { LoginGuard } from './login.guard';
 import User from '../user/entity/user.entity';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import passport from 'passport';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import session from 'express-session';
 
-interface RequestWithUser extends Request {
+interface RequestWithUser extends Express.Request {
   user: User;
 }
 
@@ -36,7 +42,7 @@ export class AuthenticationController {
   @HttpCode(200)
   @UseGuards(ReAuthenticationGuard)
   @Post('logout')
-  async logout(@Req() request: RequestWithUser) {
+  async logout(@Req() request: Express.Request) {
     request.logOut();
     request.session.cookie.maxAge = 0;
   }

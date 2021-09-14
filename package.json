@@ -86,6 +86,7 @@
     "@types/config": "0.0.39",
     "@types/express-session": "^1.17.4",
     "@types/passport-local": "^1.0.34",
+    "argon2": "^0.28.2",
     "chalk": "^4.1.2",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
