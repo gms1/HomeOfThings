@@ -26,7 +26,13 @@ export class ConfigService {
       return ConfigService._instance;
     }
     ConfigService._instance = this;
-    this.configDirectory = process.env.NODE_CONFIG_DIR ?? process.cwd() + '/config';
+    if (this._opts.configDirectory) {
+      process.env.NODE_CONFIG_DIR = this._opts.configDirectory;
+    }
+    if (this._opts.environment) {
+      process.env.NODE_CONFIG_ENV = this._opts.environment;
+    }
+    this.configDirectory = process.env.NODE_CONFIG_DIR ?? path.resolve(process.cwd(), 'config');
     this.environment = process.env.NODE_CONFIG_ENV ?? '';
     debug(`config-directory: '${this.configDirectory}'`);
     debug(`environment: '${this.environment}'`);

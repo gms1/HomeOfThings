@@ -1,3 +1,4 @@
 export interface ConfigModuleOptions {
-  _dummy?: void;
+  configDirectory?: string;
+  environment?: string;
 }
