@@ -4,10 +4,12 @@ import * as path from 'path';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigModuleOptions, CONFIG_MODULE_OPTIONS_TOKEN } from './model';
 
-process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
-import * as config from 'config';
-
 const debug = _debug('nestjs-config');
+
+process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
+import type * as configType from 'config';
+
+let config: configType.IConfig;
 
 /** ConfigService to read configured values. */
 @Injectable()
@@ -36,6 +38,7 @@ export class ConfigService {
     this.environment = process.env.NODE_CONFIG_ENV ?? '';
     debug(`config-directory: '${this.configDirectory}'`);
     debug(`environment: '${this.environment}'`);
+    config = require('config');
   }
 
   /**
@@ -145,3 +148,5 @@ export class ConfigService {
     return this._instance;
   }
 }
+
+
