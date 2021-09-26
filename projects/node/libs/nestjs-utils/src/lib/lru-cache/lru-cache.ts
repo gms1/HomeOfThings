@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 export class LruCache<T> {
   private _map: Map<string, T> = new Map<string, T>();
 
@@ -28,11 +29,12 @@ export class LruCache<T> {
     return item;
   }
 
-  set(key: string, value: T) {
-    if (!this._map.delete(key)) {
+  set(key: string, item: T) {
+    if (!this.delete(key)) {
       this.resize(this._maxEntries - 1);
     }
-    this._map.set(key, value);
+    this.onInsert(item);
+    this._map.set(key, item);
   }
 
   has(key: string): boolean {
@@ -40,12 +42,19 @@ export class LruCache<T> {
   }
 
   delete(key: string): boolean {
+    const item: T = this._map.get(key);
+    if (item) {
+      this.onDelete(item);
+    }
     return this._map.delete(key);
   }
 
+  protected onInsert(_item: T) {}
+  protected onDelete(_item: T) {}
+
   private resize(newSize: number): void {
     while (this._map.size > newSize) {
-      this._map.delete(this._map.keys().next().value);
+      this.delete(this._map.keys().next().value);
     }
   }
 }

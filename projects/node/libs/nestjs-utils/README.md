@@ -91,3 +91,10 @@ export class ChildModule {}
 - providing multiple options using eihter `register` or `registerAsync` (e.g. providing multiple connections)
 
 [@homeofthings/nestjs-sqlite3](https://github.com/gms1/HomeOfThings/tree/master/projects/node/libs/nestjs-sqlite3/)
+
+
+## more utilities
+
+- `class LruCache<T>` - LRU cache
+- `class AsyncContext<T>` - wrapper for `AsyncLocalStorage`
+- `function writeFileIfChanged(outputPath: string, content: string): Promise<boolean>`  - write a file if provided content is different to exiting content
