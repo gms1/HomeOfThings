@@ -16,12 +16,4 @@ export interface ExpressApplicationOptions {
     disabled?: boolean;
   };
   trustProxy?: string;
-  session: {
-    name: string;
-    secret: string | string[];
-    maxAge: number;
-  };
-  limits?: {
-    jsonBody?: string;
-  };
 }

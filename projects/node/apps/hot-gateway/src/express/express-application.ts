@@ -7,8 +7,6 @@ import helmet from 'helmet';
 import * as http from 'http';
 import * as https from 'https';
 import * as net from 'net';
-import passport from 'passport';
-import session from 'express-session';
 import { TLSSocket } from 'tls';
 import { ExpressApplicationOptions } from './express-application-options';
 
@@ -44,29 +42,6 @@ export class ExpressApplication {
   private registerGlobalMiddleware() {
     this._app.use(helmet());
     this._app.use(this.httpRedirectMiddleware.bind(this));
-
-    this._app.use(
-      session({
-        // TODO: store:
-        secret: this._options.session.secret,
-        name: this._options.session.name,
-        rolling: true,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-          httpOnly: true,
-          secure: 'auto',
-          maxAge: this._options.session.maxAge,
-          sameSite: 'strict',
-        },
-      }),
-    );
-
-    this._app.use(passport.initialize());
-    this._app.use(passport.session());
-
-    this._app.use(express.json(this._options?.limits?.jsonBody ? { limit: this._options?.limits?.jsonBody } : {}));
-    this._app.use(express.urlencoded({ extended: true }));
   }
 
   createServer(): boolean | undefined {

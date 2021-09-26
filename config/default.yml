@@ -25,30 +25,10 @@ gateway:
     maxHeaderSize: 8192
     # disabled: set to 'true' if you want to disable https; default is 'false'
     disabled: 'false'
-  limits:
-    # jsonBody: maximum json body size; default 10kb
-    jsonBody: '10kb'
 
   # trustProxy: ip addresses of trusted proxies delimited by ','
   #   please see 'IP addresses' in https://expressjs.com/en/guide/behind-proxies.html
-  trustProxy: '127.0.0.1'
-
-  throttle:
-    # ttl: the time to live in seconds; default 60
-    ttl: 60
-    # limit: number of hits allowed before returning http status 429; default 10
-    limit: 10
-
-  session:
-    # secret: the secret for signing the session cookie, optional following additional key delimited by ',' for verifying
-    # please set your own!!!
-    secret: h0m30fTh1ngs
-    # name: the name of the session cookie; default 'sessionId'
-    name: sessionId
-    # maxAge: Specifies the number (in milliseconds) to use when calculating the Expires Set-Cookie attribute.
-    # the cookie will expire in maxAge since the last response was sent
-    # default: 900000 (15 * 60 * 1000): 15 min
-    maxAge: 900000
+  trustProxy:
 
   logging:
     console:
@@ -68,7 +48,7 @@ cli:
   logging:
   console:
     # level: 'silly', 'debug', 'verbose', 'help', 'info' (default), 'warn', 'error'
-    level: 'help'
+    level: 'debug'
     # silent: set to 'true' to turn of logging; default is 'false'
     # silent: true
   file:
@@ -78,3 +58,36 @@ cli:
     path: 'var/log/gateway.log'
     # silent: set to 'true' to turn of logging; default is 'false'
     silent: true
+
+server:
+  database:
+    file: 'hot.db'
+
+  session:
+    # secret: the secret for signing the session cookie, optional following additional key delimited by ',' for verifying
+    # please set your own!!!
+    secret: h0m30fTh1ngs
+    # name: the name of the session cookie; default 'sessionId'
+    name: sessionId
+    # maxAge: Specifies the number (in milliseconds) to use when calculating the Expires Set-Cookie attribute.
+    # the cookie will expire in maxAge since the last response was sent
+    # default: 900000 (15 * 60 * 1000): 15 min
+    maxAge: 900000
+    # domain: indicates the domain that the cookie can be accessed from; default is undefined
+    domain:
+    # path: is the path that the cookie is accepted within the domain; default is undefined
+    path:
+
+  throttle:
+    # ttl: the time to live in seconds; default 60
+    ttl: 60
+    # limit: number of hits allowed before returning http status 429; default 10
+    limit: 10
+
+  limits:
+    # jsonBody: maximum json body size; default 10kb
+    jsonBody: '10kb'
+
+  bcrypt:
+    # rounds: salt rounds; default 10
+    rounds: 10

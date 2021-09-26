@@ -1,14 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
-import RegisterDto from './dto/register.dto';
-import * as argon2 from 'argon2';
+import { RegisterDto } from './dto/register.dto';
+import { AuthenticationModuleOptions, AUTHENTICATION_MODULE_OPTIONS_TOKEN, DEFAULT_BCRYPT_ROUNDS } from './model';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly userService: UserService) {}
+  constructor(@Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN) private options: AuthenticationModuleOptions, private readonly userService: UserService) {}
 
   public async register(registrationData: RegisterDto) {
-    const hashedPassword = await argon2.hash(registrationData.password, { type: argon2.argon2id, memoryCost: 1024 * 16, timeCost: 6 }); // TODO: parameterize
+    const hashedPassword = await bcrypt.hash(registrationData.password, this.options.bcryptRounds || DEFAULT_BCRYPT_ROUNDS);
     try {
       return this.userService.create({
         ...registrationData,
@@ -30,7 +31,7 @@ export class AuthenticationService {
   }
 
   private async verifyPassword(plainTextPassword: string, hashedPassword: string) {
-    const isPasswordMatching = await argon2.verify(hashedPassword, plainTextPassword);
+    const isPasswordMatching = await bcrypt.compare(plainTextPassword, hashedPassword);
     if (!isPasswordMatching) {
       throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
     }

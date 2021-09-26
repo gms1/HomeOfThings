@@ -11,10 +11,6 @@ import * as path from 'path';
 import { AppModule } from './app/app.module';
 import { ExpressApplication } from './express/express-application';
 
-const DEFAULT_SERVICE_LIMIT_JSON_BODY = '10kb';
-const DEFAULT_SERVICE_SESSION_NAME = 'sessionId';
-const DEFAULT_SERVICE_SESSION_SECRET = 'hot';
-const DEFAULT_SERVICE_SESSION_MAX_AGE = 900000;
 const GLOBAL_API_PREFIX = 'api';
 const COMMAND_EXPORT_API = 'export-api';
 
@@ -53,14 +49,6 @@ const expressApplication = new ExpressApplication(logger, {
     disabled: configService.getOptionalBoolean('gateway.https.disabled'),
   },
   trustProxy: configService.getOptionalString('gateway.trustProxy'),
-  limits: {
-    jsonBody: configService.getString('gateway.limits.jsonBody', DEFAULT_SERVICE_LIMIT_JSON_BODY),
-  },
-  session: {
-    secret: configService.getString('gateway.session.secret', DEFAULT_SERVICE_SESSION_SECRET).split(','),
-    name: configService.getString('gateway.session.name', DEFAULT_SERVICE_SESSION_NAME),
-    maxAge: configService.getNumber('gateway.session.maxAge', DEFAULT_SERVICE_SESSION_MAX_AGE),
-  },
 });
 
 const OPENAPI_DOCUMENT = new DocumentBuilder()
@@ -99,6 +87,7 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, expressApplication.adapter, { logger });
 
+    debug('application module created');
     const appLogger = new Logger('Application');
     appLogger.debug(`Application created`);
     appLogger.debug(`Configuration:`);

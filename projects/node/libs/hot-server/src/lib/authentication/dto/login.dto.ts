@@ -9,5 +9,3 @@ export class LoginDto {
   @MinLength(7)
   password: string;
 }
-
-export default LoginDto;

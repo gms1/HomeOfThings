@@ -2,15 +2,14 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Body, Req, Controller, HttpCode, Post, UseGuards, UseInterceptors, ClassSerializerInterceptor, Get } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
-import RegisterDto from './dto/register.dto';
-import { ReAuthenticationGuard } from './re-authentication.guard';
-import { LoginGuard } from './login.guard';
-import User from '../user/entity/user.entity';
+import { RegisterDto } from './dto/register.dto';
+import { UserIsAuthenticatedGuard } from './user-is-authenticated.guard';
+import { UserLoginGuard } from './user-login.guard';
+import { User } from '../user/entity/user.entity';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import passport from 'passport';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import session from 'express-session';
-
 interface RequestWithUser extends Express.Request {
   user: User;
 }
@@ -26,21 +25,21 @@ export class AuthenticationController {
   }
 
   @HttpCode(200)
-  @UseGuards(LoginGuard)
+  @UseGuards(UserLoginGuard)
   @Post('login')
   async login(@Req() request: RequestWithUser) {
     return request.user;
   }
 
   @HttpCode(200)
-  @UseGuards(ReAuthenticationGuard)
+  @UseGuards(UserIsAuthenticatedGuard)
   @Get()
   async authenticate(@Req() request: RequestWithUser) {
     return request.user;
   }
 
   @HttpCode(200)
-  @UseGuards(ReAuthenticationGuard)
+  @UseGuards(UserIsAuthenticatedGuard)
   @Post('logout')
   async logout(@Req() request: Express.Request) {
     request.logOut();

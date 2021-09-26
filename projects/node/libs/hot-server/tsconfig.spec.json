@@ -5,5 +5,5 @@
     "module": "commonjs",
     "types": ["jest", "node"]
   },
-  "include": ["**/*.spec.ts"]
+  "include": ["**/*.spec.ts", "src/lib/test/**/fixtures/**/*.ts"]
 }

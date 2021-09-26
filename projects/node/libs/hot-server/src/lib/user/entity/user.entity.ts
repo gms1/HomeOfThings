@@ -2,7 +2,7 @@ import { Column, Entity, Index, PrimaryKeyColumn } from '@homeofthings/nestjs-sq
 import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'USERS', autoIncrement: true })
-class User {
+export class User {
   @PrimaryKeyColumn({ name: 'user_id', dbtype: 'INTEGER NOT NULL' })
   public id?: number;
 
@@ -24,5 +24,3 @@ class User {
   @Exclude()
   public password: string;
 }
-
-export default User;

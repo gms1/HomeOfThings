@@ -1,5 +1,5 @@
 import { UserService } from '../user/user.service';
-import User from '../user/entity/user.entity';
+import { User } from '../user/entity/user.entity';
 import { PassportSerializer } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 

@@ -1,12 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from './entity/user.entity';
-import CreateUserDto from './dto/create-user.dto';
+import { User } from './entity/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository, Repository } from '@homeofthings/nestjs-sqlite3';
+import { HOT_MAIN_DB } from '../model';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
+    @InjectRepository(User, HOT_MAIN_DB)
     private usersRepository: Repository<User>,
   ) {}
 

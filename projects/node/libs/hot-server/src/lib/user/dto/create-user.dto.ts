@@ -5,5 +5,3 @@ export class CreateUserDto {
   lastName?: string;
   password: string;
 }
-
-export default CreateUserDto;
