@@ -16,7 +16,7 @@ export function writeTextFile(filePath: string, data: string, encoding: BufferEn
 
 // -----------------------------------------------------------------------------------------
 export function readJson(filePath: string): Promise<any> {
-  return readTextFile(filePath).catch((buffer) => parseJson(buffer));
+  return readTextFile(filePath).then((buffer) => parseJson(buffer));
 }
 
 // -----------------------------------------------------------------------------------------
