@@ -4,9 +4,9 @@ import * as fs from 'fs';
 import * as lcov_total from 'lcov-total';
 import * as chalk from 'chalk';
 import { Command } from 'commander';
-import { globPromised } from './ts/utils/glob';
-import { unlinkPromised, writeTextFilePromised } from './ts/utils/fs';
-import { die, log, setApplication } from './ts/common';
+import { glob } from './ts/utils/glob';
+import { unlink, writeFile } from './ts/utils/fs';
+import { die, log, setApplication } from './ts/utils/app';
 
 setApplication(__filename);
 const workdir = process.cwd();
@@ -23,10 +23,10 @@ program
   .description(`merge coverage reports found in '${coverageDirectory}'`)
   .action(async () => {
     try {
-      await unlinkPromised(coverageReport);
-      const files = await globPromised(path.join(coverageDirectory, '**', 'lcov.info'));
+      await unlink(coverageReport, true);
+      const files = await glob(path.join(coverageDirectory, '**', 'lcov.info'));
       const mergedReport = files.reduce((mergedReport, currFile) => (mergedReport += fs.readFileSync(currFile)), '');
-      await writeTextFilePromised(coverageReport, mergedReport);
+      await writeFile(coverageReport, mergedReport);
       const result: number = lcov_total(coverageReport);
       const color = result >= 80 ? 82 : result >= 70 ? 136 : 196;
       log(`overall coverage result: ${chalk.bold.ansi256(color)(result.toFixed(2))}`);

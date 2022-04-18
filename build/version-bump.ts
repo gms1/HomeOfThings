@@ -2,7 +2,8 @@
 import * as path from 'path';
 import * as process from 'process';
 import { Command } from 'commander';
-import { die, log, readJson, setApplication, warn, writeJson } from './ts/common';
+import { die, log, setApplication, warn } from './ts/utils/app';
+import { readJson, writeJson } from './ts/utils/file';
 
 setApplication(__filename);
 const workdir = process.cwd();

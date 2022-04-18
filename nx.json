@@ -16,33 +16,16 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
+        "parallel": 1
       }
-    }
-  },
-  "projects": {
-    "hot-gateway": {
-      "tags": ["scope:backend"]
-    },
-    "nestjs-config": {
-      "tags": ["scope:backend"]
-    },
-    "nestjs-logger": {
-      "tags": ["scope:backend"]
-    },
-    "nestjs-sqlite3": {
-      "tags": ["scope:backend"]
-    },
-    "nestjs-utils": {
-      "tags": ["scope:backend"]
-    },
-    "hot-cli": {
-      "tags": ["scope:backend"]
-    },
-    "hot-server": {
-      "tags": ["scope:backend"]
     }
   },
   "workspaceLayout": {
@@ -56,5 +39,9 @@
         "projects": "dependencies"
       }
     ]
-  }
+  },
+  "cli": {
+    "defaultCollection": "@nstudio/xplat"
+  },
+  "defaultProject": "hot-gateway"
 }

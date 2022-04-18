@@ -4,13 +4,21 @@
       "versions": ">=2.0",
       "reason": "does not preserve wrapped lines"
     },
+    "chalk": {
+      "versions": ">=5.0.0",
+      "reason": "using ESM"
+    },
+    "lcov-total": {
+      "versions": ">=2.0.0",
+      "reason": "using ESM"
+    },
     "supports-color": {
       "versions": ">=9.0.0",
       "reason": "using ESM; breaks unit-tests"
     },
     "typescript": {
-      "versions": ">=4.4",
-      "reason": "@angular/cli v12 peer dependency"
+      "versions": ">=4.7",
+      "reason": "@angular/cli v13 peer dependency"
     }
   }
 }

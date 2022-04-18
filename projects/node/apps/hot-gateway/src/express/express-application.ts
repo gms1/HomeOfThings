@@ -125,7 +125,8 @@ export class ExpressApplication {
       debug(`redirecting to ${redirectUrl}`);
       // eslint-disable-next-line @typescript-eslint/naming-convention
       res.writeHead(this._options?.http?.redirectCode ?? 307, { Location: redirectUrl });
-      return res.end(redirectUrl);
+      res.end(redirectUrl);
+      next();
     }
     return next();
   }
@@ -148,10 +149,7 @@ function listenServer(server: net.Server, opts: net.ListenOptions, proto: 'http'
       reject(err);
     };
 
-    server
-      .once('listening', listeningListener)
-      .once('error', errorListener)
-      .listen(opts);
+    server.once('listening', listeningListener).once('error', errorListener).listen(opts);
   });
 }
 

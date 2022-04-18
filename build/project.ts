@@ -2,7 +2,8 @@
 // tslint:disable: no-console
 import * as path from 'path';
 import { Command } from 'commander';
-import { die, error, log, readJson, setApplication, writeJson } from './ts/common';
+import { die, error, log, setApplication } from './ts/utils/app';
+import { readJson, writeJson } from './ts/utils/file';
 
 setApplication(__filename);
 const workdir = process.cwd();

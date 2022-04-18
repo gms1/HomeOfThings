@@ -3,5 +3,5 @@ export class CreateUserDto {
   shortName: string;
   firstName?: string;
   lastName?: string;
-  password: string;
+  passwordHash: string;
 }

@@ -20,7 +20,7 @@ export class User {
   @Column({ name: 'user_lastname', dbtype: 'TEXT' })
   public lastName?: string;
 
-  @Column({ name: 'user_password', dbtype: 'TEXT' })
+  @Column({ name: 'user_password_hash', dbtype: 'TEXT' })
   @Exclude()
-  public password: string;
+  public passwordHash: string;
 }
