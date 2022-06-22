@@ -1,10 +1,11 @@
 [![npm version](https://badge.fury.io/js/%40homeofthings%2Fnestjs-utils.svg)](https://badge.fury.io/js/%40homeofthings%2Fnestjs-utils)
-[![Build Status](https://api.travis-ci.com/gms1/HomeOfThings.svg?branch=master)](https://app.travis-ci.com/gms1/HomeOfThings)
+[![Build Workflow](https://github.com/gms1/HomeOfThings/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/gms1/HomeOfThings/actions/workflows/build.yml)
 [![Coverage Status](https://codecov.io/gh/gms1/HomeOfThings/branch/master/graph/badge.svg?flag=nestjs-utils)](https://codecov.io/gh/gms1/HomeOfThings)
 [![DeepScan grade](https://deepscan.io/api/teams/439/projects/987/branches/1954/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=439&pid=987&bid=1954)
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![License](https://img.shields.io/npm/l/@homeofthings/nestjs-utils.svg?style=flat-square)](https://github.com/gms1/HomeOfThings/blob/master/LICENSE)
+
 # HomeOfThings - common utilities for NestJs
 
 [HomeOfThings](https://github.com/gms1/HomeOfThings)
@@ -92,9 +93,8 @@ export class ChildModule {}
 
 [@homeofthings/nestjs-sqlite3](https://github.com/gms1/HomeOfThings/tree/master/projects/node/libs/nestjs-sqlite3/)
 
-
 ## more utilities
 
 - `class LruCache<T>` - LRU cache
 - `class AsyncContext<T>` - wrapper for `AsyncLocalStorage`
-- `function writeFileIfChanged(outputPath: string, content: string): Promise<boolean>`  - write a file if provided content is different to exiting content
+- `function writeFileIfChanged(outputPath: string, content: string): Promise<boolean>` - write a file if provided content is different to exiting content

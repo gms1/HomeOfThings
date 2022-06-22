@@ -1,5 +1,5 @@
 [![npm version](https://badge.fury.io/js/%40homeofthings%2Fnestjs-sqlite3.svg)](https://badge.fury.io/js/%40homeofthings%2Fnestjs-sqlite3)
-[![Build Status](https://api.travis-ci.com/gms1/HomeOfThings.svg?branch=master)](https://app.travis-ci.com/gms1/HomeOfThings)
+[![Build Workflow](https://github.com/gms1/HomeOfThings/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/gms1/HomeOfThings/actions/workflows/build.yml)
 [![Coverage Status](https://codecov.io/gh/gms1/HomeOfThings/branch/master/graph/badge.svg?flag=nestjs-sqlite3)](https://codecov.io/gh/gms1/HomeOfThings)
 [![DeepScan grade](https://deepscan.io/api/teams/439/projects/987/branches/1954/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=439&pid=987&bid=1954)
 
@@ -211,7 +211,7 @@ please see (https://github.com/gms1/node-sqlite3-orm#schema-creation)
 ```
 
 > NOTE: if you are using a single database, you can call `upgradeAllTables`, otherwise you will need to specify the tables for the specific database that you want to upgrade.
-All tables referenced by a `forFeature` call for a specific database can be retrieved by calling `ConnectionManager.getTables`
+> All tables referenced by a `forFeature` call for a specific database can be retrieved by calling `ConnectionManager.getTables`
 
 ### online backup
 
@@ -226,7 +226,7 @@ to run the backup in one step you can call:
 
 ## tracing
 
-**sqlite3orm** uses the `debug` module, so you can turn on the logging by setting the 'DEBUG' environment to "sqlite3orm:*"
+**sqlite3orm** uses the `debug` module, so you can turn on the logging by setting the 'DEBUG' environment to "sqlite3orm:\*"
 
 ## RELEASE NOTES
 

@@ -1,5 +1,5 @@
 [![npm version](https://badge.fury.io/js/%40homeofthings%2Fnestjs-logger.svg)](https://badge.fury.io/js/%40homeofthings%2Fnestjs-logger)
-[![Build Status](https://api.travis-ci.com/gms1/HomeOfThings.svg?branch=master)](https://app.travis-ci.com/gms1/HomeOfThings)
+[![Build Workflow](https://github.com/gms1/HomeOfThings/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/gms1/HomeOfThings/actions/workflows/build.yml)
 [![Coverage Status](https://codecov.io/gh/gms1/HomeOfThings/branch/master/graph/badge.svg?flag=nestjs-logger)](https://codecov.io/gh/gms1/HomeOfThings)
 [![DeepScan grade](https://deepscan.io/api/teams/439/projects/987/branches/1954/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=439&pid=987&bid=1954)
 
@@ -95,7 +95,7 @@ import { Logger, Injectable } from '@nestjs/common';
 @Injectable()
 class MyService {
   private readonly logger = new Logger(MyService.name);
-  
+
   doSomething() {
     this.logger.log('Doing something...');
   }
@@ -107,7 +107,7 @@ That way, the calls to this.logger.log() from MyService would result in calls to
 ### environment variables
 
 - FORCE_COLORS ... force color output
-- NO_COLORS    ... disable color output
+- NO_COLORS ... disable color output
 
 ### default formatters
 
