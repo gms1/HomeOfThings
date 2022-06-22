@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'node-libs-nestjs-sqlite3',
+/* eslint-disable */
+export default {
+  displayName: 'node-libs-nestjs-utils',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -11,7 +12,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/projects/node/libs/nestjs-sqlite3',
+  coverageDirectory: '../../../../coverage/projects/node/libs/nestjs-utils',
   coveragePathIgnorePatterns: ['/test/'],
-  maxWorkers: 3,
 };

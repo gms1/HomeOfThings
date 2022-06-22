@@ -16,7 +16,7 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
         "cacheableOperations": [
           "build",
@@ -24,7 +24,8 @@
           "test",
           "e2e"
         ],
-        "parallel": 1
+        "parallel": 1,
+        "accessToken": "YTg3ZDVjNjYtMGQ5NS00ZTFiLWI2NDAtM2Y5N2RiZDA4MzI2fHJlYWQtd3JpdGU="
       }
     }
   },
@@ -32,16 +33,13 @@
     "appsDir": "projects",
     "libsDir": "projects"
   },
-  "targetDependencies": {
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
-    ]
-  },
-  "cli": {
-    "defaultCollection": "@nstudio/xplat"
-  },
-  "defaultProject": "hot-gateway"
+  "defaultProject": "hot-gateway",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    }
+  }
 }

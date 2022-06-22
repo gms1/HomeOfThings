@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'node-libs-nestjs-logger',
+/* eslint-disable */
+export default {
+  displayName: 'node-libs-nestjs-config',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -11,6 +12,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/projects/node/libs/nestjs-logger',
+  coverageDirectory: '../../../../coverage/projects/node/libs/nestjs-config',
   coveragePathIgnorePatterns: ['/test/'],
 };

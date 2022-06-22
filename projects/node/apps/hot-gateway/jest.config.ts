@@ -1,4 +1,5 @@
-module.exports = {
+/* eslint-disable */
+export default {
   displayName: 'node-apps-hot-gateway',
   preset: '../../../../jest.preset.js',
   globals: {
