@@ -10,7 +10,10 @@
     "importHelpers": true,
     "target": "ESNext",
     "module": "es2015",
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "esModuleInterop": true,
@@ -18,12 +21,26 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@homeofthings/hot-server": ["projects/node/libs/hot-server/src/index.ts"],
-      "@homeofthings/nestjs-config": ["projects/node/libs/nestjs-config/src/index.ts"],
-      "@homeofthings/nestjs-logger": ["projects/node/libs/nestjs-logger/src/index.ts"],
-      "@homeofthings/nestjs-sqlite3": ["projects/node/libs/nestjs-sqlite3/src/index.ts"],
-      "@homeofthings/nestjs-utils": ["projects/node/libs/nestjs-utils/src/index.ts"]
+      "@homeofthings/hot-server": [
+        "projects/node/libs/hot-server/src/index.ts"
+      ],
+      "@homeofthings/nestjs-config": [
+        "projects/node/libs/nestjs-config/src/index.ts"
+      ],
+      "@homeofthings/nestjs-logger": [
+        "projects/node/libs/nestjs-logger/src/index.ts"
+      ],
+      "@homeofthings/nestjs-sqlite3": [
+        "projects/node/libs/nestjs-sqlite3/src/index.ts"
+      ],
+      "@homeofthings/nestjs-utils": [
+        "projects/node/libs/nestjs-utils/src/index.ts"
+      ]
     },
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "exactOptionalPropertyTypes": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
@@ -33,10 +50,15 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "strict": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
     "strictNullChecks": false,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": false
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }
