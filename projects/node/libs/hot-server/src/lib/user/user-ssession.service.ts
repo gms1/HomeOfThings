@@ -1,36 +1,17 @@
 import { Request } from 'express';
-import { User } from './entity/user.entity';
 import { UserSession } from './entity/user-session';
 import { BaseDAO, SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
-import { HOT_MAIN_DB } from '../model';
+import { HOT_SESSION_DB } from '../model';
 import { InjectConnectionPool } from '@homeofthings/nestjs-sqlite3';
 import { LruCache } from '@homeofthings/nestjs-utils';
+import { User } from './entity/user.entity';
 
 const SESSION_CACHE_SIZE = 20;
 
-export class SessionService {
+export class UserSessionService {
   private cache: LruCache<UserSession> = new LruCache(SESSION_CACHE_SIZE);
 
-  constructor(@InjectConnectionPool(HOT_MAIN_DB) private sqlConnectionPool: SqlConnectionPool) {}
-
-  async getUserByEmail(email: string): Promise<User> {
-    let conn: SqlDatabase;
-    try {
-      conn = await this.sqlConnectionPool.get();
-      const dao = new BaseDAO(User, conn);
-      return dao.selectOne({ email });
-    } catch (err) {
-      return Promise.reject(err);
-    } finally {
-      if (conn) {
-        await conn.close();
-      }
-    }
-  }
-
-  async setFailedLoginAttempt(_user: User, _request: Request): Promise<void> {
-    // TODO:
-  }
+  constructor(@InjectConnectionPool(HOT_SESSION_DB) private sqlConnectionPool: SqlConnectionPool) {}
 
   async createSession(user: User, request: Request): Promise<UserSession> {
     let conn: SqlDatabase;

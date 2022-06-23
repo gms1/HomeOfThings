@@ -1,11 +1,11 @@
 import { PassportSerializer } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { UserSession } from '../user/entity/user-session';
-import { SessionService } from '../user/user-ssession.service';
+import { UserSessionService } from '../user/user-ssession.service';
 
 @Injectable()
 export class LocalSerializer extends PassportSerializer {
-  constructor(private readonly sessionService: SessionService) {
+  constructor(private readonly userSessionService: UserSessionService) {
     super();
   }
 
@@ -15,7 +15,7 @@ export class LocalSerializer extends PassportSerializer {
 
   async deserializeUser(sessionId: string, done: CallableFunction) {
     try {
-      const session = await this.sessionService.getSessionById(Number(sessionId));
+      const session = await this.userSessionService.getSessionById(Number(sessionId));
       done(null, session);
     } catch (err) {
       done(err);

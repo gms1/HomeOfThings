@@ -5,7 +5,7 @@ import { UserService } from '../user/user.service';
 import { RegisterDto } from './dto/register.dto';
 import { AuthenticationModuleOptions, AUTHENTICATION_MODULE_OPTIONS_TOKEN, DEFAULT_BCRYPT_ROUNDS } from './model';
 import { UserSession } from '../user/entity/user-session';
-import { SessionService } from '../user/user-ssession.service';
+import { UserSessionService } from '../user/user-ssession.service';
 import { Request } from 'express';
 
 @Injectable()
@@ -13,10 +13,10 @@ export class AuthenticationService {
   constructor(
     @Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN) private options: AuthenticationModuleOptions,
     private readonly userService: UserService,
-    private readonly sessionService: SessionService,
+    private readonly userSessionService: UserSessionService,
   ) {}
 
-  public async register(registrationData: RegisterDto): Promise<User> {
+  async register(registrationData: RegisterDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(registrationData.password, this.options.bcryptRounds || DEFAULT_BCRYPT_ROUNDS);
     try {
       return this.userService.create({
@@ -28,17 +28,15 @@ export class AuthenticationService {
     }
   }
 
-  public async getAuthenticatedUser(request: Request, email: string, plainTextPassword: string): Promise<UserSession> {
+  async getAuthenticatedUser(request: Request, email: string, plainTextPassword: string): Promise<UserSession> {
     try {
-      // NOTE: using UserSessionService instead of UserService;
-      // because `getAuthenticatedUser` is called by `LocalStrategy.validate` and a connection context is not yet available (not yet intercepted by Sqlite3Interceptor)
-      const user = await this.sessionService.getUserByEmail(email);
+      const user = await this.userService.getByEmail(email);
       const authenticated = await bcrypt.compare(plainTextPassword, user.passwordHash);
       if (!authenticated) {
-        await this.sessionService.setFailedLoginAttempt(user, request);
+        await this.userService.setFailedLoginAttempt(user, request);
         throw new Error(`not authenticated`);
       }
-      return this.sessionService.createSession(user, request);
+      return this.userSessionService.createSession(user, request);
     } catch (error) {
       throw new HttpException('Wrong credentials provided', HttpStatus.UNAUTHORIZED);
     }

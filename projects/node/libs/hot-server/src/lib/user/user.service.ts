@@ -3,6 +3,7 @@ import { User } from './entity/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository, Repository } from '@homeofthings/nestjs-sqlite3';
 import { HOT_MAIN_DB } from '../model';
+import { Request } from 'express';
 
 @Injectable()
 export class UserService {
@@ -31,5 +32,9 @@ export class UserService {
     const newUser = await this.usersRepository.insert(userData);
     await this.usersRepository.save(newUser);
     return newUser;
+  }
+
+  async setFailedLoginAttempt(_user: User, _request: Request): Promise<void> {
+    // TODO:
   }
 }
