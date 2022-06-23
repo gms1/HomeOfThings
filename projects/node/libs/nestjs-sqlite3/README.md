@@ -43,7 +43,7 @@ export class AppModule {}
   imports: [
     Sqlite3Module.registerAsync(Sqlite3Module, {
       imports: [], // optional
-      useFactory: (): Promise<Sqlite3ModuleOptions> => Promise.resolve({
+      useFactory: (): Promise<Sqlite3ConnectionOptions> => Promise.resolve({
         // provide your options
       }),
       inject: [], // optional inject params for useFactory method
