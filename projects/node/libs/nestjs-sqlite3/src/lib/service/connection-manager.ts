@@ -12,13 +12,15 @@ export class ConnectionManager {
   private readonly logger = new Logger('ConnectionManager');
   private readonly _connectionPools: Sqlite3ConnectionPools = {};
   private readonly _entityManagers: Sqlite3EntityManagers = {};
-  private readonly _context = new AsyncContext<Sqlite3Connections>();
-  private _warnOnConnectionOnRootContext = true;
+  private _context: AsyncContext<Sqlite3Connections>;
+  private _warnOnOpenConnectionsInCreateConnectionContext = true;
 
   constructor() {
     if (ConnectionManager._instance) {
       throw new Error(`an instance of ConnectionManager is already initialized`);
     }
+    this._context = new AsyncContext<Sqlite3Connections>();
+    this._context.set({});
   }
 
   /*
@@ -93,6 +95,7 @@ export class ConnectionManager {
 
   createConnectionContext(): Promise<void> {
     const connectionDictionary = this._context.get();
+    // NOTE: we do not want to inherit any connections from asynchronous context, since we would close them in child asynchronous context
     this._context.set({});
     if (!connectionDictionary) {
       return Promise.resolve();
@@ -100,17 +103,20 @@ export class ConnectionManager {
     const names = Object.keys(connectionDictionary)
       .filter((name) => connectionDictionary[name])
       .join(',');
-    if (names && this._warnOnConnectionOnRootContext) {
+    if (names && this._warnOnOpenConnectionsInCreateConnectionContext) {
       this.logger.warn(`detected open connections on new connection context: ${names}`);
-      this.logger.warn(`please avoid opening connections on root context`);
-      this._warnOnConnectionOnRootContext = false;
+      this._warnOnOpenConnectionsInCreateConnectionContext = false;
     }
     return Promise.resolve();
   }
 
   async closeConnectionContext(_commit: boolean): Promise<void> {
     const connectionDictionary = this._context.get();
-    this._context.set((undefined as unknown) as Sqlite3Connections);
+    this._context.set({});
+
+    if (!connectionDictionary) {
+      return Promise.resolve();
+    }
 
     const connections: SqlDatabase[] = Object.keys(connectionDictionary)
       .filter((name) => connectionDictionary[name])

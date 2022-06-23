@@ -97,6 +97,10 @@ describe('ConnectionManager', () => {
   });
 
   describe('connection context', () => {
+    beforeEach(() => {
+      mockedNestUtils.mockClear();
+    });
+
     it('should open connections context', async () => {
       await connectionManager.createConnectionContext();
       expect(mockedNestUtils.asyncContextGet).toBeCalledTimes(1);

@@ -9,8 +9,8 @@ import { Test } from '@nestjs/testing';
 import { Repository } from './repository';
 import { Column, Entity, PrimaryKeyColumn } from '../common/sqlite3.decorators';
 
-// NOTE: make sure all branches are covered by these unit tests and all methods are covered by integration tests (see test/integration folder)
-// so that there is no need to fully unit-test all methods here
+// NOTE: make sure all branches are covered by unit tests and all methods are covered by integration tests (see test/integration folder)
+// so that there is no need to fully unit-test all branches/methods here
 
 @Entity()
 class TestEntity {

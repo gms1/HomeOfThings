@@ -32,22 +32,22 @@ describe('Repository-Integration', () => {
       .compile();
     appModule.enableShutdownHooks();
     connectionManager = appModule.get(ConnectionManager);
+    await connectionManager.createConnectionContext();
     await init.initDatabase(connectionManager, SQLITE3_DEFAULT_CONNECTION_NAME);
     userService = appModule.get(UserRepositoryService);
     expect(userService).toBeInstanceOf(UserRepositoryService);
     contactService = appModule.get(ContactRepositoryService);
     expect(contactService).toBeInstanceOf(ContactRepositoryService);
-    await connectionManager.createConnectionContext();
   });
 
   afterAll(async () => {
     await connectionManager.closeConnectionContext(false);
+    (ConnectionManager as any)._instance = undefined;
+    (ConnectionManager as any).tablesPerConnection = undefined;
     if (appModule) {
       appModule.close();
     }
     appModule = undefined;
-    (ConnectionManager as any)._instance = undefined;
-    (ConnectionManager as any).tablesPerConnection = undefined;
   });
 
   it('`exists` should return truthy', async () => {
