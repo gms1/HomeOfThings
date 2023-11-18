@@ -1,21 +1,39 @@
 flags:
+  jsonpointerx:
+    paths:
+      - packages/js/jsonpointerx
+  sqlite3orm:
+    paths:
+      - packages/node/sqlite3orm
+  asyncctx:
+    paths:
+      - packages/node/asyncctx
   nestjs-utils:
     paths:
-      - projects/node/libs/nestjs-utils
+      - packages/node/@homeofthings/nestjs-utils
   nestjs-config:
     paths:
-      - projects/node/libs/nestjs-config
+      - packages/node/@homeofthings/nestjs-config
   nestjs-logger:
     paths:
-      - projects/node/libs/nestjs-logger
+      - packages/node/@homeofthings/nestjs-logger
   nestjs-sqlite3:
     paths:
-      - projects/node/libs/nestjs-sqlite3
+      - packages/node/@homeofthings/nestjs-sqlite3
 
 # To see status checks based on flags
 coverage:
   status:
     project:
+      jsonpointerx:
+        flags:
+          - jsonpointerx
+      sqlite3orm:
+        flags:
+          - sqlite3orm
+      asyncctx:
+        flags:
+          - asyncctx
       nestjs-utils:
         flags:
           - nestjs-utils

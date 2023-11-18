@@ -1,6 +1,5 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-
-import { ConnectionManager, Repository } from '@homeofthings/nestjs-sqlite3';
+import { ConnectionManager } from '../../../../service/connection-manager';
+import { Repository } from '../../../../service/repository';
 import { Contact } from '../entity/contact';
 import { User } from '../entity/user';
 

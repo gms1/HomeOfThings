@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { AutoUpgrader, BaseDAO } from 'sqlite3orm';
-import { ConnectionManager } from '@homeofthings/nestjs-sqlite3';
 import { Contact } from './entity/contact';
 import { User } from './entity/user';
+import { ConnectionManager } from '../../../service/connection-manager';
 
 export const DONALD = 'Donald';
 
@@ -45,14 +44,35 @@ export async function initDatabase(connectionManager: ConnectionManager, connect
       await userDao.deleteAll();
     }
 
-    user = await userDao.insertPartial({ userLoginName: DONALD_DUCK_LOGIN_NAME, userFirstName: DONALD_DUCK_FIRST_NAME, userLastName: DONALD_DUCK_LAST_NAME });
-    contact = await contactDao.insertPartial({ userId: user.userId, emailAddress: DONALD_DUCK_EMAIL });
+    user = await userDao.insertPartial({
+      userLoginName: DONALD_DUCK_LOGIN_NAME,
+      userFirstName: DONALD_DUCK_FIRST_NAME,
+      userLastName: DONALD_DUCK_LAST_NAME,
+    });
+    contact = await contactDao.insertPartial({
+      userId: user.userId,
+      emailAddress: DONALD_DUCK_EMAIL,
+    });
 
-    user = await userDao.insertPartial({ userLoginName: CHUCK_NORRIS_LOGIN_NAME, userFirstName: CHUCK_NORRIS_FIRST_NAME, userLastName: CHUCK_NORRIS_LAST_NAME });
-    contact = await contactDao.insertPartial({ userId: user.userId, emailAddress: CHUCK_NORRIS_EMAIL });
-    contact = await contactDao.insertPartial({ userId: user.userId, emailAddress: CHUCK_NORRIS_EMAIL2 });
+    user = await userDao.insertPartial({
+      userLoginName: CHUCK_NORRIS_LOGIN_NAME,
+      userFirstName: CHUCK_NORRIS_FIRST_NAME,
+      userLastName: CHUCK_NORRIS_LAST_NAME,
+    });
+    contact = await contactDao.insertPartial({
+      userId: user.userId,
+      emailAddress: CHUCK_NORRIS_EMAIL,
+    });
+    contact = await contactDao.insertPartial({
+      userId: user.userId,
+      emailAddress: CHUCK_NORRIS_EMAIL2,
+    });
 
-    user = await userDao.insertPartial({ userLoginName: DONALD_TRUMP_LOGIN_NAME, userFirstName: DONALD_TRUMP_FIRST_NAME, userLastName: DONALD_TRUMP_LAST_NAME });
+    user = await userDao.insertPartial({
+      userLoginName: DONALD_TRUMP_LOGIN_NAME,
+      userFirstName: DONALD_TRUMP_FIRST_NAME,
+      userLastName: DONALD_TRUMP_LAST_NAME,
+    });
   } catch (e) {
     console.error(`init database failed: `, e);
     throw e;

@@ -16,12 +16,18 @@ import { HOT_MAIN_DB, HOT_SESSION_DB } from '../model';
     Sqlite3Module.registerAsync({
       name: HOT_MAIN_DB,
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => Promise.resolve({ file: config.getString('server.database.file', DEFAULT_MAIN_DB_FILE) }),
+      useFactory: (config: ConfigService) =>
+        Promise.resolve({
+          file: config.getString('server.database.file', DEFAULT_MAIN_DB_FILE),
+        }),
     }),
     Sqlite3Module.registerAsync({
       name: HOT_SESSION_DB,
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => Promise.resolve({ file: config.getString('server.session.database.file', DEFAULT_SESSION_DB_FILE) }),
+      useFactory: (config: ConfigService) =>
+        Promise.resolve({
+          file: config.getString('server.session.database.file', DEFAULT_SESSION_DB_FILE),
+        }),
     }),
     UsersModule,
     AuthenticationModule.forRootAsync(AuthenticationModule, {

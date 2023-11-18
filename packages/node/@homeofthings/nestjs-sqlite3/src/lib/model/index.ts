@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GenericDictionary } from '@homeofthings/nestjs-utils';
 import { SqlConnectionPool, SqlDatabase } from 'sqlite3orm';

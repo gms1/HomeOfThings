@@ -3,7 +3,7 @@ import { Type } from '@homeofthings/nestjs-utils';
 import { BaseDAO, BaseDAOInsertMode, Filter, METADATA_MODEL_KEY, MetaModel, SqlDatabase, Table, Where } from 'sqlite3orm';
 import { ConnectionManager } from './connection-manager';
 
-export class Repository<T> {
+export class Repository<T extends Object> {
   private readonly table: Table;
 
   constructor(public readonly type: Type<T>, private _connectionManager: ConnectionManager, private _connectionName: string) {

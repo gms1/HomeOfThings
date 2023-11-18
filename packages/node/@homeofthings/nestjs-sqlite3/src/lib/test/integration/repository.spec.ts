@@ -1,17 +1,18 @@
 /* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 
 import * as mockedLogger from '../mocks/logger';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConnectionManager, Sqlite3ConnectionOptions, Sqlite3Module, SQLITE3_DEFAULT_CONNECTION_NAME } from '@homeofthings/nestjs-sqlite3';
 import { Contact } from './fixtures/entity/contact';
 import { ContactRepositoryService } from './fixtures/service/contact.repository.service';
 import { UserRepositoryService } from './fixtures/service/user.repository.service';
 import { UserRepository } from './fixtures/repository/user.repository';
 import * as init from './fixtures/init';
 import { User } from './fixtures/entity/user';
+import { SQLITE3_DEFAULT_CONNECTION_NAME, Sqlite3ConnectionOptions } from '../../model';
+import { ConnectionManager } from '../../service/connection-manager';
+import { Sqlite3Module } from '../../sqlite3.module';
 
 const CONNECTION_OPTIONS: Sqlite3ConnectionOptions = {
   file: 'file:repository.spec.db?mode=memory&cache=shared',
@@ -448,7 +449,9 @@ describe('Repository-Integration', () => {
     const connection = await connectionManager.getConnection(SQLITE3_DEFAULT_CONNECTION_NAME);
     await connection.beginTransaction();
     try {
-      const deletedUserCount = await userService.deleteAll({ userLoginName: init.CHUCK_NORRIS_LOGIN_NAME });
+      const deletedUserCount = await userService.deleteAll({
+        userLoginName: init.CHUCK_NORRIS_LOGIN_NAME,
+      });
       expect(deletedUserCount).toBe(1);
 
       const foundUser = await userService.findUserByUserLoginName(init.CHUCK_NORRIS_LOGIN_NAME);
@@ -465,7 +468,9 @@ describe('Repository-Integration', () => {
     try {
       const givenLoginName = 'bar';
 
-      const deletedUserCount = await userService.deleteAll({ userLoginName: givenLoginName });
+      const deletedUserCount = await userService.deleteAll({
+        userLoginName: givenLoginName,
+      });
       expect(deletedUserCount).toBe(0);
     } finally {
       await connection.rollbackTransaction();

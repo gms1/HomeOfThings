@@ -29,7 +29,11 @@
     "url": "https://github.com/gms1/HomeOfThings/issues"
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
-  "scripts": {
-    "prepublishOnly": "echo \"ERROR: please call `npm run ci` before publishing\" && exit 1"
+  "dependencies": {
+    "@nestjs/common": "*",
+    "@homeofthings/nestjs-utils": "*",
+    "config": "*",
+    "debug": "*",
+    "tslib": "*"
   }
 }

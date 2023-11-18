@@ -1,26 +1,21 @@
 {
   "root": true,
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "project": "./tsconfig.base.json",
-    "sourceType": "module"
-  },
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx", "rxjs"],
+  "plugins": ["@nx"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@nrwl/nx/enforce-module-boundaries": [
+        "@nx/enforce-module-boundaries": [
           "error",
           {
             "enforceBuildableLibDependency": true,
             "allow": [],
             "depConstraints": [
-              { "sourceTag": "scope:shared", "onlyDependOnLibsWithTags": ["scope:shared"] },
-              { "sourceTag": "scope:frontend", "onlyDependOnLibsWithTags": ["scope:shared", "scope:frontend"] },
-              { "sourceTag": "scope:backend", "onlyDependOnLibsWithTags": ["scope:shared", "scope:backend"] }
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
             ]
           }
         ]
@@ -28,46 +23,20 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {
-        // eslint-plugin-rxjs:
-        "rxjs/no-async-subscribe": "error",
-        "rxjs/no-ignored-observable": "error",
-        "rxjs/no-ignored-subscription": "error",
-        "rxjs/no-nested-subscribe": "error",
-        "rxjs/no-unbound-methods": "error",
-        "rxjs/throw-error": "error",
-
-        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-        "@typescript-eslint/naming-convention": [
-          "error",
-          {
-            "selector": ["default"],
-            "format": ["strictCamelCase"],
-            "leadingUnderscore": "allow"
-          },
-          {
-            "selector": ["typeLike"],
-            "format": ["StrictPascalCase"]
-          },
-          {
-            "selector": ["enum", "enumMember"],
-            "format": ["StrictPascalCase", "UPPER_CASE"]
-          },
-          {
-            "selector": ["variable"],
-            "modifiers": ["global"],
-            "format": ["strictCamelCase", "UPPER_CASE"]
-          },
-          {
-            "selector": ["classProperty"],
-            "modifiers": ["readonly"],
-            "format": ["strictCamelCase", "UPPER_CASE"],
-            "leadingUnderscore": "allow"
-          }
-        ]
-      }
+      "extends": ["plugin:@nx/typescript"],
+      "rules": {}
     },
-    { "files": ["*.js", "*.jsx"], "extends": ["plugin:@nrwl/nx/javascript"], "rules": {} }
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
+      "env": {
+        "jest": true
+      },
+      "rules": {}
+    }
   ]
 }

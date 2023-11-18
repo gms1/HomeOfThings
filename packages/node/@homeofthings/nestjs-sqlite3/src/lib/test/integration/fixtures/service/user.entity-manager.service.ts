@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 
-import { EntityManager, InjectEntityManager } from '@homeofthings/nestjs-sqlite3';
 import { Filter, Where } from 'sqlite3orm';
 import { Contact } from '../entity/contact';
 import { User } from '../entity/user';
+import { InjectEntityManager } from '../../../../common/sqlite3.decorators';
+import { EntityManager } from '../../../../service/entity-manager';
 
 export class UserEntityManagerService {
   constructor(@InjectEntityManager() public entityManager: EntityManager) {}

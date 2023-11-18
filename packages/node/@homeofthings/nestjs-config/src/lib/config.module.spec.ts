@@ -45,7 +45,7 @@ describe('ConfigModule', () => {
       imports: [
         ConfigModule.forRootAsync(ConfigModule, {
           useFactory: () =>
-            new Promise((resolve, _reject) => {
+            new Promise((resolve) => {
               setTimeout(resolve, 500, givenOptions);
             }),
         }),

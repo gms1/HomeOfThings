@@ -320,7 +320,9 @@ describe('ConfigService instantiation', () => {
   it('config-directory should be configurable via ConfigModuleOptions', () => {
     const givenDirectory = '/foo';
     process.env.NODE_CONFIG_DIR = '/tmp';
-    const configService = new ConfigService({ configDirectory: givenDirectory });
+    const configService = new ConfigService({
+      configDirectory: givenDirectory,
+    });
     expect(configService.configDirectory).toBe(givenDirectory);
     expect(process.env.NODE_CONFIG_DIR).toBe(givenDirectory);
   });

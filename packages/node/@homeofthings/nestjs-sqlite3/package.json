@@ -27,7 +27,13 @@
     "url": "https://github.com/gms1/HomeOfThings/issues"
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
-  "scripts": {
-    "prepublishOnly": "echo \"ERROR: please call `npm run ci` before publishing\" && exit 1"
+  "dependencies": {
+    "@homeofthings/nestjs-utils": "*",
+    "@nestjs/common": "*",
+    "@nestjs/core": "*",
+    "reflect-metadata": "*",
+    "rxjs": "*",
+    "sqlite3orm": "*",
+    "tslib": "*"
   }
 }

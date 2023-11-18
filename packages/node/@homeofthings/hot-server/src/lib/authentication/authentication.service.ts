@@ -11,7 +11,8 @@ import { Request } from 'express';
 @Injectable()
 export class AuthenticationService {
   constructor(
-    @Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN) private options: AuthenticationModuleOptions,
+    @Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN)
+    private options: AuthenticationModuleOptions,
     private readonly userService: UserService,
     private readonly userSessionService: UserSessionService,
   ) {}
@@ -31,7 +32,7 @@ export class AuthenticationService {
   async getAuthenticatedUser(request: Request, email: string, plainTextPassword: string): Promise<UserSession> {
     try {
       const user = await this.userService.getByEmail(email);
-      const authenticated = await bcrypt.compare(plainTextPassword, user.passwordHash);
+      const authenticated = await bcrypt.compare(plainTextPassword, user.passwordHash as string);
       if (!authenticated) {
         await this.userService.setFailedLoginAttempt(user, request);
         throw new Error(`not authenticated`);

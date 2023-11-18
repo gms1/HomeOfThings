@@ -10,6 +10,7 @@
     "preserveConstEnums": true,
     "allowJs": true,
     "esModuleInterop": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "typeRoots": ["../node_modules/@types", "ts/typings"]
   }
 }

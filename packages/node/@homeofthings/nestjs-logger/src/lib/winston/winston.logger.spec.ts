@@ -47,7 +47,6 @@ describe('WinstonLogger with file logging and logLevels', () => {
     spyCreateLogger.mockClear();
   });
 
-
   it('should log error-message', () => {
     const givenMessage = 'test error message';
     winstonLogger.error(givenMessage);
@@ -122,7 +121,6 @@ describe('WinstonLogger with file logging and logLevels', () => {
   beforeEach(() => {
     spyCreateLogger.mockClear();
   });
-
 
   it('should log error-message', () => {
     const givenMessage = 'test error message';

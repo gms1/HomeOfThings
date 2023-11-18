@@ -1,5 +1,5 @@
 name: Build Workflow
-"on":
+'on':
   push:
     branches:
       - master
@@ -8,48 +8,79 @@ name: Build Workflow
       - master
 jobs:
   Build:
-    runs-on: "${{ matrix.os }}"
+    runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
         os:
-          - ubuntu-20.04
+          - ubuntu-22.04
         node-version:
-          - 16.x
+          - 20.x
+          - 18.x
     steps:
-      - name: "Set up Node.js ${{ matrix.node-version }}"
+      - name: 'Set up Node.js ${{ matrix.node-version }}'
         uses: actions/setup-node@v1
         with:
-          node-version: "${{ matrix.node-version }}"
+          node-version: '${{ matrix.node-version }}'
       - uses: actions/checkout@v2
-      - name: "Install dependencies"
-        run: "npm ci"
-      - name: "Run"
-        run: "npm run ci"
+
+      - name: 'Install dependencies'
+        run: 'npm ci'
+
+      - name: 'Run'
+        run: 'npm run ci'
+
+      - name: Upload jsonpointerx coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./coverage/packages/js/jsonpointerx
+          flags: 'jsonpointerx'
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Upload asyncctx coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./coverage/packages/node/asyncctx
+          flags: 'asyncctx'
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Upload sqlite3orm coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./coverage/packages/node/sqlite3orm
+          flags: 'sqlite3orms'
+          fail_ci_if_error: true
+          verbose: true
+
       - name: Upload nestjs-utils coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          directory: ./coverage/projects/node/libs/nestjs-utils
-          flags: "nestjs-utils"
+          directory: ./coverage/packages/node/@homeofthings/nestjs-utils
+          flags: 'nestjs-utils'
           fail_ci_if_error: true
           verbose: true
+
       - name: Upload nestjs-config coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          directory: ./coverage/projects/node/libs/nestjs-config
-          flags: "nestjs-config"
+          directory: ./coverage/packages/node/@homeofthings/nestjs-config
+          flags: 'nestjs-config'
           fail_ci_if_error: true
           verbose: true
+
       - name: Upload nestjs-logger coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          directory: ./coverage/projects/node/libs/nestjs-logger
-          flags: "nestjs-logger"
+          directory: ./coverage/packages/node/@homeofthings/nestjs-logger
+          flags: 'nestjs-logger'
           fail_ci_if_error: true
           verbose: true
+
       - name: Upload nestjs-sqlite3 coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          directory: ./coverage/projects/node/libs/nestjs-sqlite3
-          flags: "nestjs-sqlite3"
+          directory: ./coverage/packages/node/@homeofthings/nestjs-sqlite3
+          flags: 'nestjs-sqlite3'
           fail_ci_if_error: true
           verbose: true

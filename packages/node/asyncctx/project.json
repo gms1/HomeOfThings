@@ -1,0 +1,38 @@
+{
+  "name": "asyncctx",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/node/asyncctx/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/node/asyncctx",
+        "tsConfig": "packages/node/asyncctx/tsconfig.lib.json",
+        "packageJson": "packages/node/asyncctx/package.json",
+        "main": "packages/node/asyncctx/src/index.ts",
+        "assets": ["packages/node/asyncctx/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs asyncctx {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/node/asyncctx/**/*.ts", "packages/node/asyncctx/package.json"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/node/asyncctx/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

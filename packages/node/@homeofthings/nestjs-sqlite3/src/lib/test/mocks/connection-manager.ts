@@ -20,7 +20,7 @@ const ConnectionManager: any = connectionManager.mockImplementation(() => {
 // ConnectionManager static methods:
 ConnectionManager.registerTable = registerTable;
 
-jest.mock('../service/connection-manager', () => {
+jest.mock('../../service/connection-manager', () => {
   return {
     ConnectionManager,
   };

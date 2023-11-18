@@ -1,30 +1,22 @@
 /* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 
 import * as mockedLogger from '../mocks/logger';
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { SqlConnectionPool } from 'sqlite3orm';
-import {
-  ConnectionManager,
-  EntityManager,
-  getConnectionPoolInjectionToken,
-  getCustomRepositoryInjectionToken,
-  getEntityManagerInjectionToken,
-  getRepositoryInjectionToken,
-  InjectConnectionPool,
-  InjectCustomRepository,
-  InjectRepository,
-  Repository,
-  Sqlite3ConnectionOptions,
-  Sqlite3Module,
-} from '@homeofthings/nestjs-sqlite3';
 import { User } from './fixtures/entity/user';
 import { Contact } from './fixtures/entity/contact';
 import { UserRepository } from './fixtures/repository/user.repository';
 import { ContactRepositoryService } from './fixtures/service/contact.repository.service';
 import { UserRepositoryService } from './fixtures/service/user.repository.service';
+import { InjectConnectionPool, InjectCustomRepository, InjectRepository } from '../../common/sqlite3.decorators';
+import { Repository } from '../../service/repository';
+import { Sqlite3ConnectionOptions } from '../../model';
+import { ConnectionManager } from '../../service/connection-manager';
+import { Sqlite3Module } from '../../sqlite3.module';
+import { getConnectionPoolInjectionToken, getCustomRepositoryInjectionToken, getEntityManagerInjectionToken, getRepositoryInjectionToken } from '../../common/sqlite3.utils';
+import { EntityManager } from '../../service/entity-manager';
 
 class ExtendedContactRepositoryService extends ContactRepositoryService {
   constructor(@InjectConnectionPool() public sqlConnectionPool: SqlConnectionPool, @InjectRepository(Contact) repository: Repository<Contact>) {
@@ -92,7 +84,7 @@ describe('Sqlite3Module-Integration', () => {
       imports: [
         Sqlite3Module.registerAsync({
           useFactory: () =>
-            new Promise((resolve, _reject) => {
+            new Promise((resolve) => {
               setTimeout(resolve, 500, givenConnectionOptions);
             }),
         }),

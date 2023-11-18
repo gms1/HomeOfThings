@@ -1,0 +1,29 @@
+{
+  "name": "asyncctx",
+  "version": "2.0.19",
+  "description": "an asynchronous execution context for TypeScript/JavaScript",
+  "tags": [
+    "typescript",
+    "asynchronous context",
+    "execution context",
+    "CLS",
+    "continuation local storage",
+    "async_hooks"
+  ],
+  "author": {
+    "email": "www.gms@gmx.at",
+    "name": "Guenter Sandner"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gms1/HomeOfThings.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gms1/HomeOfThings/issues"
+  },
+  "homepage": "https://github.com/gms1/HomeOfThings",
+  "dependencies": {
+    "tslib": "*"
+  }
+}

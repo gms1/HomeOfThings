@@ -11,16 +11,19 @@ const SESSION_CACHE_SIZE = 20;
 export class UserSessionService {
   private cache: LruCache<UserSession> = new LruCache(SESSION_CACHE_SIZE);
 
-  constructor(@InjectConnectionPool(HOT_SESSION_DB) private sqlConnectionPool: SqlConnectionPool) {}
+  constructor(
+    @InjectConnectionPool(HOT_SESSION_DB)
+    private sqlConnectionPool: SqlConnectionPool,
+  ) {}
 
   async createSession(user: User, request: Request): Promise<UserSession> {
-    let conn: SqlDatabase;
+    let conn: SqlDatabase | undefined = undefined;
     try {
       const session = new UserSession();
       session.userId = user.id;
       session.userEmail = user.email;
       session.userShortName = user.shortName;
-      session.clientIp = request.ip;
+      session.clientIp = request.ip as string;
       conn = await this.sqlConnectionPool.get();
       const dao = new BaseDAO(UserSession, conn);
       await dao.insert(session);
@@ -40,7 +43,7 @@ export class UserSessionService {
     if (cachedSession) {
       return Promise.resolve(cachedSession);
     }
-    let conn: SqlDatabase;
+    let conn: SqlDatabase | undefined = undefined;
     try {
       conn = await this.sqlConnectionPool.get();
       const dao = new BaseDAO(UserSession, conn);

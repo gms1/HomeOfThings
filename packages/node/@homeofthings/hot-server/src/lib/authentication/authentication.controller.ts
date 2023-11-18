@@ -9,6 +9,7 @@ import { RegisterDto } from './dto/register.dto';
 import { UserIsAuthenticatedGuard } from './user-is-authenticated.guard';
 import { UserLoginGuard } from './user-login.guard';
 
+// NOTE: Express.Request is defined by @types/passport
 interface RequestWithUser extends Express.Request {
   user: User;
 }
@@ -43,7 +44,10 @@ export class AuthenticationController {
   @UseGuards(UserIsAuthenticatedGuard)
   @Post('logout')
   async logout(@Req() request: Express.Request): Promise<void> {
-    request.logOut();
-    request.session.cookie.maxAge = 0;
+    request.logOut(() => {});
+    const cookie = (request as any).session.cookie;
+    if (cookie) {
+      cookie.maxAge = 0;
+    }
   }
 }

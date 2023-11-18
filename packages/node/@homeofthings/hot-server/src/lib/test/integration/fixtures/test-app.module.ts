@@ -5,7 +5,14 @@ import * as path from 'path';
 import { ServerModule } from '../../../server/server.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(ConfigModule, { configDirectory: path.resolve(__dirname, 'config'), environment: 'test' }), LoggerModule.forRoot(LoggerModule, {}), ServerModule],
+  imports: [
+    ConfigModule.forRoot(ConfigModule, {
+      configDirectory: path.resolve(__dirname, 'config'),
+      environment: 'test',
+    }),
+    LoggerModule.forRoot(LoggerModule, {}),
+    ServerModule,
+  ],
   controllers: [],
   providers: [],
 })

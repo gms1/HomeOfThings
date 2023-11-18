@@ -16,7 +16,14 @@ describe('ConnectionManager', () => {
 
   beforeEach(async () => {
     (ConnectionManager as any)._instance = undefined;
-    const module = await Test.createTestingModule({ providers: [{ provide: ConnectionManager, useValue: ConnectionManager.getInstance() }] })
+    const module = await Test.createTestingModule({
+      providers: [
+        {
+          provide: ConnectionManager,
+          useValue: ConnectionManager.getInstance(),
+        },
+      ],
+    })
       .setLogger(mockedLogger.logger)
       .compile();
     connectionManager = module.get(ConnectionManager);
@@ -45,7 +52,9 @@ describe('ConnectionManager', () => {
   describe('connection pool', () => {
     it('should fail to open connection having falsy file property', async () => {
       try {
-        await connectionManager.openConnectionPool(givenConnectionName, { file: '' });
+        await connectionManager.openConnectionPool(givenConnectionName, {
+          file: '',
+        });
       } catch (_e) {
         return;
       }
@@ -53,7 +62,9 @@ describe('ConnectionManager', () => {
     });
 
     it('should fail if opening connection pool failed', async () => {
-      const givenConnectionOptions: Sqlite3ConnectionOptions = { file: 'should not open' };
+      const givenConnectionOptions: Sqlite3ConnectionOptions = {
+        file: 'should not open',
+      };
       mockedSqlite3Orm.sqlConnectionPoolOpen.mockReturnValue(Promise.reject('this open should fail'));
       try {
         await connectionManager.openConnectionPool(givenConnectionName, givenConnectionOptions);
@@ -65,7 +76,9 @@ describe('ConnectionManager', () => {
     });
 
     it('should succeed opening connection pool', async () => {
-      const givenConnectionOptions: Sqlite3ConnectionOptions = { file: 'should open' };
+      const givenConnectionOptions: Sqlite3ConnectionOptions = {
+        file: 'should open',
+      };
       mockedSqlite3Orm.sqlConnectionPoolOpen.mockReturnValue(Promise.resolve('this open should succeed'));
       await connectionManager.openConnectionPool(givenConnectionName, givenConnectionOptions);
       expect(mockedSqlite3Orm.sqlConnectionPoolOpen).toHaveBeenCalledTimes(1);
@@ -73,7 +86,9 @@ describe('ConnectionManager', () => {
     });
 
     it('should fail to open connection pool twice', async () => {
-      const givenConnectionOptions: Sqlite3ConnectionOptions = { file: 'should open' };
+      const givenConnectionOptions: Sqlite3ConnectionOptions = {
+        file: 'should open',
+      };
       mockedSqlite3Orm.sqlConnectionPoolOpen.mockReturnValue(Promise.resolve('this open should succeed'));
       await connectionManager.openConnectionPool(givenConnectionName, givenConnectionOptions);
       expect(mockedSqlite3Orm.sqlConnectionPoolOpen).toHaveBeenCalledTimes(1);
@@ -121,14 +136,18 @@ describe('ConnectionManager', () => {
     });
 
     it('should close connection context (commit=true)', async () => {
-      mockedNestUtils.asyncContextGet.mockReturnValue({ test: new SqlDatabase() });
+      mockedNestUtils.asyncContextGet.mockReturnValue({
+        test: new SqlDatabase(),
+      });
       mockedSqlite3Orm.sqlDatabaseClose.mockReturnValue(Promise.resolve());
       await connectionManager.closeConnectionContext(true);
       expect(mockedSqlite3Orm.sqlDatabaseClose).toBeCalledTimes(1);
     });
 
     it('should close connection context (commit=false)', async () => {
-      mockedNestUtils.asyncContextGet.mockReturnValue({ test: new SqlDatabase() });
+      mockedNestUtils.asyncContextGet.mockReturnValue({
+        test: new SqlDatabase(),
+      });
       mockedSqlite3Orm.sqlDatabaseClose.mockReturnValue(Promise.resolve());
       await connectionManager.closeConnectionContext(false);
       expect(mockedSqlite3Orm.sqlDatabaseClose).toBeCalledTimes(1);
@@ -143,7 +162,9 @@ describe('ConnectionManager', () => {
     });
 
     it('`getConnection` should succeed opening connection', async () => {
-      const givenConnectionOptions: Sqlite3ConnectionOptions = { file: 'should open' };
+      const givenConnectionOptions: Sqlite3ConnectionOptions = {
+        file: 'should open',
+      };
       mockedSqlite3Orm.sqlConnectionPoolOpen.mockReturnValue(Promise.resolve('this open should succeed'));
       mockedSqlite3Orm.sqlConnectionPoolGet.mockReturnValue(Promise.resolve());
       await connectionManager.openConnectionPool(givenConnectionName, givenConnectionOptions);
@@ -159,7 +180,9 @@ describe('ConnectionManager', () => {
 
     it('`getConnection` should succeed inside of connection context if connection already open', async () => {
       const givenConnection = new SqlDatabase();
-      mockedNestUtils.asyncContextGet.mockReturnValue({ test: givenConnection });
+      mockedNestUtils.asyncContextGet.mockReturnValue({
+        test: givenConnection,
+      });
       let conn: SqlDatabase | undefined;
       try {
         conn = await connectionManager.getConnection(givenConnectionName);
@@ -171,7 +194,9 @@ describe('ConnectionManager', () => {
 
     it('`getConnection` should fail for undefined connection name', async () => {
       const givenConnection = new SqlDatabase();
-      mockedNestUtils.asyncContextGet.mockReturnValue({ test: givenConnection });
+      mockedNestUtils.asyncContextGet.mockReturnValue({
+        test: givenConnection,
+      });
       try {
         await connectionManager.getConnection('undefined connection name');
       } catch (_e) {

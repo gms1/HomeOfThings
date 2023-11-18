@@ -51,7 +51,8 @@ function getSqlite3DynamicRootModuleProperties(modulOptions: Sqlite3SyncModuleOp
 })
 export class Sqlite3CoreModule
   extends createDynamicRootModule<Sqlite3CoreModule, Sqlite3SyncModuleOptions, Sqlite3AsyncModuleOptions>(SQLITE3_MODULE_OPTIONS_TOKEN, getSqlite3DynamicRootModuleProperties)
-  implements OnApplicationShutdown {
+  implements OnApplicationShutdown
+{
   private readonly logger = new Logger('Sqlite3CoreModule');
 
   constructor(private readonly moduleRef: ModuleRef) {
@@ -59,7 +60,7 @@ export class Sqlite3CoreModule
     this.logger.debug('instantiated');
   }
 
-  async onApplicationShutdown(_signal?: string) {
+  async onApplicationShutdown() {
     this.logger.debug('shutdown');
     const connectionManager = this.moduleRef.get(ConnectionManager);
     await connectionManager.closeAllConnectionPools();

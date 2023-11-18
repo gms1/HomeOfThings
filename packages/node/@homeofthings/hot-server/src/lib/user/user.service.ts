@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './entity/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -29,7 +30,7 @@ export class UserService {
   }
 
   async create(userData: CreateUserDto) {
-    const newUser = await this.usersRepository.insert(userData);
+    const newUser = await this.usersRepository.insert(userData as User);
     await this.usersRepository.save(newUser);
     return newUser;
   }

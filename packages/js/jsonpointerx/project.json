@@ -1,0 +1,40 @@
+{
+  "name": "jsonpointerx",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/js/jsonpointerx/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/js/jsonpointerx",
+        "main": "packages/js/jsonpointerx/src/index.ts",
+        "tsConfig": "packages/js/jsonpointerx/tsconfig.lib.json",
+        "assets": [],
+        "project": "packages/js/jsonpointerx/package.json",
+        "compiler": "swc",
+        "format": ["cjs", "esm"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs jsonpointerx {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/js/jsonpointerx/**/*.ts", "packages/js/jsonpointerx/package.json"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/js/jsonpointerx/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

@@ -5,13 +5,13 @@
 /config/local.yml
 
 # compiled output
-/dist
-/tmp
+dist
+tmp
 /out-tsc
-/var
+/*.log
 
 # dependencies
-/node_modules
+node_modules
 
 # IDEs and editors
 /.idea
@@ -38,13 +38,11 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/*.db
+/file:sqlite3orm*
 
 # System Files
 .DS_Store
 Thumbs.db
 
-#---------------------------------------
-# temporary files:
-
-/file:*
-/*.db
+.nx/cache

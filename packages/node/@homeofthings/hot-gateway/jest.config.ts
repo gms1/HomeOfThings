@@ -1,17 +1,11 @@
 /* eslint-disable */
 export default {
-  displayName: 'node-apps-hot-gateway',
+  displayName: 'hot-gateway',
   preset: '../../../../jest.preset.js',
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-    },
-  },
   testEnvironment: 'node',
   transform: {
-    '^.+\\.[tj]s$': 'ts-jest',
+    '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../../coverage/projects/node/apps/hot-gateway',
-  coveragePathIgnorePatterns: ['/test/'],
+  coverageDirectory: '../../../../coverage/packages/node/@homeofthings/hot-gateway',
 };

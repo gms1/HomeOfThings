@@ -1,5 +1,21 @@
 {
   "name": "@homeofthings/gateway",
   "description": "HomeOfThings - gateway",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "dependencies": {
+    "@homeofthings/nestjs-utils": "*",
+    "@homeofthings/nestjs-config": "*",
+    "@homeofthings/nestjs-logger": "*",
+    "@homeofthings/hot-server": "*",
+    "@nestjs/common": "*",
+    "@nestjs/platform-express": "*",
+    "debug": "*",
+    "express": "*",
+    "@nestjs/core": "*",
+    "@nestjs/swagger": "*",
+    "nestjs-console": "*",
+    "commander": "*",
+    "helmet": "*",
+    "tslib": "*"
+  }
 }

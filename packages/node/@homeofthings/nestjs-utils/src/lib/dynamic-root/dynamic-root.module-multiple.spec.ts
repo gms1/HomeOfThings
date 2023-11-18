@@ -27,7 +27,7 @@ describe('multiple DynamicRootModules', () => {
         MyDynamicRootModule.registerAsync({
           name: givenName1,
           useFactory: () =>
-            new Promise((resolve, _reject) => {
+            new Promise((resolve) => {
               setTimeout(resolve, 300, { value: givenName1Value });
             }),
         }),
@@ -68,7 +68,7 @@ class MyManager {
   moduleProviderFactory(optionsName: string | undefined, moduleOptions: MyCommonOptions): Promise<string> {
     const name = optionsName || MY_DEFAULT_OPTIONS_NAME;
     MyManager.namedOptions[name] = moduleOptions;
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       setTimeout(resolve, 300, `moduleProvider[${name}]: {value: ${moduleOptions.value}}, name: ${optionsName}`);
     });
   }
@@ -76,7 +76,7 @@ class MyManager {
   featureProviderFactory(featureName: string | undefined, namedModuleProvider: string): Promise<string> {
     const name = featureName || MY_DEFAULT_OPTIONS_NAME;
     MyManager.namedModuleProviders[name] = namedModuleProvider;
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       setTimeout(resolve, 300, `featureProvider[${name}]: {${namedModuleProvider}}`);
     });
   }

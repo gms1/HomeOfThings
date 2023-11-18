@@ -29,6 +29,9 @@ program
 program.parse(process.argv);
 
 async function preparePublishing(): Promise<void> {
+  console.warn('NOT IMPLEMENTED YET');
+
+  /*
   try {
     const workspace = await readJson(workspaceJsonPath);
     if (!workspace.projects) {
@@ -45,8 +48,10 @@ async function preparePublishing(): Promise<void> {
     return Promise.reject(err);
   }
   return Promise.resolve();
+  */
 }
 
+/*
 async function prepareProject(projectName: string, filePath?: string): Promise<void> {
   try {
     const packageJson = await readJson(filePath);
@@ -83,3 +88,4 @@ async function prepareProject(projectName: string, filePath?: string): Promise<v
     return Promise.reject(err);
   }
 }
+*/

@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 
-import { InjectCustomRepository } from '@homeofthings/nestjs-sqlite3';
 import { Filter, Where } from 'sqlite3orm';
 import { Contact } from '../entity/contact';
 import { User } from '../entity/user';
 import { UserRepository } from '../repository/user.repository';
+import { InjectCustomRepository } from '../../../../common/sqlite3.decorators';
 
 export class UserRepositoryService {
   constructor(@InjectCustomRepository(UserRepository) public repository: UserRepository) {}

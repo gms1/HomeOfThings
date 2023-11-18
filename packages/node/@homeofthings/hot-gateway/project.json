@@ -1,0 +1,38 @@
+{
+  "name": "hot-gateway",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/node/@homeofthings/hot-gateway/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/node/@homeofthings/hot-gateway",
+        "tsConfig": "packages/node/@homeofthings/hot-gateway/tsconfig.lib.json",
+        "packageJson": "packages/node/@homeofthings/hot-gateway/package.json",
+        "main": "packages/node/@homeofthings/hot-gateway/src/index.ts",
+        "assets": ["packages/node/@homeofthings/hot-gateway/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs hot-gateway {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/node/@homeofthings/hot-gateway/**/*.ts", "packages/node/@homeofthings/hot-gateway/package.json"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/node/@homeofthings/hot-gateway/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

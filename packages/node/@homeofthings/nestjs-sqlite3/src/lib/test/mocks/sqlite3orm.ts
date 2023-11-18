@@ -10,7 +10,11 @@ export const sqlDatabaseClose = jest.fn();
 
 // SqlConnectionPool constructor:
 const SqlConnectionPool: any = sqlConnectionPool.mockImplementation(() => {
-  return { open: sqlConnectionPoolOpen, close: sqlConnectionPoolClose, get: sqlConnectionPoolGet };
+  return {
+    open: sqlConnectionPoolOpen,
+    close: sqlConnectionPoolClose,
+    get: sqlConnectionPoolGet,
+  };
 });
 
 // SqlDatabase constructor:

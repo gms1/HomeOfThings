@@ -12,7 +12,9 @@ describe('Sqlite3Interceptor', () => {
   beforeEach(async () => {
     mockedConnectionManager.mockClear();
     mockedConnectionManager.closeConnectionContext.mockReturnValue(Promise.resolve());
-    appModule = await Test.createTestingModule({ providers: [{ provide: ConnectionManager, useValue: new ConnectionManager() }, Sqlite3Interceptor] }).compile();
+    appModule = await Test.createTestingModule({
+      providers: [{ provide: ConnectionManager, useValue: new ConnectionManager() }, Sqlite3Interceptor],
+    }).compile();
     appModule.enableShutdownHooks();
   });
 
@@ -28,7 +30,9 @@ describe('Sqlite3Interceptor', () => {
 
     expect(mockedConnectionManager.createConnectionContext).toHaveBeenCalledTimes(0);
     expect(mockedConnectionManager.closeConnectionContext).toHaveBeenCalledTimes(0);
-    const observable$ = await interceptor.intercept({} as any, { handle: () => of<any>({}) });
+    const observable$ = await interceptor.intercept({} as any, {
+      handle: () => of<any>({}),
+    });
     await lastValueFrom(observable$);
     expect(mockedConnectionManager.createConnectionContext).toHaveBeenCalledTimes(1);
     expect(mockedConnectionManager.closeConnectionContext).toHaveBeenCalledTimes(1);
@@ -41,7 +45,9 @@ describe('Sqlite3Interceptor', () => {
 
     expect(mockedConnectionManager.createConnectionContext).toHaveBeenCalledTimes(0);
     expect(mockedConnectionManager.closeConnectionContext).toHaveBeenCalledTimes(0);
-    const observable$ = await interceptor.intercept({} as any, { handle: () => throwError(() => new Error('This is an error!')) });
+    const observable$ = await interceptor.intercept({} as any, {
+      handle: () => throwError(() => new Error('This is an error!')),
+    });
     try {
       await lastValueFrom(observable$);
     } catch (_e) {

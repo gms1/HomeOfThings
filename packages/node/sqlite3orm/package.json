@@ -1,0 +1,37 @@
+{
+  "name": "sqlite3orm",
+  "version": "2.6.4",
+  "description": "ORM for sqlite3 and TypeScript/JavaScript",
+  "tags": [
+    "javascript",
+    "typescript",
+    "sqlite",
+    "sqlite3",
+    "sqlcipher",
+    "ORM",
+    "DAO",
+    "schema",
+    "database",
+    "node",
+    "electron"
+  ],
+  "author": {
+    "email": "www.gms@gmx.at",
+    "name": "Guenter Sandner"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gms1/HomeOfThings.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gms1/HomeOfThings/issues"
+  },
+  "homepage": "https://github.com/gms1/HomeOfThings",
+  "dependencies": {
+    "debug": "*",
+    "reflect-metadata": "*",
+    "sqlite3": "*",
+    "tslib": "*"
+  }
+}

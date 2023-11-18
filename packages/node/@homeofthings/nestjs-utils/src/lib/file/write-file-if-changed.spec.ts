@@ -3,8 +3,8 @@
 const mockReadFileResult: [err: Error | null, data: string] = [null, null];
 const mockWriteFileResult: [err: Error | null] = [null];
 
-const mockedReadFile = jest.fn().mockImplementation((path: string, options: any, cb: (err: Error| null, data: string) => void) => cb(...mockReadFileResult));
-const mockedWiteFile = jest.fn().mockImplementation((path: string, data: string, options: any, cb: (err: Error| null) => void) => cb(...mockWriteFileResult));
+const mockedReadFile = jest.fn().mockImplementation((path: string, options: any, cb: (err: Error | null, data: string) => void) => cb(...mockReadFileResult));
+const mockedWiteFile = jest.fn().mockImplementation((path: string, data: string, options: any, cb: (err: Error | null) => void) => cb(...mockWriteFileResult));
 const mockedSync = jest.fn();
 
 jest.mock('fs', () => ({
@@ -37,7 +37,7 @@ describe('writeFileIfChanged', () => {
     expect(mockedReadFile).toHaveBeenCalledTimes(1);
     expect(mockedSync).toHaveBeenCalledTimes(1);
     expect(mockedWiteFile).toHaveBeenCalledTimes(1);
-  })
+  });
 
   it('should write content if not exist', async () => {
     const givenPath = '/test/file';
@@ -48,7 +48,7 @@ describe('writeFileIfChanged', () => {
     expect(mockedReadFile).toHaveBeenCalledTimes(1);
     expect(mockedSync).toHaveBeenCalledTimes(1);
     expect(mockedWiteFile).toHaveBeenCalledTimes(1);
-  })
+  });
 
   it('should fail if writing file failed', async () => {
     const givenPath = '/test/file';
@@ -59,14 +59,13 @@ describe('writeFileIfChanged', () => {
     mockWriteFileResult[0] = new Error('failed to write');
     try {
       await writeFileIfChanged(givenPath, givenNewContent);
-      fail("should have thrown")
-    } catch(err) {
+      fail('should have thrown');
+    } catch (err) {
       expect(mockedReadFile).toHaveBeenCalledTimes(1);
       expect(mockedSync).toHaveBeenCalledTimes(1);
       expect(mockedWiteFile).toHaveBeenCalledTimes(1);
     }
-
-  })
+  });
 
   it('should not write content if not changed', async () => {
     const givenPath = '/test/file';
@@ -77,8 +76,5 @@ describe('writeFileIfChanged', () => {
     expect(mockedReadFile).toHaveBeenCalledTimes(1);
     expect(mockedSync).toHaveBeenCalledTimes(0);
     expect(mockedWiteFile).toHaveBeenCalledTimes(0);
-  })
-
-
-
+  });
 });

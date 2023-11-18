@@ -2,7 +2,23 @@
   "name": "@homeofthings/hot-server",
   "description": "HomeOfThings - hot-server",
   "version": "0.0.0",
-  "scripts": {
-    "prepublishOnly": "echo \"ERROR: please call `npm run ci` before publishing\" && exit 1"
+  "dependencies": {
+    "@nestjs/common": "*",
+    "@homeofthings/nestjs-utils": "*",
+    "@nestjs/passport": "*",
+    "@nestjs/swagger": "*",
+    "bcrypt": "*",
+    "class-transformer": "*",
+    "class-validator": "*",
+    "express": "*",
+    "express-session": "*",
+    "@nestjs/core": "*",
+    "@homeofthings/nestjs-config": "*",
+    "@homeofthings/nestjs-logger": "*",
+    "@homeofthings/nestjs-sqlite3": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "sqlite3orm": "*",
+    "tslib": "*"
   }
 }

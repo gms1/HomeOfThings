@@ -1,5 +1,7 @@
 # TODOs
 
+- implement tests for @homeofthings/node-shell
+- refactor writeFileIfChanged in nestjs-utils
 - test authentication using supertest
 - TODOs marked in authentication folder ( and README.md )
 - UI:

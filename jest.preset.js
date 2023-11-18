@@ -1,3 +1,7 @@
-const nxPreset = require('@nrwl/jest/preset').default;
+const nxPreset = require('@nx/jest/preset').default;
+
+nxPreset.coverageReporters = ['lcov', 'json', 'text-summary'];
+nxPreset.collectCoverage = true;
+nxPreset.passWithNoTests = true;
 
 module.exports = { ...nxPreset };

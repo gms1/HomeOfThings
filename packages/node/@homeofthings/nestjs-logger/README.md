@@ -4,7 +4,7 @@
 [![DeepScan grade](https://deepscan.io/api/teams/439/projects/987/branches/1954/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=439&pid=987&bid=1954)
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![License](https://img.shields.io/npm/l/@homeofthings/nestjs-logger.svg?style=flat-square)](https://github.com/gms1/HomeOfThings/blob/master/LICENSE)
+[![License](https://img.shields.io/npm/l/@homeofthings/nestjs-logger.svg?style=flat-square)](https://github.com/gms1/HomeOfThings/blob/master/packages/node/@homeofthings/nestjs-logger/LICENSE)
 
 # HomeOfThings - Logger for NestJs
 

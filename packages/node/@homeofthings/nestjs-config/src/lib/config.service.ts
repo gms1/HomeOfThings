@@ -1,5 +1,5 @@
 import _debug from 'debug';
-import * as process from 'process';
+import * as process from 'node:process';
 import * as path from 'path';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigModuleOptions, CONFIG_MODULE_OPTIONS_TOKEN } from './model';
@@ -16,8 +16,8 @@ let config: configType.IConfig;
 export class ConfigService {
   private static _instance: ConfigService;
 
-  readonly configDirectory: string;
-  readonly environment: string;
+  readonly configDirectory!: string;
+  readonly environment!: string;
 
   get opts(): ConfigModuleOptions {
     return this._opts;
@@ -34,10 +34,10 @@ export class ConfigService {
     if (this._opts.environment) {
       process.env.NODE_CONFIG_ENV = this._opts.environment;
     }
-    this.configDirectory = process.env.NODE_CONFIG_DIR ?? path.resolve(process.cwd(), 'config');
     this.environment = process.env.NODE_CONFIG_ENV ?? '';
-    debug(`config-directory: '${this.configDirectory}'`);
+    this.configDirectory = process.env.NODE_CONFIG_DIR ?? path.resolve(process.cwd(), 'config');
     debug(`environment: '${this.environment}'`);
+    debug(`config-directory: '${this.configDirectory}'`);
     config = require('config');
   }
 
@@ -148,5 +148,3 @@ export class ConfigService {
     return this._instance;
   }
 }
-
-

@@ -1,0 +1,28 @@
+{
+  "name": "jsonpointerx",
+  "version": "1.1.6",
+  "description": "fast jsonpointer (rfc6901) implementation",
+  "tags": [
+    "javascript",
+    "typescript",
+    "json pointer",
+    "rfc6901"
+  ],
+  "author": {
+    "email": "www.gms@gmx.at",
+    "name": "Guenter Sandner"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gms1/HomeOfThings.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gms1/HomeOfThings/issues"
+  },
+  "homepage": "https://github.com/gms1/HomeOfThings",
+  "dependencies": {},
+  "type": "commonjs",
+  "main": "./index.cjs",
+  "module": "./index.js"
+}

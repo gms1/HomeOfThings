@@ -29,34 +29,45 @@ describe('LoggerService', () => {
   it('should log log-message without message context', () => {
     const givenMessage = 'test log message';
     loggerService.log(givenMessage);
-    expect(loggerService.logger.info).toHaveBeenCalledWith(givenMessage, { context: givenServiceContext });
+    expect(loggerService.logger.info).toHaveBeenCalledWith(givenMessage, {
+      context: givenServiceContext,
+    });
   });
 
   it('should log log-message with message context', () => {
     const givenMessage = 'test log message';
     const givenMessageContext = 'test message context';
     loggerService.log(givenMessage, givenMessageContext);
-    expect(loggerService.logger.info).toHaveBeenCalledWith(givenMessage, { context: givenMessageContext });
+    expect(loggerService.logger.info).toHaveBeenCalledWith(givenMessage, {
+      context: givenMessageContext,
+    });
   });
 
   it('should log error-message without trace and without message context', () => {
     const givenMessage = 'test error message';
     loggerService.error(givenMessage);
-    expect(loggerService.logger.error).toHaveBeenCalledWith(givenMessage, { context: givenServiceContext });
+    expect(loggerService.logger.error).toHaveBeenCalledWith(givenMessage, {
+      context: givenServiceContext,
+    });
   });
 
   it('should log error-message without trace and with message context', () => {
     const givenMessage = 'test error message';
     const givenMessageContext = 'test message context';
     loggerService.error(givenMessage, undefined, givenMessageContext);
-    expect(loggerService.logger.error).toHaveBeenCalledWith(givenMessage, { context: givenMessageContext });
+    expect(loggerService.logger.error).toHaveBeenCalledWith(givenMessage, {
+      context: givenMessageContext,
+    });
   });
 
   it('should log error-message with trace and without message context', () => {
     const givenMessage = 'test error message';
     const givenTrace = new Error().stack;
     loggerService.error(givenMessage, givenTrace);
-    expect(loggerService.logger.error).toHaveBeenCalledWith(givenMessage, { context: givenServiceContext, stack: givenTrace });
+    expect(loggerService.logger.error).toHaveBeenCalledWith(givenMessage, {
+      context: givenServiceContext,
+      stack: givenTrace,
+    });
   });
 
   it('should log error-message with trace and with message context', () => {
@@ -64,53 +75,70 @@ describe('LoggerService', () => {
     const givenTrace = new Error().stack;
     const givenMessageContext = 'test message context';
     loggerService.error(givenMessage, givenTrace, givenMessageContext);
-    expect(loggerService.logger.error).toHaveBeenCalledWith(givenMessage, { context: givenMessageContext, stack: givenTrace });
+    expect(loggerService.logger.error).toHaveBeenCalledWith(givenMessage, {
+      context: givenMessageContext,
+      stack: givenTrace,
+    });
   });
 
   it('should log warn-message without message context', () => {
     const givenMessage = 'test warn message';
     loggerService.warn(givenMessage);
-    expect(loggerService.logger.warn).toHaveBeenCalledWith(givenMessage, { context: givenServiceContext });
+    expect(loggerService.logger.warn).toHaveBeenCalledWith(givenMessage, {
+      context: givenServiceContext,
+    });
   });
 
   it('should log warn-message with message context', () => {
     const givenMessage = 'test warn message';
     const givenMessageContext = 'test message context';
     loggerService.warn(givenMessage, givenMessageContext);
-    expect(loggerService.logger.warn).toHaveBeenCalledWith(givenMessage, { context: givenMessageContext });
+    expect(loggerService.logger.warn).toHaveBeenCalledWith(givenMessage, {
+      context: givenMessageContext,
+    });
   });
 
   it('should log debug-message without message context', () => {
     const givenMessage = 'test debug message';
     loggerService.debug(givenMessage);
-    expect(loggerService.logger.debug).toHaveBeenCalledWith(givenMessage, { context: givenServiceContext });
+    expect(loggerService.logger.debug).toHaveBeenCalledWith(givenMessage, {
+      context: givenServiceContext,
+    });
   });
 
   it('should log debug-message with message context', () => {
     const givenMessage = 'test debug message';
     const givenMessageContext = 'test message context';
     loggerService.debug(givenMessage, givenMessageContext);
-    expect(loggerService.logger.debug).toHaveBeenCalledWith(givenMessage, { context: givenMessageContext });
+    expect(loggerService.logger.debug).toHaveBeenCalledWith(givenMessage, {
+      context: givenMessageContext,
+    });
   });
 
   it('should log verbose-message without message context', () => {
     const givenMessage = 'test verbose message';
     loggerService.verbose(givenMessage);
-    expect(loggerService.logger.verbose).toHaveBeenCalledWith(givenMessage, { context: givenServiceContext });
+    expect(loggerService.logger.verbose).toHaveBeenCalledWith(givenMessage, {
+      context: givenServiceContext,
+    });
   });
 
   it('should log verbose-message with message context', () => {
     const givenMessage = 'test verbose message';
     const givenMessageContext = 'test message context';
     loggerService.verbose(givenMessage, givenMessageContext);
-    expect(loggerService.logger.verbose).toHaveBeenCalledWith(givenMessage, { context: givenMessageContext });
+    expect(loggerService.logger.verbose).toHaveBeenCalledWith(givenMessage, {
+      context: givenMessageContext,
+    });
   });
 
   it('should log message without service context and without message context', () => {
     const givenMessage = 'test verbose message';
     loggerService.setContext(undefined);
     loggerService.verbose(givenMessage);
-    expect(loggerService.logger.verbose).toHaveBeenCalledWith(givenMessage, { context: undefined });
+    expect(loggerService.logger.verbose).toHaveBeenCalledWith(givenMessage, {
+      context: undefined,
+    });
   });
 
   it('should set console logLevel', () => {

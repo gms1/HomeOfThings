@@ -81,7 +81,7 @@ describe('single DynamicRootModule', () => {
           givenDynamicRootModule.forRootAsync(givenDynamicRootModule, {
             // NOTE: using factory without inject
             useFactory: () =>
-              new Promise((resolve, _reject) => {
+              new Promise((resolve) => {
                 setTimeout(resolve, 3000, givenOptions);
               }),
           }),
@@ -115,7 +115,7 @@ describe('single DynamicRootModule', () => {
       @Injectable()
       class MyModuleOptionsProvider {
         getModuleOptions(): Promise<MyModuleOptions> {
-          return new Promise((resolve, _reject) => {
+          return new Promise((resolve) => {
             setTimeout(resolve, 3000, givenOptions);
           });
         }
@@ -162,7 +162,7 @@ describe('single DynamicRootModule', () => {
       @Injectable()
       class MyModuleOptionsProvider {
         getModuleOptions(): Promise<MyModuleOptions> {
-          return new Promise((resolve, _reject) => {
+          return new Promise((resolve) => {
             setTimeout(resolve, 3000, givenOptions);
           });
         }
@@ -211,7 +211,9 @@ describe('single DynamicRootModule', () => {
       }
 
       const givenChildModule = ChildModule;
-      const givenOptions: MyModuleOptions = { value: 'global-unecessary-forChild' };
+      const givenOptions: MyModuleOptions = {
+        value: 'global-unecessary-forChild',
+      };
       appModule = await Test.createTestingModule({
         imports: [givenDynamicRootModule.forRoot(givenDynamicRootModule, givenOptions), givenChildModule],
       }).compile();
@@ -235,8 +237,12 @@ describe('single DynamicRootModule', () => {
       }
 
       const givenChildModule = ChildModule;
-      const givenOptions1: MyModuleOptions = { value: 'global-duplicate-forRoot-options1' };
-      const givenOptions2: MyModuleOptions = { value: 'global-duplicate-forRoot-options2' };
+      const givenOptions1: MyModuleOptions = {
+        value: 'global-duplicate-forRoot-options1',
+      };
+      const givenOptions2: MyModuleOptions = {
+        value: 'global-duplicate-forRoot-options2',
+      };
 
       try {
         appModule = await Test.createTestingModule({
@@ -262,21 +268,25 @@ describe('single DynamicRootModule', () => {
       }
 
       const givenChildModule = ChildModule;
-      const givenOptions1: MyModuleOptions = { value: 'global-duplicate-forRoot-options1' };
-      const givenOptions2: MyModuleOptions = { value: 'global-duplicate-forRoot-options2' };
+      const givenOptions1: MyModuleOptions = {
+        value: 'global-duplicate-forRoot-options1',
+      };
+      const givenOptions2: MyModuleOptions = {
+        value: 'global-duplicate-forRoot-options2',
+      };
 
       try {
         appModule = await Test.createTestingModule({
           imports: [
             givenDynamicRootModule.forRootAsync(givenDynamicRootModule, {
               useFactory: () =>
-                new Promise((resolve, _reject) => {
+                new Promise((resolve) => {
                   setTimeout(resolve, 3000, givenOptions1);
                 }),
             }),
             givenDynamicRootModule.forRootAsync(givenDynamicRootModule, {
               useFactory: () =>
-                new Promise((resolve, _reject) => {
+                new Promise((resolve) => {
                   setTimeout(resolve, 3000, givenOptions2);
                 }),
             }),

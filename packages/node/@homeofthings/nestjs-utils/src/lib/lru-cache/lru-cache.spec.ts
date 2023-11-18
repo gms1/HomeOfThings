@@ -5,7 +5,7 @@ class TestLruCache<T> extends LruCache<T> {
     super.onInsert(_item);
   }
   override onDelete(_item: T) {
-    super.onDelete(_item)
+    super.onDelete(_item);
   }
 }
 
@@ -37,7 +37,6 @@ describe('LruCache', () => {
   });
 
   it('should delete a given key', () => {
-
     const onDeleteSpy = jest.spyOn(lruCache, 'onDelete');
     lruCache.delete('2');
     expect(onDeleteSpy).toBeCalledTimes(1);

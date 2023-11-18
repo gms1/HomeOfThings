@@ -25,7 +25,10 @@ export class AuthenticationModule
 {
   private readonly logger = new Logger(AuthenticationModule.name);
 
-  constructor(@Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN) private readonly options: AuthenticationModuleOptions) {
+  constructor(
+    @Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN)
+    private readonly options: AuthenticationModuleOptions,
+  ) {
     super();
   }
 

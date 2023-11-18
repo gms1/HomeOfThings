@@ -1,0 +1,38 @@
+{
+  "name": "sqlite3orm",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/node/sqlite3orm/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/node/sqlite3orm",
+        "tsConfig": "packages/node/sqlite3orm/tsconfig.lib.json",
+        "packageJson": "packages/node/sqlite3orm/package.json",
+        "main": "packages/node/sqlite3orm/src/index.ts",
+        "assets": ["packages/node/sqlite3orm/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs sqlite3orm {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/node/sqlite3orm/**/*.ts", "packages/node/sqlite3orm/package.json"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/node/sqlite3orm/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

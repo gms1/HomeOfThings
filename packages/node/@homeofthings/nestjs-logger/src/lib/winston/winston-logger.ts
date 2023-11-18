@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import _debug from 'debug';
-import mkdirp from 'mkdirp';
+import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 import * as winston from 'winston';
 import { LoggerOptions } from '../model';
@@ -99,7 +99,7 @@ export class WinstonLogger {
     });
 
     if (options.fileLogFileName) {
-      mkdirp(path.dirname(options.fileLogFileName));
+      mkdirp.sync(path.dirname(options.fileLogFileName));
       this._fileTransport = new winston.transports.File({
         silent: options.fileLogSilent,
         level: options.fileLogLevel ?? DEFAULT_FILE_LOGLEVEL,

@@ -21,7 +21,7 @@ please see https://supertokens.io/blog/express-session-vs-supertokens-for-handli
   - using HttpOnly cookies, to disallow JavaScript to read them, to prevent token theft via Cross-site scripting (XSS)
   - using HTTPS, to prevent Man in the middle as long as no untrusted HTTPS proxy is in use
   - implemented token theft detection: verifying that the IP of the follow-up request matches the IP of the the initial connection
-  
+
 > TODO: implement theft detection based on IP
 
 - Data theft from database: express-session stores all session IDs in plain text. If an attacker get hold of the database and the cookie signing key, it could hijack the sessions of all current logged in users
@@ -36,7 +36,9 @@ TODO: we may want to cache the users to avoid reading the user information an ea
 - Reliability and Correctness
 
 > NOTE: express-session only has a `set` call to the store, while an explicit insert vs. update would solve
+
 <!-- -->
+
 > TODO: we may want to implement soft-delete for our sqlite3 store
 
 ### passport local
@@ -44,10 +46,11 @@ TODO: we may want to cache the users to avoid reading the user information an ea
 - Brute force user password
 
 > TODO: implement a kind of rate limit for password login
-please see [User/Password Authentication Rate Limits](https://auth0.com/docs/support/policies/rate-limit-policy/database-connections-rate-limits)
-<!-- -->
-> TODO: implement a kind of two-factor authentication (e.g verify new devices by email/sms )
+> please see [User/Password Authentication Rate Limits](https://auth0.com/docs/support/policies/rate-limit-policy/database-connections-rate-limits)
 
+<!-- -->
+
+> TODO: implement a kind of two-factor authentication (e.g verify new devices by email/sms )
 
 [Suspicious IP Throttling](https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling)
 

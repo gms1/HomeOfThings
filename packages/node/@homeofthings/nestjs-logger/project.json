@@ -1,0 +1,38 @@
+{
+  "name": "nestjs-logger",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/node/@homeofthings/nestjs-logger/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/node/@homeofthings/nestjs-logger",
+        "tsConfig": "packages/node/@homeofthings/nestjs-logger/tsconfig.lib.json",
+        "packageJson": "packages/node/@homeofthings/nestjs-logger/package.json",
+        "main": "packages/node/@homeofthings/nestjs-logger/src/index.ts",
+        "assets": ["packages/node/@homeofthings/nestjs-logger/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs nestjs-logger {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/node/@homeofthings/nestjs-logger/**/*.ts", "packages/node/@homeofthings/nestjs-logger/package.json"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/node/@homeofthings/nestjs-logger/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
