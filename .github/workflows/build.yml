@@ -49,7 +49,7 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/node/sqlite3orm
-          flags: 'sqlite3orms'
+          flags: 'sqlite3orm'
           fail_ci_if_error: true
           verbose: true
 
