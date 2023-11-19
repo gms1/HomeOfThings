@@ -5,7 +5,7 @@ import { JsonPointer as json_ptr_i } from 'json-ptr';
 const jsonpointer_i = require('jsonpointer');
 const json_pointer_i = require('json-pointer');
 
-const ITERATIONS = 10;
+const OPTIONS = { iterations: 20 };
 
 const jpstring = '/l1/l2/l3/l4/l5/l6/l7/l8/l9/l10';
 const content: any = { l1: { l2: { l3: { l4: { l5: { l6: { l7: { l8: { l9: { l10: '42' } } } } } } } } } };
@@ -18,7 +18,7 @@ const json_pointer = json_pointer_i;
 
 async function benchGetDefinedProperty(message: string): Promise<void> {
   console.log(message);
-  const bench = new Bench({ iterations: ITERATIONS });
+  const bench = new Bench(OPTIONS);
   bench
     .add('jsonpointerx.get', () => jsonpointerx.get(content))
     .add('json-ptr.get', () => json_ptr.get(content))
@@ -30,7 +30,7 @@ async function benchGetDefinedProperty(message: string): Promise<void> {
 
 async function benchGetPropertyFromNullAncestor(message: string): Promise<void> {
   console.log(message);
-  const bench = new Bench({ iterations: ITERATIONS });
+  const bench = new Bench(OPTIONS);
   bench
     .add('jsonpointerx.get', () => {
       try {
@@ -60,7 +60,7 @@ async function benchGetPropertyFromNullAncestor(message: string): Promise<void> 
 
 async function benchSetProperty(message: string): Promise<void> {
   console.log(message);
-  const bench = new Bench({ iterations: ITERATIONS });
+  const bench = new Bench(OPTIONS);
   bench
     .add('jsonpointerx.set', () => jsonpointerx.set(content, 123))
     .add('json-ptr.set', () => json_ptr.set(content, 123))

@@ -86,7 +86,7 @@ jobs:
           verbose: true
 
       - name: "Benchmark jsonpointerx"
-        working-directory: "./tools/benchmark/jsonpointerx"
+        working-directory: "./tools/benchmarks/jsonpointerx"
         run: |
           npm i
           npm test
