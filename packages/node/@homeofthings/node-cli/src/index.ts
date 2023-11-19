@@ -59,7 +59,8 @@ async function main() {
   } catch (err) {
     if ((err as Error)?.message) {
       logWarn((err as Error)?.message);
+      return;
     }
-    logError('failed');
+    logError('failed:', err);
   }
 })();

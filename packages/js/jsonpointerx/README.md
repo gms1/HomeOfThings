@@ -64,38 +64,38 @@ JsonPointer.get(content, '/foo/0');             // returns 'bar' (content.foo[0]
 ## Benchmark
 
 ```shell
+gms@sirius:~/workspace/tools/benchmark/jsonpointerx$ npm test
 
-gms@orion:~/work/HOT/jsonpointerx/bench$ npm run test
+> jsonpointer-bench@1.0.0 test
+> ts-node ./src/jp-bench.ts
 
-============================================================
-json pointer: get defined property - suite:
-------------------------------------------------------------
-  4 tests completed.
-
-  json_pointer.get x     538,688 ops/sec ±0.19% (100 runs sampled)
-  jsonpointer.get  x   5,282,555 ops/sec ±0.43% (94 runs sampled)
-  json-ptr.get     x 893,703,300 ops/sec ±0.74% (88 runs sampled)
-  jsonpointerx.get x 964,196,465 ops/sec ±1.93% (87 runs sampled)
-
-============================================================
-json pointer: get property from 'null' ancestor - suite:
-------------------------------------------------------------
-  4 tests completed.
-
-  json_pointer.get x     125,478 ops/sec ±0.83% (96 runs sampled)
-  jsonpointer.get  x      81,552 ops/sec ±0.17% (97 runs sampled)
-  json-ptr.get     x 879,120,006 ops/sec ±0.26% (88 runs sampled)
-  jsonpointerx.get x 882,737,697 ops/sec ±0.96% (93 runs sampled)
-
-============================================================
-json pointer: set property - suite:
-------------------------------------------------------------
-  4 tests completed.
-
-  json_pointer.set x    492,791 ops/sec ±1.98% (95 runs sampled)
-  jsonpointer.set  x  4,088,610 ops/sec ±0.41% (94 runs sampled)
-  json-ptr.set     x  6,012,530 ops/sec ±0.28% (94 runs sampled)
-  jsonpointerx.set x 14,032,516 ops/sec ±0.65% (99 runs sampled)
+get defined property:
+┌─────────┬────────────────────┬──────────────┬────────────────────┬──────────┬──────────┐
+│ (index) │     Task Name      │   ops/sec    │ Average Time (ns)  │  Margin  │ Samples  │
+├─────────┼────────────────────┼──────────────┼────────────────────┼──────────┼──────────┤
+│    0    │ 'jsonpointerx.get' │ '24,027,866' │ 41.618342903253826 │ '±0.87%' │ 12013934 │
+│    1    │   'json-ptr.get'   │ '22,944,210' │ 43.583980384803716 │ '±1.17%' │ 11472109 │
+│    2    │ 'jsonpointer.get'  │ '4,184,033'  │ 239.0037980472164  │ '±0.08%' │ 2092017  │
+│    3    │ 'json_pointer.get' │  '533,487'   │ 1874.456494550886  │ '±0.64%' │  266744  │
+└─────────┴────────────────────┴──────────────┴────────────────────┴──────────┴──────────┘
+get property from null ancestor:
+┌─────────┬────────────────────┬──────────────┬────────────────────┬──────────┬──────────┐
+│ (index) │     Task Name      │   ops/sec    │ Average Time (ns)  │  Margin  │ Samples  │
+├─────────┼────────────────────┼──────────────┼────────────────────┼──────────┼──────────┤
+│    0    │ 'jsonpointerx.get' │ '23,160,191' │ 43.177535195859214 │ '±1.04%' │ 11580096 │
+│    1    │   'json-ptr.get'   │ '25,255,682' │ 39.59504991479924  │ '±0.06%' │ 12627842 │
+│    2    │ 'jsonpointer.get'  │ '4,401,982'  │ 227.1703761632352  │ '±0.47%' │ 2200992  │
+│    3    │ 'json_pointer.get' │  '186,445'   │ 5363.498878111937  │ '±0.47%' │  93223   │
+└─────────┴────────────────────┴──────────────┴────────────────────┴──────────┴──────────┘
+set property:
+┌─────────┬────────────────────┬─────────────┬────────────────────┬──────────┬─────────┐
+│ (index) │     Task Name      │   ops/sec   │ Average Time (ns)  │  Margin  │ Samples │
+├─────────┼────────────────────┼─────────────┼────────────────────┼──────────┼─────────┤
+│    0    │ 'jsonpointerx.set' │ '9,247,707' │ 108.13490535394183 │ '±1.25%' │ 4623906 │
+│    1    │   'json-ptr.set'   │ '4,804,467' │ 208.1396285237822  │ '±0.70%' │ 2402234 │
+│    2    │ 'jsonpointer.set'  │ '3,387,908' │  295.167381741252  │ '±0.78%' │ 1693955 │
+│    3    │ 'json_pointer.set' │  '395,497'  │ 2528.4619850516683 │ '±2.88%' │ 197749  │
+└─────────┴────────────────────┴─────────────┴────────────────────┴──────────┴─────────┘
 
 ```
 
