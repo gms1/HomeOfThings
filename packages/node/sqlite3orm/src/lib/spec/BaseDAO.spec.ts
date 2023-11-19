@@ -568,10 +568,6 @@ describe(`BaseDAO`, () => {
       } catch (err) {
         failTest(err);
       }
-      try {
-      } catch (err) {
-        failTest(err);
-      }
     });
 
     // ---------------------------------------------

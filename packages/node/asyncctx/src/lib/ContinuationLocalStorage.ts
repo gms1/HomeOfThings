@@ -167,14 +167,14 @@ export class ContinuationLocalStorage<T> {
    *
    * @returns {(T|undefined)}
    */
-  public getRootContext(): T | undefined {
+  public getRootContext(): T {
     const hi = this.idHookMap.get(ROOT_ID);
     /* istanbul ignore if  */
     if (!hi) {
       // NOTES: this should not happen
       throw new Error('internal error: root node not found (1)!');
     }
-    return hi ? hi.data : undefined;
+    return hi.data;
   }
 
   /**

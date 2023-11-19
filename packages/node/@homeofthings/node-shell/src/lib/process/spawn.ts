@@ -150,7 +150,9 @@ export function onChildProcessExit(options: SpawnOptions): Promise<SpawnContext>
     };
     childProcess.once('exit', exitListener);
     childProcess.once('error', errorListener);
-    writeInputToChildProcess(options).catch();
+    writeInputToChildProcess(options).catch(() => {
+      /*ignore*/
+    });
   });
 }
 

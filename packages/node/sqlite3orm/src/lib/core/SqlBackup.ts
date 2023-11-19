@@ -77,6 +77,7 @@ export class SqlBackup {
         if (err) {
           debug(`step '${pages}' failed: ${err.message}`);
           reject(err);
+          return;
         }
         debug(`step '${pages}' succeeded`);
         resolve();

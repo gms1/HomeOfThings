@@ -1,6 +1,5 @@
 # TODOs
 
-- fix deepscan issues
 - implement tests for @homeofthings/node-shell
 - refactor writeFileIfChanged in nestjs-utils
 - test authentication using supertest
