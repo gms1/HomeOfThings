@@ -1,6 +1,6 @@
 {
   "name": "sqlite3orm",
-  "version": "2.6.4",
+  "version": "2.7.0",
   "description": "ORM for sqlite3 and TypeScript/JavaScript",
   "tags": [
     "javascript",

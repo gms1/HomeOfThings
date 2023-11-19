@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rimraf dist tmp *.log",
     "preclean": "npm run clean:test && npm run clean:coverage",
-    "clean:cache": "rimraf .nx",
+    "clean:cache": "rimraf .nx .angular",
     "clean:test": "rimraf test*.db file:sqlite3orm*",
     "clean:coverage": "rimraf coverage",
     "clean:all": "npm run clean && npm run clean:cache",

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.0
+
+- feature: moved to new repository
+
 ## 1.1.2 - 1.1.6
 
 - maintenance release
