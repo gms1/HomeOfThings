@@ -60,9 +60,9 @@ async function publish(graph: ProjectGraph): Promise<void> {
     }
     if (!isPublishable(project)) {
       if (isGenerated(project)) {
-        log(`${project.sourcePackageJson.name}@${project.sourcePackageJson.version}: skipping already published version`);
+        log(`'${project.sourcePackageJson.name}@${project.sourcePackageJson.version}': skipping already published version`);
       } else {
-        log(`${project.sourcePackageJson.name}@${project.sourcePackageJson.version}: is not publishable`);
+        log(`'${project.sourcePackageJson.name}': is not publishable`);
       }
       continue;
     }
@@ -70,7 +70,7 @@ async function publish(graph: ProjectGraph): Promise<void> {
   }
 
   for (const project of projects) {
-    log(`publishing: '${project.sourcePackageJson.name}@${project.sourcePackageJson.version}'`);
+    log(`publishing: '${project.outputPackageJson.name}@${project.outputPackageJson.version}'`);
     process.chdir(project.outputDir);
 
     try {
@@ -79,12 +79,11 @@ async function publish(graph: ProjectGraph): Promise<void> {
       const hasLicense = fs.existsSync(LICENSE_FILE);
       const hasReadme = fs.existsSync(README_FILE);
       if (!hasLicense) {
-        await copyFile(path.resolve(WORKSPACE_DIR, project.data.sourceRoot, LICENSE_FILE), LICENSE_FILE);
+        await copyFile(path.resolve(WORKSPACE_DIR, project.data.root, LICENSE_FILE), LICENSE_FILE);
       }
       if (!hasReadme) {
-        await copyFile(path.resolve(WORKSPACE_DIR, project.data.sourceRoot, README_FILE), README_FILE);
+        await copyFile(path.resolve(WORKSPACE_DIR, project.data.root, README_FILE), README_FILE);
       }
-
       const output  = await spawn('npm', 'publish', '--access public');
       console.log(output);
     } catch(err) {
@@ -154,7 +153,7 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
   if (versions.indexOf(project.outputPackageJson.version) >= 0) {
     project.published = true;
   } else {
-    warn(`'${project.outputPackageJson.version}' not found in `, versions);
+    log(`'${project.outputPackageJson.name}@${project.outputPackageJson.version}' not yet published`);
   }
   return project;
 }
