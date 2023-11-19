@@ -12,7 +12,7 @@
         "tsConfig": "packages/node/sqlite3orm/tsconfig.lib.json",
         "packageJson": "packages/node/sqlite3orm/package.json",
         "main": "packages/node/sqlite3orm/src/index.ts",
-        "assets": ["packages/node/sqlite3orm/*.md"]
+        "assets": ["packages/node/sqlite3orm/*.md", "packages/node/sqlite3orm/LICENSE"]
       }
     },
     "publish": {

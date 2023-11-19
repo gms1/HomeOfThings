@@ -12,7 +12,7 @@
         "tsConfig": "packages/node/@homeofthings/nestjs-config/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/nestjs-config/package.json",
         "main": "packages/node/@homeofthings/nestjs-config/src/index.ts",
-        "assets": ["packages/node/@homeofthings/nestjs-config/*.md"]
+        "assets": ["packages/node/@homeofthings/nestjs-config/*.md", "packages/node/@homeofthings/nestjs-config/LICENSE"]
       }
     },
     "publish": {

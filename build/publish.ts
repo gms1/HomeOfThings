@@ -1,12 +1,16 @@
 #!/usr/bin/env ts-node-script
 import * as path from 'path';
+import * as fs from 'node:fs';
 import * as process from 'process';
 import { Command } from 'commander';
 import { APPNAME, LogLevel, die, error, getWorkspaceDir, invariant, log, setApplication, warn } from './ts/utils/app';
 import { readJson, writeJson } from './ts/utils/file';
 import { readCachedProjectGraph, ProjectGraph, ProjectGraphProjectNode } from '@nx/devkit';
 import { spawn } from './ts/utils/process';
+import { copyFile } from './ts/utils/fs';
 // -----------------------------------------------------------------------------------------
+const LICENSE_FILE="LICENSE";
+const README_FILE="README.md";
 
 interface Project extends ProjectGraphProjectNode {
   sourcePackageJson: any;
@@ -26,7 +30,7 @@ function isPublishable(project?: Project): boolean {
 }
 
 setApplication(__filename);
-const initialWorkspaceDir = path.resolve(getWorkspaceDir());
+const WORKSPACE_DIR = path.resolve(getWorkspaceDir());
 
 const program = new Command();
 program
@@ -68,13 +72,25 @@ async function publish(graph: ProjectGraph): Promise<void> {
   for (const project of projects) {
     log(`publishing: '${project.sourcePackageJson.name}@${project.sourcePackageJson.version}'`);
     process.chdir(project.outputDir);
+
     try {
+      // NOTE: executor @nx/rollup:rollup (used by jsonpointerx) does not copy files outside of srcRoot
+      // so we copy them here if they do not exist
+      const hasLicense = fs.existsSync(LICENSE_FILE);
+      const hasReadme = fs.existsSync(README_FILE);
+      if (!hasLicense) {
+        await copyFile(path.resolve(WORKSPACE_DIR, project.data.sourceRoot, LICENSE_FILE), LICENSE_FILE);
+      }
+      if (!hasReadme) {
+        await copyFile(path.resolve(WORKSPACE_DIR, project.data.sourceRoot, README_FILE), README_FILE);
+      }
+
       const output  = await spawn('npm', 'publish', '--access public');
       console.log(output);
     } catch(err) {
       return Promise.reject(err);
     } finally {
-      process.chdir(initialWorkspaceDir)
+      process.chdir(WORKSPACE_DIR)
     }
   }
 }
@@ -93,7 +109,7 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
   project.outputDir = project.data?.targets?.build?.options?.outputPath;
   invariant(project.outputDir, LogLevel.FATAL, `Could not find "build.options.outputPath" of project "${project.name}". Is project.json configured  correctly?`);
 
-  const sourcePackageJsonPath = path.resolve(initialWorkspaceDir, nxProject.data.root, 'package.json');
+  const sourcePackageJsonPath = path.resolve(WORKSPACE_DIR, nxProject.data.root, 'package.json');
   try {
     project.sourcePackageJson = await readJson(sourcePackageJsonPath);
   } catch {
@@ -104,7 +120,7 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
     return project;
   }
   project.publishable = true;
-  const outputPackageJsonPath = path.resolve(initialWorkspaceDir, project.outputDir, 'package.json');
+  const outputPackageJsonPath = path.resolve(WORKSPACE_DIR, project.outputDir, 'package.json');
   try {
     project.outputPackageJson = await readJson(outputPackageJsonPath);
   } catch {

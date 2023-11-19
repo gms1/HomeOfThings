@@ -12,7 +12,7 @@
         "tsConfig": "packages/node/@homeofthings/hot-cli/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/hot-cli/package.json",
         "main": "packages/node/@homeofthings/hot-cli/src/index.ts",
-        "assets": ["packages/node/@homeofthings/hot-cli/*.md"]
+        "assets": ["packages/node/@homeofthings/hot-cli/*.md", "packages/node/@homeofthings/hot-cli/LICENSE"]
       }
     },
     "publish": {

@@ -24,6 +24,14 @@ export function writeFile(filePath: fs.PathLike, data: string | NodeJS.ArrayBuff
 }
 
 // -----------------------------------------------------------------------------------------
+export function copyFile(oldFilePath: fs.PathLike, newFilePath: fs.PathLike): Promise<void> {
+  return fs.promises.copyFile(oldFilePath, newFilePath).catch((err) => {
+    debug(`copy '${oldFilePath}' to '${newFilePath}' failed: : ${err}`);
+    return Promise.reject(err);
+  });
+}
+
+// -----------------------------------------------------------------------------------------
 export function renameFile(oldFilePath: fs.PathLike, newFilePath: fs.PathLike): Promise<void> {
   return fs.promises.rename(oldFilePath, newFilePath).catch((err) => {
     debug(`renaming '${oldFilePath}' to '${newFilePath}' failed: : ${err}`);

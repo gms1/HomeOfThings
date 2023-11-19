@@ -12,7 +12,7 @@
         "tsConfig": "packages/node/@homeofthings/nestjs-sqlite3/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/nestjs-sqlite3/package.json",
         "main": "packages/node/@homeofthings/nestjs-sqlite3/src/index.ts",
-        "assets": ["packages/node/@homeofthings/nestjs-sqlite3/*.md"]
+        "assets": ["packages/node/@homeofthings/nestjs-sqlite3/*.md", "packages/node/@homeofthings/nestjs-sqlite3/LICENSE"]
       }
     },
     "publish": {

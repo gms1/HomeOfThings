@@ -12,7 +12,7 @@
         "tsConfig": "packages/node/@homeofthings/nestjs-logger/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/nestjs-logger/package.json",
         "main": "packages/node/@homeofthings/nestjs-logger/src/index.ts",
-        "assets": ["packages/node/@homeofthings/nestjs-logger/*.md"]
+        "assets": ["packages/node/@homeofthings/nestjs-logger/*.md", "packages/node/@homeofthings/nestjs-logger/LICENSE"]
       }
     },
     "publish": {

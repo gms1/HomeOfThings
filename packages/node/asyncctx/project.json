@@ -12,7 +12,7 @@
         "tsConfig": "packages/node/asyncctx/tsconfig.lib.json",
         "packageJson": "packages/node/asyncctx/package.json",
         "main": "packages/node/asyncctx/src/index.ts",
-        "assets": ["packages/node/asyncctx/*.md"]
+        "assets": ["packages/node/asyncctx/*.md", "packages/node/asyncctx/LICENSE"]
       }
     },
     "publish": {
