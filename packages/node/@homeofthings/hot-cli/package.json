@@ -1,7 +1,7 @@
 {
   "name": "@homeofthings/hot-cli",
   "description": "HomeOfThings - hot-cli",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "dependencies": {
     "@homeofthings/nestjs-config": "*",
     "@homeofthings/nestjs-logger": "*",

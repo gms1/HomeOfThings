@@ -15,7 +15,7 @@
 
 - [node-sqlite3-orm](packages/node/sqlite3orm/README.md)
 
-  a ORM for sqlite3 offering a connection pool, automatic upgrades, online backups as well as typesafe database queries
+  an ORM for sqlite3 offering a connection pool, automatic upgrades, online backups as well as typesafe database queries
 
 - [node-async-context](packages/node/asyncctx/README.md)
 
@@ -35,4 +35,4 @@
 
 - [@homeofthings/nestjs-sqlite3](packages/node/@homeofthings/nestjs-sqlite3/README.md)
 
-  a sqlite3 module for [NestJS](https://docs.nestjs.com/) based on [sqlite3orm](https://www.npmjs.com/package/sqlite3orm)
+  a sqlite3 module for [NestJS](https://docs.nestjs.com/) based on [sqlite3orm](packages/node/sqlite3orm/README.md)

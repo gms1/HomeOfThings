@@ -6,20 +6,17 @@ import * as chalk from 'chalk';
 import { Command } from 'commander';
 import { glob } from './ts/utils/glob';
 import { unlink, writeFile } from './ts/utils/fs';
-import { die, log, setApplication } from './ts/utils/app';
+import { APPNAME, die, getWorkspaceDir, log, setApplication } from './ts/utils/app';
+// -----------------------------------------------------------------------------------------
 
 setApplication(__filename);
-const workdir = process.cwd();
-const workspaceDir = path.relative(workdir, path.resolve(__dirname, '..'));
-
-const coverageDirectory = path.join(workspaceDir, 'coverage');
+const coverageDirectory = path.join(getWorkspaceDir(), 'coverage');
 const coverageReport = path.join(coverageDirectory, 'lcov.info');
 
-// -----------------------------------------------------------------------------------------
 const program = new Command();
 program
   .version('1.0')
-  .command(`merge-coverage`, { isDefault: true })
+  .command(APPNAME, { isDefault: true })
   .description(`merge coverage reports found in '${coverageDirectory}'`)
   .action(async () => {
     try {
@@ -35,4 +32,5 @@ program
     }
     log(`succeeded`);
   });
+
 program.parse(process.argv);

@@ -3,22 +3,25 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist coverage tmp *.log",
-    "postclean": "npm run clean:test",
+    "clean": "rimraf dist tmp *.log",
+    "preclean": "npm run clean:test && npm run clean:coverage",
     "clean:cache": "rimraf .nx",
     "clean:test": "rimraf test*.db file:sqlite3orm*",
+    "clean:coverage": "rimraf coverage",
     "clean:all": "npm run clean && npm run clean:cache",
     "format:check": "nx format:check",
     "format:write": "nx format:write",
     "lint": "nx run-many --target=lint --parallel=4",
     "test": "nx run-many --target=test --parallel=4 --verbose",
+    "pretest": "npm run clean:coverage",
     "posttest": "npm run merge-coverage && npm run clean:test",
     "build": "nx run-many --target=build --parallel=4",
     "all": "npm run format:write && npm run lint && npm run build && npm run test",
     "ci": "npm run format:check && npm run lint && npm run test && npm run build",
     "node-cli": "NODE_PATH=dist/packages/node node dist/packages/node/@homeofthings/node-cli/src/index.js",
     "ts-node-cli": "NODE_PATH=dist/packages/node ts-node packages/node/@homeofthings/node-cli/src/index.ts",
-    "merge-coverage": "ts-node --project=build/tsconfig.json build/merge-coverage.ts"
+    "merge-coverage": "ts-node --project=build/tsconfig.json build/merge-coverage.ts",
+    "publish": "ts-node --project=build/tsconfig.json build/publish.ts"
   },
   "private": true,
   "devDependencies": {

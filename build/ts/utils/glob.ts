@@ -1,5 +1,5 @@
 import * as _glob from 'glob';
-import * as util from 'util';
+import * as util from 'node:util';
 import * as _dbg from 'debug';
 
 const debug = _dbg('build:utils:glob');

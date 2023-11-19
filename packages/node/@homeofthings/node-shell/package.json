@@ -1,6 +1,6 @@
 {
   "name": "@homeofthings/node-shell",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "dependencies": {
     "chalk": "*",
     "debug": "*",
