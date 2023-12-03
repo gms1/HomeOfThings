@@ -4,4 +4,4 @@ nxPreset.coverageReporters = ['lcov', 'json', 'text-summary'];
 nxPreset.collectCoverage = true;
 nxPreset.passWithNoTests = true;
 
-module.exports = { ...nxPreset };
+module.exports = { ...nxPreset, coveragePathIgnorePatterns: ['node_modules', 'test'] };

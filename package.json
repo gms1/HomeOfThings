@@ -21,6 +21,7 @@
     "node-cli": "NODE_PATH=dist/packages/node node dist/packages/node/@homeofthings/node-cli/src/index.js",
     "ts-node-cli": "NODE_PATH=dist/packages/node ts-node packages/node/@homeofthings/node-cli/src/index.ts",
     "merge-coverage": "ts-node --project=build/tsconfig.json build/merge-coverage.ts",
+    "prettier": "npm run format:write",
     "publish": "ts-node --project=build/tsconfig.json build/publish.ts"
   },
   "private": true,
