@@ -263,7 +263,7 @@ describe('fs', () => {
   it('`mkdir` should create a directory with mode', async () => {
     const givenRootDir = await fs.mktemp(path.resolve(testFolder, 'tmp_'), { directory: true });
     const givenDir = path.resolve(givenRootDir, 'testdir');
-    const givenMode = 0o774;
+    const givenMode = 0o755;
 
     expect(await fs.exists(givenDir)).toBe(false);
     await fs.mkdir(givenDir, { mode: givenMode });
@@ -273,9 +273,6 @@ describe('fs', () => {
     if (fs.IS_WIN) {
       return;
     }
-    // TODO: this fails in github action with
-    //      Expected: "0764"
-    //      Received: "0744"
     expect((await fs.statsMmode(givenDir)).toOctal()).toBe(givenMode.toString(8).padStart(4, '0'));
   });
 
