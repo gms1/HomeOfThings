@@ -1,0 +1,12 @@
+{
+  "ignore": {
+    "chalk": {
+      "versions": ">4.0",
+      "reason": "version 5 is ESM"
+    },
+    "lcov-total": {
+      "versions": ">2.0",
+      "reason": "version 2 is ESM"
+    }
+  }
+}

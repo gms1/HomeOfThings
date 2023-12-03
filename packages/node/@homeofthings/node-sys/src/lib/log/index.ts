@@ -73,6 +73,14 @@ export function logCommandArgs(...args: string[]) {
   logCommand(getCommand(false, args));
 }
 
+export function logCommandResult<T = string | string[]>(output: T): T {
+  if (!ECHO_ENABLED) {
+    return;
+  }
+  logInfo(Array.isArray(output) ? output.join('\n') : output);
+  return output;
+}
+
 export function getCommand(shell: string | boolean | undefined, args: string[]): string {
   if (shell) {
     const command = typeof shell === 'string' ? quoteArgs(shell, '-c', ...args) : quoteArgs('sh', '-c', ...args);

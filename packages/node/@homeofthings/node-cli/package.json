@@ -2,7 +2,7 @@
   "name": "@homeofthings/node-cli",
   "version": "0.0.0",
   "dependencies": {
-    "@homeofthings/node-shell": "*",
+    "@homeofthings/node-sys": "*",
     "tslib": "*"
   }
 }

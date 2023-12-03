@@ -5,7 +5,10 @@ import { SpawnContext } from './options';
 const debug = debugjs.default('shell:process:error');
 
 export class ProcessError extends Error {
-  constructor(public context: SpawnContext, cause?: Error) {
+  constructor(
+    public context: SpawnContext,
+    cause?: Error,
+  ) {
     super(
       PROMPT +
         context.command +

@@ -1,7 +1,7 @@
-import { logOpen, logImportant, pipe, exec, sh, logInfo, nohupExec, nohupPipe, nohupSh, logClose, logWarn, logError, which } from '@homeofthings/node-shell';
+import { logOpen, logImportant, pipe, exec, sh, logInfo, nohupExec, nohupPipe, nohupSh, logClose, logWarn, logError } from '@homeofthings/node-sys';
 
 async function main() {
-  let output: string[] = [];
+  const output: string[] = [];
   logOpen('index.log');
   logImportant('`pipe` using `exec` should print "hello": ');
   await pipe(exec('echo', 'hello')).to(exec('grep', 'el')).run();
@@ -44,7 +44,6 @@ async function main() {
   await nohupPipe(nohupExec('echo', 'hello')).to(nohupSh('sleep 2m && grep el')).run();
 
   logImportant('`which -a ls` should echo and write output into variable');
-  output = await which({ all: true }, 'ls');
   logInfo('output:');
   logInfo(output.join('\n'));
 

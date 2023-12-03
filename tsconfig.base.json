@@ -21,7 +21,7 @@
       "@homeofthings/nestjs-logger": ["packages/node/@homeofthings/nestjs-logger/src/index.ts"],
       "@homeofthings/nestjs-sqlite3": ["packages/node/@homeofthings/nestjs-sqlite3/src/index.ts"],
       "@homeofthings/nestjs-utils": ["packages/node/@homeofthings/nestjs-utils/src/index.ts"],
-      "@homeofthings/node-shell": ["packages/node/@homeofthings/node-shell/src/index.ts"],
+      "@homeofthings/node-sys": ["packages/node/@homeofthings/node-sys/src/index.ts"],
       "asyncctx": ["packages/node/asyncctx/src/index.ts"],
       "jsonpointerx": ["packages/js/jsonpointerx/src/index.ts"],
       "sqlite3orm": ["packages/node/sqlite3orm/src/index.ts"]

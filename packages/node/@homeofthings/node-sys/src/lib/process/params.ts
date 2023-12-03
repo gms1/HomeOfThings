@@ -8,7 +8,10 @@ export abstract class CommonParams<OptionType extends CommonOptions> {
   protected _options: OptionType = {} as OptionType;
   protected _args: string[];
 
-  constructor(private defaultOutput: IOType, ...args: string[]) {
+  constructor(
+    private defaultOutput: IOType,
+    ...args: string[]
+  ) {
     this._args = args;
     this._stdioToArray();
   }

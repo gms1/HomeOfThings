@@ -1,0 +1,38 @@
+{
+  "name": "node-sys",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/node/@homeofthings/node-sys/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/node/@homeofthings/node-sys",
+        "tsConfig": "packages/node/@homeofthings/node-sys/tsconfig.lib.json",
+        "packageJson": "packages/node/@homeofthings/node-sys/package.json",
+        "main": "packages/node/@homeofthings/node-sys/src/index.ts",
+        "assets": ["packages/node/@homeofthings/node-sys/*.md", "packages/node/@homeofthings/node-sys/LICENSE"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs node-sys {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/node/@homeofthings/node-sys/**/*.ts", "packages/node/@homeofthings/node-sys/package.json"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/node/@homeofthings/node-sys/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
