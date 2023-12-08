@@ -3,14 +3,16 @@ import { Inject, Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/
 import { PassportModule } from '@nestjs/passport';
 import session from 'express-session';
 import passport from 'passport';
+
+import { UserSessionService } from '../user/user-ssession.service';
 import { UsersModule } from '../user/user.module';
+
 import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
 import { LocalSerializer } from './local.serializer';
 import { LocalStrategy } from './local.strategy';
 import { AUTHENTICATION_MODULE_OPTIONS_TOKEN, DEFAULT_SESSION_NAME, DEFAULT_SESSION_MAX_AGE, DEFAULT_SESSION_SECRET } from './model/authentication.constants';
 import { AuthenticationModuleOptions } from './model/authentication.options';
-import { UserSessionService } from '../user/user-ssession.service';
 @Module({
   imports: [UsersModule, PassportModule],
   providers: [LocalStrategy, LocalSerializer],

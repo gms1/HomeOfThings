@@ -1,17 +1,70 @@
 import { ECHO_ENABLED, logCommand, logWarn } from '../log/index';
-import { CommonOptions, ExecOptions, NohupOptions, PIPE, SpawnContext } from './options';
-import { spawnChildProcess, onChildProcessExit, writeInputToChildProcess } from './spawn';
-import { CommonParams, ExecParams, NohupParams } from './params';
 
-export abstract class CommonPipe<ParamType extends CommonParams<OptionType>, OptionType extends CommonOptions> {
-  protected _items: ParamType[] = [];
+import { ExecParams } from './exec';
+import { PIPE, SpawnContext } from './options';
+import { spawnChildProcess, onChildProcessExit } from './spawn';
 
-  public to(item: ParamType): typeof this {
+export class Pipe {
+  protected _items: ExecParams[] = [];
+
+  public to(item: ExecParams): typeof this {
     return this.add(item);
   }
 
-  public add(item: ParamType): typeof this {
+  public add(item: ExecParams): typeof this {
     this._items.push(item);
+    return this;
+  }
+
+  public async run(): Promise<SpawnContext[]> {
+    if (this._items.length === 0) {
+      return [];
+    }
+    this.logCommands();
+    await this.spawnAllChildProcesses();
+    await this._items[0].writeInput();
+
+    const childContexts: Promise<SpawnContext>[] = [];
+    for (const item of this._items) {
+      childContexts.push(onChildProcessExit(item.options));
+    }
+
+    return Promise.all(childContexts);
+  }
+
+  public async spawn(opts?: { unref: boolean }): Promise<Pipe> {
+    if (this._items.length === 0) {
+      return this;
+    }
+    this.logCommands(true);
+    await this.spawnAllChildProcesses();
+    await this._items[0].writeInput();
+    if (opts.unref) {
+      for (const item of this._items) {
+        item.unref();
+      }
+    }
+    return this;
+  }
+
+  public async wait(): Promise<SpawnContext[]> {
+    const childContexts: Promise<SpawnContext>[] = [];
+    for (const item of this._items) {
+      childContexts.push(onChildProcessExit(item.options));
+    }
+
+    return Promise.all(childContexts);
+  }
+
+  // set wait for detached process to exit
+  public ref(): Pipe {
+    this.forEach((exec) => exec.options.context.process.ref());
+    return this;
+  }
+
+  // set do not wait for detached process to exit
+  public unref(): Pipe {
+    this.forEach((exec) => exec.options.context.process.unref());
     return this;
   }
 
@@ -19,14 +72,14 @@ export abstract class CommonPipe<ParamType extends CommonParams<OptionType>, Opt
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let lastStdout: any = undefined;
 
-    this._items[0]!.setStdio(1, PIPE);
-
-    this.logCommands();
+    if (this._items.length > 1) {
+      this._items[0]!.setStdio(1, PIPE);
+    }
 
     let warnShellArgs = true;
     for (const idx in this._items) {
       const item = this._items[idx]!;
-      if (idx) {
+      if (idx !== '0') {
         item.setStdio(0, lastStdout);
       }
       if (warnShellArgs && item.options.shell && item.args.length > 1) {
@@ -38,9 +91,7 @@ export abstract class CommonPipe<ParamType extends CommonParams<OptionType>, Opt
     }
   }
 
-  public abstract run(): Promise<SpawnContext[]>;
-
-  protected logCommands() {
+  protected logCommands(background = false) {
     if (!ECHO_ENABLED) {
       return;
     }
@@ -51,53 +102,14 @@ export abstract class CommonPipe<ParamType extends CommonParams<OptionType>, Opt
       }
       commands.push(execParams.getCommand());
     }
-    logCommand(commands.join(' | '));
+    logCommand(commands.join(' | ') + (background ? ' &' : ''));
   }
-}
 
-export class Pipe extends CommonPipe<ExecParams, ExecOptions> {
-  public async run(): Promise<SpawnContext[]> {
-    if (this._items.length === 0) {
-      return [];
-    }
-    await this.spawnAllChildProcesses();
-
-    const childContexts: Promise<SpawnContext>[] = [];
-    for (const item of this._items) {
-      childContexts.push(onChildProcessExit(item.options));
-    }
-
-    return Promise.all(childContexts);
+  private forEach(callbackfn: (value: ExecParams, index: number, array: ExecParams[]) => void): void {
+    this._items.filter((exec) => exec.options.context?.process).forEach(callbackfn);
   }
 }
 
 export function pipe(params: ExecParams): Pipe {
   return new Pipe().add(params);
-}
-
-export class NohupPipe extends CommonPipe<NohupParams, NohupOptions> {
-  public async run(): Promise<SpawnContext[]> {
-    if (this._items.length === 0) {
-      return [];
-    }
-    await this.spawnAllChildProcesses();
-
-    const unrefChildProcess = (options: NohupOptions) => {
-      return writeInputToChildProcess(options).then((context) => {
-        context.process!.unref();
-        return context;
-      });
-    };
-
-    const childContexts: Promise<SpawnContext>[] = [];
-    for (const item of this._items) {
-      childContexts.push(unrefChildProcess(item.options));
-    }
-
-    return Promise.all(childContexts);
-  }
-}
-
-export function nohupPipe(params: NohupParams): NohupPipe {
-  return new NohupPipe().add(params);
 }

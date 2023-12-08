@@ -1,8 +1,8 @@
+import { ServerModule } from '@homeofthings/hot-server';
 import { ConfigModule } from '@homeofthings/nestjs-config';
 import { LoggerModule } from '@homeofthings/nestjs-logger';
 import { Logger, Module } from '@nestjs/common';
 import { ConsoleModule } from 'nestjs-console';
-import { ServerModule } from '@homeofthings/hot-server';
 
 @Module({
   imports: [

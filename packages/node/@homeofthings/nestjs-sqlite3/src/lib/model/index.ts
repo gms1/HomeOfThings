@@ -2,8 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GenericDictionary } from '@homeofthings/nestjs-utils';
 import { SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
+
 import { ConnectionManager, Repository } from '../..';
 import { EntityManager } from '../service/entity-manager';
+
 import { Sqlite3ConnectionOptions } from './sqlite3.options';
 
 export * from './sqlite3.constants';

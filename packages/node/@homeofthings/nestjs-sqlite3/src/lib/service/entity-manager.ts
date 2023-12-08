@@ -2,6 +2,7 @@
 import { Type } from '@homeofthings/nestjs-utils';
 import { Logger } from '@nestjs/common';
 import { BaseDAO, BaseDAOInsertMode, Filter, METADATA_MODEL_KEY, MetaModel, SqlDatabase, Where } from 'sqlite3orm';
+
 import { ConnectionManager } from './connection-manager';
 import { Repository } from './repository';
 
@@ -12,7 +13,10 @@ export class EntityManager {
     return this._connectionManager.getConnection(this._connectionName);
   }
 
-  constructor(private _connectionManager: ConnectionManager, private _connectionName: string) {}
+  constructor(
+    private _connectionManager: ConnectionManager,
+    private _connectionName: string,
+  ) {}
 
   /**
    * get a repository for the given entity class

@@ -1,4 +1,5 @@
 import { Writable } from 'node:stream';
+
 import { PromiseFactories, sequentialize } from './sequentialize';
 
 export function writeStringToStream(writable: Writable, data: string): Promise<void> {
@@ -19,7 +20,7 @@ export function endStream(writable: Writable): Promise<void> {
   });
 }
 
-export function writeToStram(writable: Writable, content: Iterable<string>): Promise<void> {
+export function writeToStream(writable: Writable, content: Iterable<string>): Promise<void> {
   if (!(writable instanceof Writable)) {
     return Promise.reject(new Error(`no writable`));
   }

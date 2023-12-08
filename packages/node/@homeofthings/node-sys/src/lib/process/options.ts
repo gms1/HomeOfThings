@@ -20,6 +20,7 @@ export interface SpawnContext {
 export interface AdditionalSpawnOptions {
   noEcho?: boolean; // disable echoing the command to stdout
   quiet?: boolean; // disable stdout and stderr
+  ignoreExitCode?: boolean; // resolve with exit code instead of rejecting it
   input?: Iterable<string>; // write those strings to 'stdin' after process has been spawend successfully
   output?: string[];
   error?: string[];
@@ -28,16 +29,4 @@ export interface AdditionalSpawnOptions {
 
 export interface SpawnOptions extends Omit<child_process.SpawnOptions, 'argv0'>, AdditionalSpawnOptions {}
 
-export interface AdditionalCommonOptions {}
-
-export interface CommonOptions extends Omit<SpawnOptions, 'detached' | 'timeout'>, AdditionalCommonOptions {}
-
-export interface AdditionalExecOptions {
-  ignoreExitCode?: boolean; // resolve with exit code instead of rejecting it
-}
-
-export interface ExecOptions extends CommonOptions, AdditionalExecOptions {}
-
-export interface AdditionalNohupOptions {}
-
-export interface NohupOptions extends CommonOptions, AdditionalNohupOptions {}
+export interface ExecOptions extends Omit<SpawnOptions, 'detached' | 'timeout'> {}

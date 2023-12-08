@@ -3,10 +3,12 @@ import { LoggerModule } from '@homeofthings/nestjs-logger';
 import { Sqlite3Module } from '@homeofthings/nestjs-sqlite3';
 import { Global, Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import express from 'express';
+
 import { AuthenticationModule } from '../authentication/authentication.module';
-import { DEFAULT_LIMIT_JSON_BODY, DEFAULT_MAIN_DB_FILE, DEFAULT_SESSION_DB_FILE } from './model/server.constants';
-import { UsersModule } from '../user/user.module';
 import { HOT_MAIN_DB, HOT_SESSION_DB } from '../model';
+import { UsersModule } from '../user/user.module';
+
+import { DEFAULT_LIMIT_JSON_BODY, DEFAULT_MAIN_DB_FILE, DEFAULT_SESSION_DB_FILE } from './model/server.constants';
 
 @Global()
 @Module({

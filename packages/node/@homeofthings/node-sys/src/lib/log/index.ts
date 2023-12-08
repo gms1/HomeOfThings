@@ -1,15 +1,17 @@
+import { WriteStream, createWriteStream } from 'node:fs';
+import * as processNode from 'node:process';
+import { format } from 'node:util';
+
 import chalk from 'chalk';
 import * as debugjs from 'debug';
-import { WriteStream, createWriteStream } from 'node:fs';
+
 import { quoteArgs } from '../util/quote';
-import { format } from 'node:util';
-import * as processNode from 'node:process';
 
 const WARNING_PREFIX = 'WARNING: ';
 const ERROR_PREFIX = 'ERROR: ';
 const DEFAULT_PROMPT = '$ ';
 
-const debug = debugjs.default('shell:log');
+const debug = debugjs.default('sys:log');
 
 // eslint-disable-next-line prefer-const
 export let ECHO_ENABLED = true;

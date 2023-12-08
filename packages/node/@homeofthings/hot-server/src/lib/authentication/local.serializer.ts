@@ -1,5 +1,6 @@
-import { PassportSerializer } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { PassportSerializer } from '@nestjs/passport';
+
 import { UserSession } from '../user/entity/user-session';
 import { UserSessionService } from '../user/user-ssession.service';
 

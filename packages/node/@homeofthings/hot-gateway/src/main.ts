@@ -1,3 +1,5 @@
+import * as path from 'path';
+
 import { ConfigModule } from '@homeofthings/nestjs-config';
 import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LoggerModule, LogLevel } from '@homeofthings/nestjs-logger';
 import { writeFileIfChanged } from '@homeofthings/nestjs-utils';
@@ -7,7 +9,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Command } from 'commander';
 import _debug from 'debug';
-import * as path from 'path';
+
 import { AppModule } from './app/app.module';
 import { ExpressApplication } from './express/express-application';
 

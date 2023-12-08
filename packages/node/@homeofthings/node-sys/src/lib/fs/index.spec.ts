@@ -1,8 +1,8 @@
-import * as fs from './index';
-import * as path from 'node:path';
 import * as nodeConsole from 'node:console';
-
 import { promises as fsNode } from 'node:fs';
+import * as path from 'node:path';
+
+import * as fs from './index';
 
 // NOTE: most of this tests are integration tests, falling back to unit tests if the functionality cannot reliable be validated
 
@@ -302,7 +302,7 @@ describe('fs', () => {
     expect(await fs.exists(givenDir)).toBe(true);
     try {
       await fs.rm(givenDir);
-      fail('whould have thrown');
+      fail('should have thrown');
     } catch (e) {
       /*ignore*/
     }
@@ -338,7 +338,7 @@ describe('fs', () => {
     expect(await fs.exists(givenDir)).toBe(true);
     try {
       await fs.rmdir(givenDir);
-      fail('whould have thrown');
+      fail('should have thrown');
     } catch (e) {
       /*ignore*/
     }

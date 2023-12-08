@@ -1,31 +1,38 @@
 /* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import * as mockedLogger from '../mocks/logger';
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { SqlConnectionPool } from 'sqlite3orm';
-import { User } from './fixtures/entity/user';
+
+import { InjectConnectionPool, InjectCustomRepository, InjectRepository } from '../../common/sqlite3.decorators';
+import { getConnectionPoolInjectionToken, getCustomRepositoryInjectionToken, getEntityManagerInjectionToken, getRepositoryInjectionToken } from '../../common/sqlite3.utils';
+import { Sqlite3ConnectionOptions } from '../../model';
+import { ConnectionManager } from '../../service/connection-manager';
+import { EntityManager } from '../../service/entity-manager';
+import { Repository } from '../../service/repository';
+import { Sqlite3Module } from '../../sqlite3.module';
+import * as mockedLogger from '../mocks/logger';
+
 import { Contact } from './fixtures/entity/contact';
+import { User } from './fixtures/entity/user';
 import { UserRepository } from './fixtures/repository/user.repository';
 import { ContactRepositoryService } from './fixtures/service/contact.repository.service';
 import { UserRepositoryService } from './fixtures/service/user.repository.service';
-import { InjectConnectionPool, InjectCustomRepository, InjectRepository } from '../../common/sqlite3.decorators';
-import { Repository } from '../../service/repository';
-import { Sqlite3ConnectionOptions } from '../../model';
-import { ConnectionManager } from '../../service/connection-manager';
-import { Sqlite3Module } from '../../sqlite3.module';
-import { getConnectionPoolInjectionToken, getCustomRepositoryInjectionToken, getEntityManagerInjectionToken, getRepositoryInjectionToken } from '../../common/sqlite3.utils';
-import { EntityManager } from '../../service/entity-manager';
 
 class ExtendedContactRepositoryService extends ContactRepositoryService {
-  constructor(@InjectConnectionPool() public sqlConnectionPool: SqlConnectionPool, @InjectRepository(Contact) repository: Repository<Contact>) {
+  constructor(
+    @InjectConnectionPool() public sqlConnectionPool: SqlConnectionPool,
+    @InjectRepository(Contact) repository: Repository<Contact>,
+  ) {
     super(repository);
   }
 }
 
 class ExtendedUserRepositoryService extends UserRepositoryService {
-  constructor(@InjectConnectionPool() public sqlConnectionPool: SqlConnectionPool, @InjectCustomRepository(UserRepository) repository: UserRepository) {
+  constructor(
+    @InjectConnectionPool() public sqlConnectionPool: SqlConnectionPool,
+    @InjectCustomRepository(UserRepository) repository: UserRepository,
+  ) {
     super(repository);
   }
 }

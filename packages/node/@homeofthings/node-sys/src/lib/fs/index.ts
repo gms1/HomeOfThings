@@ -1,22 +1,27 @@
+import { CopyOptions as NodeCopyOptions, Mode, Stats, promises as fsNode } from 'node:fs';
 import * as nodePath from 'node:path';
 import * as nodeProcess from 'node:process';
-import { CopyOptions as NodeCopyOptions, Mode, Stats, promises as fsNode } from 'node:fs';
 import { promisify } from 'node:util';
-import { logCommandArgs, logCommand, logCommandResult } from '../log/index';
+
 import * as externalChmodr from 'chmodr';
 import * as externalChownr from 'chownr';
 import * as externMkTemp from 'mktemp';
-import externalTouch from 'touch';
-import externalWhich from 'which';
 import externalMv from 'mv';
 import { Mode as StatsMode } from 'stat-mode';
+import externalTouch from 'touch';
+import externalWhich from 'which';
+
+import { logCommandArgs, logCommand, logCommandResult } from '../log/index';
 
 // NOTE:
 // shell would be needed for getting shell expansion (e.g for pathname expansion (globbing) of '*', '?', '[...]' wildcards)
 // but in general we should avoid using the shell, or calling programs which are most likely not installed on all systems
 
 export { StatsMode };
-export type TouchOptions = Pick<externalTouch.Options, 'time' | 'atime' | 'mtime' | 'nocreate' | 'ref'>;
+export interface TouchOptions extends Pick<externalTouch.Options, 'time' | 'atime' | 'mtime' | 'nocreate' | 'ref'> {
+  atime: boolean;
+  mtime: boolean;
+}
 export type CopyOptions = Pick<NodeCopyOptions, 'dereference' | 'preserveTimestamps' | 'recursive'>;
 
 // to call the external function directly
@@ -177,8 +182,29 @@ export function unlink(path: string): Promise<void> {
 }
 
 export function touch(path: string, options?: TouchOptions): Promise<void> {
-  // TODO: log options
-  logCommandArgs('touch', path);
+  const log: string[] = ['touch'];
+  if (options) {
+    if (options.atime || options.mtime || options.nocreate) {
+      let opts = '-';
+      if (options.nocreate) {
+        opts += 'c';
+      }
+      if (options.atime) {
+        opts += 'a';
+      }
+      if (options.mtime) {
+        opts += 'm';
+      }
+      log.push(opts);
+    }
+    if (options.time) {
+      log.push('-t', options.time.toString());
+    }
+    if (options.ref) {
+      log.push('-r', options.ref);
+    }
+  }
+  logCommandArgs(...log, path);
   return _touch(path, options);
 }
 

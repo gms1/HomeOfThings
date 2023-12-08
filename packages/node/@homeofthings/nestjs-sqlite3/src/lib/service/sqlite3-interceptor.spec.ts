@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable import/order */
 import * as mockedConnectionManager from '../test/mocks/connection-manager';
 
 import { Test, TestingModule } from '@nestjs/testing';
+import { lastValueFrom, of, throwError } from 'rxjs';
+
 import { ConnectionManager } from './connection-manager';
 import { Sqlite3Interceptor } from './sqlite3-interceptor';
-import { lastValueFrom, of, throwError } from 'rxjs';
 
 describe('Sqlite3Interceptor', () => {
   let appModule: TestingModule;

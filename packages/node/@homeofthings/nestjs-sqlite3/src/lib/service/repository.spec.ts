@@ -1,13 +1,16 @@
+/* eslint-disable import/order */
 import * as mockedConnectionManager from '../test/mocks/connection-manager';
 import * as mockedLogger from '../test/mocks/logger';
 
+import { Test } from '@nestjs/testing';
+
+import { Column, Entity, PrimaryKeyColumn } from '../common/sqlite3.decorators';
 import { getEntityManagerInjectionToken } from '../common/sqlite3.utils';
 import { SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
+
 import { ConnectionManager } from './connection-manager';
 import { EntityManager } from './entity-manager';
-import { Test } from '@nestjs/testing';
 import { Repository } from './repository';
-import { Column, Entity, PrimaryKeyColumn } from '../common/sqlite3.decorators';
 
 // NOTE: make sure all branches are covered by unit tests and all methods are covered by integration tests (see test/integration folder)
 // so that there is no need to fully unit-test all branches/methods here

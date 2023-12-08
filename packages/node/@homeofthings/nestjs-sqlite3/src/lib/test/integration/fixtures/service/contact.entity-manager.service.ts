@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 import { Filter, Where } from 'sqlite3orm';
-import { Contact } from '../entity/contact';
-import { User } from '../entity/user';
+
 import { InjectEntityManager } from '../../../../common/sqlite3.decorators';
 import { EntityManager } from '../../../../service/entity-manager';
+import { Contact } from '../entity/contact';
+import { User } from '../entity/user';
 
 export class ContactEntityManagerService {
   constructor(@InjectEntityManager() public entityManager: EntityManager) {}

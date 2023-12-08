@@ -1,9 +1,11 @@
-import { Request } from 'express';
-import { UserSession } from './entity/user-session';
-import { BaseDAO, SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
-import { HOT_SESSION_DB } from '../model';
 import { InjectConnectionPool } from '@homeofthings/nestjs-sqlite3';
 import { LruCache } from '@homeofthings/nestjs-utils';
+import { Request } from 'express';
+import { BaseDAO, SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
+
+import { HOT_SESSION_DB } from '../model';
+
+import { UserSession } from './entity/user-session';
 import { User } from './entity/user.entity';
 
 const SESSION_CACHE_SIZE = 20;

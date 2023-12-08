@@ -1,8 +1,9 @@
+import { INestApplication } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import supertest from 'supertest';
+
 import * as mockedLogger from '../mocks/logger';
 
-import supertest from 'supertest';
-import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import { TestAppModule } from './fixtures/test-app.module';
 
 describe('Authentication', () => {

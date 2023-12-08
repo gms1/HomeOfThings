@@ -1,13 +1,14 @@
-import _debug from 'debug';
 import * as process from 'node:process';
 import * as path from 'path';
+
 import { Inject, Injectable } from '@nestjs/common';
+import type * as configType from 'config';
+import _debug from 'debug';
+
 import { ConfigModuleOptions, CONFIG_MODULE_OPTIONS_TOKEN } from './model';
 
-const debug = _debug('nestjs-config');
-
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
-import type * as configType from 'config';
+const debug = _debug('nestjs-config');
 
 let config: configType.IConfig;
 

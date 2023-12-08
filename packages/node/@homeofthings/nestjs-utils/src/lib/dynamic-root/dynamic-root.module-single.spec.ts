@@ -1,5 +1,6 @@
 import { Global, Inject, Injectable, Module } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { createDynamicRootModule } from './dynamic-root.module';
 
 describe('single DynamicRootModule', () => {

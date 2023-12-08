@@ -2,7 +2,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Body, ClassSerializerInterceptor, Controller, Get, HttpCode, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
+
 import { User } from '../user/entity/user.entity';
+
 import { AuthenticationService } from './authentication.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';

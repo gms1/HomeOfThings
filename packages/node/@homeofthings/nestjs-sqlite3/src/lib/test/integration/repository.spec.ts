@@ -1,18 +1,19 @@
 /* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import * as mockedLogger from '../mocks/logger';
-
 import { Test, TestingModule } from '@nestjs/testing';
-import { Contact } from './fixtures/entity/contact';
-import { ContactRepositoryService } from './fixtures/service/contact.repository.service';
-import { UserRepositoryService } from './fixtures/service/user.repository.service';
-import { UserRepository } from './fixtures/repository/user.repository';
-import * as init from './fixtures/init';
-import { User } from './fixtures/entity/user';
+
 import { SQLITE3_DEFAULT_CONNECTION_NAME, Sqlite3ConnectionOptions } from '../../model';
 import { ConnectionManager } from '../../service/connection-manager';
 import { Sqlite3Module } from '../../sqlite3.module';
+import * as mockedLogger from '../mocks/logger';
+
+import { Contact } from './fixtures/entity/contact';
+import { User } from './fixtures/entity/user';
+import * as init from './fixtures/init';
+import { UserRepository } from './fixtures/repository/user.repository';
+import { ContactRepositoryService } from './fixtures/service/contact.repository.service';
+import { UserRepositoryService } from './fixtures/service/user.repository.service';
 
 const CONNECTION_OPTIONS: Sqlite3ConnectionOptions = {
   file: 'file:repository.spec.db?mode=memory&cache=shared',

@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { LoggerModuleOptions, LogLevel } from './model';
+
 import { LoggerModule } from './logger.module';
 import { LoggerService } from './logger.service';
+import { LoggerModuleOptions, LogLevel } from './model';
 import { WinstonLogger } from './winston/winston-logger';
 
 describe('LoggerModule', () => {

@@ -1,4 +1,4 @@
-import { logOpen, logImportant, pipe, exec, sh, logInfo, nohupExec, nohupPipe, nohupSh, logClose, logWarn, logError } from '@homeofthings/node-sys';
+import { logOpen, logImportant, pipe, exec, sh, logInfo, logClose, logWarn, logError } from '@homeofthings/node-sys';
 
 async function main() {
   const output: string[] = [];
@@ -12,7 +12,7 @@ async function main() {
   logImportant('`exec` should echo and log to stdout: ');
   await exec('ls', '-l', '.').run();
   logImportant('`exec` should log to stderr and succeed although command failed: ');
-  await exec('ls', '-l', 'xx x').set('ignoreExitCode', true).run();
+  await exec('ls', '-l', 'xx x').setIgnoreExitCode().run();
   logImportant('`exec` should succeed although command failed and should not have any output: ');
   await exec('ls', '-l', 'xx x').setQuiet().setIgnoreExitCode().run();
   logImportant('`sh` should echo and log to stdout: ');
@@ -30,22 +30,27 @@ async function main() {
     .run();
   logInfo('output:');
   logInfo(output.join('\n'));
-  logImportant('`nohup` should echo but should not log to stdout');
-  await nohupExec('bash')
+  logImportant('`sh` in background should echo but should not log to stdout');
+
+  /*
+  sh('bash')
     .setStdIn(
       `
-      sleep 2m
-      echo end
-    `,
+    sleep 2m
+    echo end
+  `,
     )
-    .run();
+    .spawn({ unref: true });
+  */
 
-  logImportant('`nohupPipe` should echo but should not log to stdout');
-  await nohupPipe(nohupExec('echo', 'hello')).to(nohupSh('sleep 2m && grep el')).run();
+  /*
+  logImportant('`pipe` in background should echo but should not log to stdout');
+  await pipe(exec('echo', 'hello')).to(sh('sleep 2m && grep el')).spawn({ unref: true });
+  */
 
-  logImportant('`which -a ls` should echo and write output into variable');
-  logInfo('output:');
-  logInfo(output.join('\n'));
+  logImportant('=================================');
+  await pipe(exec('bash').setStdIn(`echo XXXX2`)).run();
+  // exec('bash').setStdIn(`echo XXXX1`).run();
 
   logImportant('end of main');
   logClose();

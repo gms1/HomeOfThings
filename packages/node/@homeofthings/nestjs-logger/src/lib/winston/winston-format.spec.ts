@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as winston from 'winston';
+
 import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT, getContextColor } from './winston-format';
 
 function getMessage(format: winston.Logform.Format, info: winston.Logform.TransformableInfo): string | undefined {

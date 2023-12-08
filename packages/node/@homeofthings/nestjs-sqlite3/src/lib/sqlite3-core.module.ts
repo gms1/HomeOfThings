@@ -1,12 +1,13 @@
+import { createDynamicRootModule, DynamicRootModuleProperties } from '@homeofthings/nestjs-utils';
 import { FactoryProvider, Global, Logger, Module, OnApplicationShutdown } from '@nestjs/common';
 import { APP_INTERCEPTOR, ModuleRef } from '@nestjs/core';
+import { BaseDAO, SqlConnectionPool } from 'sqlite3orm';
+
+import { getConnectionPoolInjectionToken, getEntityManagerInjectionToken } from './common/sqlite3.utils';
 import { Sqlite3AsyncModuleOptions, Sqlite3ConnectionOptions, Sqlite3SyncModuleOptions, SQLITE3_MODULE_OPTIONS_TOKEN } from './model';
 import { ConnectionManager } from './service/connection-manager';
-import { createDynamicRootModule, DynamicRootModuleProperties } from '@homeofthings/nestjs-utils';
-import { Sqlite3Interceptor } from './service/sqlite3-interceptor';
-import { BaseDAO, SqlConnectionPool } from 'sqlite3orm';
-import { getConnectionPoolInjectionToken, getEntityManagerInjectionToken } from './common/sqlite3.utils';
 import { EntityManager } from './service/entity-manager';
+import { Sqlite3Interceptor } from './service/sqlite3-interceptor';
 
 BaseDAO.options = BaseDAO.options || {};
 BaseDAO.options.ignoreNoChanges = true;

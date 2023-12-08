@@ -1,8 +1,10 @@
 import * as debugjs from 'debug';
+
 import { PROMPT } from '../log/index';
+
 import { SpawnContext } from './options';
 
-const debug = debugjs.default('shell:process:error');
+const debug = debugjs.default('sys:process:error');
 
 export class ProcessError extends Error {
   constructor(

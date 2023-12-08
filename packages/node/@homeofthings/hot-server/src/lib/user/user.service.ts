@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from './entity/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository, Repository } from '@homeofthings/nestjs-sqlite3';
-import { HOT_MAIN_DB } from '../model';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request } from 'express';
+
+import { HOT_MAIN_DB } from '../model';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entity/user.entity';
 
 @Injectable()
 export class UserService {

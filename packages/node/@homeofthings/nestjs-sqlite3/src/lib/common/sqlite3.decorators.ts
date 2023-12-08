@@ -2,9 +2,11 @@
 import 'reflect-metadata';
 import { Type } from '@homeofthings/nestjs-utils';
 import { Inject } from '@nestjs/common';
-import { RepositoryType, SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
-import { getConnectionPoolInjectionToken, getCustomRepositoryInjectionToken, getEntityManagerInjectionToken, getRepositoryInjectionToken } from './sqlite3.utils';
 import { field, fk, id, index, table } from 'sqlite3orm';
+
+import { RepositoryType, SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
+
+import { getConnectionPoolInjectionToken, getCustomRepositoryInjectionToken, getEntityManagerInjectionToken, getRepositoryInjectionToken } from './sqlite3.utils';
 
 export const Entity = table;
 export const Column = field;

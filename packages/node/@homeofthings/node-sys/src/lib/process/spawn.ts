@@ -1,12 +1,15 @@
 import * as child_process from 'node:child_process';
+
 import * as debugjs from 'debug';
-import { ExitCodeError, ProcessError } from './error';
-import { SpawnContext, SpawnOptions } from './options';
-import { writeToStram } from '../util/stream';
+
 import { getCommand } from '../log/index';
+import { writeToStream } from '../util/stream';
 import { WritableStrings } from '../util/stream-strings';
 
-const debug = debugjs.default('shell:process:spawn');
+import { ExitCodeError, ProcessError } from './error';
+import { SpawnContext, SpawnOptions } from './options';
+
+const debug = debugjs.default('sys:process:spawn');
 let spawnId = 0;
 
 interface InternalSpawnContext extends SpawnContext {
@@ -85,31 +88,6 @@ export function spawnChildProcess(options: SpawnOptions, ...args: string[]): Pro
   });
 }
 
-export function writeInputToChildProcess(options: SpawnOptions): Promise<SpawnContext> {
-  const context = options.context as InternalSpawnContext;
-  const id = context.id;
-  const childProcess = context.process!;
-  if (!context.input) {
-    return Promise.resolve(context);
-  }
-
-  context.inputProcessing = true;
-  debug(`process [${id}]: writing to stdin...`);
-  return writeToStram(childProcess.stdin!, context.input)
-    .then(() => {
-      debug(`process [${id}]: data successfully written to stdin`);
-      delete context.input;
-      delete context.inputProcessing;
-    })
-    .catch((err) => {
-      debug(`process [${id}]: failed to write to stdin: `, err);
-      context.inputError = err;
-      delete context.inputProcessing;
-      return Promise.reject(err);
-    })
-    .then(() => context);
-}
-
 export function onChildProcessExit(options: SpawnOptions): Promise<SpawnContext> {
   return new Promise((resolve, reject) => {
     const context = options.context as InternalSpawnContext;
@@ -150,13 +128,31 @@ export function onChildProcessExit(options: SpawnOptions): Promise<SpawnContext>
     };
     childProcess.once('exit', exitListener);
     childProcess.once('error', errorListener);
-    writeInputToChildProcess(options).catch(() => {
-      /*ignore*/
-    });
   });
 }
 
-export async function runChildProcess(options: SpawnOptions, ...args: string[]): Promise<SpawnContext> {
-  await spawnChildProcess(options, ...args);
-  return await onChildProcessExit(options);
+export function writeInputToChildProcess(options: SpawnOptions): Promise<SpawnContext> {
+  const context = options.context as InternalSpawnContext;
+  const id = context.id;
+  const childProcess = context.process!;
+  if (!context.input) {
+    return Promise.resolve(context);
+  }
+
+  context.inputProcessing = true;
+  debug(`process [${id}]: writing to stdin...`);
+  return writeToStream(childProcess.stdin!, context.input)
+    .then(() => {
+      debug(`process [${id}]: data successfully written to stdin`);
+      delete context.input;
+      delete context.inputProcessing;
+    })
+    .catch((err) => {
+      debug(`process [${id}]: failed to write to stdin: `, err);
+      context.inputError = err;
+      delete context.input;
+      delete context.inputProcessing;
+      return Promise.reject(err);
+    })
+    .then(() => context);
 }

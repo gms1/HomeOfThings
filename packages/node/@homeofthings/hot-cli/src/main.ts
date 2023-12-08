@@ -1,8 +1,9 @@
-import { BootstrapConsole } from 'nestjs-console';
-import { AppModule } from './app/app.module';
-import _debug from 'debug';
 import { ConfigModule } from '@homeofthings/nestjs-config';
 import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LoggerModule, LogLevel } from '@homeofthings/nestjs-logger';
+import _debug from 'debug';
+import { BootstrapConsole } from 'nestjs-console';
+
+import { AppModule } from './app/app.module';
 
 const CLI_CONTEXT = 'hot:cli';
 const debug = _debug(CLI_CONTEXT);

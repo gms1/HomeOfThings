@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DynamicModule, FactoryProvider, Global, Injectable, Module } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { Dictionary, GenericDictionary } from '../model/common-types';
 import { AsyncModuleOptions } from '../model/module.options';
+
 import { createDynamicRootModule, DynamicRootModuleProperties } from './dynamic-root.module';
 
 describe('multiple DynamicRootModules', () => {

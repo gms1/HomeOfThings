@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { ConfigModuleOptions } from './model';
-import { ConfigService } from './config.service';
+
 import { ConfigModule } from './config.module';
+import { ConfigService } from './config.service';
+import { ConfigModuleOptions } from './model';
 
 jest.mock('config', () => ({}));
 

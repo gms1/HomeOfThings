@@ -1,12 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Type } from '@homeofthings/nestjs-utils';
 import { BaseDAO, BaseDAOInsertMode, Filter, METADATA_MODEL_KEY, MetaModel, SqlDatabase, Table, Where } from 'sqlite3orm';
+
 import { ConnectionManager } from './connection-manager';
 
 export class Repository<T extends Object> {
   private readonly table: Table;
 
-  constructor(public readonly type: Type<T>, private _connectionManager: ConnectionManager, private _connectionName: string) {
+  constructor(
+    public readonly type: Type<T>,
+    private _connectionManager: ConnectionManager,
+    private _connectionName: string,
+  ) {
     const metaModel: MetaModel = Reflect.getMetadata(METADATA_MODEL_KEY, type.prototype);
     if (!metaModel) {
       throw new Error(`no table-definition on prototype of ${type.name}'`);

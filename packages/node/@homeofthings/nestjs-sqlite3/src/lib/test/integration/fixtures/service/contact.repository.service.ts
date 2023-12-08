@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 import { Filter, Where } from 'sqlite3orm';
-import { Contact } from '../entity/contact';
-import { User } from '../entity/user';
+
 import { InjectRepository } from '../../../../common/sqlite3.decorators';
 import { Repository } from '../../../../service/repository';
+import { Contact } from '../entity/contact';
+import { User } from '../entity/user';
 
 export class ContactRepositoryService {
   constructor(@InjectRepository(Contact) public repository: Repository<Contact>) {}
