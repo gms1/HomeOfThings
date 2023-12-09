@@ -1,16 +1,17 @@
 {
   "extends": "../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
   "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "types": ["node"],
-    "rootDir": ".",
-    "removeComments": false,
-    "preserveConstEnums": true,
-    "allowJs": true,
-    "esModuleInterop": false,
-    "noImplicitAny": false,
-    "typeRoots": ["../node_modules/@types", "ts/typings"]
+    "typeRoots": ["../node_modules/@types", "typings"],
+    "esModuleInterop": true
   }
 }

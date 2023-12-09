@@ -15,9 +15,13 @@
         "assets": ["packages/node/@homeofthings/hot-gateway/*.md", "packages/node/@homeofthings/hot-gateway/LICENSE"]
       }
     },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs hot-gateway {args.ver} {args.tag}",
-      "dependsOn": ["build"]
+    "version-bump": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/version-bump.js packages/node/@homeofthings/hot-gateway {args.ver}",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }]
     },
     "lint": {
       "executor": "@nx/eslint:lint",

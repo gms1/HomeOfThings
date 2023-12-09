@@ -1,8 +1,13 @@
+import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-const _BASE_DIR = path.resolve(__dirname, '..', '..', '..');
+import { pwd } from '@homeofthings/node-sys';
+import * as debugjs from 'debug';
 
-export var APPNAME: string = '<app>';
+const _BASE_DIR = path.resolve(__dirname, '..', '..', '..', '..');
+const debug = debugjs.default('build:utils:file');
+
+export let APPNAME: string = '<app>';
 
 export enum LogLevel {
   'INFO',
@@ -10,6 +15,9 @@ export enum LogLevel {
   'ERROR',
   'FATAL',
 }
+
+export let ERRORS = 0;
+export let WARNINGS = 0;
 
 type LoggingFunction = (message: string, ...params) => void;
 
@@ -27,8 +35,15 @@ export function setApplication(filename: string) {
 
 // -----------------------------------------------------------------------------------------
 export function getWorkspaceDir(): string {
-  const workDir = process.cwd();
+  const workDir = pwd();
   const workspaceDir = path.relative(workDir, _BASE_DIR);
+
+  const nxJsonPath = path.resolve(workspaceDir, 'nx.json');
+  if (!fs.existsSync(nxJsonPath)) {
+    throw new Error(`failed to resolve workspace directory ('${workspaceDir}' seems to be wrong)`);
+  }
+
+  debug('workspace directory: ', workspaceDir);
   return workspaceDir;
 }
 
@@ -40,11 +55,13 @@ export function log(message: string, ...params) {
 // -----------------------------------------------------------------------------------------
 export function warn(message: string, ...params) {
   console.warn(`${APPNAME}: WARNING: ${message} `, ...params);
+  WARNINGS++;
 }
 
 // -----------------------------------------------------------------------------------------
 export function error(message: string, ...params) {
   console.error(`${APPNAME}: ERROR: ${message} `, ...params);
+  ERRORS++;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -54,6 +71,7 @@ export function die(message: string, ...params) {
 }
 
 // -----------------------------------------------------------------------------------------
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function invariant(condition: any, level: LogLevel, message: string) {
   if (!condition) {
     LOGGING[level](message);

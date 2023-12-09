@@ -13,11 +13,24 @@ const DEFAULT_PROMPT = '$ ';
 
 const debug = debugjs.default('sys:log');
 
-// eslint-disable-next-line prefer-const
 export let ECHO_ENABLED = true;
-// eslint-disable-next-line prefer-const
 export let PROMPT = DEFAULT_PROMPT;
-export let LOGFILE: WriteStream | undefined;
+
+let LOGFILE: WriteStream | undefined;
+
+export function logEcho(echo?: boolean): boolean {
+  if (typeof echo === 'boolean') {
+    ECHO_ENABLED = echo;
+  }
+  return ECHO_ENABLED;
+}
+
+export function logPrompt(prompt?: string): string {
+  if (typeof prompt === 'string') {
+    PROMPT = prompt;
+  }
+  return PROMPT;
+}
 
 export function logOpen(logfile: string, options?: BufferEncoding | { flags: string } | undefined): void {
   logClose();
@@ -66,6 +79,7 @@ export function logError(...text: unknown[]): void {
 
 export function logCommand(command: string): void {
   if (!ECHO_ENABLED) {
+    debug(PROMPT + command);
     return;
   }
   logInfo(PROMPT + command);
@@ -76,10 +90,12 @@ export function logCommandArgs(...args: string[]) {
 }
 
 export function logCommandResult<T = string | string[]>(output: T): T {
+  const result = Array.isArray(output) ? output.join('\n') : output;
   if (!ECHO_ENABLED) {
-    return;
+    debug(result);
+    return output;
   }
-  logInfo(Array.isArray(output) ? output.join('\n') : output);
+  logInfo(result);
   return output;
 }
 

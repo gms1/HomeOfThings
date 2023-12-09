@@ -1,10 +1,11 @@
-import * as _glob from 'glob';
 import * as util from 'node:util';
-import * as _dbg from 'debug';
 
-const debug = _dbg('build:utils:glob');
+import * as debugjs from 'debug';
+import * as _glob from 'glob';
 
-const _globPromised = util.promisify(_glob);
+const debug = debugjs.default('build:utils:glob');
+
+const _globPromised = util.promisify(_glob.default);
 
 // -----------------------------------------------------------------------------------------
 export function glob(pattern: string, options?: _glob.IOptions): Promise<string[]> {

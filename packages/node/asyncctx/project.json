@@ -15,9 +15,13 @@
         "assets": ["packages/node/asyncctx/*.md", "packages/node/asyncctx/LICENSE"]
       }
     },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs asyncctx {args.ver} {args.tag}",
-      "dependsOn": ["build"]
+    "version-bump": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/version-bump.js packages/node/asyncctx {args.ver}",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }]
     },
     "lint": {
       "executor": "@nx/eslint:lint",

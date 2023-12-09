@@ -15,9 +15,13 @@
         "assets": ["packages/node/@homeofthings/nestjs-sqlite3/*.md", "packages/node/@homeofthings/nestjs-sqlite3/LICENSE"]
       }
     },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs nestjs-sqlite3 {args.ver} {args.tag}",
-      "dependsOn": ["build"]
+    "version-bump": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/version-bump.js packages/node/@homeofthings/nestjs-sqlite3 {args.ver}",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }]
     },
     "lint": {
       "executor": "@nx/eslint:lint",

@@ -1,19 +1,24 @@
 #!/usr/bin/env ts-node-script
-import * as path from 'path';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as fs from 'node:fs';
-import * as process from 'process';
-import { Command } from 'commander';
-import { APPNAME, LogLevel, die, error, getWorkspaceDir, invariant, log, setApplication, warn } from './ts/utils/app';
-import { readJson, writeJson } from './ts/utils/file';
+import * as path from 'node:path';
+import * as process from 'node:process';
+
+import { cp, exec, logEcho, pushd, popd, IGNORE } from '@homeofthings/node-sys';
 import { readCachedProjectGraph, ProjectGraph, ProjectGraphProjectNode } from '@nx/devkit';
-import { spawn } from './ts/utils/process';
-import { copyFile } from './ts/utils/fs';
+import { Command } from 'commander';
+import * as debugjs from 'debug';
+
+import { APPNAME, LogLevel, die, error, getWorkspaceDir, invariant, log, setApplication, warn } from './utils/app';
+import { readJson } from './utils/file';
+
 // -----------------------------------------------------------------------------------------
-const LICENSE_FILE="LICENSE";
-const README_FILE="README.md";
+const LICENSE_FILE = 'LICENSE';
+const README_FILE = 'README.md';
 
 interface Project extends ProjectGraphProjectNode {
   sourcePackageJson: any;
+  nonPublishableReasons: string[];
   publishable: boolean; // true if the project is not private and has a proper version
   generated: boolean; // true if the project is built
   published: boolean; // true if the project has already published for the current version
@@ -21,13 +26,8 @@ interface Project extends ProjectGraphProjectNode {
   outputPackageJson?: any;
 }
 
-function isGenerated(project?: Project): boolean {
-  return project && project.publishable && project.generated;
-}
-
-function isPublishable(project?: Project): boolean {
-  return isGenerated(project) && !project.published;
-}
+const debug = debugjs.default('build:publish');
+logEcho(false);
 
 setApplication(__filename);
 const WORKSPACE_DIR = path.resolve(getWorkspaceDir());
@@ -52,44 +52,74 @@ program.parse(process.argv);
 async function publish(graph: ProjectGraph): Promise<void> {
   const nxWorkspaceLibraryProjects = Object.values(graph.nodes).filter((n) => n.type === 'lib');
 
-  const projects: Project[] = [];
+  const publishProjects: Project[] = [];
+  const nonPublishableProjects: string[] = [];
+  const notGeneratedProjects: string[] = [];
+  const publishedProjects: string[] = [];
   for (const nxProject of nxWorkspaceLibraryProjects) {
     const project: Project = await enrichProject(nxProject);
     if (!project) {
       continue;
     }
-    if (!isPublishable(project)) {
-      if (isGenerated(project)) {
-        log(`'${project.sourcePackageJson.name}@${project.sourcePackageJson.version}': skipping already published version`);
-      } else {
-        log(`'${project.sourcePackageJson.name}': is not publishable`);
-      }
+    if (!project.publishable) {
+      nonPublishableProjects.push(`${project.sourcePackageJson.name}: ` + project.nonPublishableReasons.join(', '));
       continue;
     }
-    projects.push(project);
+    if (project.published) {
+      publishedProjects.push(`${project.sourcePackageJson.name}@${project.sourcePackageJson.version}`);
+      continue;
+    }
+    publishProjects.push(project);
   }
 
-  for (const project of projects) {
+  log('');
+  if (nonPublishableProjects.length) {
+    log('skipping non publishable projects: ');
+    for (const project of nonPublishableProjects) {
+      log(`  ${project}`);
+    }
+    log('');
+  }
+
+  if (publishedProjects.length) {
+    log('skipping already published versions: ');
+    for (const project of publishedProjects) {
+      log(`  ${project}`);
+    }
+    log('');
+  }
+
+  if (notGeneratedProjects.length) {
+    log('skipping not generated versions: ');
+    for (const project of notGeneratedProjects) {
+      log(`  ${project}`);
+    }
+    log('');
+  }
+
+  for (const project of publishProjects) {
+    if (!project.publishable || project.published || !project.generated) {
+      continue;
+    }
     log(`publishing: '${project.outputPackageJson.name}@${project.outputPackageJson.version}'`);
-    process.chdir(project.outputDir);
+    pushd(project.outputDir);
 
     try {
       // NOTE: executor @nx/rollup:rollup (used by jsonpointerx) does not copy files outside of srcRoot
       // so we copy them here if they do not exist
       const hasLicense = fs.existsSync(LICENSE_FILE);
-      const hasReadme = fs.existsSync(README_FILE);
       if (!hasLicense) {
-        await copyFile(path.resolve(WORKSPACE_DIR, project.data.root, LICENSE_FILE), LICENSE_FILE);
+        await cp(path.resolve(WORKSPACE_DIR, project.data.root, LICENSE_FILE), LICENSE_FILE, { preserveTimestamps: true });
       }
+      const hasReadme = fs.existsSync(README_FILE);
       if (!hasReadme) {
-        await copyFile(path.resolve(WORKSPACE_DIR, project.data.root, README_FILE), README_FILE);
+        await cp(path.resolve(WORKSPACE_DIR, project.data.root, README_FILE), README_FILE), { preserveTimestamps: true };
       }
-      const output  = await spawn('npm', 'publish', '--access public');
-      console.log(output);
-    } catch(err) {
+      await exec('npm', 'publish', '--access public').run();
+    } catch (err) {
       return Promise.reject(err);
     } finally {
-      process.chdir(WORKSPACE_DIR)
+      popd();
     }
   }
 }
@@ -97,6 +127,7 @@ async function publish(graph: ProjectGraph): Promise<void> {
 // -----------------------------------------------------------------------------------------
 async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Project | undefined> {
   const project: Project = { ...nxProject } as any;
+  project.nonPublishableReasons = [];
   project.publishable = false;
   project.published = false;
   project.generated = false;
@@ -115,7 +146,17 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
     error(`failed to read '${sourcePackageJsonPath}'`);
     return undefined;
   }
-  if (project.sourcePackageJson.private == true || !project.sourcePackageJson.version || project.sourcePackageJson.version === '0.0.0') {
+  if (project.sourcePackageJson.private == true) {
+    project.nonPublishableReasons.push('is private');
+  } else {
+    if (!project.sourcePackageJson.version) {
+      project.nonPublishableReasons.push('has no version');
+    }
+    if (project.sourcePackageJson.version === '0.0.0') {
+      project.nonPublishableReasons.push(`has version '${project.sourcePackageJson.version}'`);
+    }
+  }
+  if (project.nonPublishableReasons.length) {
     return project;
   }
   project.publishable = true;
@@ -137,23 +178,31 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
     `version differs between package jsons in '${sourcePackageJsonPath}' and '${outputPackageJsonPath}'`,
   );
   project.generated = true;
-  const versionsString = await spawn('npm', 'view', project.outputPackageJson.name as string, 'versions', '--json');
-  let versions: string[];
+  const outputLines: string[] = [];
+  const context = await exec('npm', 'view', project.outputPackageJson.name as string, 'versions', '--json')
+    .setStdOut(outputLines)
+    .setStdErr(IGNORE)
+    .setIgnoreExitCode()
+    .run();
+  const output = outputLines.join('');
+  let json: any;
   try {
-    versions = JSON.parse(versionsString);
+    json = JSON.parse(output);
   } catch {
     die(`failed to parse json received from calling: npm view ${project.outputPackageJson.name} versions --json`);
     return undefined;
   }
-  invariant(
-    Array.isArray(versions),
-    LogLevel.FATAL,
-    `data recieved from calling 'npm view ${project.outputPackageJson.name} versions --json' is not an array: ${versionsString}`
-  );
-  if (versions.indexOf(project.outputPackageJson.version) >= 0) {
+  if (context.exitCode) {
+    invariant(json.error?.code === 'E404', LogLevel.FATAL, `data recieved from calling 'npm view ${project.outputPackageJson.name} versions --json' is not an error: ${output}`);
+    log(`${project.outputPackageJson.name} was never published`);
+    return project;
+  }
+  invariant(Array.isArray(json), LogLevel.FATAL, `data recieved from calling 'npm view ${project.outputPackageJson.name} versions --json' is not a JSON array: ${output}`);
+  debug('versions: ', output);
+  if (json.indexOf(project.outputPackageJson.version) >= 0) {
     project.published = true;
   } else {
-    log(`'${project.outputPackageJson.name}@${project.outputPackageJson.version}' not yet published`);
+    log(`${project.outputPackageJson.name}@${project.outputPackageJson.version} not yet published`);
   }
   return project;
 }

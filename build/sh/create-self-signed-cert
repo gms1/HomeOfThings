@@ -1,7 +1,7 @@
 #!/bin/bash
 BN=$(basename "$0")
 DN=$(dirname "$0")
-. "${DN}/sh/common"
+. "${DN}/common"
 #--------------------------------------------------------------
 TRGDIR="${WORKSPACE_DIR}/config/secrets/ceritifcates"
 mkdir -p "${TRGDIR}"

@@ -1,0 +1,10 @@
+{
+  "name": "build",
+  "private": true,
+  "dependencies": {
+    "@homeofthings/node-sys": "*",
+    "tslib": "*"
+  },
+  "main": "./main.js",
+  "type": "commonjs"
+}

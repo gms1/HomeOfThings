@@ -103,14 +103,6 @@ export class ExecParams {
     return this;
   }
 
-  public setStdio(index: number, io: IOType): typeof this {
-    this._stdio[index] = io;
-    if (index === 0) {
-      delete this._options.input;
-    }
-    return this;
-  }
-
   public setStdIn(str0: string | Iterable<string>, ...rest: string[]) {
     if (isIterable(str0) && !rest.length) {
       this._options.input = str0;
@@ -123,17 +115,39 @@ export class ExecParams {
     return this;
   }
 
-  public setStdOut(out: string[]) {
+  public setStdOut(out: string[] | typeof IGNORE | typeof INHERIT) {
+    if (!Array.isArray(out)) {
+      return this.setStdio(1, out);
+    }
     this._options.output = out;
     this._options.output.length = 0;
     this._stdio[1] = PIPE;
     return this;
   }
 
-  public setStdErr(out: string[]) {
+  public setStdErr(out: string[] | typeof IGNORE | typeof INHERIT) {
+    if (!Array.isArray(out)) {
+      return this.setStdio(2, out);
+    }
     this._options.error = out;
     this._options.error.length = 0;
     this._stdio[2] = PIPE;
+    return this;
+  }
+
+  public setStdio(index: number, io: IOType): typeof this {
+    this._stdio[index] = io;
+    switch (index) {
+      case 0:
+        delete this.options.input;
+        break;
+      case 1:
+        delete this.options.output;
+        break;
+      case 2:
+        delete this.options.error;
+        break;
+    }
     return this;
   }
 

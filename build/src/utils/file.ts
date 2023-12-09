@@ -1,18 +1,25 @@
-import * as fs from './fs';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { WriteFileOptions, promises as fsNode } from 'node:fs';
+
+import { rename } from '@homeofthings/node-sys';
+import * as debugjs from 'debug';
 import parseJson = require('parse-json');
+
 import { SearchReplace, stringSearchAndReplace } from './string';
 
 export const BOM_CODE = 0xfeff;
 const DEFAULT_INDENT = 2;
 
+const debug = debugjs.default('build:utils:file');
+
 // -----------------------------------------------------------------------------------------
 export function readTextFile(filePath: string, encoding: BufferEncoding = 'utf8'): Promise<string> {
-  return fs.readFile(filePath, encoding) as Promise<string>;
+  return fsNode.readFile(filePath, encoding) as Promise<string>;
 }
 
 // -----------------------------------------------------------------------------------------
 export function writeTextFile(filePath: string, data: string, encoding: BufferEncoding = 'utf8'): Promise<void> {
-  return fs.writeFile(filePath, data, encoding);
+  return fsNode.writeFile(filePath, data, encoding);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -43,4 +50,24 @@ export async function fileSearchAndReplace(filePath: string, opts: SearchReplace
   }
   await writeTextFile(filePath, newBuffer);
   return true;
+}
+
+// -----------------------------------------------------------------------------------------
+export function readFile(filePath: string, options: BufferEncoding): Promise<string | Buffer> {
+  return fsNode.readFile(filePath, options).catch((err) => {
+    debug(`reading '${filePath}' failed: ${err}`);
+    return Promise.reject(err);
+  });
+}
+
+// -----------------------------------------------------------------------------------------
+export function writeFile(filePath: string, data: string | NodeJS.ArrayBufferView, options?: WriteFileOptions): Promise<void> {
+  const tmpFilePath = filePath + '.tmp';
+  return fsNode
+    .writeFile(tmpFilePath, data, options)
+    .catch((err) => {
+      debug(`writing '${tmpFilePath}' failed: ${err}`);
+      return Promise.reject(err);
+    })
+    .then(() => rename(tmpFilePath, filePath));
 }

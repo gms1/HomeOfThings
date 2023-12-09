@@ -1,0 +1,55 @@
+{
+  "name": "build",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "build/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/build",
+        "tsConfig": "build/tsconfig.lib.json",
+        "packageJson": "build/package.json",
+        "main": "build/src/index.ts",
+        "assets": []
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "build/jest.config.ts"
+      }
+    },
+    "merge-coverage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/merge-coverage.js",
+        "envFile": "build/.env"
+      },
+      "dependsOn": ["build"]
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/publish.js",
+        "envFile": "build/.env"
+      },
+      "dependsOn": ["build"]
+    },
+    "validate-projects": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/validate-projects.js",
+        "envFile": "build/.env"
+      },
+      "dependsOn": ["build"]
+    }
+  },
+  "tags": []
+}

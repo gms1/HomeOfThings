@@ -15,9 +15,13 @@
         "assets": ["packages/node/@homeofthings/nestjs-utils/*.md", "packages/node/@homeofthings/nestjs-utils/LICENSE"]
       }
     },
-    "publish": {
-      "command": "node tools/scripts/publish.mjs nestjs-utils {args.ver} {args.tag}",
-      "dependsOn": ["build"]
+    "version-bump": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/version-bump.js packages/node/@homeofthings/nestjs-utils {args.ver}",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }]
     },
     "lint": {
       "executor": "@nx/eslint:lint",
