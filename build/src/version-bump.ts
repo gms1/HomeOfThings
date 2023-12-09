@@ -5,10 +5,10 @@ import * as process from 'node:process';
 
 import { logEcho } from '@homeofthings/node-sys';
 import { Command } from 'commander';
+import { ProjectGraph, readCachedProjectGraph } from 'nx/src/devkit-exports';
 
 import { die, getWorkspaceDir, log, setApplication } from './utils/app';
 import { readJson, writeJson } from './utils/file';
-import { ProjectGraph, readCachedProjectGraph } from 'nx/src/devkit-exports';
 // -----------------------------------------------------------------------------------------
 // NOTE: call this script using `npx nx run <project>:version-bump --ver <new version>|increment|keep`
 
