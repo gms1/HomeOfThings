@@ -15,14 +15,6 @@
         "assets": ["packages/node/@homeofthings/node-sys/*.md", "packages/node/@homeofthings/node-sys/LICENSE"]
       }
     },
-    "version-bump": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node dist/build/src/version-bump.js packages/node/@homeofthings/node-sys {args.ver}",
-        "envFile": "build/.env"
-      },
-      "dependsOn": [{ "projects": "build", "target": "build" }]
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
@@ -36,6 +28,22 @@
       "options": {
         "jestConfig": "packages/node/@homeofthings/node-sys/jest.config.ts"
       }
+    },
+    "version-bump": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/version-bump.js packages/node/@homeofthings/node-sys {args.ver}",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }]
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/publish.js node-sys",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }, "build"]
     }
   },
   "tags": []

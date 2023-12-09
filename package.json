@@ -21,7 +21,7 @@
     "prettier": "npm run format:write",
     "merge-coverage": "nx run build:merge-coverage",
     "validate-projects": "nx run build:validate-projects",
-    "publish": "nx run build:publish"
+    "publish": "nx run-many --target=publish --output-style=static"
   },
   "private": true,
   "devDependencies": {

@@ -71,21 +71,36 @@ async function validate(graph: ProjectGraph): Promise<void> {
       } else {
         invariant(true, LogLevel.ERROR, `no $schema property in project.json '${projectJsonPath}'`);
       }
-      if (project.name === 'build') {
-        continue;
+      const publish = project.projectJson.targets?.publish;
+      invariant(publish, LogLevel.ERROR, `target named 'publish' not in project.json '${projectJsonPath}'`);
+      if (publish) {
+        const command = publish.options?.command ?? '';
+        const args = command.split(/ /);
+        invariant(
+          args[2] === nxProject.name,
+          LogLevel.ERROR,
+          `argument 1 in targets.publish.options.command is '${args[2]}' instead of '${nxProject.name}' in project.json '${projectJsonPath}'`,
+        );
+        const envFile = publish.options?.envFile;
+        invariant(envFile === 'build/.env', LogLevel.ERROR, `targets.publish.options.envFile is set to '${envFile}' instead of 'build/.env' in project.json '${projectJsonPath}'`);
+        const dependsOn = publish.dependsOn;
+        invariant(Array.isArray(dependsOn) && dependsOn.includes('build'), LogLevel.ERROR, `targets.publish does not depend on 'build' in project.json '${projectJsonPath}'`);
       }
-      invariant(!project.projectJson.targets?.publish, LogLevel.ERROR, `target named 'publish' in project.json '${projectJsonPath}'`);
       const versionBump = project.projectJson.targets?.['version-bump'];
       invariant(versionBump, LogLevel.ERROR, `target named 'version-bump' not in project.json '${projectJsonPath}'`);
       if (versionBump) {
-        const command = versionBump.options?.command;
+        const command = versionBump.options?.command ?? '';
         const args = command.split(/ /);
-        invariant(args[2] === nxProject.data.root, LogLevel.ERROR, `argument for project directory is '${args[2]}' instead of '${nxProject.data.root}'`);
+        invariant(
+          args[2] === nxProject.data.root,
+          LogLevel.ERROR,
+          `argument 1 in targets.version-bump.options.command is '${args[2]}' instead of '${nxProject.data.root}' in project.json '${projectJsonPath}'`,
+        );
         const envFile = versionBump.options?.envFile;
         invariant(
           envFile === 'build/.env',
           LogLevel.ERROR,
-          `target 'version-bump' property 'envFile' is not set to '${envFile}' instead of 'build/.env' in project.json '${projectJsonPath}'`,
+          `targets.version-bump.options.envFile is set to '${envFile}' instead of 'build/.env' in project.json '${projectJsonPath}'`,
         );
       }
       log(`validating project '${project.name}: done`);

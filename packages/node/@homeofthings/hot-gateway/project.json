@@ -15,14 +15,6 @@
         "assets": ["packages/node/@homeofthings/hot-gateway/*.md", "packages/node/@homeofthings/hot-gateway/LICENSE"]
       }
     },
-    "version-bump": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node dist/build/src/version-bump.js packages/node/@homeofthings/hot-gateway {args.ver}",
-        "envFile": "build/.env"
-      },
-      "dependsOn": [{ "projects": "build", "target": "build" }]
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
@@ -36,6 +28,22 @@
       "options": {
         "jestConfig": "packages/node/@homeofthings/hot-gateway/jest.config.ts"
       }
+    },
+    "version-bump": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/version-bump.js packages/node/@homeofthings/hot-gateway {args.ver}",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }]
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/publish.js hot-gateway",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }, "build"]
     }
   },
   "tags": []

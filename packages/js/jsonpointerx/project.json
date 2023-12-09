@@ -17,14 +17,6 @@
         "format": ["cjs", "esm"]
       }
     },
-    "version-bump": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node dist/build/src/version-bump.js packages/js/jsonpointerx {args.ver}",
-        "envFile": "build/.env"
-      },
-      "dependsOn": [{ "projects": "build", "target": "build" }]
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
@@ -38,6 +30,22 @@
       "options": {
         "jestConfig": "packages/js/jsonpointerx/jest.config.ts"
       }
+    },
+    "version-bump": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/version-bump.js packages/js/jsonpointerx {args.ver}",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }]
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/publish.js jsonpointerx",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }, "build"]
     }
   },
   "tags": []

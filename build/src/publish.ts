@@ -35,92 +35,59 @@ const WORKSPACE_DIR = path.resolve(getWorkspaceDir());
 const program = new Command();
 program
   .version('1.0')
-  .command(APPNAME, { isDefault: true })
-  .description('prepare all projects for publishing')
-  .action(async () => {
-    return publish(readCachedProjectGraph())
-      .catch((err) => {
-        die(`failed: ${err}`);
-      })
-      .then(() => {
-        log(`succeeded`);
-      });
+  .command(`${APPNAME} <project-name> `, { isDefault: true })
+  .description('publish package')
+  .action(async (projectName: string) => {
+    return publish(readCachedProjectGraph(), projectName).catch((err) => {
+      die(`failed: ${err}`);
+    });
   });
 program.parse(process.argv);
 
 // -----------------------------------------------------------------------------------------
-async function publish(graph: ProjectGraph): Promise<void> {
-  const nxWorkspaceLibraryProjects = Object.values(graph.nodes).filter((n) => n.type === 'lib');
+async function publish(graph: ProjectGraph, projectName: string): Promise<void> {
+  const nxProject = graph.nodes[projectName];
 
-  const publishProjects: Project[] = [];
-  const nonPublishableProjects: string[] = [];
-  const notGeneratedProjects: string[] = [];
-  const publishedProjects: string[] = [];
-  for (const nxProject of nxWorkspaceLibraryProjects) {
-    const project: Project = await enrichProject(nxProject);
-    if (!project) {
-      continue;
-    }
-    if (!project.publishable) {
-      nonPublishableProjects.push(`${project.sourcePackageJson.name}: ` + project.nonPublishableReasons.join(', '));
-      continue;
-    }
-    if (project.published) {
-      publishedProjects.push(`${project.sourcePackageJson.name}@${project.sourcePackageJson.version}`);
-      continue;
-    }
-    publishProjects.push(project);
+  if (!nxProject) {
+    die(`project '${projectName}' not found`);
+  }
+  const project: Project = await enrichProject(nxProject);
+  if (!project) {
+    return;
+  }
+  if (!project.publishable) {
+    log(`skipping non publishable project:   ${project.sourcePackageJson.name}: ` + project.nonPublishableReasons.join(', '));
+    return;
+  }
+  if (!project.generated) {
+    log(`skipping not generated project:     ${project.sourcePackageJson.name}@${project.sourcePackageJson.version}`);
+    return;
+  }
+  if (project.published) {
+    log(`skipping already published version: ${project.sourcePackageJson.name}@${project.sourcePackageJson.version}`);
+    return;
   }
 
-  log('');
-  if (nonPublishableProjects.length) {
-    log('skipping non publishable projects: ');
-    for (const project of nonPublishableProjects) {
-      log(`  ${project}`);
-    }
-    log('');
-  }
+  log(`publishing: '${project.outputPackageJson.name}@${project.outputPackageJson.version}'`);
+  pushd(project.outputDir);
 
-  if (publishedProjects.length) {
-    log('skipping already published versions: ');
-    for (const project of publishedProjects) {
-      log(`  ${project}`);
+  try {
+    // NOTE: executor @nx/rollup:rollup (used by jsonpointerx) does not copy files outside of srcRoot
+    // so we copy them here if they do not exist
+    const hasLicense = fs.existsSync(LICENSE_FILE);
+    if (!hasLicense) {
+      await cp(path.resolve(WORKSPACE_DIR, project.data.root, LICENSE_FILE), LICENSE_FILE, { preserveTimestamps: true });
     }
-    log('');
-  }
-
-  if (notGeneratedProjects.length) {
-    log('skipping not generated versions: ');
-    for (const project of notGeneratedProjects) {
-      log(`  ${project}`);
+    const hasReadme = fs.existsSync(README_FILE);
+    if (!hasReadme) {
+      await cp(path.resolve(WORKSPACE_DIR, project.data.root, README_FILE), README_FILE), { preserveTimestamps: true };
     }
-    log('');
-  }
-
-  for (const project of publishProjects) {
-    if (!project.publishable || project.published || !project.generated) {
-      continue;
-    }
-    log(`publishing: '${project.outputPackageJson.name}@${project.outputPackageJson.version}'`);
-    pushd(project.outputDir);
-
-    try {
-      // NOTE: executor @nx/rollup:rollup (used by jsonpointerx) does not copy files outside of srcRoot
-      // so we copy them here if they do not exist
-      const hasLicense = fs.existsSync(LICENSE_FILE);
-      if (!hasLicense) {
-        await cp(path.resolve(WORKSPACE_DIR, project.data.root, LICENSE_FILE), LICENSE_FILE, { preserveTimestamps: true });
-      }
-      const hasReadme = fs.existsSync(README_FILE);
-      if (!hasReadme) {
-        await cp(path.resolve(WORKSPACE_DIR, project.data.root, README_FILE), README_FILE), { preserveTimestamps: true };
-      }
-      await exec('npm', 'publish', '--access public').run();
-    } catch (err) {
-      return Promise.reject(err);
-    } finally {
-      popd();
-    }
+    await exec('npm', 'publish', '--access public').run();
+    log(`succeeded`);
+  } catch (err) {
+    return Promise.reject(err);
+  } finally {
+    popd();
   }
 }
 
