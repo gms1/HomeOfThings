@@ -92,9 +92,9 @@ async function validate(graph: ProjectGraph): Promise<void> {
         const command = versionBump.options?.command ?? '';
         const args = command.split(/ /);
         invariant(
-          args[2] === nxProject.data.root,
+          args[2] === nxProject.name,
           LogLevel.ERROR,
-          `argument 1 in targets.version-bump.options.command is '${args[2]}' instead of '${nxProject.data.root}' in project.json '${projectJsonPath}'`,
+          `argument 1 in targets.version-bump.options.command is '${args[2]}' instead of '${nxProject.name}' in project.json '${projectJsonPath}'`,
         );
         const envFile = versionBump.options?.envFile;
         invariant(

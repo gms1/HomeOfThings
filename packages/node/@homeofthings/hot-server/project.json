@@ -32,7 +32,7 @@
     "version-bump": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node dist/build/src/version-bump.js packages/node/@homeofthings/hot-server {args.ver}",
+        "command": "node dist/build/src/version-bump.js hot-server {args.ver}",
         "envFile": "build/.env"
       },
       "dependsOn": [{ "projects": "build", "target": "build" }]

@@ -32,7 +32,7 @@
     "version-bump": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node dist/build/src/version-bump.js packages/node/@homeofthings/nestjs-sqlite3 {args.ver}",
+        "command": "node dist/build/src/version-bump.js nestjs-sqlite3 {args.ver}",
         "envFile": "build/.env"
       },
       "dependsOn": [{ "projects": "build", "target": "build" }]

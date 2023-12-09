@@ -8,6 +8,7 @@ import { Command } from 'commander';
 
 import { die, getWorkspaceDir, log, setApplication } from './utils/app';
 import { readJson, writeJson } from './utils/file';
+import { ProjectGraph, readCachedProjectGraph } from 'nx/src/devkit-exports';
 // -----------------------------------------------------------------------------------------
 // NOTE: call this script using `npx nx run <project>:version-bump --ver <new version>|increment|keep`
 
@@ -21,10 +22,10 @@ const versionRegex = /^(\d+)\.(\d+)\.(\d+)((-rc\.)(\d+))?$/;
 const program = new Command();
 program
   .version('1.0')
-  .command(`version-bump <project-dir> <<new-version>|increment|keep> `, { isDefault: true })
+  .command(`version-bump <project-name> <<new-version>|increment|keep> `, { isDefault: true })
   .description('bump version for all projects')
-  .action(async (projectDir: string, version: string) => {
-    return versionBump(projectDir, version)
+  .action(async (projectName: string, version: string) => {
+    return versionBump(readCachedProjectGraph(), projectName, version)
       .catch((err) => {
         die(`failed: ${err}`);
       })
@@ -35,10 +36,15 @@ program
 program.parse(process.argv);
 
 // -----------------------------------------------------------------------------------------
-async function versionBump(projectDir: string, version: string): Promise<void> {
+async function versionBump(graph: ProjectGraph, projectName: string, version: string): Promise<void> {
+  const nxProject = graph.nodes[projectName];
+  if (!nxProject) {
+    die(`project '${projectName}' not found`);
+  }
+
   try {
-    const projectPackageJson = path.resolve(WORKSPACE_DIR, projectDir, 'package.json');
-    await bumpPackageVersion(projectDir, projectPackageJson, version);
+    const projectPackageJson = path.resolve(WORKSPACE_DIR, nxProject.data.root, 'package.json');
+    await bumpPackageVersion(nxProject.data.root, projectPackageJson, version);
     return;
   } catch (err) {
     return Promise.reject(err);

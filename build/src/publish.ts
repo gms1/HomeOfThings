@@ -51,6 +51,7 @@ async function publish(graph: ProjectGraph, projectName: string): Promise<void> 
   if (!nxProject) {
     die(`project '${projectName}' not found`);
   }
+
   const project: Project = await enrichProject(nxProject);
   if (!project) {
     return;
