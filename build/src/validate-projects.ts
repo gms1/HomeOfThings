@@ -11,6 +11,7 @@ import * as debugjs from 'debug';
 
 import { APPNAME, ERRORS, LogLevel, WARNINGS, die, getWorkspaceDir, invariant, log, setApplication } from './utils/app';
 import { readJson } from './utils/file';
+import { glob } from './utils/glob';
 
 // -----------------------------------------------------------------------------------------
 
@@ -53,7 +54,7 @@ async function validate(graph: ProjectGraph): Promise<void> {
     }
 
     const project: Project = { ...nxProject } as any;
-    log(`validating project '${project.name}...`);
+    log(`validating project ${project.name}...`);
     try {
       const projectRootDir = path.resolve(WORKSPACE_DIR, nxProject.data.root);
 
@@ -65,12 +66,28 @@ async function validate(graph: ProjectGraph): Promise<void> {
       project.packageJson = await readProjectJson(packageJsonPath);
       invariant(project.projectJson, project.type === 'lib' ? LogLevel.ERROR : LogLevel.INFO, `file '${packageJsonPath}' not found`);
 
+      // validate $schema in project.json
       if (project.projectJson.$schema) {
         const projectJsonSchemaPath = path.resolve(projectRootDir, project.projectJson.$schema);
         invariant(fs.existsSync(projectJsonSchemaPath), LogLevel.ERROR, `wrong $schema property in project.json '${projectJsonPath}'`);
       } else {
         invariant(true, LogLevel.ERROR, `no $schema property in project.json '${projectJsonPath}'`);
       }
+
+      // validate targets.build command
+      const build = project.projectJson.targets?.build;
+      invariant(build, LogLevel.ERROR, `target named 'build' not in project.json '${projectJsonPath}'`);
+      if (build && project.packageJson) {
+        const outputPath = build.options.outputPath;
+        const expectedOutputPath = project.name === 'build' ? `dist/build` : `dist/packages/${project.packageJson.name}`;
+        invariant(
+          outputPath === expectedOutputPath,
+          LogLevel.ERROR,
+          `target.build.options.outputPath is '${outputPath}' instead of '${expectedOutputPath}' in project.json '${projectJsonPath}'`,
+        );
+      }
+
+      // validate targets.publish command
       const publish = project.projectJson.targets?.publish;
       invariant(publish, LogLevel.ERROR, `target named 'publish' not in project.json '${projectJsonPath}'`);
       if (publish) {
@@ -86,6 +103,8 @@ async function validate(graph: ProjectGraph): Promise<void> {
         const dependsOn = publish.dependsOn;
         invariant(Array.isArray(dependsOn) && dependsOn.includes('build'), LogLevel.ERROR, `targets.publish does not depend on 'build' in project.json '${projectJsonPath}'`);
       }
+
+      // validate targets.version-bump command
       const versionBump = project.projectJson.targets?.['version-bump'];
       invariant(versionBump, LogLevel.ERROR, `target named 'version-bump' not in project.json '${projectJsonPath}'`);
       if (versionBump) {
@@ -96,6 +115,11 @@ async function validate(graph: ProjectGraph): Promise<void> {
           LogLevel.ERROR,
           `argument 1 in targets.version-bump.options.command is '${args[2]}' instead of '${nxProject.name}' in project.json '${projectJsonPath}'`,
         );
+        invariant(
+          args[3] === '{args.ver}',
+          LogLevel.ERROR,
+          `argument 1 in targets.version-bump.options.command is '${args[2]}' instead of '{args.ver}' in project.json '${projectJsonPath}'`,
+        );
         const envFile = versionBump.options?.envFile;
         invariant(
           envFile === 'build/.env',
@@ -103,7 +127,23 @@ async function validate(graph: ProjectGraph): Promise<void> {
           `targets.version-bump.options.envFile is set to '${envFile}' instead of 'build/.env' in project.json '${projectJsonPath}'`,
         );
       }
-      log(`validating project '${project.name}: done`);
+
+      // validate tsConfig*.json
+      const tsConfigs = await glob(path.join(projectRootDir, 'tsconfig*.json'));
+      for (const tsConfig of tsConfigs) {
+        const json = await readProjectJson(tsConfig);
+
+        // validate compilerOptions.outDir
+        const outDir = json.compilerOptions?.outDir;
+        if (!outDir) {
+          continue;
+        }
+        const outputPath = path.resolve(projectRootDir, outDir);
+        const expectedOutputPath = path.resolve(WORKSPACE_DIR, 'dist', 'out-tsc');
+        invariant(outputPath === expectedOutputPath, LogLevel.ERROR, `outDir is '${outputPath}' instead of '${expectedOutputPath}' in '${tsConfig}'`);
+      }
+
+      log(`validating project ${project.name}: done`);
     } catch {
       die('failed to validate');
     }

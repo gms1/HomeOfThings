@@ -17,7 +17,7 @@
     "json-pointer": "*",
     "json-ptr": "*",
     "jsonpointer": "*",
-    "jsonpointerx": "file:../../../dist/packages/js/jsonpointerx"
+    "jsonpointerx": "file:../../../dist/packages/jsonpointerx"
   },
   "devDependencies": {
     "tinybench": "*",

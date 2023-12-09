@@ -8,7 +8,7 @@
       "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/js/jsonpointerx",
+        "outputPath": "dist/packages/jsonpointerx",
         "main": "packages/js/jsonpointerx/src/index.ts",
         "tsConfig": "packages/js/jsonpointerx/tsconfig.lib.json",
         "assets": [],

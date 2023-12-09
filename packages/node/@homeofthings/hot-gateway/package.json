@@ -1,5 +1,5 @@
 {
-  "name": "@homeofthings/gateway",
+  "name": "@homeofthings/hot-gateway",
   "description": "HomeOfThings - gateway",
   "version": "0.0.0",
   "dependencies": {
