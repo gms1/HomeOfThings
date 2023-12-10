@@ -1,10 +1,9 @@
 #!/usr/bin/env ts-node-script
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as path from 'node:path';
-import * as process from 'node:process';
-
 import { logEcho } from '@homeofthings/node-sys';
 import { Command } from 'commander';
+import * as path from 'node:path';
+import * as process from 'node:process';
 import { ProjectGraph, readCachedProjectGraph } from 'nx/src/devkit-exports';
 
 import { die, getWorkspaceDir, log, setApplication } from './utils/app';

@@ -7,6 +7,10 @@
     "lcov-total": {
       "versions": ">2.0",
       "reason": "version 2 is ESM"
+    },
+    "parse-json": {
+      "versions": ">6.0",
+      "reason": "version 6 is ESM"
     }
   }
 }
