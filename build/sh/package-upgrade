@@ -1,0 +1,15 @@
+#!/bin/bash
+BN=$(basename "$0")
+DN=$(dirname "$0")
+. "${DN}/common"
+#--------------------------------------------------------------
+
+npx nx migrate latest
+if [ -f "migrations.json" ]; then
+  npm i
+  npx nx migrate --run-migrations
+  rm -f "migrations.json"
+fi
+npm i
+npm-upgrade
+npm i
