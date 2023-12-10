@@ -1,16 +1,20 @@
 {
   "ignore": {
     "chalk": {
-      "versions": ">4.0",
+      "versions": ">=5.0",
       "reason": "version 5 is ESM"
     },
     "lcov-total": {
-      "versions": ">2.0",
+      "versions": ">=2.0",
       "reason": "version 2 is ESM"
     },
     "parse-json": {
-      "versions": ">6.0",
+      "versions": ">=6.0",
       "reason": "version 6 is ESM"
+    },
+    "typescript": {
+      "versions": ">=5.3",
+      "reason": "not supported by Angular 17"
     }
   }
 }

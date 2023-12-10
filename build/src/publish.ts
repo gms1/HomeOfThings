@@ -15,6 +15,9 @@ import { readJson } from './utils/file';
 // -----------------------------------------------------------------------------------------
 const LICENSE_FILE = 'LICENSE';
 const README_FILE = 'README.md';
+const CHANGELOG_FILE = 'CHANGELOG.md';
+
+const FILES = [README_FILE, LICENSE_FILE, CHANGELOG_FILE];
 
 interface Project extends ProjectGraphProjectNode {
   sourcePackageJson: any;
@@ -75,13 +78,17 @@ async function publish(graph: ProjectGraph, projectName: string): Promise<void> 
   try {
     // NOTE: executor @nx/rollup:rollup (used by jsonpointerx) does not copy files outside of srcRoot
     // so we copy them here if they do not exist
-    const hasLicense = fs.existsSync(LICENSE_FILE);
-    if (!hasLicense) {
-      await cp(path.resolve(WORKSPACE_DIR, project.data.root, LICENSE_FILE), LICENSE_FILE, { preserveTimestamps: true });
-    }
-    const hasReadme = fs.existsSync(README_FILE);
-    if (!hasReadme) {
-      await cp(path.resolve(WORKSPACE_DIR, project.data.root, README_FILE), README_FILE), { preserveTimestamps: true };
+    for (const fileName of FILES) {
+      const trgFile = fileName;
+      const srcFile = path.resolve(WORKSPACE_DIR, project.data.root, fileName);
+      if (!fs.existsSync(trgFile)) {
+        if (fs.existsSync(srcFile)) {
+          warn(`copying ${fileName}`);
+          await cp(srcFile, trgFile, { preserveTimestamps: true });
+        } else {
+          warn(`missing ${fileName} file`);
+        }
+      }
     }
     await exec('npm', 'publish', '--access public').run();
     log(`succeeded`);
