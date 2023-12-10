@@ -1,9 +1,8 @@
-import { DbColumnTypeInfo, DbCatalogDAO } from '../dbcatalog';
-import { backtickQuoteSimpleIdentifier } from '../utils';
-
 import { FieldOpts } from './decorators';
 import { PropertyType } from './PropertyType';
 import { schema } from './Schema';
+import { DbColumnTypeInfo, DbCatalogDAO } from '../dbcatalog';
+import { backtickQuoteSimpleIdentifier } from '../utils';
 
 /**
  * Class holding a field definition

@@ -1,9 +1,8 @@
+import chalk from 'chalk';
+import * as debugjs from 'debug';
 import { WriteStream, createWriteStream } from 'node:fs';
 import * as processNode from 'node:process';
 import { format } from 'node:util';
-
-import chalk from 'chalk';
-import * as debugjs from 'debug';
 
 import { quoteArgs } from '../util/quote';
 

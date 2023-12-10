@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { MetaModel } from '../metadata';
 
 import { QueryOperation } from './QueryOperation';
 import { QueryPropertyPredicate } from './QueryPropertyPredicate';
 import { getPropertyComparison, getPropertyPredicates, ModelPredicates } from './Where';
+import { MetaModel } from '../metadata';
 
 export class QueryModelPredicates<MT> implements QueryOperation {
   subOperations: QueryPropertyPredicate<MT[keyof MT]>[];

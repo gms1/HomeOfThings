@@ -1,8 +1,7 @@
-import { ECHO_ENABLED, logCommand, logWarn } from '../log/index';
-
 import { ExecParams } from './exec';
 import { PIPE, SpawnContext } from './options';
 import { spawnChildProcess, onChildProcessExit } from './spawn';
+import { ECHO_ENABLED, logCommand, logWarn } from '../log/index';
 
 export class Pipe {
   protected _items: ExecParams[] = [];

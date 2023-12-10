@@ -1,9 +1,8 @@
-import { getCommand, logCommand, logWarn } from '../log/index';
-import { isIterable } from '../util/types/is';
-
 import { ExitCodeError } from './error';
 import { ExecOptions, IGNORE, INHERIT, IOType, PIPE, SpawnContext, SpawnOptions } from './options';
 import { onChildProcessExit, spawnChildProcess, writeInputToChildProcess } from './spawn';
+import { getCommand, logCommand, logWarn } from '../log/index';
+import { isIterable } from '../util/types/is';
 
 export class ExecParams {
   protected _options: ExecOptions = {};

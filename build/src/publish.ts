@@ -1,13 +1,13 @@
 #!/usr/bin/env ts-node-script
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import * as process from 'node:process';
 
 import { cp, exec, logEcho, pushd, popd, IGNORE } from '@homeofthings/node-sys';
 import { readCachedProjectGraph, ProjectGraph, ProjectGraphProjectNode } from '@nx/devkit';
 import { Command } from 'commander';
 import * as debugjs from 'debug';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as process from 'node:process';
 
 import { APPNAME, LogLevel, die, error, getWorkspaceDir, invariant, log, setApplication, warn } from './utils/app';
 import { readJson } from './utils/file';

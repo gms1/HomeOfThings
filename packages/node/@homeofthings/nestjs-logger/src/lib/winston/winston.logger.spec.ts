@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as winston from 'winston';
 
-import { LogLevel } from '../model';
-
 import { WinstonLogger } from './winston-logger';
+import { LogLevel } from '../model';
 
 jest.mock('winston', () => ({
   format: {

@@ -1,13 +1,11 @@
-import * as child_process from 'node:child_process';
-
 import * as debugjs from 'debug';
-
-import { getCommand } from '../log/index';
-import { writeToStream } from '../util/stream';
-import { WritableStrings } from '../util/stream-strings';
+import * as child_process from 'node:child_process';
 
 import { ExitCodeError, ProcessError } from './error';
 import { SpawnContext, SpawnOptions } from './options';
+import { getCommand } from '../log/index';
+import { writeToStream } from '../util/stream';
+import { WritableStrings } from '../util/stream-strings';
 
 const debug = debugjs.default('sys:process:spawn');
 let spawnId = 0;

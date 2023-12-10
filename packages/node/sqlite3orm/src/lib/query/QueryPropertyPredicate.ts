@@ -2,14 +2,18 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { KeyType, MetaModel, MetaProperty } from '../metadata';
 
 import { QueryOperation } from './QueryOperation';
 import { ComparisonOperatorType } from './Where';
+import { KeyType, MetaModel, MetaProperty } from '../metadata';
 
 export class QueryPropertyPredicate<PT> implements QueryOperation {
   op: ComparisonOperatorType;
-  constructor(public propertyKey: KeyType, opName: string, public value: any) {
+  constructor(
+    public propertyKey: KeyType,
+    opName: string,
+    public value: any,
+  ) {
     switch (opName) {
       case 'eq':
       case 'neq':

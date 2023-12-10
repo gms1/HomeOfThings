@@ -1,8 +1,7 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-
 import { pwd } from '@homeofthings/node-sys';
 import * as debugjs from 'debug';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 const _BASE_DIR = path.resolve(__dirname, '..', '..', '..', '..');
 const debug = debugjs.default('build:utils:file');

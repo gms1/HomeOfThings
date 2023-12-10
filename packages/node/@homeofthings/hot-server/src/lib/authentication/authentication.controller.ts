@@ -3,13 +3,12 @@
 import { Body, ClassSerializerInterceptor, Controller, Get, HttpCode, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
 
-import { User } from '../user/entity/user.entity';
-
 import { AuthenticationService } from './authentication.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UserIsAuthenticatedGuard } from './user-is-authenticated.guard';
 import { UserLoginGuard } from './user-login.guard';
+import { User } from '../user/entity/user.entity';
 
 // NOTE: Express.Request is defined by @types/passport
 interface RequestWithUser extends Express.Request {

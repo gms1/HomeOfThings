@@ -1,8 +1,7 @@
 import * as debugjs from 'debug';
 
-import { PROMPT } from '../log/index';
-
 import { SpawnContext } from './options';
+import { PROMPT } from '../log/index';
 
 const debug = debugjs.default('sys:process:error');
 

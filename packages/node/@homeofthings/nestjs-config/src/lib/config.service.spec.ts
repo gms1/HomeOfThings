@@ -4,9 +4,8 @@ jest.mock('config', () => ({
   get: jest.fn(),
 }));
 
-import * as path from 'path';
-
 import * as config from 'config';
+import * as path from 'path';
 
 import { ConfigService } from './config.service';
 

@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { DbColumnInfo, DbForeignKeyInfo, DbIndexColumnInfo, DbIndexInfo, DbTableInfo } from './DbTableInfo';
 import { SQL_DEFAULT_SCHEMA, SqlDatabase } from '../core';
 import { FKDefinition } from '../metadata';
 import { quoteSimpleIdentifier, splitSchemaIdentifier } from '../utils';
-
-import { DbColumnInfo, DbForeignKeyInfo, DbIndexColumnInfo, DbIndexInfo, DbTableInfo } from './DbTableInfo';
 
 export class DbCatalogDAO {
   sqldb: SqlDatabase;

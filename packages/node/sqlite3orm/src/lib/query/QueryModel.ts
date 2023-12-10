@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
-import { SqlDatabase } from '../core';
 
 import { Filter } from './Filter';
 import { QueryCondition } from './QueryCondition';
 import { QueryModelBase } from './QueryModelBase';
 import { QueryModelPredicates } from './QueryModelPredicates';
 import { isModelPredicates, Where } from './Where';
+import { SqlDatabase } from '../core';
 
 export class QueryModel<T> extends QueryModelBase<T> {
   constructor(type: { new (): T }) {

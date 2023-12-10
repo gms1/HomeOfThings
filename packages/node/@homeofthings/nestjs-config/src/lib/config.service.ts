@@ -1,11 +1,11 @@
+import { Inject, Injectable } from '@nestjs/common';
+import _debug from 'debug';
 import * as process from 'node:process';
 import * as path from 'path';
 
-import { Inject, Injectable } from '@nestjs/common';
-import type * as configType from 'config';
-import _debug from 'debug';
-
 import { ConfigModuleOptions, CONFIG_MODULE_OPTIONS_TOKEN } from './model';
+
+import type * as configType from 'config';
 
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
 const debug = _debug('nestjs-config');

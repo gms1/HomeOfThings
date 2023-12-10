@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { AutoUpgrader, BaseDAO } from 'sqlite3orm';
 
-import { ConnectionManager } from '../../../service/connection-manager';
-
 import { Contact } from './entity/contact';
 import { User } from './entity/user';
+import { ConnectionManager } from '../../../service/connection-manager';
 
 export const DONALD = 'Donald';
 
