@@ -4,6 +4,9 @@ DN=$(dirname "$0")
 . "${DN}/common"
 #--------------------------------------------------------------
 
+NU=$(which npm-upgrade)
+[ -n "${NU}" ] || npm -g install npm-upgrade
+
 npx nx migrate latest
 if [ -f "migrations.json" ]; then
   npm i
