@@ -1,5 +1,5 @@
 import * as child_process from 'node:child_process';
-import { Stream } from 'node:stream';
+import { Readable, Stream, Writable } from 'node:stream';
 
 export const INHERIT = 'inherit';
 export const IGNORE = 'ignore';
@@ -21,9 +21,9 @@ export interface AdditionalSpawnOptions {
   noEcho?: boolean; // disable echoing the command to stdout
   quiet?: boolean; // disable stdout and stderr
   ignoreExitCode?: boolean; // resolve with exit code instead of rejecting it
-  input?: Iterable<string>; // write those strings to 'stdin' after process has been spawend successfully
-  output?: string[];
-  error?: string[];
+  input?: Readable; // read from 'input' and write to stdin
+  output?: Writable; // read from stdout and write to 'output'
+  error?: Writable; // read from stderr and write to 'error'
   context?: SpawnContext;
 }
 

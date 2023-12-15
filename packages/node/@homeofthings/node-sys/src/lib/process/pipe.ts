@@ -21,7 +21,6 @@ export class Pipe {
     }
     this.logCommands();
     await this.spawnAllChildProcesses();
-    await this._items[0].writeInput();
 
     const childContexts: Promise<SpawnContext>[] = [];
     for (const item of this._items) {
@@ -37,7 +36,6 @@ export class Pipe {
     }
     this.logCommands(true);
     await this.spawnAllChildProcesses();
-    await this._items[0].writeInput();
     if (opts.unref) {
       for (const item of this._items) {
         item.unref();

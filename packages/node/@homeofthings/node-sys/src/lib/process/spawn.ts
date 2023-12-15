@@ -4,19 +4,9 @@ import * as child_process from 'node:child_process';
 import { ExitCodeError, ProcessError } from './error';
 import { SpawnContext, SpawnOptions } from './options';
 import { getCommand } from '../log/index';
-import { writeToStream } from '../util/stream';
-import { WritableStrings } from '../util/stream-strings';
 
 const debug = debugjs.default('sys:process:spawn');
 let spawnId = 0;
-
-interface InternalSpawnContext extends SpawnContext {
-  input?: Iterable<string> | undefined;
-  inputError?: Error;
-  inputProcessing?: boolean;
-  output?: WritableStrings;
-  error?: WritableStrings;
-}
 
 // NOTE: see:
 //   https://nodejs.org/api/child_process.html#child_processspawncommand-args-options
@@ -27,10 +17,9 @@ interface InternalSpawnContext extends SpawnContext {
 
 export function spawnChildProcess(options: SpawnOptions, ...args: string[]): Promise<SpawnContext> {
   const id = ++spawnId;
-  const context: InternalSpawnContext = (options.context = {
+  const context: SpawnContext = (options.context = {
     id,
     command: getCommand(options.shell, args),
-    input: options.input,
   });
 
   if (debug.enabled) {
@@ -54,28 +43,26 @@ export function spawnChildProcess(options: SpawnOptions, ...args: string[]): Pro
       debug(`process [${id}]: spawned: pid: ${childProcess.pid}`);
       childProcess.removeListener('error', errorListener);
       if (options.output) {
-        options.output.length = 0;
-        if (childProcess.stdout) {
-          context.output = new WritableStrings();
-          context.output.data = options.output;
-          childProcess.stdout.on('data', (data) => {
-            context.output!.write(data);
-          });
+        if (childProcess.stdout?.pipe) {
+          childProcess.stdout.pipe(options.output);
         } else {
           reject(new ProcessError(context, new Error(`process spawned, but stdout is not available`)));
           return;
         }
       }
       if (options.error) {
-        options.error.length = 0;
-        if (childProcess.stderr) {
-          context.error = new WritableStrings();
-          context.error.data = options.error;
-          childProcess.stderr.on('data', (data) => {
-            context.error!.write(data);
-          });
+        if (childProcess.stderr?.pipe) {
+          childProcess.stderr.pipe(options.error);
         } else {
           reject(new ProcessError(context, new Error(`process spawned, but stderr is not available`)));
+          return;
+        }
+      }
+      if (options.input) {
+        if (childProcess.stdin?.pipe) {
+          options.input.pipe(childProcess.stdin);
+        } else {
+          reject(new ProcessError(context, new Error(`process spawned, but stdin is not available`)));
           return;
         }
       }
@@ -88,7 +75,7 @@ export function spawnChildProcess(options: SpawnOptions, ...args: string[]): Pro
 
 export function onChildProcessExit(options: SpawnOptions): Promise<SpawnContext> {
   return new Promise((resolve, reject) => {
-    const context = options.context as InternalSpawnContext;
+    const context = options.context as SpawnContext;
     const id = context.id;
     const childProcess = context.process!;
     const errorListener = (err: Error) => {
@@ -98,26 +85,6 @@ export function onChildProcessExit(options: SpawnOptions): Promise<SpawnContext>
       const exitCode = code ?? -1;
       context.exitCode = exitCode;
       debug(`process [${id}]: exited with ${exitCode}`);
-      if (context.output) {
-        context.output.end();
-      }
-      if (context.error) {
-        context.error.end();
-      }
-      if (context.inputError) {
-        const err = new Error(`process exited with ${exitCode} but writing to stdin failed`);
-        err.cause = context.inputError;
-        reject(new ProcessError(context, err));
-        return;
-      }
-      if (context.input) {
-        if (context.inputProcessing) {
-          reject(new ProcessError(context, new Error(`process exited with ${exitCode} without waiting for stdin`)));
-        } else {
-          reject(new ProcessError(context, new Error(`process exited with ${exitCode} but we havn't yet stated to write to stdin`)));
-        }
-        return;
-      }
       if (exitCode !== 0) {
         reject(new ExitCodeError(context));
         return;
@@ -127,30 +94,4 @@ export function onChildProcessExit(options: SpawnOptions): Promise<SpawnContext>
     childProcess.once('exit', exitListener);
     childProcess.once('error', errorListener);
   });
-}
-
-export function writeInputToChildProcess(options: SpawnOptions): Promise<SpawnContext> {
-  const context = options.context as InternalSpawnContext;
-  const id = context.id;
-  const childProcess = context.process!;
-  if (!context.input) {
-    return Promise.resolve(context);
-  }
-
-  context.inputProcessing = true;
-  debug(`process [${id}]: writing to stdin...`);
-  return writeToStream(childProcess.stdin!, context.input)
-    .then(() => {
-      debug(`process [${id}]: data successfully written to stdin`);
-      delete context.input;
-      delete context.inputProcessing;
-    })
-    .catch((err) => {
-      debug(`process [${id}]: failed to write to stdin: `, err);
-      context.inputError = err;
-      delete context.input;
-      delete context.inputProcessing;
-      return Promise.reject(err);
-    })
-    .then(() => context);
 }

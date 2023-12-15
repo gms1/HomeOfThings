@@ -1,7 +1,10 @@
+import { Readable } from 'stream';
+
 import { ExitCodeError } from './error';
 import { ExecOptions, IGNORE, INHERIT, IOType, PIPE, SpawnContext, SpawnOptions } from './options';
-import { onChildProcessExit, spawnChildProcess, writeInputToChildProcess } from './spawn';
+import { onChildProcessExit, spawnChildProcess } from './spawn';
 import { getCommand, logCommand, logWarn } from '../log/index';
+import { WritableStrings } from '../util';
 import { isIterable } from '../util/types/is';
 
 export class ExecParams {
@@ -34,7 +37,6 @@ export class ExecParams {
 
     (options as SpawnOptions).detached = true;
     await spawnChildProcess(options, ...args);
-    await this.writeInput();
     if (opts?.unref) {
       this.unref();
     }
@@ -65,7 +67,6 @@ export class ExecParams {
     }
     try {
       await spawnChildProcess(options, ...args);
-      await this.writeInput();
       return await onChildProcessExit(options);
     } catch (err) {
       if (options?.ignoreExitCode) {
@@ -75,10 +76,6 @@ export class ExecParams {
       }
       return Promise.reject(err);
     }
-  }
-
-  public writeInput(): Promise<SpawnContext> {
-    return writeInputToChildProcess(this.options);
   }
 
   // set wait for detached process to exit
@@ -102,36 +99,31 @@ export class ExecParams {
     return this;
   }
 
-  public setStdIn(str0: string | Iterable<string>, ...rest: string[]) {
-    if (isIterable(str0) && !rest.length) {
-      this._options.input = str0;
-    } else {
-      const args = typeof str0 === 'string' ? [str0] : [...str0];
-      args.push(...rest);
-      this._options.input = args;
+  public setStdIn(input: Iterable<string> | typeof IGNORE | typeof INHERIT) {
+    if (isIterable<string>(input)) {
+      this._options.input = Readable.from(input);
+      this._stdio[0] = PIPE;
+      return this;
     }
-    this._stdio[0] = PIPE;
-    return this;
+    return this.setStdio(0, input);
   }
 
   public setStdOut(out: string[] | typeof IGNORE | typeof INHERIT) {
-    if (!Array.isArray(out)) {
-      return this.setStdio(1, out);
+    if (Array.isArray(out)) {
+      this._options.output = new WritableStrings(undefined, out);
+      this._stdio[1] = PIPE;
+      return this;
     }
-    this._options.output = out;
-    this._options.output.length = 0;
-    this._stdio[1] = PIPE;
-    return this;
+    return this.setStdio(1, out);
   }
 
   public setStdErr(out: string[] | typeof IGNORE | typeof INHERIT) {
-    if (!Array.isArray(out)) {
-      return this.setStdio(2, out);
+    if (Array.isArray(out)) {
+      this._options.error = new WritableStrings(undefined, out);
+      this._stdio[2] = PIPE;
+      return this;
     }
-    this._options.error = out;
-    this._options.error.length = 0;
-    this._stdio[2] = PIPE;
-    return this;
+    return this.setStdio(2, out);
   }
 
   public setStdio(index: number, io: IOType): typeof this {

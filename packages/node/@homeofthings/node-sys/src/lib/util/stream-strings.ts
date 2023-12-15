@@ -11,10 +11,12 @@ export class WritableStrings extends Writable {
   _init = true;
   _decoder?: StringDecoder;
   _buffer = '';
-  _data: string[] = [];
+  _data: string[];
 
-  constructor(options?: WritableOptions) {
+  constructor(options?: WritableOptions, data?: string[]) {
     super(options);
+    this.data = data ? data : [];
+    this.data.length = 0;
   }
 
   get data(): string[] {
