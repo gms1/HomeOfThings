@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Logger as NodeSysLogger } from '@homeofthings/nestjs-utils';
 import _debug from 'debug';
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
@@ -16,7 +17,7 @@ import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LogLevel } from '../mo
 const debug = _debug('nestjs-logger');
 debug('Module "winston" imported');
 
-export class WinstonLogger {
+export class WinstonLogger implements NodeSysLogger {
   private _logger!: winston.Logger;
 
   get logger(): winston.Logger {
@@ -75,13 +76,13 @@ export class WinstonLogger {
     return this;
   }
 
-  debug(message: string, ...meta: any[]): WinstonLogger {
-    this._logger.debug(message, ...meta);
+  verbose(message: string, ...meta: any[]): WinstonLogger {
+    this._logger.verbose(message, ...meta);
     return this;
   }
 
-  verbose(message: string, ...meta: any[]): WinstonLogger {
-    this._logger.verbose(message, ...meta);
+  debug(message: string, ...meta: any[]): WinstonLogger {
+    this._logger.debug(message, ...meta);
     return this;
   }
 

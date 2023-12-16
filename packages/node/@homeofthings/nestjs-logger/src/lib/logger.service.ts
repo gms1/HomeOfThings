@@ -1,3 +1,4 @@
+import { setLogger } from '@homeofthings/nestjs-utils';
 import { Inject, Injectable } from '@nestjs/common';
 
 import { LoggerModuleOptions, LOGGER_MODULE_OPTIONS_TOKEN, LogLevel } from './model';
@@ -28,6 +29,7 @@ export class LoggerService implements NestLoggerService {
   constructor(@Inject(LOGGER_MODULE_OPTIONS_TOKEN) _options: LoggerModuleOptions) {
     if (!LoggerService._instance) {
       LoggerService._instance = new WinstonLogger(_options);
+      setLogger(LoggerService._instance);
     }
   }
 
