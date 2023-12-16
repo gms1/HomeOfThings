@@ -23,8 +23,7 @@
   "dependencies": {
     "@nestjs/common": "*",
     "rxjs": "*",
-    "mkdirp": "*",
-    "type-fest": "*",
-    "tslib": "*"
+    "tslib": "*",
+    "@homeofthings/node-sys": "*"
   }
 }

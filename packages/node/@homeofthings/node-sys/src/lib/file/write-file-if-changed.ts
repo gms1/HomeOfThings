@@ -1,15 +1,12 @@
-import * as fs from 'fs';
-import * as mkdirp from 'mkdirp';
+import { promises as fsNode } from 'node:fs';
 import * as path from 'path';
-import * as util from 'util';
 
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+import { mkdir } from '../fs';
 
 export async function writeFileIfChanged(outputPath: string, content: string): Promise<boolean> {
   let oldContent;
   try {
-    oldContent = await readFile(outputPath, { encoding: 'utf8' });
+    oldContent = await fsNode.readFile(outputPath, { encoding: 'utf8' });
   } catch (err) {
     oldContent = undefined;
   }
@@ -18,8 +15,8 @@ export async function writeFileIfChanged(outputPath: string, content: string): P
   }
   const dirname = path.dirname(outputPath);
   try {
-    mkdirp.sync(dirname);
-    await writeFile(outputPath, content, { encoding: 'utf8' });
+    await mkdir(dirname, { recursive: true });
+    await fsNode.writeFile(outputPath, content, { encoding: 'utf8' });
   } catch (err) {
     return Promise.reject(err);
   }

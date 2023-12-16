@@ -1,5 +1,5 @@
 import { InjectConnectionPool } from '@homeofthings/nestjs-sqlite3';
-import { LruCache } from '@homeofthings/nestjs-utils';
+import { LruCache } from '@homeofthings/node-sys';
 import { Request } from 'express';
 import { BaseDAO, SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
 

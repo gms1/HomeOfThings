@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "dependencies": {
     "@nestjs/common": "*",
+    "@homeofthings/node-sys": "*",
     "@homeofthings/nestjs-utils": "*",
     "@nestjs/passport": "*",
     "@nestjs/swagger": "*",

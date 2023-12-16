@@ -1,6 +1,7 @@
-import { AnyObject, Constructor } from './common-types';
-
 // stolen from https://loopback.io/doc/en/lb4/apidocs.core.mixintarget.html
+
+import { AnyObject, Constructor } from './common';
+
 // https://loopback.io/doc/en/lb4/Mixin.html
 export type MixinTarget<T extends AnyObject> = Constructor<{
   // Enumerate only public members to avoid the following compiler error:

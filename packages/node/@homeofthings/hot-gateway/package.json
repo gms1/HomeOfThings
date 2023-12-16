@@ -3,7 +3,7 @@
   "description": "HomeOfThings - gateway",
   "version": "0.0.0",
   "dependencies": {
-    "@homeofthings/nestjs-utils": "*",
+    "@homeofthings/node-sys": "*",
     "@homeofthings/nestjs-config": "*",
     "@homeofthings/nestjs-logger": "*",
     "@homeofthings/hot-server": "*",

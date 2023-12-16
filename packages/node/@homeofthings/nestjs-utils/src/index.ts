@@ -1,5 +1,5 @@
 export * from './lib/model';
 export * from './lib/dynamic-root/dynamic-root.module';
-export * from './lib/async-context/async-context';
-export * from './lib/file/write-file-if-changed';
-export * from './lib/lru-cache/lru-cache';
+
+// TODO: those exports should be deprecated in favour of importing them directly from '@homeofthings/node-sys'
+export { AsyncContext, LruCache, writeFileIfChanged } from '@homeofthings/node-sys';

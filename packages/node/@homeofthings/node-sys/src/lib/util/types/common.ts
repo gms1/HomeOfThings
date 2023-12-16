@@ -1,18 +1,17 @@
-/**
- * Object with any (unknown) properties
- */
-export interface AnyObject {
-  [property: string]: unknown;
-}
+// see https://github.com/sindresorhus/type-fest for more types
+export type { Constructor, JsonValue, Primitive } from 'type-fest';
 
 /**
  * Generic Dictionary
  */
-export interface GenericDictionary<T> {
-  [property: string]: T;
-}
+export type GenericDictionary<T> = Record<string, T>;
 
 /**
  * Dictionary: { [property: string]: string; }
  */
-export interface Dictionary extends GenericDictionary<string> {}
+export type Dictionary = GenericDictionary<string>;
+
+/**
+ * AnyObject with any (unknown) properties
+ */
+export type AnyObject = GenericDictionary<unknown>;

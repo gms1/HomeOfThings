@@ -9,7 +9,7 @@ const AsyncContext: any = asyncContext.mockImplementation(() => {
   return { get: asyncContextGet, set: asyncContextSet };
 });
 
-jest.mock('@homeofthings/nestjs-utils', () => {
+jest.mock('@homeofthings/node-sys', () => {
   return {
     AsyncContext,
   };

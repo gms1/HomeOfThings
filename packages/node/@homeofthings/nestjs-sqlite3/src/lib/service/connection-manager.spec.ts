@@ -3,7 +3,7 @@
 /* eslint-disable import/order */
 
 import * as mockedLogger from '../test/mocks/logger';
-import * as mockedNestUtils from '../test/mocks/nest-utils';
+import * as mockedNestUtils from '../test/mocks/node-sys';
 import * as mockedSqlite3Orm from '../test/mocks/sqlite3orm';
 
 import { Test } from '@nestjs/testing';

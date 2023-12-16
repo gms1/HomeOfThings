@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {
+    "@homeofthings/node-sys": "*",
     "@homeofthings/nestjs-utils": "*",
     "@nestjs/common": "*",
     "@nestjs/core": "*",

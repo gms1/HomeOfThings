@@ -97,5 +97,4 @@ export class ChildModule {}
 ## more utilities
 
 - `class LruCache<T>` - LRU cache
-- `class AsyncContext<T>` - wrapper for `AsyncLocalStorage`
-- `function writeFileIfChanged(outputPath: string, content: string): Promise<boolean>` - write a file if provided content is different to exiting content
+- `class AsyncContext<T>` - asynchronouse contest based on `AsyncLocalStorage`
