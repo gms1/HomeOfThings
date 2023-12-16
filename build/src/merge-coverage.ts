@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node-script
 
-import { rm, logEcho } from '@homeofthings/node-sys';
+import { rm, setEcho } from '@homeofthings/node-sys';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import lcov_total from 'lcov-total';
@@ -11,7 +11,7 @@ import { APPNAME, die, getWorkspaceDir, log, setApplication } from './utils/app'
 import { writeFile } from './utils/file';
 import { glob } from './utils/glob';
 // -----------------------------------------------------------------------------------------
-logEcho(false);
+setEcho(false);
 
 const COVERAGE_GREEN_LOWER_LIMIT = 85;
 

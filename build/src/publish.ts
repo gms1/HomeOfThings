@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node-script
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { cp, exec, logEcho, pushd, popd, IGNORE } from '@homeofthings/node-sys';
+import { cp, exec, setEcho, pushd, popd, IGNORE } from '@homeofthings/node-sys';
 import { readCachedProjectGraph, ProjectGraph, ProjectGraphProjectNode } from '@nx/devkit';
 import { Command } from 'commander';
 import * as debugjs from 'debug';
@@ -30,7 +30,7 @@ interface Project extends ProjectGraphProjectNode {
 }
 
 const debug = debugjs.default('build:publish');
-logEcho(false);
+setEcho(false);
 
 setApplication(__filename);
 const WORKSPACE_DIR = path.resolve(getWorkspaceDir());

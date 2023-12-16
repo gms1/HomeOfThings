@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node-script
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { logEcho } from '@homeofthings/node-sys';
+import { setEcho } from '@homeofthings/node-sys';
 import { Command } from 'commander';
 import * as path from 'node:path';
 import * as process from 'node:process';
@@ -11,7 +11,7 @@ import { readJson, writeJson } from './utils/file';
 // -----------------------------------------------------------------------------------------
 // NOTE: call this script using `npx nx run <project>:version-bump --ver <new version>|increment|keep`
 
-logEcho(false);
+setEcho(false);
 
 setApplication(__filename);
 const WORKSPACE_DIR = path.resolve(getWorkspaceDir());

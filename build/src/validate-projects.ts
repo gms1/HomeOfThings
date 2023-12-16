@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node-script
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { logEcho } from '@homeofthings/node-sys';
+import { setEcho } from '@homeofthings/node-sys';
 import { readCachedProjectGraph, ProjectGraph, ProjectGraphProjectNode } from '@nx/devkit';
 import { Command } from 'commander';
 import * as debugjs from 'debug';
@@ -22,7 +22,7 @@ interface Project extends ProjectGraphProjectNode {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debug = debugjs.default('build:validate-projects');
-logEcho(false);
+setEcho(false);
 
 setApplication(__filename);
 const WORKSPACE_DIR = path.resolve(getWorkspaceDir());
