@@ -6,20 +6,20 @@ class DefaultLogger implements Logger {
   readonly WARNING_PREFIX = 'WARNING: ';
   readonly ERROR_PREFIX = 'ERROR: ';
 
-  log(...text: unknown[]): void {
-    console.info(...text);
+  verbose(message: string, ...more: unknown[]): void {
+    console.info(message, ...more);
   }
 
-  info(...text: unknown[]): void {
-    console.info(chalk.green(...text));
+  info(message: string, ...more: unknown[]): void {
+    console.info(chalk.green(message, ...more));
   }
 
-  warn(...text: unknown[]): void {
-    console.warn(chalk.yellow(this.WARNING_PREFIX, ...text));
+  warn(message: string, ...more: unknown[]): void {
+    console.warn(chalk.yellow(message, this.WARNING_PREFIX, ...more));
   }
 
-  error(...text: unknown[]): void {
-    console.error(chalk.red.bold(this.ERROR_PREFIX, ...text));
+  error(message: string, ...more: unknown[]): void {
+    console.error(chalk.red.bold(message, this.ERROR_PREFIX, ...more));
   }
 }
 
@@ -29,18 +29,18 @@ export function setLogger(logger: Logger) {
   currentLogger = logger;
 }
 
-export function log(...text: unknown[]): void {
-  currentLogger.log(...text);
+export function logVerbose(message: string, ...more: unknown[]): void {
+  currentLogger.verbose(message, ...more);
 }
 
-export function logInfo(...text: unknown[]): void {
-  currentLogger.info(...text);
+export function logInfo(message: string, ...more: unknown[]): void {
+  currentLogger.info(message, ...more);
 }
 
-export function logWarn(...text: unknown[]): void {
-  currentLogger.warn(...text);
+export function logWarn(message: string, ...more: unknown[]): void {
+  currentLogger.warn(message, ...more);
 }
 
-export function logError(...text: unknown[]): void {
-  currentLogger.error(...text);
+export function logError(message: string, ...more: unknown[]): void {
+  currentLogger.error(message, ...more);
 }

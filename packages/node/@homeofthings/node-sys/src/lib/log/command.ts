@@ -1,6 +1,6 @@
 import * as debugjs from 'debug';
 
-import { log } from './log';
+import { logVerbose } from './log';
 import { getCommand } from '../process';
 
 const debug = debugjs.default('sys:log:command');
@@ -29,7 +29,7 @@ export function logCommand(command: string): void {
     debug(currentPrompt + command);
     return;
   }
-  log(currentPrompt + command);
+  logVerbose(currentPrompt + command);
 }
 
 export function logCommandArgs(...args: string[]) {
@@ -42,6 +42,6 @@ export function logCommandResult<T = string | string[]>(output: T): T {
     debug(result);
     return output;
   }
-  log(result);
+  logVerbose('', result);
   return output;
 }

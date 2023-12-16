@@ -1,6 +1,6 @@
 export interface Logger {
-  log(...text: unknown[]): void;
-  info(...text: unknown[]): void;
-  warn(...text: unknown[]): void;
-  error(...text: unknown[]): void;
+  verbose(message: string, ...more: unknown[]): void;
+  info(message: string, ...more: unknown[]): void;
+  warn(message: string, ...more: unknown[]): void;
+  error(message: string, ...more: unknown[]): void;
 }
