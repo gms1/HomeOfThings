@@ -31,7 +31,7 @@ const program = new Command();
 program
   .version('1.0')
   .command(APPNAME, { isDefault: true })
-  .description('prepare all projects for publishing')
+  .description('valid project configurations')
   .action(async () => {
     return validate(readCachedProjectGraph())
       .catch((err) => {
@@ -59,11 +59,11 @@ async function validate(graph: ProjectGraph): Promise<void> {
       const projectRootDir = path.resolve(WORKSPACE_DIR, nxProject.data.root);
 
       const projectJsonPath = path.resolve(projectRootDir, 'project.json');
-      project.projectJson = await readProjectJson(projectJsonPath);
+      project.projectJson = await readJson(projectJsonPath);
       invariant(project.projectJson, LogLevel.FATAL, `file '${projectJsonPath}' not found`);
 
       const packageJsonPath = path.resolve(projectRootDir, 'package.json');
-      project.packageJson = await readProjectJson(packageJsonPath);
+      project.packageJson = await readJson(packageJsonPath);
       invariant(project.projectJson, project.type === 'lib' ? LogLevel.ERROR : LogLevel.INFO, `file '${packageJsonPath}' not found`);
 
       // validate $schema in project.json
@@ -131,7 +131,7 @@ async function validate(graph: ProjectGraph): Promise<void> {
       // validate tsConfig*.json
       const tsConfigs = await glob(path.join(projectRootDir, 'tsconfig*.json'));
       for (const tsConfig of tsConfigs) {
-        const json = await readProjectJson(tsConfig);
+        const json = await readJson(tsConfig);
 
         // validate compilerOptions.outDir
         const outDir = json.compilerOptions?.outDir;
@@ -144,22 +144,11 @@ async function validate(graph: ProjectGraph): Promise<void> {
       }
 
       log(`validating project ${project.name}: done`);
-    } catch {
-      die('failed to validate');
+    } catch (err) {
+      die(`validating project ${project.name}: failed: `, err);
     }
   }
   if (ERRORS) {
     die(`${ERRORS} error(s) and ${WARNINGS} warning(s) found`);
-  }
-}
-
-async function readProjectJson(path: string): Promise<any> {
-  if (!fs.existsSync(path)) {
-    return undefined;
-  }
-  try {
-    return await readJson(path);
-  } catch {
-    throw new Error(`failed to read '${path}'`);
   }
 }
