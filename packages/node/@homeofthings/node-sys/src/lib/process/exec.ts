@@ -2,12 +2,12 @@ import { Readable } from 'stream';
 
 import { ExitCodeError } from './error';
 import { ExecOptions, IGNORE, INHERIT, IOType, PIPE, SpawnContext, SpawnOptions } from './options';
-import { onChildProcessExit, spawnChildProcess } from './spawn';
-import { getCommand, logCommand, logWarn } from '../log/index';
+import { getCommand, onChildProcessExit, spawnChildProcess } from './spawn';
+import { logCommand, logWarn } from '../log';
 import { WritableStrings } from '../util';
 import { isIterable } from '../util/types/is';
 
-export class ExecParams {
+export class Exec {
   protected _options: ExecOptions = {};
   protected _args: string[];
   private defaultOutput: IOType = INHERIT;
@@ -29,20 +29,17 @@ export class ExecParams {
     return this._options.stdio as IOType[];
   }
 
-  public async spawn(opts?: { unref: boolean }): Promise<ExecParams> {
-    const { options, args } = this;
-    delete options.context;
-
-    this.logBackgroundCommand();
-
-    (options as SpawnOptions).detached = true;
-    await spawnChildProcess(options, ...args);
-    if (opts?.unref) {
-      this.unref();
-    }
+  /*
+   * start: start the child process in background (detached)
+   */
+  public async start(): Promise<Exec> {
+    await this.spawn(true);
     return this;
   }
 
+  /*
+   * wait: wait for child process to exit
+   */
   public async wait(): Promise<SpawnContext> {
     const { options } = this;
     try {
@@ -57,44 +54,32 @@ export class ExecParams {
     }
   }
 
+  /*
+   * run: spawn a child process and wait until it has exited
+   */
   public async run(): Promise<SpawnContext> {
-    const { options, args } = this;
-    delete options.context;
-
-    this.logCommand();
-    if (options.shell && args.length > 1) {
-      logWarn('`sh -c` should be called with just one argument');
-    }
-    try {
-      await spawnChildProcess(options, ...args);
-      return await onChildProcessExit(options);
-    } catch (err) {
-      if (options?.ignoreExitCode) {
-        if (err instanceof ExitCodeError && typeof options.context?.exitCode === 'number') {
-          return options.context!;
-        }
-      }
-      return Promise.reject(err);
-    }
+    await this.spawn(false);
+    return await this.wait();
   }
 
-  // set wait for detached process to exit
-  public ref(): ExecParams {
+  // on end of current process, wait for detached process to exit
+  public ref(): Exec {
     if (this.options.context?.process) {
       this.options.context?.process.ref();
     }
     return this;
   }
 
-  // set do not wait for detached process to exit
-  public unref(): ExecParams {
+  // on end of current process, do not wait for detached process to exit
+  public unref(): Exec {
     if (this.options.context?.process) {
       this.options.context?.process.unref();
     }
     return this;
   }
 
-  public setIgnoreExitCode(): ExecParams {
+  // do not throw if child process exited with non-zero exit code
+  public setIgnoreExitCode(): Exec {
     this._options.ignoreExitCode = true;
     return this;
   }
@@ -142,6 +127,7 @@ export class ExecParams {
     return this;
   }
 
+  // do not echo and ignore all output of the child process
   public setQuiet(value?: boolean): typeof this {
     this._options.quiet = value == undefined ? true : value;
     if (this._options.quiet) {
@@ -152,6 +138,13 @@ export class ExecParams {
     return this;
   }
 
+  // set echo to on
+  public setEcho(): typeof this {
+    this._options.noEcho = false;
+    return this;
+  }
+
+  // set echo to off
   public setNoEcho(): typeof this {
     this._options.noEcho = true;
     return this;
@@ -172,29 +165,31 @@ export class ExecParams {
     }
   }
 
-  public getCommand(): string {
-    return getCommand(this.options.shell, this.args);
+  public async spawn(detached: boolean, warnShellArgs = true) {
+    const { options, args } = this;
+    delete options.context;
+
+    (options as SpawnOptions).detached = detached;
+    this.logCommand(detached);
+    if (warnShellArgs && options.shell && args.length > 1) {
+      logWarn('`sh -c` should be called with just one argument');
+    }
+    await spawnChildProcess(options, ...args);
   }
 
-  protected logCommand(): void {
+  protected logCommand(detached: boolean): void {
     if (this.options?.noEcho) {
       return;
     }
-    logCommand(this.getCommand());
-  }
-
-  protected logBackgroundCommand(): void {
-    if (this.options?.noEcho) {
-      return;
-    }
-    logCommand(this.getCommand() + ' &');
+    const command = getCommand(this.options.shell, this.args);
+    logCommand(detached ? command + ' &' : command);
   }
 }
 
-export function exec(...args: string[]): ExecParams {
-  return new ExecParams(...args);
+export function exec(...args: string[]): Exec {
+  return new Exec(...args);
 }
 
-export function sh(arg: string): ExecParams {
-  return new ExecParams(arg).setShell();
+export function sh(arg: string): Exec {
+  return new Exec(arg).setShell();
 }

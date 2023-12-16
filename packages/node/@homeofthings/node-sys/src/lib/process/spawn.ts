@@ -3,7 +3,7 @@ import * as child_process from 'node:child_process';
 
 import { ExitCodeError, ProcessError } from './error';
 import { SpawnContext, SpawnOptions } from './options';
-import { getCommand } from '../log/index';
+import { quoteArgs } from '../util';
 
 const debug = debugjs.default('sys:process:spawn');
 let spawnId = 0;
@@ -94,4 +94,16 @@ export function onChildProcessExit(options: SpawnOptions): Promise<SpawnContext>
     childProcess.once('exit', exitListener);
     childProcess.once('error', errorListener);
   });
+}
+
+export function getCommand(shell: string | boolean | undefined, args: string[]): string {
+  if (shell) {
+    const command = typeof shell === 'string' ? quoteArgs(shell, '-c', ...args) : quoteArgs('sh', '-c', ...args);
+    if (command.substring(0, 7) !== "sh -c '") {
+      return command;
+    }
+    return command.substring(7, command.length - 1);
+  } else {
+    return quoteArgs(...args);
+  }
 }

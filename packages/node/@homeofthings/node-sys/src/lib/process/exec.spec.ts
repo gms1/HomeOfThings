@@ -85,7 +85,7 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = exec('node', '-e', `console.log('${message}')`).setStdOut(out);
-      const process = await params.spawn();
+      const process = await params.start();
       process.unref();
 
       process.ref();
@@ -101,7 +101,8 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = exec('node', '-e', `console.error('${message}')`).setStdErr(out);
-      const process = await params.spawn({ unref: true });
+      const process = await params.start();
+      process.unref();
 
       process.ref();
       const context = await process.wait();
@@ -117,7 +118,7 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = exec('node').setStdIn(script).setStdOut(out);
-      const process = await params.spawn();
+      const process = await params.start();
       process.unref();
 
       process.ref();
@@ -131,7 +132,8 @@ describe('exec', () => {
     it('should not throw on non-zero exit code if using `setIgnoreExitCode()`', async () => {
       const exitCode = 24;
       const params = exec('node', '-e', `process.exit(${exitCode})`).setIgnoreExitCode();
-      const process = await params.spawn({ unref: true });
+      const process = await params.start();
+      process.unref();
 
       process.ref();
       const context = await process.wait();
@@ -142,8 +144,7 @@ describe('exec', () => {
       const exitCode = 24;
       try {
         const params = exec('node', '-e', `process.exit(${exitCode})`);
-        await params.spawn();
-        const process = await params.spawn();
+        const process = await params.start();
         process.unref();
 
         process.ref();
@@ -222,7 +223,7 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = sh(`node -e "console.log('${message}')"`).setStdOut(out);
-      const process = await params.spawn();
+      const process = await params.start();
       process.unref();
 
       process.ref();
@@ -238,7 +239,7 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = sh(`node -e "console.error('${message}')"`).setStdErr(out);
-      const process = await params.spawn();
+      const process = await params.start();
       process.unref();
 
       process.ref();
@@ -255,7 +256,7 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = sh('node').setStdIn(script).setStdOut(out);
-      const process = await params.spawn();
+      const process = await params.start();
       process.unref();
 
       process.ref();
@@ -269,7 +270,7 @@ describe('exec', () => {
     it('should not throw on non-zero exit code if using `setIgnoreExitCode()`', async () => {
       const exitCode = 24;
       const params = sh(`node -e "process.exit(${exitCode})"`).setIgnoreExitCode();
-      const process = await params.spawn();
+      const process = await params.start();
       process.unref();
 
       process.ref();
@@ -282,7 +283,7 @@ describe('exec', () => {
       const exitCode = 24;
       try {
         const params = sh(`node -e "process.exit(${exitCode})"`);
-        const process = await params.spawn();
+        const process = await params.start();
         process.unref();
 
         process.ref();

@@ -13,8 +13,6 @@ export interface SpawnContext {
   process?: child_process.ChildProcess; // the child process
   // set after child process exited:
   exitCode?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
 }
 
 export interface AdditionalSpawnOptions {

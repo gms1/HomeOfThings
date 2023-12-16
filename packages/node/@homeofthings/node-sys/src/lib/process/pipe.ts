@@ -1,56 +1,84 @@
-import { ExecParams } from './exec';
+import { Exec } from './exec';
 import { PIPE, SpawnContext } from './options';
-import { spawnChildProcess, onChildProcessExit } from './spawn';
-import { ECHO_ENABLED, logCommand, logWarn } from '../log/index';
+import { getCommand } from './spawn';
+import { logCommand } from '../log';
 
 export class Pipe {
-  protected _items: ExecParams[] = [];
+  private _items: Exec[] = [];
+  private noEcho = false;
 
-  public to(item: ExecParams): typeof this {
+  /*
+   * to: pipe the output of the previous command into another one
+   *     this is a synonym for `add`
+   */
+  public to(item: Exec): typeof this {
     return this.add(item);
   }
 
-  public add(item: ExecParams): typeof this {
+  /*
+   * add: add a new command to this pipe
+   */
+  public add(item: Exec): typeof this {
     this._items.push(item);
     return this;
   }
 
+  /*
+   * run: spawn all child processes of this pipe and wait until they have exited
+   */
   public async run(): Promise<SpawnContext[]> {
-    if (this._items.length === 0) {
-      return [];
-    }
-    this.logCommands();
-    await this.spawnAllChildProcesses();
-
-    const childContexts: Promise<SpawnContext>[] = [];
-    for (const item of this._items) {
-      childContexts.push(onChildProcessExit(item.options));
-    }
-
-    return Promise.all(childContexts);
+    await this.spawn(false);
+    return this.wait();
   }
 
-  public async spawn(opts?: { unref: boolean }): Promise<Pipe> {
-    if (this._items.length === 0) {
-      return this;
-    }
-    this.logCommands(true);
-    await this.spawnAllChildProcesses();
-    if (opts.unref) {
-      for (const item of this._items) {
-        item.unref();
-      }
-    }
-    return this;
+  /*
+   * start: start the child processes of this pipe in background (detached)
+   */
+  public async start(): Promise<Pipe> {
+    return this.spawn(true);
   }
 
+  /*
+   * wait: wait for all child processes of this pipe to exit
+   */
   public async wait(): Promise<SpawnContext[]> {
     const childContexts: Promise<SpawnContext>[] = [];
     for (const item of this._items) {
-      childContexts.push(onChildProcessExit(item.options));
+      childContexts.push(item.wait());
     }
 
     return Promise.all(childContexts);
+  }
+
+  protected async spawn(detached: boolean): Promise<Pipe> {
+    if (this._items.length === 0) {
+      return this;
+    }
+    this.logCommand(detached);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let lastStdout: any = undefined;
+
+    if (this._items.length > 1) {
+      this._items[0]!.setStdio(1, PIPE);
+    }
+
+    let warnShellArgs = true;
+    for (const idx in this._items) {
+      const item = this._items[idx]!;
+
+      if (idx !== '0') {
+        item.setStdio(0, lastStdout);
+      }
+      item.options.noEcho = true;
+      await item.spawn(detached, warnShellArgs);
+      if (warnShellArgs && item.options.shell && item.args.length > 1) {
+        warnShellArgs = false;
+      }
+      lastStdout = item.options.context!.process!.stdout;
+    }
+
+    return this;
   }
 
   // set wait for detached process to exit
@@ -65,48 +93,34 @@ export class Pipe {
     return this;
   }
 
-  protected async spawnAllChildProcesses(): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let lastStdout: any = undefined;
-
-    if (this._items.length > 1) {
-      this._items[0]!.setStdio(1, PIPE);
-    }
-
-    let warnShellArgs = true;
-    for (const idx in this._items) {
-      const item = this._items[idx]!;
-      if (idx !== '0') {
-        item.setStdio(0, lastStdout);
-      }
-      if (warnShellArgs && item.options.shell && item.args.length > 1) {
-        logWarn('`sh -c` should be called with just one argument');
-        warnShellArgs = false;
-      }
-      await spawnChildProcess(item.options, ...item.args);
-      lastStdout = item.options.context!.process!.stdout;
-    }
+  // set echo to on
+  public setEcho(): typeof this {
+    this.noEcho = false;
+    return this;
   }
 
-  protected logCommands(background = false) {
-    if (!ECHO_ENABLED) {
+  // set echo to off
+  public setNoEcho(): typeof this {
+    this.noEcho = true;
+    return this;
+  }
+
+  protected logCommand(detached = false) {
+    if (this.noEcho) {
       return;
     }
     const commands: string[] = [];
     for (const execParams of this._items) {
-      if (execParams.options?.noEcho) {
-        return;
-      }
-      commands.push(execParams.getCommand());
+      commands.push(getCommand(execParams.options.shell, execParams.args));
     }
-    logCommand(commands.join(' | ') + (background ? ' &' : ''));
+    logCommand(commands.join(' | ') + (detached ? ' &' : ''));
   }
 
-  private forEach(callbackfn: (value: ExecParams, index: number, array: ExecParams[]) => void): void {
+  private forEach(callbackfn: (value: Exec, index: number, array: Exec[]) => void): void {
     this._items.filter((exec) => exec.options.context?.process).forEach(callbackfn);
   }
 }
 
-export function pipe(params: ExecParams): Pipe {
+export function pipe(params: Exec): Pipe {
   return new Pipe().add(params);
 }

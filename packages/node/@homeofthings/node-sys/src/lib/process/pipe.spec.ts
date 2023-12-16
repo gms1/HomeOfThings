@@ -46,7 +46,8 @@ describe('pipe', () => {
 
       const out: string[] = [];
       const p = await pipe(exec('node').setStdIn(script1)).to(exec('node', '-e', script2).setStdOut(out));
-      await p.spawn({ unref: true });
+      await p.start();
+      p.unref();
 
       p.ref();
       const context = await p.wait();

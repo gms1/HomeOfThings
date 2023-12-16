@@ -10,7 +10,7 @@ import { Mode as StatsMode } from 'stat-mode';
 import externalTouch from 'touch';
 import externalWhich from 'which';
 
-import { logCommandArgs, logCommand, logCommandResult } from '../log/index';
+import { logCommandArgs, logCommand, logCommandResult } from '../log';
 
 // NOTE:
 // shell would be needed for getting shell expansion (e.g for pathname expansion (globbing) of '*', '?', '[...]' wildcards)
