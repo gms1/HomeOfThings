@@ -33,8 +33,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalString('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
@@ -43,16 +43,16 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalString('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(`${givenValue}`);
   });
 
   it('getOptionalString should return undefined', () => {
     has.mockReturnValueOnce(false);
     const value = configService.getOptionalString('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(0);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(0);
     expect(value).toBeUndefined();
   });
 
@@ -62,8 +62,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getString('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
@@ -71,8 +71,8 @@ describe('ConfigService', () => {
     const defaultValue = 'bar';
     has.mockReturnValueOnce(false);
     const value = configService.getString('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(0);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(0);
     expect(value).toBe(defaultValue);
   });
 
@@ -81,8 +81,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalNumber('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
@@ -92,16 +92,16 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalNumber('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenNumber);
   });
 
   it('getOptionalNumber should return undefined', () => {
     has.mockReturnValueOnce(false);
     const value = configService.getOptionalNumber('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(0);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(0);
     expect(value).toBeUndefined();
   });
 
@@ -111,8 +111,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getNumber('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
@@ -120,8 +120,8 @@ describe('ConfigService', () => {
     const defaultValue = 316;
     has.mockReturnValueOnce(false);
     const value = configService.getNumber('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(0);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(0);
     expect(value).toBe(defaultValue);
   });
 
@@ -130,8 +130,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
@@ -140,8 +140,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(true);
   });
 
@@ -150,8 +150,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(true);
   });
 
@@ -160,8 +160,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(false);
   });
 
@@ -170,8 +170,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(false);
   });
 
@@ -180,16 +180,16 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(undefined);
   });
 
   it('getOptionalBoolean should return undefined', () => {
     has.mockReturnValueOnce(false);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(0);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(0);
     expect(value).toBeUndefined();
   });
 
@@ -199,8 +199,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getBoolean('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
@@ -208,8 +208,8 @@ describe('ConfigService', () => {
     const defaultValue = true;
     has.mockReturnValueOnce(false);
     const value = configService.getBoolean('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(0);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(0);
     expect(value).toBe(defaultValue);
   });
 
@@ -218,8 +218,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalPath('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
@@ -228,16 +228,16 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalPath('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(path.resolve(configService.configDirectory, givenValue));
   });
 
   it('getOptionalPath should return undefined', () => {
     has.mockReturnValueOnce(false);
     const value = configService.getOptionalPath('testKey');
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(0);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(0);
     expect(value).toBeUndefined();
   });
 
@@ -247,8 +247,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getPath('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
@@ -258,8 +258,8 @@ describe('ConfigService', () => {
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
     const value = configService.getPath('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(1);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(path.resolve(configService.configDirectory, givenValue));
   });
 
@@ -267,8 +267,8 @@ describe('ConfigService', () => {
     const defaultValue = '/bar';
     has.mockReturnValueOnce(false);
     const value = configService.getPath('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(0);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(0);
     expect(value).toBe(defaultValue);
   });
 
@@ -276,8 +276,8 @@ describe('ConfigService', () => {
     const defaultValue = 'bar';
     has.mockReturnValueOnce(false);
     const value = configService.getPath('testKey', defaultValue);
-    expect(has).toBeCalledTimes(1);
-    expect(get).toBeCalledTimes(0);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(0);
     expect(value).toBe(path.resolve(configService.configDirectory, defaultValue));
   });
 });

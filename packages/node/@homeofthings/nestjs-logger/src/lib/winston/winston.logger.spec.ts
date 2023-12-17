@@ -51,31 +51,31 @@ describe('WinstonLogger with file logging and logLevels', () => {
   it('should log error-message', () => {
     const givenMessage = 'test error message';
     winstonLogger.error(givenMessage);
-    expect(winstonLogger.logger.error).toBeCalledWith(givenMessage);
+    expect(winstonLogger.logger.error).toHaveBeenCalledWith(givenMessage);
   });
 
   it('should log warn-message', () => {
     const givenMessage = 'test warn message';
     winstonLogger.warn(givenMessage);
-    expect(winstonLogger.logger.warn).toBeCalledWith(givenMessage);
+    expect(winstonLogger.logger.warn).toHaveBeenCalledWith(givenMessage);
   });
 
   it('should log info-message', () => {
     const givenMessage = 'test info message';
     winstonLogger.info(givenMessage);
-    expect(winstonLogger.logger.info).toBeCalledWith(givenMessage);
+    expect(winstonLogger.logger.info).toHaveBeenCalledWith(givenMessage);
   });
 
   it('should log debug-message', () => {
     const givenMessage = 'test debug message';
     winstonLogger.debug(givenMessage);
-    expect(winstonLogger.logger.debug).toBeCalledWith(givenMessage);
+    expect(winstonLogger.logger.debug).toHaveBeenCalledWith(givenMessage);
   });
 
   it('should log verbose-message', () => {
     const givenMessage = 'test verbose message';
     winstonLogger.verbose(givenMessage);
-    expect(winstonLogger.logger.verbose).toBeCalledWith(givenMessage);
+    expect(winstonLogger.logger.verbose).toHaveBeenCalledWith(givenMessage);
   });
 
   it('should set console logLevel', () => {
@@ -126,7 +126,7 @@ describe('WinstonLogger with file logging and logLevels', () => {
   it('should log error-message', () => {
     const givenMessage = 'test error message';
     winstonLogger.error(givenMessage);
-    expect(winstonLogger.logger.error).toBeCalledWith(givenMessage);
+    expect(winstonLogger.logger.error).toHaveBeenCalledWith(givenMessage);
   });
 });
 

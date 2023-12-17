@@ -116,8 +116,8 @@ describe('ConnectionManager', () => {
 
     it('should open connections context', async () => {
       await connectionManager.createConnectionContext();
-      expect(mockedNestUtils.asyncContextGet).toBeCalledTimes(1);
-      expect(mockedNestUtils.asyncContextSet).toBeCalledTimes(1);
+      expect(mockedNestUtils.asyncContextGet).toHaveBeenCalledTimes(1);
+      expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledTimes(1);
       expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledWith({});
     });
 
@@ -126,11 +126,11 @@ describe('ConnectionManager', () => {
       expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledWith({});
       mockedNestUtils.asyncContextGet.mockReturnValue({ test: true });
       await connectionManager.createConnectionContext();
-      expect(mockedNestUtils.asyncContextGet).toBeCalledTimes(2);
-      expect(mockedNestUtils.asyncContextSet).toBeCalledTimes(2);
+      expect(mockedNestUtils.asyncContextGet).toHaveBeenCalledTimes(2);
+      expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledTimes(2);
       await connectionManager.createConnectionContext();
-      expect(mockedNestUtils.asyncContextGet).toBeCalledTimes(3);
-      expect(mockedNestUtils.asyncContextSet).toBeCalledTimes(3);
+      expect(mockedNestUtils.asyncContextGet).toHaveBeenCalledTimes(3);
+      expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledTimes(3);
     });
 
     it('should close connection context (commit=true)', async () => {
@@ -139,7 +139,7 @@ describe('ConnectionManager', () => {
       });
       mockedSqlite3Orm.sqlDatabaseClose.mockReturnValue(Promise.resolve());
       await connectionManager.closeConnectionContext(true);
-      expect(mockedSqlite3Orm.sqlDatabaseClose).toBeCalledTimes(1);
+      expect(mockedSqlite3Orm.sqlDatabaseClose).toHaveBeenCalledTimes(1);
     });
 
     it('should close connection context (commit=false)', async () => {
@@ -148,7 +148,7 @@ describe('ConnectionManager', () => {
       });
       mockedSqlite3Orm.sqlDatabaseClose.mockReturnValue(Promise.resolve());
       await connectionManager.closeConnectionContext(false);
-      expect(mockedSqlite3Orm.sqlDatabaseClose).toBeCalledTimes(1);
+      expect(mockedSqlite3Orm.sqlDatabaseClose).toHaveBeenCalledTimes(1);
     });
 
     it('`getConnection` should fail outside of connection context', async () => {
