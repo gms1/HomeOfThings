@@ -23,3 +23,5 @@ publish all publishable projects:
 ```bash
 npm run publish
 ```
+
+> NOTE: this command is using `nx run-many` which should always run the commands in an order, which is based on the dpendencies between projects
