@@ -23,7 +23,7 @@ describe('pipe', () => {
   });
 
   describe('in foreground', () => {
-    it('should work', async () => {
+    it('should work with echo', async () => {
       const message = 'hello world';
       const script1 = [`console.log('${message}')`];
       const script2 = `process.stdin.on("data", data => { console.log("[" + data.toString() + "]") })`;
@@ -31,6 +31,21 @@ describe('pipe', () => {
       const out: string[] = [];
       const context = await pipe(exec('node').setStdIn(script1))
         .to(exec('node', '-e', script2).setStdOut(out))
+        .setEcho()
+        .run();
+      expect(context[0].exitCode).toBe(0);
+      expect(context[1].exitCode).toBe(0);
+      expect(out.join('')).toBe('[' + message + ']');
+    });
+    it('should work without echo', async () => {
+      const message = 'hello world';
+      const script1 = [`console.log('${message}')`];
+      const script2 = `process.stdin.on("data", data => { console.log("[" + data.toString() + "]") })`;
+
+      const out: string[] = [];
+      const context = await pipe(exec('node').setStdIn(script1))
+        .to(exec('node', '-e', script2).setStdOut(out))
+        .setNoEcho()
         .run();
       expect(context[0].exitCode).toBe(0);
       expect(context[1].exitCode).toBe(0);
@@ -45,7 +60,10 @@ describe('pipe', () => {
       const script2 = `process.stdin.on("data", data => { console.log("[" + data.toString() + "]") })`;
 
       const out: string[] = [];
-      const p = await pipe(exec('node').setStdIn(script1)).to(exec('node', '-e', script2).setStdOut(out));
+      const p = await pipe(exec('node').setStdIn(script1))
+        .to(exec('node', '-e', script2).setStdOut(out))
+        .setNoEcho()
+        .setEcho();
       await p.start();
       p.unref();
 

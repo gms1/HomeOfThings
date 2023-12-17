@@ -13,8 +13,8 @@ export class ProcessError extends Error {
     super(
       getPrompt() +
         context.command +
-        ' : ' +
-        (cause ? ` caught exception: ${cause?.message}` : typeof context.exitCode === 'number' ? `exited with ${context.exitCode}` : 'failed for unknown reason'),
+        ': ' +
+        (cause ? `caught exception: ${cause?.message}` : typeof context.exitCode === 'number' ? `exited with ${context.exitCode}` : 'failed for unknown reason'),
     );
     if (cause) {
       this.cause = cause;

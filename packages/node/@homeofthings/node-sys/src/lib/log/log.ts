@@ -15,11 +15,11 @@ class DefaultLogger implements Logger {
   }
 
   warn(message: string, ...more: unknown[]): void {
-    console.warn(chalk.yellow(message, this.WARNING_PREFIX, ...more));
+    console.warn(chalk.yellow(this.WARNING_PREFIX, message, ...more));
   }
 
   error(message: string, ...more: unknown[]): void {
-    console.error(chalk.red.bold(message, this.ERROR_PREFIX, ...more));
+    console.error(chalk.red.bold(this.ERROR_PREFIX, message, ...more));
   }
 }
 
@@ -27,6 +27,10 @@ let currentLogger: Logger = new DefaultLogger();
 
 export function setLogger(logger: Logger) {
   currentLogger = logger;
+}
+
+export function getLogger(): Logger {
+  return currentLogger;
 }
 
 export function logVerbose(message: string, ...more: unknown[]): void {

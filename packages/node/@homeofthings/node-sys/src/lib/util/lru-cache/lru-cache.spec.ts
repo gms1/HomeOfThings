@@ -32,15 +32,15 @@ describe('LruCache', () => {
     expect(lruCache.has('4')).toBe(false);
     expect(lruCache.get('1')).toBe(1);
     expect(lruCache.get('4')).toBe(undefined);
-    expect(onDeleteSpy).toBeCalledTimes(0);
-    expect(onInsertSpy).toBeCalledTimes(0);
+    expect(onDeleteSpy).toHaveBeenCalledTimes(0);
+    expect(onInsertSpy).toHaveBeenCalledTimes(0);
   });
 
   it('should delete a given key', () => {
     const onDeleteSpy = jest.spyOn(lruCache, 'onDelete');
     lruCache.delete('2');
-    expect(onDeleteSpy).toBeCalledTimes(1);
-    expect(onDeleteSpy).toBeCalledWith(2);
+    expect(onDeleteSpy).toHaveBeenCalledTimes(1);
+    expect(onDeleteSpy).toHaveBeenCalledWith(2);
 
     expect(lruCache.has('2')).toBe(false);
     expect(lruCache.get('1')).toBe(1);
@@ -57,10 +57,10 @@ describe('LruCache', () => {
     const onInsertSpy = jest.spyOn(lruCache, 'onInsert');
     const onDeleteSpy = jest.spyOn(lruCache, 'onDelete');
     lruCache.set('4', 4);
-    expect(onDeleteSpy).toBeCalledTimes(1);
-    expect(onDeleteSpy).toBeCalledWith(3);
-    expect(onInsertSpy).toBeCalledTimes(1);
-    expect(onInsertSpy).toBeCalledWith(4);
+    expect(onDeleteSpy).toHaveBeenCalledTimes(1);
+    expect(onDeleteSpy).toHaveBeenCalledWith(3);
+    expect(onInsertSpy).toHaveBeenCalledTimes(1);
+    expect(onInsertSpy).toHaveBeenCalledWith(4);
 
     expect(lruCache.get('1')).toBe(1);
     expect(lruCache.get('2')).toBe(2);
@@ -77,10 +77,10 @@ describe('LruCache', () => {
     const onInsertSpy = jest.spyOn(lruCache, 'onInsert');
     const onDeleteSpy = jest.spyOn(lruCache, 'onDelete');
     lruCache.set('2', 5); // '2' is an existing item
-    expect(onDeleteSpy).toBeCalledTimes(1);
-    expect(onDeleteSpy).toBeCalledWith(2);
-    expect(onInsertSpy).toBeCalledTimes(1);
-    expect(onInsertSpy).toBeCalledWith(5);
+    expect(onDeleteSpy).toHaveBeenCalledTimes(1);
+    expect(onDeleteSpy).toHaveBeenCalledWith(2);
+    expect(onInsertSpy).toHaveBeenCalledTimes(1);
+    expect(onInsertSpy).toHaveBeenCalledWith(5);
 
     expect(lruCache.get('1')).toBe(1);
     expect(lruCache.get('2')).toBe(5);
@@ -95,8 +95,8 @@ describe('LruCache', () => {
 
     const onDeleteSpy = jest.spyOn(lruCache, 'onDelete');
     lruCache.maxEntries = 2;
-    expect(onDeleteSpy).toBeCalledTimes(1);
-    expect(onDeleteSpy).toBeCalledWith(3);
+    expect(onDeleteSpy).toHaveBeenCalledTimes(1);
+    expect(onDeleteSpy).toHaveBeenCalledWith(3);
 
     expect(lruCache.size).toBe(lruCache.maxEntries);
     expect(lruCache.get('1')).toBe(1);
@@ -107,7 +107,7 @@ describe('LruCache', () => {
   it('maxEntries not apply negative maxEntries', () => {
     const onDeleteSpy = jest.spyOn(lruCache, 'onDelete');
     lruCache.maxEntries = -5;
-    expect(onDeleteSpy).toBeCalledTimes(3);
+    expect(onDeleteSpy).toHaveBeenCalledTimes(3);
 
     expect(lruCache.maxEntries).toBe(0);
     expect(lruCache.size).toBe(0);

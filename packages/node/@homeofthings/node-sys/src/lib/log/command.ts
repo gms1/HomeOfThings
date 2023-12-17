@@ -9,14 +9,15 @@ const DEFAULT_PROMPT = '$ ';
 let echoEnabled = true;
 let currentPrompt = DEFAULT_PROMPT;
 
-export function setEcho(echo?: boolean): boolean {
-  if (typeof echo === 'boolean') {
-    echoEnabled = echo;
-  }
+export function setEcho(echo: boolean): void {
+  echoEnabled = echo;
+}
+
+export function getEcho(): boolean {
   return echoEnabled;
 }
 
-export function setPrompt(prompt: string) {
+export function setPrompt(prompt: string): void {
   currentPrompt = prompt;
 }
 

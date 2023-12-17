@@ -14,11 +14,7 @@ export async function writeFileIfChanged(outputPath: string, content: string): P
     return false;
   }
   const dirname = path.dirname(outputPath);
-  try {
-    await mkdir(dirname, { recursive: true });
-    await fsNode.writeFile(outputPath, content, { encoding: 'utf8' });
-  } catch (err) {
-    return Promise.reject(err);
-  }
+  await mkdir(dirname, { recursive: true });
+  await fsNode.writeFile(outputPath, content, { encoding: 'utf8' });
   return true;
 }

@@ -1,18 +1,18 @@
 import { ExitCodeError } from './error';
 import { ExecOptions, IGNORE, INHERIT, IOType, PIPE, SpawnContext, SpawnOptions } from './options';
 import { getCommand, onChildProcessExit, spawnChildProcess } from './spawn';
-import { logCommand, logWarn } from '../log';
+import { logCommand } from '../log';
 import { WritableStrings, readableStrings } from '../util';
 import { isIterable } from '../util/types/is';
 
 export class Exec {
-  protected _options: ExecOptions = {};
+  protected _options: ExecOptions = {
+    stdio: [INHERIT, INHERIT, INHERIT],
+  };
   protected _args: string[];
-  private defaultOutput: IOType = INHERIT;
 
   constructor(...args: string[]) {
     this._args = args;
-    this._stdioToArray();
   }
 
   public get options(): ExecOptions {
@@ -83,12 +83,12 @@ export class Exec {
   }
 
   public setStdIn(input: Iterable<string> | typeof IGNORE | typeof INHERIT) {
-    if (isIterable<string>(input)) {
+    if (isIterable<string>(input) && typeof input !== 'string') {
       this._options.input = readableStrings(...input);
       this._stdio[0] = PIPE;
       return this;
     }
-    return this.setStdio(0, input);
+    return this.setStdio(0, input as IOType);
   }
 
   public setStdOut(out: string[] | typeof IGNORE | typeof INHERIT) {
@@ -125,13 +125,21 @@ export class Exec {
     return this;
   }
 
+  public getStdio(index: number): IOType {
+    return this._stdio[index];
+  }
+
   // do not echo and ignore all output of the child process
   public setQuiet(value?: boolean): typeof this {
     this._options.quiet = value == undefined ? true : value;
     if (this._options.quiet) {
       this._options.noEcho = true;
-      this.setStdio(1, IGNORE);
-      this.setStdio(2, IGNORE);
+      if (this.getStdio(1) === INHERIT) {
+        this.setStdio(1, IGNORE);
+      }
+      if (this.getStdio(2) === INHERIT) {
+        this.setStdio(2, IGNORE);
+      }
     }
     return this;
   }
@@ -151,16 +159,6 @@ export class Exec {
   public setShell(shell?: string): typeof this {
     this._options.shell = shell ? shell : true;
     return this;
-  }
-
-  protected _stdioToArray(): void {
-    if (!Array.isArray(this._options.stdio)) {
-      if (typeof this._options.stdio === 'string') {
-        this._options.stdio = [this._options.stdio, this._options.stdio, this._options.stdio];
-      } else {
-        this._options.stdio = [INHERIT, this.defaultOutput, this.defaultOutput];
-      }
-    }
   }
 
   public async spawn(detached: boolean) {

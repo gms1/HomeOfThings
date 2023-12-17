@@ -2,6 +2,7 @@ import * as nodeConsole from 'node:console';
 
 import { ProcessError } from './error';
 import { exec, sh } from './exec';
+import { IGNORE, INHERIT } from './options';
 
 const warn = nodeConsole.warn;
 
@@ -22,7 +23,7 @@ describe('exec', () => {
     info.mockClear();
   });
 
-  describe('exec in forgroud', () => {
+  describe('exec in forground', () => {
     it('should set stdout', async () => {
       const message = 'hello world';
 
@@ -59,7 +60,7 @@ describe('exec', () => {
 
     it('should not throw on non-zero exit code if using `setIgnoreExitCode()', async () => {
       const exitCode = 42;
-      const params = exec('node', '-e', `process.exit(${exitCode})`).setIgnoreExitCode();
+      const params = exec('node', '-e', `process.exit(${exitCode})`).setStdOut(INHERIT).setStdErr(INHERIT).setIgnoreExitCode();
       const context = await params.run();
       expect(context.exitCode).toBe(exitCode);
     });
@@ -84,7 +85,7 @@ describe('exec', () => {
       const message = 'hello world';
 
       const out: string[] = [];
-      const params = exec('node', '-e', `console.log('${message}')`).setStdOut(out);
+      const params = exec('node', '-e', `console.log('${message}')`).setStdIn(IGNORE).setNoEcho().setQuiet().setStdOut(out);
       const process = await params.start();
       process.unref();
 
@@ -100,7 +101,7 @@ describe('exec', () => {
       const message = 'hello world';
 
       const out: string[] = [];
-      const params = exec('node', '-e', `console.error('${message}')`).setStdErr(out);
+      const params = exec('node', '-e', `console.error('${message}')`).setEcho().setStdErr(out);
       const process = await params.start();
       process.unref();
 

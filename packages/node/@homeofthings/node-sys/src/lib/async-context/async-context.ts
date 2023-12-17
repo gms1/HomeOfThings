@@ -27,7 +27,7 @@ export class AsyncContext<T> {
   }
 
   get(): T {
-    return this._storage.getStore() || this._default;
+    return this._storage.getStore() ?? this._default;
   }
 
   run<R, A extends unknown[]>(value: T, callback: (...args: A) => R, ...args: A): R {

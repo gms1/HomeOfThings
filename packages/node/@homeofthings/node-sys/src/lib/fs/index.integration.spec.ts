@@ -3,6 +3,7 @@ import { promises as fsNode } from 'node:fs';
 import * as path from 'node:path';
 
 import * as fs from './index';
+import { getEcho, setEcho, setPrompt } from '../log';
 
 // NOTE: most of this tests are integration tests, falling back to unit tests if the functionality cannot reliable be validated
 
@@ -21,6 +22,8 @@ describe('fs', () => {
     tmpFolder = path.resolve(workspace, 'tmp');
     await fs.mkdir(tmpFolder, { recursive: true });
     testFolder = await fs.mktemp(path.resolve(tmpFolder, 'node-utils_fs.spec_'), { directory: true });
+    setEcho(!getEcho());
+    setPrompt('jest$ ');
   });
 
   afterAll(async () => {

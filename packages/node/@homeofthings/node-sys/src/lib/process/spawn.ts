@@ -22,10 +22,8 @@ export function spawnChildProcess(options: SpawnOptions, ...args: string[]): Pro
     command: getCommand(options.shell, args),
   });
 
-  if (debug.enabled) {
-    debug(`process [${id}]: spawn args: `, args);
-    debug(`process [${id}]: spawnoptions: `, options);
-  }
+  debug(`process [${id}]: spawn args: `, args);
+  debug(`process [${id}]: spawnoptions: `, options);
   return new Promise((resolve, reject) => {
     const callArgs = [...args];
     const callProgram = callArgs.shift();
