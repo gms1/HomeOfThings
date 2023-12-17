@@ -1,5 +1,4 @@
 /* eslint-disable import/order */
-import * as mockedConnectionManager from '../test/mocks/connection-manager';
 import * as mockedLogger from '../test/mocks/logger';
 
 import { Test } from '@nestjs/testing';
@@ -45,11 +44,11 @@ describe('EntityManager', () => {
 
     entityManager = module.get<EntityManager>(getEntityManagerInjectionToken());
     expect(entityManager).toBeInstanceOf(EntityManager);
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
     entityManager = undefined;
-    mockedConnectionManager.mockClear();
   });
 
   it('`getRepository` should throw if prototype of given entity has no table-definition', async () => {

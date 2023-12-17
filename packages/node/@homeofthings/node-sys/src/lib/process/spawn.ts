@@ -98,11 +98,7 @@ export function onChildProcessExit(options: SpawnOptions): Promise<SpawnContext>
 
 export function getCommand(shell: string | boolean | undefined, args: string[]): string {
   if (shell) {
-    const command = typeof shell === 'string' ? quoteArgs(shell, '-c', ...args) : quoteArgs('sh', '-c', ...args);
-    if (command.substring(0, 7) !== "sh -c '") {
-      return command;
-    }
-    return command.substring(7, command.length - 1);
+    return typeof shell === 'string' ? quoteArgs(shell, '-c', ...args) : quoteArgs('sh', '-c', ...args);
   } else {
     return quoteArgs(...args);
   }

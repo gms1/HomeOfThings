@@ -1,10 +1,8 @@
-import { Readable } from 'stream';
-
 import { ExitCodeError } from './error';
 import { ExecOptions, IGNORE, INHERIT, IOType, PIPE, SpawnContext, SpawnOptions } from './options';
 import { getCommand, onChildProcessExit, spawnChildProcess } from './spawn';
 import { logCommand, logWarn } from '../log';
-import { WritableStrings } from '../util';
+import { WritableStrings, readableStrings } from '../util';
 import { isIterable } from '../util/types/is';
 
 export class Exec {
@@ -86,7 +84,7 @@ export class Exec {
 
   public setStdIn(input: Iterable<string> | typeof IGNORE | typeof INHERIT) {
     if (isIterable<string>(input)) {
-      this._options.input = Readable.from(input);
+      this._options.input = readableStrings(...input);
       this._stdio[0] = PIPE;
       return this;
     }
@@ -165,15 +163,12 @@ export class Exec {
     }
   }
 
-  public async spawn(detached: boolean, warnShellArgs = true) {
+  public async spawn(detached: boolean) {
     const { options, args } = this;
     delete options.context;
 
     (options as SpawnOptions).detached = detached;
     this.logCommand(detached);
-    if (warnShellArgs && options.shell && args.length > 1) {
-      logWarn('`sh -c` should be called with just one argument');
-    }
     await spawnChildProcess(options, ...args);
   }
 

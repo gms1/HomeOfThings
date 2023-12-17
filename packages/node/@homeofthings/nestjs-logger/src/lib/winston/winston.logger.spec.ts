@@ -45,7 +45,7 @@ describe('WinstonLogger with file logging and logLevels', () => {
   });
 
   beforeEach(() => {
-    spyCreateLogger.mockClear();
+    jest.clearAllMocks();
   });
 
   it('should log error-message', () => {
@@ -120,7 +120,7 @@ describe('WinstonLogger with file logging and logLevels', () => {
   });
 
   beforeEach(() => {
-    spyCreateLogger.mockClear();
+    jest.clearAllMocks();
   });
 
   it('should log error-message', () => {
@@ -143,7 +143,7 @@ describe('WinstonLogger without file logging', () => {
   });
 
   beforeEach(() => {
-    spyCreateLogger.mockClear();
+    jest.clearAllMocks();
   });
 
   it('should set file logLevel', () => {

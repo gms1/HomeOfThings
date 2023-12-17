@@ -21,11 +21,9 @@ import { writeFileIfChanged } from './write-file-if-changed';
 
 describe('writeFileIfChanged', () => {
   beforeEach(() => {
-    mockedReadFile.mockClear();
-    mockedWiteFile.mockClear();
-    mockedMkdir.mockClear();
     mockReadFileResult = undefined;
     mockWriteFileResult = undefined;
+    jest.clearAllMocks();
   });
 
   it('should write content if changed', async () => {

@@ -29,11 +29,7 @@ describe('ConnectionManager', () => {
       .setLogger(mockedLogger.logger)
       .compile();
     connectionManager = module.get(ConnectionManager);
-  });
-
-  afterEach(() => {
-    mockedNestUtils.mockClear();
-    mockedSqlite3Orm.mockClear();
+    jest.clearAllMocks();
   });
 
   describe('instantiation', () => {
@@ -115,7 +111,7 @@ describe('ConnectionManager', () => {
 
   describe('connection context', () => {
     beforeEach(() => {
-      mockedNestUtils.mockClear();
+      jest.clearAllMocks();
     });
 
     it('should open connections context', async () => {

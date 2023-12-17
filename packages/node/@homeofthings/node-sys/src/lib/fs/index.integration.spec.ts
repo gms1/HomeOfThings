@@ -36,7 +36,7 @@ describe('fs', () => {
   beforeEach(() => {
     info.mockImplementation(warn);
     global.console.info('----------------------------------------');
-    info.mockClear();
+    jest.clearAllMocks();
   });
 
   it('`basename` should return the last path part', async () => {

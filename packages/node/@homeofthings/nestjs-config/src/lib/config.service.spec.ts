@@ -20,8 +20,7 @@ describe('ConfigService', () => {
   });
 
   beforeEach(() => {
-    has.mockClear();
-    get.mockClear();
+    jest.clearAllMocks();
     configService = new ConfigService({});
   });
 

@@ -19,7 +19,7 @@ describe('pipe', () => {
   beforeEach(() => {
     info.mockImplementation(warn);
     global.console.info('----------------------------------------');
-    info.mockClear();
+    jest.clearAllMocks();
   });
 
   describe('in foreground', () => {

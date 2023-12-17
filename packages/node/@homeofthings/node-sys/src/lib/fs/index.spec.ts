@@ -3,6 +3,7 @@ import { promises as fsNode } from 'node:fs';
 import * as path from 'node:path';
 
 import * as fs from './index';
+import * as logCommand from '../log/command';
 
 // NOTE: most of this tests are integration tests, falling back to unit tests if the functionality cannot reliable be validated
 
@@ -36,7 +37,7 @@ describe('fs', () => {
   beforeEach(() => {
     info.mockImplementation(warn);
     global.console.info('----------------------------------------');
-    info.mockClear();
+    jest.clearAllMocks();
   });
 
   it('`exit` should call process.exit', () => {
@@ -146,5 +147,62 @@ describe('fs', () => {
     await fs.realpath(givenPath);
     expect(realpathSpy).toHaveBeenCalledTimes(1);
     expect(realpathSpy).toHaveBeenCalledWith(givenPath);
+  });
+
+  it('`touch` should log nocreate option', async () => {
+    const givenPath = 'testpath';
+    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
+    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+
+    await fs.touch(givenPath, { nocreate: true });
+    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-c', givenPath);
+  });
+
+  it('`touch` should log atime option', async () => {
+    const givenPath = 'testpath';
+    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
+    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+
+    await fs.touch(givenPath, { atime: true });
+    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-a', givenPath);
+  });
+
+  it('`touch` should log mtime option', async () => {
+    const givenPath = 'testpath';
+    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
+    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+
+    await fs.touch(givenPath, { mtime: true });
+    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-m', givenPath);
+  });
+
+  it('`touch` should log ref option', async () => {
+    const givenPath = 'testpath';
+    const givenRef = 'testref';
+    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
+    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+
+    await fs.touch(givenPath, { ref: givenRef });
+    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-r', givenRef, givenPath);
+  });
+
+  it('`touch` should log time option', async () => {
+    const givenPath = 'testpath';
+    const givenTime = new Date();
+    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
+    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+
+    await fs.touch(givenPath, { time: givenTime });
+    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
+    expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-t', givenTime.toString(), givenPath);
   });
 });

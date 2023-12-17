@@ -1,5 +1,4 @@
 /* eslint-disable import/order */
-import * as mockedConnectionManager from '../test/mocks/connection-manager';
 import * as mockedLogger from '../test/mocks/logger';
 
 import { Test } from '@nestjs/testing';
@@ -44,11 +43,11 @@ describe('Repository', () => {
     const entityManager = module.get<EntityManager>(getEntityManagerInjectionToken());
     expect(entityManager).toBeInstanceOf(EntityManager);
     repository = await entityManager.getRepository(TestEntity);
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
     repository = undefined;
-    mockedConnectionManager.mockClear();
   });
 
   it('should be instance of Repository', async () => {

@@ -10,7 +10,7 @@ import { Mode as StatsMode } from 'stat-mode';
 import externalTouch from 'touch';
 import externalWhich from 'which';
 
-import { logCommandArgs, logCommand, logCommandResult } from '../log';
+import { logCommandArgs, logCommand, logCommandResult } from '../log/command';
 
 // NOTE:
 // shell would be needed for getting shell expansion (e.g for pathname expansion (globbing) of '*', '?', '[...]' wildcards)
@@ -18,8 +18,8 @@ import { logCommandArgs, logCommand, logCommandResult } from '../log';
 
 export { StatsMode };
 export interface TouchOptions extends Pick<externalTouch.Options, 'time' | 'atime' | 'mtime' | 'nocreate' | 'ref'> {
-  atime: boolean;
-  mtime: boolean;
+  atime?: boolean;
+  mtime?: boolean;
 }
 export type CopyOptions = Pick<NodeCopyOptions, 'dereference' | 'preserveTimestamps' | 'recursive'>;
 

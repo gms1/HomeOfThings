@@ -46,16 +46,12 @@ export class WritableStrings extends Writable {
 
   private append(chunk: string, flush: boolean = false): void {
     this._buffer += chunk;
-    if (flush) {
-      if (this._buffer.length) {
-        const lines = this._buffer.split(/\r?\n\r?/);
-        this._data.push(...lines);
-      }
-      return;
-    }
     if (this._buffer.length) {
       const lines = this._buffer.split(/\r?\n\r?/);
-      if (lines.length > 1) {
+      if (flush) {
+        this._buffer = '';
+        this._data.push(...lines);
+      } else if (lines.length > 1) {
         this._buffer = lines.pop();
         this._data.push(...lines);
       }

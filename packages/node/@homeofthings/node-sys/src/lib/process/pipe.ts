@@ -51,9 +51,6 @@ export class Pipe {
   }
 
   protected async spawn(detached: boolean): Promise<Pipe> {
-    if (this._items.length === 0) {
-      return this;
-    }
     this.logCommand(detached);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,7 +60,6 @@ export class Pipe {
       this._items[0]!.setStdio(1, PIPE);
     }
 
-    let warnShellArgs = true;
     for (const idx in this._items) {
       const item = this._items[idx]!;
 
@@ -71,10 +67,7 @@ export class Pipe {
         item.setStdio(0, lastStdout);
       }
       item.options.noEcho = true;
-      await item.spawn(detached, warnShellArgs);
-      if (warnShellArgs && item.options.shell && item.args.length > 1) {
-        warnShellArgs = false;
-      }
+      await item.spawn(detached);
       lastStdout = item.options.context!.process!.stdout;
     }
 
