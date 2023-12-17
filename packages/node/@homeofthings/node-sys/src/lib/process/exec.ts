@@ -1,9 +1,10 @@
+import { isIterable, WritableStrings } from '@homeofthings/node-utils';
+import { Readable } from 'node:stream';
+
 import { ExitCodeError } from './error';
-import { ExecOptions, IGNORE, INHERIT, IOType, PIPE, SpawnContext, SpawnOptions } from './options';
+import { ExecOptions, IGNORE, INHERIT, IOType, PIPE, SpawnOptions } from './options';
 import { getCommand, onChildProcessExit, spawnChildProcess } from './spawn';
 import { logCommand } from '../log';
-import { WritableStrings, readableStrings } from '../util';
-import { isIterable } from '../util/types/is';
 
 export class Exec {
   protected _options: ExecOptions = {
@@ -38,14 +39,15 @@ export class Exec {
   /*
    * wait: wait for child process to exit
    */
-  public async wait(): Promise<SpawnContext> {
+  public async wait(): Promise<number> {
     const { options } = this;
     try {
-      return await onChildProcessExit(options);
+      const context = await onChildProcessExit(options);
+      return context.exitCode;
     } catch (err) {
       if (options?.ignoreExitCode) {
         if (err instanceof ExitCodeError && typeof options.context?.exitCode === 'number') {
-          return options.context!;
+          return options.context.exitCode;
         }
       }
       return Promise.reject(err);
@@ -55,7 +57,7 @@ export class Exec {
   /*
    * run: spawn a child process and wait until it has exited
    */
-  public async run(): Promise<SpawnContext> {
+  public async run(): Promise<number> {
     await this.spawn(false);
     return await this.wait();
   }
@@ -84,7 +86,7 @@ export class Exec {
 
   public setStdIn(input: Iterable<string> | typeof IGNORE | typeof INHERIT) {
     if (isIterable<string>(input) && typeof input !== 'string') {
-      this._options.input = readableStrings(...input);
+      this._options.input = Readable.from(input);
       this._stdio[0] = PIPE;
       return this;
     }

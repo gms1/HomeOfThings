@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GenericDictionary } from '@homeofthings/node-sys';
+import { GenericDictionary } from '@homeofthings/node-utils';
 import { SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
 
 import { Sqlite3ConnectionOptions } from './sqlite3.options';

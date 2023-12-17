@@ -29,8 +29,8 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = exec('node', '-e', `console.log('${message}')`).setStdOut(out);
-      const context = await params.run();
-      expect(context.exitCode).toBe(0);
+      const exitCode = await params.run();
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
@@ -40,8 +40,8 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = exec('node', '-e', `console.error('${message}')`).setStdErr(out);
-      const context = await params.run();
-      expect(context.exitCode).toBe(0);
+      const exitCode = await params.run();
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
@@ -52,30 +52,30 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = exec('node').setStdIn(script).setStdOut(out);
-      const context = await params.run();
-      expect(context.exitCode).toBe(0);
+      const exitCode = await params.run();
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
 
     it('should not throw on non-zero exit code if using `setIgnoreExitCode()', async () => {
-      const exitCode = 42;
-      const params = exec('node', '-e', `process.exit(${exitCode})`).setStdOut(INHERIT).setStdErr(INHERIT).setIgnoreExitCode();
-      const context = await params.run();
-      expect(context.exitCode).toBe(exitCode);
+      const givenExitCode = 42;
+      const params = exec('node', '-e', `process.exit(${givenExitCode})`).setStdOut(INHERIT).setStdErr(INHERIT).setIgnoreExitCode();
+      const exitCode = await params.run();
+      expect(exitCode).toBe(givenExitCode);
     });
 
     it('should throw on non-zero exit code if not using `setIgnoreExitCode()`', async () => {
-      const exitCode = 24;
+      const givenExitCode = 24;
       try {
-        const params = exec('node', '-e', `process.exit(${exitCode})`);
+        const params = exec('node', '-e', `process.exit(${givenExitCode})`);
         await params.run();
         fail('should have thrown');
       } catch (e) {
         if (!(e instanceof ProcessError)) {
           fail('should throw with ProcessError');
         }
-        expect(e.context.exitCode).toBe(exitCode);
+        expect(e.context.exitCode).toBe(givenExitCode);
       }
     });
   });
@@ -90,9 +90,9 @@ describe('exec', () => {
       process.unref();
 
       process.ref();
-      const context = await process.wait();
+      const exitCode = await process.wait();
 
-      expect(context.exitCode).toBe(0);
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
@@ -106,9 +106,9 @@ describe('exec', () => {
       process.unref();
 
       process.ref();
-      const context = await process.wait();
+      const exitCode = await process.wait();
 
-      expect(context.exitCode).toBe(0);
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
@@ -123,28 +123,28 @@ describe('exec', () => {
       process.unref();
 
       process.ref();
-      const context = await process.wait();
+      const exitCode = await process.wait();
 
-      expect(context.exitCode).toBe(0);
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
 
     it('should not throw on non-zero exit code if using `setIgnoreExitCode()`', async () => {
-      const exitCode = 24;
-      const params = exec('node', '-e', `process.exit(${exitCode})`).setIgnoreExitCode();
+      const givenExitCode = 24;
+      const params = exec('node', '-e', `process.exit(${givenExitCode})`).setIgnoreExitCode();
       const process = await params.start();
       process.unref();
 
       process.ref();
-      const context = await process.wait();
-      expect(context.exitCode).toBe(exitCode);
+      const exitCode = await process.wait();
+      expect(exitCode).toBe(givenExitCode);
     });
 
     it('should throw on non-zero exit code if not using `setIgnoreExitCode()`', async () => {
-      const exitCode = 24;
+      const givenExitCode = 24;
       try {
-        const params = exec('node', '-e', `process.exit(${exitCode})`);
+        const params = exec('node', '-e', `process.exit(${givenExitCode})`);
         const process = await params.start();
         process.unref();
 
@@ -156,7 +156,7 @@ describe('exec', () => {
         if (!(e instanceof ProcessError)) {
           fail('should throw with ProcessError');
         }
-        expect(e.context.exitCode).toBe(exitCode);
+        expect(e.context.exitCode).toBe(givenExitCode);
       }
     });
   });
@@ -167,8 +167,8 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = sh(`node -e "console.log('${message}')"`).setStdOut(out);
-      const context = await params.run();
-      expect(context.exitCode).toBe(0);
+      const exitCode = await params.run();
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
@@ -178,8 +178,8 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = sh(`node -e "console.error('${message}')"`).setStdErr(out);
-      const context = await params.run();
-      expect(context.exitCode).toBe(0);
+      const exitCode = await params.run();
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
@@ -190,30 +190,30 @@ describe('exec', () => {
 
       const out: string[] = [];
       const params = sh('node').setStdIn(script).setStdOut(out);
-      const context = await params.run();
-      expect(context.exitCode).toBe(0);
+      const exitCode = await params.run();
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
 
     it('should not throw on non-zero exit code if using `setIgnoreExitCode()', async () => {
-      const exitCode = 42;
-      const params = sh(`node -e "process.exit(${exitCode})"`).setIgnoreExitCode();
-      const context = await params.run();
-      expect(context.exitCode).toBe(exitCode);
+      const givenExitCode = 42;
+      const params = sh(`node -e "process.exit(${givenExitCode})"`).setIgnoreExitCode();
+      const exitCode = await params.run();
+      expect(exitCode).toBe(givenExitCode);
     });
 
     it('should throw on non-zero exit code if not using `setIgnoreExitCode()`', async () => {
-      const exitCode = 24;
+      const givenExitCode = 24;
       try {
-        const params = sh(`node -e "process.exit(${exitCode})"`);
+        const params = sh(`node -e "process.exit(${givenExitCode})"`);
         await params.run();
         fail('should have thrown');
       } catch (e) {
         if (!(e instanceof ProcessError)) {
           fail('should throw with ProcessError');
         }
-        expect(e.context.exitCode).toBe(exitCode);
+        expect(e.context.exitCode).toBe(givenExitCode);
       }
     });
   });
@@ -228,9 +228,9 @@ describe('exec', () => {
       process.unref();
 
       process.ref();
-      const context = await process.wait();
+      const exitCode = await process.wait();
 
-      expect(context.exitCode).toBe(0);
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
@@ -244,9 +244,9 @@ describe('exec', () => {
       process.unref();
 
       process.ref();
-      const context = await process.wait();
+      const exitCode = await process.wait();
 
-      expect(context.exitCode).toBe(0);
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
@@ -261,29 +261,29 @@ describe('exec', () => {
       process.unref();
 
       process.ref();
-      const context = await process.wait();
+      const exitCode = await process.wait();
 
-      expect(context.exitCode).toBe(0);
+      expect(exitCode).toBe(0);
       expect(out.length).toBe(1);
       expect(out[0]).toBe(message);
     });
 
     it('should not throw on non-zero exit code if using `setIgnoreExitCode()`', async () => {
-      const exitCode = 24;
-      const params = sh(`node -e "process.exit(${exitCode})"`).setIgnoreExitCode();
+      const givenExitCode = 24;
+      const params = sh(`node -e "process.exit(${givenExitCode})"`).setIgnoreExitCode();
       const process = await params.start();
       process.unref();
 
       process.ref();
-      const context = await process.wait();
+      const exitCode = await process.wait();
 
-      expect(context.exitCode).toBe(exitCode);
+      expect(exitCode).toBe(givenExitCode);
     });
 
     it('should throw on non-zero exit code if not using `setIgnoreExitCode()`', async () => {
-      const exitCode = 24;
+      const givenExitCode = 24;
       try {
-        const params = sh(`node -e "process.exit(${exitCode})"`);
+        const params = sh(`node -e "process.exit(${givenExitCode})"`);
         const process = await params.start();
         process.unref();
 
@@ -295,7 +295,7 @@ describe('exec', () => {
         if (!(e instanceof ProcessError)) {
           fail('should throw with ProcessError');
         }
-        expect(e.context.exitCode).toBe(exitCode);
+        expect(e.context.exitCode).toBe(givenExitCode);
       }
     });
   });

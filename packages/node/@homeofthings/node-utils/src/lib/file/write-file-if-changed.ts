@@ -1,7 +1,5 @@
 import { promises as fsNode } from 'node:fs';
-import * as path from 'path';
-
-import { mkdir } from '../fs';
+import * as path from 'node:path';
 
 export async function writeFileIfChanged(outputPath: string, content: string): Promise<boolean> {
   let oldContent;
@@ -13,8 +11,10 @@ export async function writeFileIfChanged(outputPath: string, content: string): P
   if (oldContent === content) {
     return false;
   }
-  const dirname = path.dirname(outputPath);
-  await mkdir(dirname, { recursive: true });
+  if (!oldContent) {
+    const outputDir = path.dirname(outputPath);
+    await fsNode.mkdir(outputDir, { recursive: true });
+  }
   await fsNode.writeFile(outputPath, content, { encoding: 'utf8' });
   return true;
 }

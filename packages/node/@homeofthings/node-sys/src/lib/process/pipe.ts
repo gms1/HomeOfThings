@@ -1,5 +1,7 @@
+import { Readable } from 'node:stream';
+
 import { Exec } from './exec';
-import { PIPE, SpawnContext } from './options';
+import { PIPE } from './options';
 import { getCommand } from './spawn';
 import { logCommand } from '../log';
 
@@ -26,7 +28,7 @@ export class Pipe {
   /*
    * run: spawn all child processes of this pipe and wait until they have exited
    */
-  public async run(): Promise<SpawnContext[]> {
+  public async run(): Promise<number> {
     await this.spawn(false);
     return this.wait();
   }
@@ -41,13 +43,14 @@ export class Pipe {
   /*
    * wait: wait for all child processes of this pipe to exit
    */
-  public async wait(): Promise<SpawnContext[]> {
-    const childContexts: Promise<SpawnContext>[] = [];
+  public async wait(): Promise<number> {
+    const childContexts: Promise<number>[] = [];
     for (const item of this._items) {
       childContexts.push(item.wait());
     }
 
-    return Promise.all(childContexts);
+    const exitCodes = await Promise.all(childContexts);
+    return exitCodes[exitCodes.length - 1];
   }
 
   protected async spawn(detached: boolean): Promise<Pipe> {
@@ -60,11 +63,16 @@ export class Pipe {
       this._items[0]!.setStdio(1, PIPE);
     }
 
-    for (const idx in this._items) {
-      const item = this._items[idx]!;
-
-      if (idx !== '0') {
+    const lastIndex = this._items.length - 1;
+    for (const [idx, item] of this._items.entries()) {
+      if (idx) {
+        if (!(lastStdout instanceof Readable)) {
+          throw Error(`not a Readable for stdin of item ${idx}`);
+        }
         item.setStdio(0, lastStdout);
+      }
+      if (idx != lastIndex) {
+        item.setStdio(1, PIPE);
       }
       item.options.noEcho = true;
       await item.spawn(detached);

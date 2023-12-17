@@ -1,7 +1,9 @@
+import { WritableStrings } from '@homeofthings/node-utils';
+import { Readable } from 'node:stream';
+
 import { ProcessError } from './error';
 import { INHERIT } from './options';
 import { spawnChildProcess } from './spawn';
-import { WritableStrings, readableStrings } from '../util';
 
 describe('spawn', () => {
   it('calling `spawnChildProcess` without argument should fail', async () => {
@@ -17,7 +19,7 @@ describe('spawn', () => {
   it('calling `spawnChildProcess` having options.input, but no stdin pipe', async () => {
     try {
       const givenInput: string[] = ['hello'];
-      await spawnChildProcess({ stdio: [INHERIT, INHERIT, INHERIT], input: readableStrings(...givenInput) }, 'node', '-e', 'process.exit(42)');
+      await spawnChildProcess({ stdio: [INHERIT, INHERIT, INHERIT], input: Readable.from(givenInput) }, 'node', '-e', 'process.exit(42)');
     } catch (err) {
       expect(err).toBeInstanceOf(ProcessError);
       return;

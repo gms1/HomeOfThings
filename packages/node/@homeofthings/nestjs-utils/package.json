@@ -24,6 +24,6 @@
     "@nestjs/common": "*",
     "rxjs": "*",
     "tslib": "*",
-    "@homeofthings/node-sys": "*"
+    "@homeofthings/node-utils": "*"
   }
 }

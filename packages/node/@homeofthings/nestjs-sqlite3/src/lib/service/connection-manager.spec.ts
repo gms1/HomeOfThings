@@ -3,7 +3,7 @@
 /* eslint-disable import/order */
 
 import * as mockedLogger from '../test/mocks/logger';
-import * as mockedNestUtils from '../test/mocks/node-sys';
+import * as mockedNodeUtils from '../test/mocks/node-utils';
 import * as mockedSqlite3Orm from '../test/mocks/sqlite3orm';
 
 import { Test } from '@nestjs/testing';
@@ -116,25 +116,25 @@ describe('ConnectionManager', () => {
 
     it('should open connections context', async () => {
       await connectionManager.createConnectionContext();
-      expect(mockedNestUtils.asyncContextGet).toHaveBeenCalledTimes(1);
-      expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledTimes(1);
-      expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledWith({});
+      expect(mockedNodeUtils.asyncContextGet).toHaveBeenCalledTimes(1);
+      expect(mockedNodeUtils.asyncContextSet).toHaveBeenCalledTimes(1);
+      expect(mockedNodeUtils.asyncContextSet).toHaveBeenCalledWith({});
     });
 
     it('should open connections context multiple times', async () => {
       await connectionManager.createConnectionContext();
-      expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledWith({});
-      mockedNestUtils.asyncContextGet.mockReturnValue({ test: true });
+      expect(mockedNodeUtils.asyncContextSet).toHaveBeenCalledWith({});
+      mockedNodeUtils.asyncContextGet.mockReturnValue({ test: true });
       await connectionManager.createConnectionContext();
-      expect(mockedNestUtils.asyncContextGet).toHaveBeenCalledTimes(2);
-      expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledTimes(2);
+      expect(mockedNodeUtils.asyncContextGet).toHaveBeenCalledTimes(2);
+      expect(mockedNodeUtils.asyncContextSet).toHaveBeenCalledTimes(2);
       await connectionManager.createConnectionContext();
-      expect(mockedNestUtils.asyncContextGet).toHaveBeenCalledTimes(3);
-      expect(mockedNestUtils.asyncContextSet).toHaveBeenCalledTimes(3);
+      expect(mockedNodeUtils.asyncContextGet).toHaveBeenCalledTimes(3);
+      expect(mockedNodeUtils.asyncContextSet).toHaveBeenCalledTimes(3);
     });
 
     it('should close connection context (commit=true)', async () => {
-      mockedNestUtils.asyncContextGet.mockReturnValue({
+      mockedNodeUtils.asyncContextGet.mockReturnValue({
         test: new SqlDatabase(),
       });
       mockedSqlite3Orm.sqlDatabaseClose.mockReturnValue(Promise.resolve());
@@ -143,7 +143,7 @@ describe('ConnectionManager', () => {
     });
 
     it('should close connection context (commit=false)', async () => {
-      mockedNestUtils.asyncContextGet.mockReturnValue({
+      mockedNodeUtils.asyncContextGet.mockReturnValue({
         test: new SqlDatabase(),
       });
       mockedSqlite3Orm.sqlDatabaseClose.mockReturnValue(Promise.resolve());
@@ -152,7 +152,7 @@ describe('ConnectionManager', () => {
     });
 
     it('`getConnection` should fail outside of connection context', async () => {
-      mockedNestUtils.asyncContextGet.mockReturnValue(undefined);
+      mockedNodeUtils.asyncContextGet.mockReturnValue(undefined);
       try {
         await connectionManager.getConnection(SQLITE3_DEFAULT_CONNECTION_NAME);
         fail('should have thrown');
@@ -167,7 +167,7 @@ describe('ConnectionManager', () => {
       mockedSqlite3Orm.sqlConnectionPoolGet.mockReturnValue(Promise.resolve());
       await connectionManager.openConnectionPool(givenConnectionName, givenConnectionOptions);
       expect(mockedSqlite3Orm.sqlConnectionPoolOpen).toHaveBeenCalledTimes(1);
-      mockedNestUtils.asyncContextGet.mockReturnValue({});
+      mockedNodeUtils.asyncContextGet.mockReturnValue({});
       try {
         await connectionManager.getConnection(givenConnectionName);
       } catch (_e) {
@@ -178,7 +178,7 @@ describe('ConnectionManager', () => {
 
     it('`getConnection` should succeed inside of connection context if connection already open', async () => {
       const givenConnection = new SqlDatabase();
-      mockedNestUtils.asyncContextGet.mockReturnValue({
+      mockedNodeUtils.asyncContextGet.mockReturnValue({
         test: givenConnection,
       });
       let conn: SqlDatabase | undefined;
@@ -192,7 +192,7 @@ describe('ConnectionManager', () => {
 
     it('`getConnection` should fail for undefined connection name', async () => {
       const givenConnection = new SqlDatabase();
-      mockedNestUtils.asyncContextGet.mockReturnValue({
+      mockedNodeUtils.asyncContextGet.mockReturnValue({
         test: givenConnection,
       });
       try {

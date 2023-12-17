@@ -1,4 +1,4 @@
-import { AsyncContext, GenericDictionary } from '@homeofthings/node-sys';
+import { AsyncContext, GenericDictionary } from '@homeofthings/node-utils';
 import { Injectable, Logger } from '@nestjs/common';
 import { SqlConnectionPool, SqlDatabase, SQL_OPEN_DEFAULT_URI, Table } from 'sqlite3orm';
 

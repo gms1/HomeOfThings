@@ -28,13 +28,13 @@
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {
-    "@homeofthings/node-sys": "*",
     "@homeofthings/nestjs-utils": "*",
     "@nestjs/common": "*",
     "@nestjs/core": "*",
     "reflect-metadata": "*",
     "rxjs": "*",
     "sqlite3orm": "*",
-    "tslib": "*"
+    "tslib": "*",
+    "@homeofthings/node-utils": "*"
   }
 }

@@ -23,32 +23,30 @@ describe('pipe', () => {
   });
 
   describe('in foreground', () => {
-    it('should work with echo', async () => {
+    it('should work if setEcho is set', async () => {
       const message = 'hello world';
       const script1 = [`console.log('${message}')`];
       const script2 = `process.stdin.on("data", data => { console.log("[" + data.toString() + "]") })`;
 
       const out: string[] = [];
-      const context = await pipe(exec('node').setStdIn(script1))
+      const exitCode = await pipe(exec('node').setStdIn(script1))
         .to(exec('node', '-e', script2).setStdOut(out))
         .setEcho()
         .run();
-      expect(context[0].exitCode).toBe(0);
-      expect(context[1].exitCode).toBe(0);
+      expect(exitCode).toBe(0);
       expect(out.join('')).toBe('[' + message + ']');
     });
-    it('should work without echo', async () => {
+    it('should work if setNoEcho is set', async () => {
       const message = 'hello world';
       const script1 = [`console.log('${message}')`];
       const script2 = `process.stdin.on("data", data => { console.log("[" + data.toString() + "]") })`;
 
       const out: string[] = [];
-      const context = await pipe(exec('node').setStdIn(script1))
+      const exitCode = await pipe(exec('node').setStdIn(script1))
         .to(exec('node', '-e', script2).setStdOut(out))
         .setNoEcho()
         .run();
-      expect(context[0].exitCode).toBe(0);
-      expect(context[1].exitCode).toBe(0);
+      expect(exitCode).toBe(0);
       expect(out.join('')).toBe('[' + message + ']');
     });
   });
@@ -68,9 +66,8 @@ describe('pipe', () => {
       p.unref();
 
       p.ref();
-      const context = await p.wait();
-      expect(context[0].exitCode).toBe(0);
-      expect(context[1].exitCode).toBe(0);
+      const exitCode = await p.wait();
+      expect(exitCode).toBe(0);
       expect(out.join('')).toBe('[' + message + ']');
     });
   });

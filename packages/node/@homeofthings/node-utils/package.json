@@ -1,0 +1,9 @@
+{
+  "name": "@homeofthings/node-utils",
+  "version": "0.0.0",
+  "dependencies": {
+    "chalk": "*",
+    "type-fest": "*",
+    "tslib": "*"
+  }
+}

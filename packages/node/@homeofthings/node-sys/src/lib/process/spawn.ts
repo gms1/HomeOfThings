@@ -1,9 +1,9 @@
+import { quoteArgs } from '@homeofthings/node-utils';
 import * as debugjs from 'debug';
 import * as child_process from 'node:child_process';
 
 import { ExitCodeError, ProcessError } from './error';
 import { SpawnContext, SpawnOptions } from './options';
-import { quoteArgs } from '../util';
 
 const debug = debugjs.default('sys:process:spawn');
 let spawnId = 0;

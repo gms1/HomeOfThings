@@ -5,16 +5,14 @@ let mockWriteFileResult: undefined | Error;
 
 const mockedReadFile = jest.fn().mockImplementation(() => (mockReadFileResult instanceof Error ? Promise.reject(mockReadFileResult) : Promise.resolve(mockReadFileResult)));
 const mockedWiteFile = jest.fn().mockImplementation(() => (mockWriteFileResult instanceof Error ? Promise.reject(mockWriteFileResult) : Promise.resolve()));
-const mockedMkdir = jest.fn();
+const mockedMkdir = jest.fn().mockImplementation(() => Promise.resolve());
 
 jest.mock('node:fs', () => ({
   promises: {
     readFile: mockedReadFile,
     writeFile: mockedWiteFile,
+    mkdir: mockedMkdir,
   },
-}));
-jest.mock('../fs', () => ({
-  mkdir: mockedMkdir,
 }));
 
 import { writeFileIfChanged } from './write-file-if-changed';
@@ -34,7 +32,7 @@ describe('writeFileIfChanged', () => {
     mockReadFileResult = givenOldContent;
     expect(await writeFileIfChanged(givenPath, givenNewContent)).toBe(true);
     expect(mockedReadFile).toHaveBeenCalledTimes(1);
-    expect(mockedMkdir).toHaveBeenCalledTimes(1);
+    expect(mockedMkdir).toHaveBeenCalledTimes(0); // file already exist
     expect(mockedWiteFile).toHaveBeenCalledTimes(1);
   });
 
@@ -61,7 +59,7 @@ describe('writeFileIfChanged', () => {
       fail('should have thrown');
     } catch (err) {
       expect(mockedReadFile).toHaveBeenCalledTimes(1);
-      expect(mockedMkdir).toHaveBeenCalledTimes(1);
+      expect(mockedMkdir).toHaveBeenCalledTimes(0); // file already exist
       expect(mockedWiteFile).toHaveBeenCalledTimes(1);
     }
   });

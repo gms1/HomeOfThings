@@ -53,6 +53,14 @@ jobs:
           fail_ci_if_error: true
           verbose: true
 
+      - name: Upload node-utils coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./coverage/packages/node/@homeofthings/node-utils
+          flags: 'node-utils'
+          fail_ci_if_error: true
+          verbose: true
+
       - name: Upload node-sys coverage to Codecov
         uses: codecov/codecov-action@v2
         with:

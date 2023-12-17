@@ -1,6 +1,6 @@
 import { ConfigModule } from '@homeofthings/nestjs-config';
 import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LoggerModule, LogLevel } from '@homeofthings/nestjs-logger';
-import { writeFileIfChanged } from '@homeofthings/node-sys';
+import { writeFileIfChanged } from '@homeofthings/node-utils';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';

@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Readable, WritableOptions } from 'node:stream';
+import { WritableOptions } from 'node:stream';
 import { Writable } from 'node:stream';
 import { StringDecoder } from 'node:string_decoder';
-
-export function readableStrings(...args: string[]): Readable {
-  return Readable.from(args);
-}
 
 export class WritableStrings extends Writable {
   _init = true;

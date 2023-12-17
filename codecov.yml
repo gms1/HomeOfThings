@@ -37,6 +37,9 @@ coverage:
       asyncctx:
         flags:
           - asyncctx
+      node-utils:
+        flags:
+          - node-utils
       node-sys:
         flags:
           - node-sys

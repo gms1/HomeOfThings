@@ -1,6 +1,6 @@
+import { logVerbose } from '@homeofthings/node-utils';
 import * as debugjs from 'debug';
 
-import { logVerbose } from './log';
 import { getCommand } from '../process';
 
 const debug = debugjs.default('sys:log:command');

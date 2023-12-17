@@ -154,7 +154,7 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
   );
   project.generated = true;
   const outputLines: string[] = [];
-  const context = await exec('npm', 'view', project.outputPackageJson.name as string, 'versions', '--json')
+  const exitCode = await exec('npm', 'view', project.outputPackageJson.name as string, 'versions', '--json')
     .setStdOut(outputLines)
     .setStdErr(IGNORE)
     .setIgnoreExitCode()
@@ -167,7 +167,7 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
     die(`failed to parse json received from calling: npm view ${project.outputPackageJson.name} versions --json`);
     return undefined;
   }
-  if (context.exitCode) {
+  if (exitCode) {
     invariant(json.error?.code === 'E404', LogLevel.FATAL, `data recieved from calling 'npm view ${project.outputPackageJson.name} versions --json' is not an error: ${output}`);
     log(`${project.outputPackageJson.name} was never published`);
     return project;
