@@ -24,4 +24,6 @@ publish all publishable projects:
 npm run publish -- --mode 'dry-run'|'force'
 ```
 
-> NOTE: this command is using `nx run-many` which should always run the commands in an order, which is based on the dpendencies between projects
+> NOTE: this command is using `nx run-many` which should always run the commands in the order, which is based on the dpendencies between projects
+
+> NOTE: if you want to run `nx run-many  --target=publish` please do not forget to add the `--nxBail` option

@@ -22,7 +22,7 @@
     "prettier": "npm run format:write",
     "merge-coverage": "nx run build:merge-coverage",
     "validate-projects": "nx run build:validate-projects",
-    "publish": "nx run-many --target=publish --output-style=static",
+    "publish": "nx run-many --target=publish --nxBail --output-style=static",
     "prepare": "husky install"
   },
   "private": true,
