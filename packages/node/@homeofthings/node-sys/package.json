@@ -1,16 +1,36 @@
 {
   "name": "@homeofthings/node-sys",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "HomeOfThings - fluent API for spawning child processes and shell-like filesystem function",
+  "keywords": [
+    "fluent-API",
+    "spawn",
+    "child-process",
+    "shell"
+  ],
   "dependencies": {
-    "debug": "*",
-    "tslib": "*",
-    "chmodr": "*",
-    "chownr": "*",
-    "mktemp": "*",
-    "touch": "*",
-    "which": "*",
-    "mv": "*",
-    "stat-mode": "*",
-    "@homeofthings/node-utils": "*"
+    "debug": "^4.3.4",
+    "tslib": "^2.6.2",
+    "chmodr": "^1.2.0",
+    "chownr": "^2.0.0",
+    "mktemp": "^1.0.1",
+    "touch": "^3.1.0",
+    "which": "^4.0.0",
+    "mv": "^2.1.1",
+    "stat-mode": "^1.0.0",
+    "@homeofthings/node-utils": "~1.0.0"
+  },
+  "author": {
+    "email": "www.gms@gmx.at",
+    "name": "Guenter Sandner"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gms1/HomeOfThings.git"
+  },
+  "homepage": "https://github.com/gms1/HomeOfThings",
+  "bugs": {
+    "url": "https://github.com/gms1/HomeOfThings/issues"
   }
 }
