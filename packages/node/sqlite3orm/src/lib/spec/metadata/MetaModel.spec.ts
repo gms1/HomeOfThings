@@ -145,7 +145,7 @@ describe('test metaModels', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('withoutRowId')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('withoutRowId')).not.toBe(-1);
     }
   });
 
@@ -164,7 +164,7 @@ describe('test metaModels', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('autoIncrement')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('autoIncrement')).not.toBe(-1);
     }
   });
 
@@ -183,7 +183,7 @@ describe('test metaModels', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('identity')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('identity')).not.toBe(-1);
     }
   });
 
@@ -202,7 +202,7 @@ describe('test metaModels', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('dbtype')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('dbtype')).not.toBe(-1);
     }
   });
 
@@ -221,7 +221,7 @@ describe('test metaModels', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('json')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('json')).not.toBe(-1);
     }
   });
 
@@ -240,7 +240,7 @@ describe('test metaModels', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('dateInMilliSeconds')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('dateInMilliSeconds')).not.toBe(-1);
     }
   });
 
@@ -260,7 +260,7 @@ describe('test metaModels', () => {
         col2?: number;
       }
     } catch (err) {
-      expect((err.message as string).indexOf('index')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('index')).not.toBe(-1);
     }
   });
 
@@ -307,7 +307,7 @@ describe('test metaModels', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('index')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('index')).not.toBe(-1);
     }
   });
 
@@ -352,7 +352,7 @@ describe('test metaModels', () => {
         col2?: number;
       }
     } catch (err) {
-      expect((err.message as string).indexOf('foreign')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('foreign')).not.toBe(-1);
     }
   });
 
@@ -379,7 +379,7 @@ describe('test metaModels', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('foreign')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('foreign')).not.toBe(-1);
     }
   });
 
@@ -410,7 +410,7 @@ describe('test metaModels', () => {
       expect(schema().hasTable('MPT11:T1')).toBeFalsy();
       metaModel1.destroy();
     } catch (err) {
-      failTest(`should not throw: ${err.message}`);
+      failTest(`should not throw: ${(err as Error).message}`);
     }
   });
 
@@ -478,7 +478,7 @@ describe('test metaModels', () => {
       expect(metaModel1.table.fields[8].name).toBe('MPT12:COLDATE_NN');
       expect(metaModel1.table.fields[8].dbtype).toBe('INTEGER NOT NULL');
     } catch (err) {
-      failTest(`should not throw: ${err.message}`);
+      failTest(`should not throw: ${(err as Error).message}`);
     }
   });
 

@@ -203,7 +203,7 @@ describe('test schema', () => {
       await schema().createIndex(sqldb, TABLE_TESTIDX_NAME, TABLE_TESTIDX_IDX_NAME_U);
       await schema().createIndex(sqldb, TABLE_TESTIDX_NAME, TABLE_TESTIDX_IDX_NAME_N);
     } catch (e) {
-      failTest(`creating table '${TABLE_TESTIDX_NAME}' and indexes failed: ${e.message}`);
+      failTest(`creating table '${TABLE_TESTIDX_NAME}' and indexes failed: ${(e as Error).message}`);
     }
 
     try {
@@ -217,14 +217,14 @@ describe('test schema', () => {
       expect(tableInfo!.indexes[TABLE_TESTIDX_IDX_NAME_N].unique).toBeFalsy();
       expect(tableInfo!.indexes[TABLE_TESTIDX_IDX_NAME_N].columns[0].desc).toBe(false);
     } catch (e) {
-      failTest(`reading catalog table info for '${TABLE_TESTIDX_NAME}' failed: ${e.message}`);
+      failTest(`reading catalog table info for '${TABLE_TESTIDX_NAME}' failed: ${(e as Error).message}`);
     }
 
     try {
       await schema().dropIndex(sqldb, TABLE_TESTIDX_NAME, TABLE_TESTIDX_IDX_NAME_U);
       await schema().dropIndex(sqldb, TABLE_TESTIDX_NAME, TABLE_TESTIDX_IDX_NAME_N);
     } catch (e) {
-      failTest(`dropping indexes on table '${TABLE_TESTIDX_NAME} failed: ${e.message}`);
+      failTest(`dropping indexes on table '${TABLE_TESTIDX_NAME} failed: ${(e as Error).message}`);
     }
 
     try {
@@ -232,7 +232,7 @@ describe('test schema', () => {
       await schema().createIndex(sqldb, TABLE_TESTIDX_NAME, TABLE_TESTIDX_IDX_NAME_U, false);
       await schema().createIndex(sqldb, TABLE_TESTIDX_NAME, TABLE_TESTIDX_IDX_NAME_N, true);
     } catch (e) {
-      failTest(`creating indexes on '${TABLE_TESTIDX_NAME}' failed: ${e.message}`);
+      failTest(`creating indexes on '${TABLE_TESTIDX_NAME}' failed: ${(e as Error).message}`);
     }
 
     try {
@@ -247,7 +247,7 @@ describe('test schema', () => {
       expect(tableInfo!.indexes[TABLE_TESTIDX_IDX_NAME_N].unique).toBeTruthy();
       expect(tableInfo!.indexes[TABLE_TESTIDX_IDX_NAME_N].columns[0].desc).toBe(false);
     } catch (e) {
-      failTest(`reading second catalog table info for '${TABLE_TESTIDX_NAME}' failed: ${e.message}`);
+      failTest(`reading second catalog table info for '${TABLE_TESTIDX_NAME}' failed: ${(e as Error).message}`);
     }
 
     try {

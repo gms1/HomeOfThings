@@ -55,7 +55,7 @@ describe('EntityManager', () => {
     try {
       await entityManager.getRepository(TestNoEntity);
     } catch (_e) {
-      expect(_e.message).toContain('prototype of TestNoEntity');
+      expect((_e as Error).message).toContain('prototype of TestNoEntity');
       return;
     }
     fail('should have thrown');

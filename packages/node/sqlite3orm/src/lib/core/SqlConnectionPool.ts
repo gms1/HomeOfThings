@@ -122,7 +122,7 @@ export class SqlConnectionPool {
       } catch (_ignore) {
         /* empty */
       }
-      debug(`pool ${this.name}: opening ${databaseFile} failed: ${err.message}`);
+      debug(`pool ${this.name}: opening ${databaseFile} failed: ${(err as Error).message}`);
       return Promise.reject(err);
     }
   }
@@ -157,7 +157,7 @@ export class SqlConnectionPool {
       this.inUse.clear();
       await Promise.all(promises);
     } catch (err) /* istanbul ignore next */ {
-      debug(`pool ${this.name}: closing failed: ${err.message}`);
+      debug(`pool ${this.name}: closing failed: ${(err as Error).message}`);
       return Promise.reject(err);
     }
   }
@@ -197,7 +197,7 @@ export class SqlConnectionPool {
       debug(`pool ${this.name}: ${this.inUse.size} connections open (${this.inPool.length} in pool)`);
       return sqldb;
     } catch (err) {
-      debug(`pool ${this.name}: getting connection from pool failed: ${err.message}`);
+      debug(`pool ${this.name}: getting connection from pool failed: ${(err as Error).message}`);
       return Promise.reject(err);
     }
   }

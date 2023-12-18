@@ -28,7 +28,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
       const row: any = await sqldb.get(select, params);
       return row.result || 0;
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`count '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`count '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 
@@ -48,7 +48,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
       const row: any = await sqldb.get(select, params);
       return row.result ? true : false;
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`count '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`count '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 
@@ -70,7 +70,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
       }
       return this.updateModelFromRow(new this.type(), rows[0]);
     } catch (e) {
-      return Promise.reject(new Error(`select '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`select '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 
@@ -93,7 +93,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
       });
       return results;
     } catch (e) {
-      return Promise.reject(new Error(`select '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`select '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 
@@ -116,7 +116,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
       });
       return results;
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`select '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`select '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 
@@ -132,7 +132,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
       const row = await sqldb.get(this.getSelectByIdStatement(), this.bindPrimaryKeyInputParams(model));
       model = this.updateModelFromRow(model, row);
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`select '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`select '${this.table.name}' failed: ${(e as Error).message}`));
     }
     return model;
   }
@@ -150,7 +150,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
       const row = await sqldb.get(this.getSelectByIdStatement(), this.bindPrimaryKeyInputParams(input));
       model = this.updateModelFromRow(model, row);
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`select '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`select '${this.table.name}' failed: ${(e as Error).message}`));
     }
     return model;
   }
@@ -168,7 +168,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
       });
       return res;
     } catch (e) {
-      return Promise.reject(new Error(`select '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`select '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 

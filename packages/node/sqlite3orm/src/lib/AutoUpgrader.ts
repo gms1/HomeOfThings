@@ -72,7 +72,7 @@ export class AutoUpgrader {
         await this._upgradeTable(tables, opts);
       }
     } catch (e) {
-      error = e;
+      error = e as Error;
     }
 
     // If foreign key constraints were originally enabled, enable them again
@@ -81,7 +81,7 @@ export class AutoUpgrader {
         await this.foreignKeyEnable(true);
       } catch (e /* istanbul ignore next */) {
         if (!error) {
-          error = e;
+          error = e as Error;
         }
       }
     }

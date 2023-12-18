@@ -30,7 +30,7 @@ bootstrap.init().then(async (app) => {
     await bootstrap.boot();
     await app.close();
   } catch (err) {
-    logger.error(`failed: ${err}`, err.stack, CLI_CONTEXT);
+    logger.error(`failed: ${err}`, (err as Error).stack, CLI_CONTEXT);
     await app.close();
     process.exit(1);
   }

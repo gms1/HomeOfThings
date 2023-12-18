@@ -778,7 +778,7 @@ describe(`BaseDAO`, () => {
         });
         failTest('updateAll should have failed');
       } catch (err) {
-        expect(err.message).toContain('nothing changed');
+        expect((err as Error).message).toContain('nothing changed');
       }
       try {
         await fullDao.deleteAll('where ID=:id', {
@@ -786,7 +786,7 @@ describe(`BaseDAO`, () => {
         });
         failTest('deleteAll should have failed');
       } catch (err) {
-        expect(err.message).toContain('nothing changed');
+        expect((err as Error).message).toContain('nothing changed');
       }
     });
 

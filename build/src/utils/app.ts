@@ -18,7 +18,7 @@ export enum LogLevel {
 export let ERRORS = 0;
 export let WARNINGS = 0;
 
-type LoggingFunction = (message: string, ...params) => void;
+type LoggingFunction = (message: string, ...params: unknown[]) => void;
 
 const LOGGING: { [key in LogLevel]: LoggingFunction } = {
   [LogLevel.INFO]: log,
@@ -47,24 +47,24 @@ export function getWorkspaceDir(): string {
 }
 
 // -----------------------------------------------------------------------------------------
-export function log(message: string, ...params) {
+export function log(message: string, ...params: unknown[]) {
   console.log(`${APPNAME}: ${message} `, ...params);
 }
 
 // -----------------------------------------------------------------------------------------
-export function warn(message: string, ...params) {
+export function warn(message: string, ...params: unknown[]) {
   console.warn(`${APPNAME}: WARNING: ${message} `, ...params);
   WARNINGS++;
 }
 
 // -----------------------------------------------------------------------------------------
-export function error(message: string, ...params) {
+export function error(message: string, ...params: unknown[]) {
   console.error(`${APPNAME}: ERROR: ${message} `, ...params);
   ERRORS++;
 }
 
 // -----------------------------------------------------------------------------------------
-export function die(message: string, ...params) {
+export function die(message: string, ...params: unknown[]) {
   error(message, ...params);
   process.exit(-1);
 }

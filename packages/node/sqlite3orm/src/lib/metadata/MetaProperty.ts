@@ -32,7 +32,10 @@ export class MetaProperty {
     return this._transform;
   }
 
-  constructor(public readonly className: string, public readonly key: KeyType) {
+  constructor(
+    public readonly className: string,
+    public readonly key: KeyType,
+  ) {
     this._propertyType = PropertyType.UNKNOWN;
   }
 
@@ -90,7 +93,7 @@ export class MetaProperty {
     try {
       this._field = model.table.getOrAddTableField(name, isIdentity, opts, this.propertyType);
     } catch (err) {
-      throw new Error(`property '${this.className}.${this.key.toString()}': failed to add field: ${err.message}`);
+      throw new Error(`property '${this.className}.${this.key.toString()}': failed to add field: ${(err as Error).message}`);
     }
 
     // add mapping from column name to this property

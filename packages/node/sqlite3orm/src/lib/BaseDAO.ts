@@ -163,7 +163,7 @@ export class BaseDAO<T extends Object> {
       }
       return res.changes;
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`update '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`update '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 
@@ -192,7 +192,7 @@ export class BaseDAO<T extends Object> {
     } catch (e) {
       // NOTE: should not happen
       /* istanbul ignore next */
-      return Promise.reject(new Error(`delete from '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`delete from '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 
@@ -217,7 +217,7 @@ export class BaseDAO<T extends Object> {
       }
       return Promise.resolve(res.changes);
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`delete from '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`delete from '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 
@@ -286,7 +286,7 @@ export class BaseDAO<T extends Object> {
       const row = await this.sqldb.get(stmt, hostParams);
       output = this.queryModel.updateModelFromRow(new this.type(), row);
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`select '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`select '${this.table.name}' failed: ${(e as Error).message}`));
     }
     return output;
   }
@@ -405,7 +405,7 @@ export class BaseDAO<T extends Object> {
       });
       return results;
     } catch (e) {
-      return Promise.reject(new Error(`select '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`select '${this.table.name}' failed: ${(e as Error).message}`));
     }
   }
 
@@ -521,7 +521,7 @@ export class BaseDAO<T extends Object> {
         idProperty.setDBValueIntoModel(input, res.lastID);
       }
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`insert into '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`insert into '${this.table.name}' failed: ${(e as Error).message}`));
     }
     return input;
   }
@@ -542,7 +542,7 @@ export class BaseDAO<T extends Object> {
         }
       }
     } catch (e /* istanbul ignore next */) {
-      return Promise.reject(new Error(`replace into '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`replace into '${this.table.name}' failed: ${(e as Error).message}`));
     }
     return input;
   }
@@ -554,7 +554,7 @@ export class BaseDAO<T extends Object> {
         return Promise.reject(new Error(`update '${this.table.name}' failed: nothing changed`));
       }
     } catch (e) {
-      return Promise.reject(new Error(`update '${this.table.name}' failed: ${e.message}`));
+      return Promise.reject(new Error(`update '${this.table.name}' failed: ${(e as Error).message}`));
     }
     return input;
   }

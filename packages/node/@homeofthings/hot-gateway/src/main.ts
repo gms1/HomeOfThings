@@ -112,7 +112,7 @@ async function bootstrap() {
             console.log(`OpenAPI spec '${specFile}' is up-to-date`);
           }
         } catch (err) {
-          console.error(`OpenAPI spec to '${specFile}: failed to export ': ${err.message}`);
+          console.error(`OpenAPI spec to '${specFile}: failed to export ': ${(err as Error).message}`);
         }
         await app.close();
         process.exit(0);
@@ -137,7 +137,7 @@ async function bootstrap() {
       return;
     }
   } catch (err) {
-    logger.error(`bootstrapping failed: ${err}`, err.stack, MAIN_CONTEXT);
+    logger.error(`bootstrapping failed: ${err}`, (err as Error).stack, MAIN_CONTEXT);
   }
 }
 

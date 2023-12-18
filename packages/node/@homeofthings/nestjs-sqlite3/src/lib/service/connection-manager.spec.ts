@@ -171,7 +171,7 @@ describe('ConnectionManager', () => {
       try {
         await connectionManager.getConnection(givenConnectionName);
       } catch (_e) {
-        console.log(_e.message, _e);
+        console.log((_e as Error).message, _e);
         fail('should not throw');
       }
     });

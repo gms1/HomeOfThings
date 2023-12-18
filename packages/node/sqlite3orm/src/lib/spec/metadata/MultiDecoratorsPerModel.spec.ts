@@ -19,7 +19,7 @@ describe('test multiple decorators per model', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('already')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('already')).not.toBe(-1);
     }
   });
 
@@ -37,7 +37,7 @@ describe('test multiple decorators per model', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('already')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('already')).not.toBe(-1);
     }
   });
 
@@ -56,7 +56,7 @@ describe('test multiple decorators per model', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('already')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('already')).not.toBe(-1);
     }
   });
 
@@ -75,7 +75,7 @@ describe('test multiple decorators per model', () => {
       }
       failTest('should have thrown');
     } catch (err) {
-      expect((err.message as string).indexOf('already')).not.toBe(-1);
+      expect(((err as Error).message as string).indexOf('already')).not.toBe(-1);
     }
   });
 });

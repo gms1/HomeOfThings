@@ -64,7 +64,7 @@ export class ExpressApplication {
         );
         debug('https server created');
       } catch (err) {
-        this._logger.error('failed to create https server', err.stack, EXPRESS_APPLICATION_CONTEXT);
+        this._logger.error('failed to create https server', (err as Error).stack, EXPRESS_APPLICATION_CONTEXT);
         return undefined;
       }
     }
@@ -78,7 +78,7 @@ export class ExpressApplication {
         );
         debug('http server created');
       } catch (err) {
-        this._logger.error('failed to create http server', err.stack, EXPRESS_APPLICATION_CONTEXT);
+        this._logger.error('failed to create http server', (err as Error).stack, EXPRESS_APPLICATION_CONTEXT);
         return undefined;
       }
     }
