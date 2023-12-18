@@ -54,6 +54,15 @@ describe('fs', () => {
     exitSpy.mockReset();
   });
 
+  it('`realpath` should call node:fs:realpath', async () => {
+    const givenPath = 'testpath';
+    const realpathSpy = jest.spyOn(fsNode, 'realpath').mockImplementation(() => Promise.resolve(''));
+
+    await fs.realpath(givenPath);
+    expect(realpathSpy).toHaveBeenCalledTimes(1);
+    expect(realpathSpy).toHaveBeenCalledWith(givenPath);
+  });
+
   it('`chmod` should change the mode for a file', async () => {
     const givenFile = await fs.mktemp(path.resolve(testFolder, 'tmp_'));
     const givenMode = 0o777;
@@ -81,7 +90,7 @@ describe('fs', () => {
 
     if (fs.IS_WIN) {
       const chmodSpy = jest.spyOn(fsNode, 'chmod').mockImplementation(() => Promise.resolve());
-      await fs.chmod(givenDir, givenMode);
+      await fs.chmod([givenDir], givenMode);
       expect(chmodSpy).toHaveBeenCalledTimes(1);
       expect(chmodSpy).toHaveBeenCalledWith(givenDir, givenMode);
       chmodSpy.mockReset();
@@ -90,7 +99,7 @@ describe('fs', () => {
 
     expect(await fs.mode(givenDir)).toBe(0o700);
 
-    await fs.chmod(givenDir, givenMode);
+    await fs.chmod([givenDir], givenMode);
 
     expect(await fs.mode(givenDir)).toBe(givenMode);
   });
@@ -103,7 +112,7 @@ describe('fs', () => {
 
     if (fs.IS_WIN) {
       const chmodSpy = jest.spyOn(fs, '_chmodR').mockImplementation(() => Promise.resolve());
-      await fs.chmod(givenDir, givenMode, { recursive: true });
+      await fs.chmod([givenDir], givenMode, { recursive: true });
       expect(chmodSpy).toHaveBeenCalledTimes(1);
       expect(chmodSpy).toHaveBeenCalledWith(givenDir, givenMode);
       chmodSpy.mockReset();
@@ -112,7 +121,7 @@ describe('fs', () => {
 
     expect(await fs.mode(givenFile)).toBe(0o600);
 
-    await fs.chmod(givenDir, givenMode, { recursive: true });
+    await fs.chmod([givenDir], givenMode, { recursive: true });
 
     expect(await fs.mode(givenFile)).toBe(givenMode);
     expect((await fs.statsMmode(givenFile)).toString()).toBe(givenModeString);
@@ -124,7 +133,7 @@ describe('fs', () => {
     const givenGroup = 1000;
 
     const chownSpy = jest.spyOn(fsNode, 'chown').mockImplementation(() => Promise.resolve());
-    await fs.chown(givenFile, givenOwner, givenGroup);
+    await fs.chown([givenFile], givenOwner, givenGroup);
     expect(chownSpy).toHaveBeenCalledTimes(1);
     expect(chownSpy).toHaveBeenCalledWith(givenFile, givenOwner, givenGroup);
   });
@@ -138,15 +147,6 @@ describe('fs', () => {
     await fs.chown(givenDir, givenOwner, givenGroup, { recursive: true });
     expect(chownSpy).toHaveBeenCalledTimes(1);
     expect(chownSpy).toHaveBeenCalledWith(givenDir, givenOwner, givenGroup);
-  });
-
-  it('`realpath` should call node:fs:realpath', async () => {
-    const givenPath = 'testpath';
-    const realpathSpy = jest.spyOn(fsNode, 'realpath').mockImplementation(() => Promise.resolve(''));
-
-    await fs.realpath(givenPath);
-    expect(realpathSpy).toHaveBeenCalledTimes(1);
-    expect(realpathSpy).toHaveBeenCalledWith(givenPath);
   });
 
   it('`touch` should log nocreate option', async () => {
@@ -165,7 +165,7 @@ describe('fs', () => {
     const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
     const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
 
-    await fs.touch(givenPath, { atime: true });
+    await fs.touch([givenPath], { atime: true });
     expect(_touchSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-a', givenPath);

@@ -99,6 +99,59 @@ export function exit(code: number): void {
   nodeProcess.exit(code);
 }
 
+export function realpath(path: string): Promise<string> {
+  logCommandArgs('realpath', path);
+  return fsNode.realpath(path).then((output) => logCommandResult(output));
+}
+
+export function stat(path: string): Promise<Stats> {
+  logCommandArgs('stat', path);
+  return fsNode.stat(path);
+}
+
+export function mode(path: string): Promise<number> {
+  return stat(path).then((stats) => (stats.mode ?? 0) & 0o7777);
+}
+
+export function statsMmode(path: string): Promise<StatsMode> {
+  return stat(path).then((stats) => new StatsMode(stats));
+}
+
+export function exists(path: string): Promise<boolean> {
+  return fsNode
+    .stat(path)
+    .then(() => true)
+    .catch(() => false);
+}
+
+export function which(name: string, options?: { all: boolean }): Promise<string[]> {
+  let res: Promise<string[]>;
+
+  if (options?.all) {
+    logCommandArgs('which', '-a', name);
+    res = _which(name, { nothrow: true, all: true });
+  } else {
+    logCommandArgs('which', name);
+    res = _which(name, { nothrow: true }).then((path) => (path ? [path] : []));
+  }
+  return res.then((output) => logCommandResult(output));
+}
+
+export function copyFile(fromPath: string, toPath: string): Promise<void> {
+  logCommandArgs('cp', fromPath, toPath);
+  return fsNode.copyFile(fromPath, toPath);
+}
+
+export function unlink(path: string): Promise<void> {
+  logCommandArgs('unlink', path);
+  return fsNode.unlink(path);
+}
+
+export function ln(source: string, destination: string): Promise<void> {
+  logCommandArgs('ln', '-s', source, destination);
+  return fsNode.symlink(source, destination, 'junction'); // NOTE: 'junction' is only used on windows platform
+}
+
 export function mktemp(prefix: string, options?: { directory: boolean }): Promise<string> {
   let res: Promise<string>;
 
@@ -112,32 +165,30 @@ export function mktemp(prefix: string, options?: { directory: boolean }): Promis
   return res.then((output) => logCommandResult(output));
 }
 
-export function ln(source: string, destination: string): Promise<void> {
-  logCommandArgs('ln', '-s', source, destination);
-  return fsNode.symlink(source, destination, 'junction'); // NOTE: 'junction' is only used on windows platform
-}
-
-export function chmod(path: string, mode: Mode, options?: { recursive: boolean }): Promise<void> {
+export async function chmod(path: string | string[] | Promise<string[]>, mode: Mode, options?: { recursive: boolean }): Promise<void> {
+  const paths = await (typeof path === 'string' ? [path] : path);
   if (options?.recursive) {
-    logCommandArgs('chmod', '-r', mode.toString(), path);
-    return _chmodR(path, mode);
+    logCommandArgs('chmod', '-r', mode.toString(), ...paths);
+    return Promise.all(paths.map((p) => _chmodR(p, mode))).then(() => {});
   } else {
-    logCommandArgs('chmod', mode.toString(), path);
-    return fsNode.chmod(path, mode);
+    logCommandArgs('chmod', mode.toString(), ...paths);
+    return Promise.all(paths.map((p) => fsNode.chmod(p, mode))).then(() => {});
   }
 }
 
-export function chown(path: string, uid: number, gid: number, options?: { recursive: boolean }): Promise<void> {
+export async function chown(path: string | string[] | Promise<string[]>, uid: number, gid: number, options?: { recursive: boolean }): Promise<void> {
+  const paths = await (typeof path === 'string' ? [path] : path);
   if (options?.recursive) {
-    logCommandArgs('chown', '-r', `${uid}:${gid}`, path);
-    return _chownR(path, uid, gid);
+    logCommandArgs('chown', '-r', `${uid}:${gid}`, ...paths);
+    return Promise.all(paths.map((p) => _chownR(p, uid, gid))).then(() => {});
   } else {
-    logCommandArgs('chown', `${uid}:${gid}`, path);
-    return fsNode.chown(path, uid, gid);
+    logCommandArgs('chown', `${uid}:${gid}`, ...paths);
+    return Promise.all(paths.map((p) => fsNode.chown(p, uid, gid))).then(() => {});
   }
 }
 
-export function mkdir(path: string, options?: { mode?: Mode; recursive?: boolean }): Promise<string> {
+export async function mkdir(path: string | string[] | Promise<string[]>, options?: { mode?: Mode; recursive?: boolean }): Promise<void> {
+  const paths = await (typeof path === 'string' ? [path] : path);
   const log: string[] = ['mkdir'];
   if (options?.mode) {
     log.push('-m', options.mode.toString());
@@ -145,16 +196,12 @@ export function mkdir(path: string, options?: { mode?: Mode; recursive?: boolean
   if (options?.recursive) {
     log.push('-p');
   }
-  logCommandArgs(...log, path);
-  return fsNode.mkdir(path, options);
+  logCommandArgs(...log, ...paths);
+  return Promise.all(paths.map((p) => fsNode.mkdir(p, options))).then(() => {});
 }
 
-export function realpath(path: string): Promise<string> {
-  logCommandArgs('realpath', path);
-  return fsNode.realpath(path).then((output) => logCommandResult(output));
-}
-
-export function rm(path: string, options?: { force?: boolean; recursive?: boolean }): Promise<void> {
+export async function rm(path: string | string[] | Promise<string[]>, options?: { force?: boolean; recursive?: boolean }): Promise<void> {
+  const paths = await (typeof path === 'string' ? [path] : path);
   const log: string[] = ['rm'];
   if (options?.recursive || options?.force) {
     let opts = '-';
@@ -166,21 +213,18 @@ export function rm(path: string, options?: { force?: boolean; recursive?: boolea
     }
     log.push(opts);
   }
-  logCommandArgs(...log, path);
-  return fsNode.rm(path, options);
+  logCommandArgs(...log, ...paths);
+  return Promise.all(paths.map((p) => fsNode.rm(p, options))).then(() => {});
 }
 
-export function rmdir(path: string): Promise<void> {
-  logCommandArgs('rmdir', path);
-  return fsNode.rmdir(path);
+export async function rmdir(path: string | string[] | Promise<string[]>): Promise<void> {
+  const paths = await (typeof path === 'string' ? [path] : path);
+  logCommandArgs('rmdir', ...paths);
+  return Promise.all(paths.map((p) => fsNode.rmdir(p))).then(() => {});
 }
 
-export function unlink(path: string): Promise<void> {
-  logCommandArgs('unlink', path);
-  return fsNode.unlink(path);
-}
-
-export function touch(path: string, options?: TouchOptions): Promise<void> {
+export async function touch(path: string | string[] | Promise<string[]>, options?: TouchOptions): Promise<void> {
+  const paths = await (typeof path === 'string' ? [path] : path);
   const log: string[] = ['touch'];
   if (options) {
     if (options.atime || options.mtime || options.nocreate) {
@@ -203,40 +247,12 @@ export function touch(path: string, options?: TouchOptions): Promise<void> {
       log.push('-r', options.ref);
     }
   }
-  logCommandArgs(...log, path);
-  return _touch(path, options);
+  logCommandArgs(...log, ...paths);
+  return Promise.all(paths.map((p) => _touch(p, options))).then(() => {});
 }
 
-export function which(name: string, options?: { all: boolean }): Promise<string[]> {
-  let res: Promise<string[]>;
-
-  if (options?.all) {
-    logCommandArgs('which', '-a', name);
-    res = _which(name, { nothrow: true, all: true });
-  } else {
-    logCommandArgs('which', name);
-    res = _which(name, { nothrow: true }).then((path) => (path ? [path] : []));
-  }
-  return res.then((output) => logCommandResult(output));
-}
-
-export function mv(fromPath: string, toPath: string): Promise<void> {
-  logCommandArgs('mv', fromPath, toPath);
-  return _mv(fromPath, toPath);
-}
-
-// NOTE: similar to 'mv', but works only on the same filesystem
-export function rename(fromPath: string, toPath: string): Promise<void> {
-  logCommandArgs('rename', fromPath, toPath);
-  return fsNode.rename(fromPath, toPath);
-}
-
-export function copyFile(fromPath: string, toPath: string): Promise<void> {
-  logCommandArgs('cp', fromPath, toPath);
-  return fsNode.copyFile(fromPath, toPath);
-}
-
-export function cp(fromPath: string, toPath: string, options?: CopyOptions): Promise<void> {
+export async function cp(fromPath: string | string[] | Promise<string[]>, toPath: string, options?: CopyOptions): Promise<void> {
+  const paths = await (typeof fromPath === 'string' ? [fromPath] : fromPath);
   let opts = '';
   if (options) {
     if (options.dereference) {
@@ -253,29 +269,22 @@ export function cp(fromPath: string, toPath: string, options?: CopyOptions): Pro
     }
   }
   if (opts) {
-    logCommandArgs('cp', '-' + opts, fromPath, toPath);
+    logCommandArgs('cp', '-' + opts, ...paths, toPath);
   } else {
-    logCommandArgs('cp', fromPath, toPath);
+    logCommandArgs('cp', ...paths, toPath);
   }
-  return fsNode.cp(fromPath, toPath, { ...options, force: true });
+  return Promise.all(paths.map((p) => fsNode.cp(p, toPath, { ...options, force: true }))).then(() => {});
 }
 
-export function stat(path: string): Promise<Stats> {
-  logCommandArgs('stat', path);
-  return fsNode.stat(path);
+export async function mv(fromPath: string | string[] | Promise<string[]>, toPath: string): Promise<void> {
+  const paths = await (typeof fromPath === 'string' ? [fromPath] : fromPath);
+  logCommandArgs('mv', ...paths, toPath);
+  return Promise.all(paths.map((p) => _mv(p, toPath))).then(() => {});
 }
 
-export function mode(path: string): Promise<number> {
-  return stat(path).then((stats) => (stats.mode ?? 0) & 0o7777);
-}
-
-export function statsMmode(path: string): Promise<StatsMode> {
-  return stat(path).then((stats) => new StatsMode(stats));
-}
-
-export function exists(path: string): Promise<boolean> {
-  return fsNode
-    .stat(path)
-    .then(() => true)
-    .catch(() => false);
+// NOTE: similar to 'mv', but works only on the same filesystem
+export async function rename(fromPath: string | string[] | Promise<string[]>, toPath: string): Promise<void> {
+  const paths = await (typeof fromPath === 'string' ? [fromPath] : fromPath);
+  logCommandArgs('rename', ...paths, toPath);
+  return Promise.all(paths.map((p) => fsNode.rename(p, toPath))).then(() => {});
 }

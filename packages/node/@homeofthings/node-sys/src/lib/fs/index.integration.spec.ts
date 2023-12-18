@@ -101,24 +101,62 @@ describe('fs', () => {
     expect(fs.dirs()).toEqual(moreDirs);
   });
 
-  it('`mktemp` should create a temporary dir', async () => {
-    const tmpdir = await fs.mktemp(path.resolve(testFolder, 'tmp_'), { directory: true });
+  it('`which` should find a program', async () => {
+    const givenProgram = 'node';
 
-    const basename = fs.basename(tmpdir);
-    expect(basename.length).toBeGreaterThanOrEqual(10);
+    const found = await fs.which(givenProgram);
+    expect(found.length).toBe(1);
 
-    const stat = await fs.stat(tmpdir);
-    expect(stat.isDirectory()).toBe(true);
+    const foundDirname = fs.dirname(found[0]);
+    const foundBasename = fs.basename(found[0]);
+
+    expect(foundBasename).toBe(givenProgram);
+    expect(foundDirname.length).toBeGreaterThan(1);
   });
 
-  it('`mktemp` should create a temporary file', async () => {
-    const tmpfile = await fs.mktemp(path.resolve(testFolder, 'tmp_'));
+  it('`which` should find all occurrence of a program', async () => {
+    const givenProgram = 'node';
 
-    const basename = fs.basename(tmpfile);
-    expect(basename.length).toBeGreaterThanOrEqual(10);
+    const found = await fs.which(givenProgram, { all: true });
+    expect(found.length).toBeGreaterThanOrEqual(1);
 
-    const stat = await fs.stat(tmpfile);
-    expect(stat.isFile()).toBe(true);
+    const foundDirname = fs.dirname(found[0]);
+    const foundBasename = fs.basename(found[0]);
+
+    expect(foundBasename).toBe(givenProgram);
+    expect(foundDirname.length).toBeGreaterThan(1);
+  });
+
+  it('`which` should return empty string array if nothing found', async () => {
+    const givenProgram = ':/';
+
+    const found = await fs.which(givenProgram);
+    expect(found.length).toBe(0);
+  });
+
+  it('`copyFile` should copy a file', async () => {
+    const givenDir = await fs.mktemp(path.resolve(testFolder, 'tmp_'), { directory: true });
+    const givenSourceFile = path.resolve(workspace, 'package.json');
+    const givenTargetFile = path.resolve(givenDir, 'package.json');
+
+    expect(await fs.exists(givenSourceFile)).toBe(true);
+    expect(await fs.exists(givenTargetFile)).toBe(false);
+
+    await fs.copyFile(givenSourceFile, givenTargetFile);
+
+    expect(await fs.exists(givenTargetFile)).toBe(true);
+
+    const sourceContent = await fsNode.readFile(givenSourceFile);
+    const targetContent = await fsNode.readFile(givenTargetFile);
+    expect(sourceContent).toEqual(targetContent);
+  });
+
+  it('`unlink` should remove a file', async () => {
+    const givenFile = await fs.mktemp(path.resolve(testFolder, 'tmp_'));
+
+    expect(await fs.exists(givenFile)).toBe(true);
+    await fs.unlink(givenFile);
+    expect(await fs.exists(givenFile)).toBe(false);
   });
 
   it('`ln` should create a symlink for a file', async () => {
@@ -143,6 +181,26 @@ describe('fs', () => {
     expect(await fs.exists(givenLink)).toBe(true);
   });
 
+  it('`mktemp` should create a temporary dir', async () => {
+    const tmpdir = await fs.mktemp(path.resolve(testFolder, 'tmp_'), { directory: true });
+
+    const basename = fs.basename(tmpdir);
+    expect(basename.length).toBeGreaterThanOrEqual(10);
+
+    const stat = await fs.stat(tmpdir);
+    expect(stat.isDirectory()).toBe(true);
+  });
+
+  it('`mktemp` should create a temporary file', async () => {
+    const tmpfile = await fs.mktemp(path.resolve(testFolder, 'tmp_'));
+
+    const basename = fs.basename(tmpfile);
+    expect(basename.length).toBeGreaterThanOrEqual(10);
+
+    const stat = await fs.stat(tmpfile);
+    expect(stat.isFile()).toBe(true);
+  });
+
   it('`mkdir` should create a directory non-recursively', async () => {
     const givenRootDir = await fs.mktemp(path.resolve(testFolder, 'tmp_'), { directory: true });
     const givenDir = path.resolve(givenRootDir, 'testdir');
@@ -158,7 +216,7 @@ describe('fs', () => {
     const givenDir = path.resolve(givenRootDir, 'testparentdir', 'testdir');
 
     expect(await fs.exists(givenDir)).toBe(false);
-    await fs.mkdir(givenDir, { recursive: true });
+    await fs.mkdir([givenDir], { recursive: true });
     expect(await fs.exists(givenDir)).toBe(true);
     expect((await fs.stat(givenDir)).isDirectory()).toBe(true);
   });
@@ -195,7 +253,7 @@ describe('fs', () => {
     expect(await fs.exists(givenFile)).toBe(true);
     expect(await fs.exists(givenDir)).toBe(true);
     try {
-      await fs.rm(givenDir);
+      await fs.rm([givenDir]);
       fail('should have thrown');
     } catch (e) {
       /*ignore*/
@@ -231,21 +289,13 @@ describe('fs', () => {
 
     expect(await fs.exists(givenDir)).toBe(true);
     try {
-      await fs.rmdir(givenDir);
+      await fs.rmdir([givenDir]);
       fail('should have thrown');
     } catch (e) {
       /*ignore*/
     }
     expect(await fs.exists(givenFile)).toBe(true);
     expect(await fs.exists(givenDir)).toBe(true);
-  });
-
-  it('`unlink` should remove a file', async () => {
-    const givenFile = await fs.mktemp(path.resolve(testFolder, 'tmp_'));
-
-    expect(await fs.exists(givenFile)).toBe(true);
-    await fs.unlink(givenFile);
-    expect(await fs.exists(givenFile)).toBe(false);
   });
 
   it('`touch` should touch a file', async () => {
@@ -255,39 +305,6 @@ describe('fs', () => {
     expect(await fs.exists(givenFile)).toBe(false);
     await fs.touch(givenFile);
     expect(await fs.exists(givenFile)).toBe(true);
-  });
-
-  it('`which` should find a program', async () => {
-    const givenProgram = 'node';
-
-    const found = await fs.which(givenProgram);
-    expect(found.length).toBe(1);
-
-    const foundDirname = fs.dirname(found[0]);
-    const foundBasename = fs.basename(found[0]);
-
-    expect(foundBasename).toBe(givenProgram);
-    expect(foundDirname.length).toBeGreaterThan(1);
-  });
-
-  it('`which` should find all occurrence of a program', async () => {
-    const givenProgram = 'node';
-
-    const found = await fs.which(givenProgram, { all: true });
-    expect(found.length).toBeGreaterThanOrEqual(1);
-
-    const foundDirname = fs.dirname(found[0]);
-    const foundBasename = fs.basename(found[0]);
-
-    expect(foundBasename).toBe(givenProgram);
-    expect(foundDirname.length).toBeGreaterThan(1);
-  });
-
-  it('`which` should return empty string array if nothing found', async () => {
-    const givenProgram = ':/';
-
-    const found = await fs.which(givenProgram);
-    expect(found.length).toBe(0);
   });
 
   it('`mv` should rename/move a file', async () => {
@@ -302,6 +319,11 @@ describe('fs', () => {
 
     expect(await fs.exists(givenSourceFile)).toBe(false);
     expect(await fs.exists(givenTargetFile)).toBe(true);
+
+    await fs.mv([givenTargetFile], givenSourceFile);
+
+    expect(await fs.exists(givenSourceFile)).toBe(true);
+    expect(await fs.exists(givenTargetFile)).toBe(false);
   });
 
   it('`rename` should rename/move a file', async () => {
@@ -316,23 +338,11 @@ describe('fs', () => {
 
     expect(await fs.exists(givenSourceFile)).toBe(false);
     expect(await fs.exists(givenTargetFile)).toBe(true);
-  });
 
-  it('`copyFile` should copy a file', async () => {
-    const givenDir = await fs.mktemp(path.resolve(testFolder, 'tmp_'), { directory: true });
-    const givenSourceFile = path.resolve(workspace, 'package.json');
-    const givenTargetFile = path.resolve(givenDir, 'package.json');
+    await fs.rename([givenTargetFile], givenSourceFile);
 
     expect(await fs.exists(givenSourceFile)).toBe(true);
     expect(await fs.exists(givenTargetFile)).toBe(false);
-
-    await fs.copyFile(givenSourceFile, givenTargetFile);
-
-    expect(await fs.exists(givenTargetFile)).toBe(true);
-
-    const sourceContent = await fsNode.readFile(givenSourceFile);
-    const targetContent = await fsNode.readFile(givenTargetFile);
-    expect(sourceContent).toEqual(targetContent);
   });
 
   it('`cp` should copy a file', async () => {
@@ -361,7 +371,7 @@ describe('fs', () => {
     const givenTargetFile = path.resolve(givenTargetDir, givenFilename);
 
     const packageJsonFile = path.resolve(workspace, 'package.json');
-    await fs.cp(packageJsonFile, givenSourceFile, { preserveTimestamps: true });
+    await fs.cp([packageJsonFile], givenSourceFile, { preserveTimestamps: true });
 
     expect(await fs.exists(givenTargetFile)).toBe(false);
 
