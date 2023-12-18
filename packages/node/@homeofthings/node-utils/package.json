@@ -1,10 +1,28 @@
 {
   "name": "@homeofthings/node-utils",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "HomeOfThings - Node Utils: various utilities and common types",
+  "keywords": [
+    "lru-cache",
+    "async-context"
+  ],
+  "author": {
+    "email": "www.gms@gmx.at",
+    "name": "Guenter Sandner"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gms1/HomeOfThings.git"
+  },
+  "homepage": "https://github.com/gms1/HomeOfThings",
+  "bugs": {
+    "url": "https://github.com/gms1/HomeOfThings/issues"
+  },
   "dependencies": {
-    "chalk": "*",
-    "type-fest": "*",
-    "tslib": "*",
-    "debug": "*"
+    "chalk": "^4.1.2",
+    "type-fest": "^4.8.3",
+    "tslib": "^2.6.2",
+    "debug": "^4.3.4"
   }
 }
