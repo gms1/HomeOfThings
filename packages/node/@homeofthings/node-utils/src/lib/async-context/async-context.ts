@@ -1,8 +1,8 @@
 import { AsyncLocalStorage } from 'async_hooks';
 
 /*
- * Probably the only reason for this little wrapper around AsyncLocalStorage is its experimental status,
- * so that any necessary adjustments can be made more easily
+ * little wrapper around AsyncLocalStorage which currently has an experimental status
+ * adds a default value
  */
 
 export class AsyncContext<T> {
@@ -18,8 +18,8 @@ export class AsyncContext<T> {
     this._default = value;
   }
 
-  constructor(defaultValue?: T) {
-    this._default = defaultValue as T;
+  constructor(defaultValue: T) {
+    this._default = defaultValue;
   }
 
   set(value: T) {

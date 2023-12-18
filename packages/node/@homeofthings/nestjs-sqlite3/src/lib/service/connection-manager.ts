@@ -20,8 +20,7 @@ export class ConnectionManager {
     if (ConnectionManager._instance) {
       throw new Error(`an instance of ConnectionManager is already initialized`);
     }
-    this._context = new AsyncContext<Sqlite3Connections>();
-    this._context.set({});
+    this._context = new AsyncContext<Sqlite3Connections>({});
   }
 
   /*
