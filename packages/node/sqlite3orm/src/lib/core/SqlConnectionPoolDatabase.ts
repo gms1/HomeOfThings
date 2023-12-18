@@ -10,7 +10,7 @@ const debug = _dbg.default('sqlite3orm:database');
 export class SqlConnectionPoolDatabase extends SqlDatabase {
   pool?: SqlConnectionPool;
 
-  public close(): Promise<void> {
+  public override close(): Promise<void> {
     if (this.pool) {
       return this.pool.release(this);
     } else {
@@ -18,7 +18,7 @@ export class SqlConnectionPoolDatabase extends SqlDatabase {
     }
   }
 
-  public async open(databaseFile: string, mode?: number, settings?: SqlDatabaseSettings): Promise<void> {
+  public override async open(databaseFile: string, mode?: number, settings?: SqlDatabaseSettings): Promise<void> {
     /* istanbul ignore else */
     if (this.isOpen()) {
       /* istanbul ignore else */

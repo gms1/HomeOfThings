@@ -14,13 +14,13 @@ function debug(formatter: any, ...args: any[]): void {
 
 // public methods for easier testing
 class SpecAutoUpgrader extends AutoUpgrader {
-  createTable(tab: Table): Promise<void> {
+  override createTable(tab: Table): Promise<void> {
     return super.createTable(tab);
   }
-  alterTable(tab: Table, upgradeInfo: UpgradeInfo): Promise<void> {
+  override alterTable(tab: Table, upgradeInfo: UpgradeInfo): Promise<void> {
     return super.alterTable(tab, upgradeInfo);
   }
-  recreateTable(tab: Table, upgradeInfo: UpgradeInfo): Promise<void> {
+  override recreateTable(tab: Table, upgradeInfo: UpgradeInfo): Promise<void> {
     return super.recreateTable(tab, upgradeInfo);
   }
 }

@@ -29,7 +29,7 @@ function debug(formatter: any, ...args: any[]): void {
 
 // public methods for easier testing
 class SpecAutoUpgrader extends AutoUpgrader {
-  _getUpgradeInfo(tab: Table, tableInfo?: DbTableInfo, opts?: UpgradeOptions): UpgradeInfo {
+  override _getUpgradeInfo(tab: Table, tableInfo?: DbTableInfo, opts?: UpgradeOptions): UpgradeInfo {
     return super._getUpgradeInfo(tab, tableInfo, opts);
   }
 }
