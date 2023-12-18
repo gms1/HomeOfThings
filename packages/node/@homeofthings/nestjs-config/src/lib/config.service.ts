@@ -8,7 +8,7 @@ import { ConfigModuleOptions, CONFIG_MODULE_OPTIONS_TOKEN } from './model';
 import type * as configType from 'config';
 
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
-const debug = _debug('nestjs-config');
+const debug = _debug('hot:nestjs-config');
 
 let config: configType.IConfig;
 

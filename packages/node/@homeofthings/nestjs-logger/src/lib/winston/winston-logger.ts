@@ -14,7 +14,7 @@ import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LogLevel } from '../mo
 //   "Pluggable log handler" (2018-03) https://github.com/visionmedia/debug/issues/556
 //   "5.x Roadmap" (2018-12) https://github.com/visionmedia/debug/issues/656
 
-const debug = _debug('nestjs-logger');
+const debug = _debug('hot:nestjs-logger');
 debug('Module "winston" imported');
 
 export class WinstonLogger implements NodeSysLogger {

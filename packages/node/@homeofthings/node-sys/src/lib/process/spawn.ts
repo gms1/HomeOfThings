@@ -5,7 +5,7 @@ import * as child_process from 'node:child_process';
 import { ExitCodeError, ProcessError } from './error';
 import { SpawnContext, SpawnOptions } from './options';
 
-const debug = debugjs.default('sys:process:spawn');
+const debug = debugjs.default('hot:node-sys:process:spawn');
 let spawnId = 0;
 
 // NOTE: see:

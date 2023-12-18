@@ -3,7 +3,7 @@ import * as debugjs from 'debug';
 
 import { getCommand } from '../process';
 
-const debug = debugjs.default('sys:log:command');
+const debug = debugjs.default('hot:node-sys:log:command');
 
 const DEFAULT_PROMPT = '$ ';
 let echoEnabled = true;

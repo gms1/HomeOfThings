@@ -3,7 +3,7 @@ import * as debugjs from 'debug';
 import { SpawnContext } from './options';
 import { getPrompt } from '../log';
 
-const debug = debugjs.default('sys:process:error');
+const debug = debugjs.default('hot:node-sys:process:error');
 
 export class ProcessError extends Error {
   constructor(
