@@ -84,13 +84,13 @@ export class Pipe {
 
   // set wait for detached process to exit
   public ref(): Pipe {
-    this.forEach((exec) => exec.options.context.process.ref());
+    this.forEach((exec) => exec.options.context!.process!.ref());
     return this;
   }
 
   // set do not wait for detached process to exit
   public unref(): Pipe {
-    this.forEach((exec) => exec.options.context.process.unref());
+    this.forEach((exec) => exec.options.context!.process!.unref());
     return this;
   }
 

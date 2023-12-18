@@ -15,7 +15,7 @@ const EXPRESS_APPLICATION_CONTEXT = 'hot:express';
 const debug = _debug(EXPRESS_APPLICATION_CONTEXT);
 
 export class ExpressApplication {
-  private readonly _options?: ExpressApplicationOptions;
+  private readonly _options: ExpressApplicationOptions;
   private readonly _logger: LoggerService;
   private readonly _app: express.Express;
   private readonly _adapter: ExpressAdapter;

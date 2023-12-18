@@ -160,7 +160,7 @@ export function mktemp(prefix: string, options?: { directory: boolean }): Promis
     res = fsNode.mkdtemp(prefix);
   } else {
     logCommandArgs('mktemp', prefix);
-    res = _mkTemp(prefix + 'XXXXXXX');
+    res = _mkTemp(prefix + 'XXXXXXX') as Promise<string>;
   }
   return res.then((output) => logCommandResult(output));
 }

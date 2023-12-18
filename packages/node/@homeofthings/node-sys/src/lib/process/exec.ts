@@ -43,7 +43,7 @@ export class Exec {
     const { options } = this;
     try {
       const context = await onChildProcessExit(options);
-      return context.exitCode;
+      return context.exitCode!;
     } catch (err) {
       if (options?.ignoreExitCode) {
         if (err instanceof ExitCodeError && typeof options.context?.exitCode === 'number') {

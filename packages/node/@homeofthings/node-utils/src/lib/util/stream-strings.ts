@@ -4,7 +4,6 @@ import { Writable } from 'node:stream';
 import { StringDecoder } from 'node:string_decoder';
 
 export class WritableStrings extends Writable {
-  _init = true;
   _decoder?: StringDecoder;
   _buffer = '';
   _data: string[];
@@ -24,10 +23,9 @@ export class WritableStrings extends Writable {
   }
 
   override _write(chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
-    if (this._init) {
+    if (!this._decoder) {
       // NOTE: got a 'buffer' encoding from spawned process stdout, although this is not a valid 'BufferEncoding' and is not supported by 'StringDecoder'
       this._decoder = new StringDecoder((encoding as any) === 'buffer' ? undefined : encoding);
-      this._init = false;
     }
     this.append(this._decoder.write(chunk));
     callback();
@@ -48,7 +46,7 @@ export class WritableStrings extends Writable {
         this._buffer = '';
         this._data.push(...lines);
       } else if (lines.length > 1) {
-        this._buffer = lines.pop();
+        this._buffer = lines.pop() as string;
         this._data.push(...lines);
       }
     }
