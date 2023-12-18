@@ -15,13 +15,13 @@ npx nx run <project>:version-bump --ver <new version>|increment|keep
 publish a project by name:
 
 ```bash
-npx nx run <project>:publish --mode dry-run|force
+npx nx run <project>:publish --mode 'dry-run'|'force'
 ```
 
 publish all publishable projects:
 
 ```bash
-npm run publish
+npm run publish -- --mode 'dry-run'|'force'
 ```
 
 > NOTE: this command is using `nx run-many` which should always run the commands in an order, which is based on the dpendencies between projects

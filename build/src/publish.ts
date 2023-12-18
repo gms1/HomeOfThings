@@ -54,6 +54,7 @@ async function publish(graph: ProjectGraph, projectName: string, mode?: string):
   if (!nxProject) {
     die(`project '${projectName}' not found`);
   }
+  invariant(!mode || mode === 'dry-run' || mode === 'force', LogLevel.FATAL, `invalid argument'${mode}', only 'dry-run' or 'force' allowed`);
 
   const project = await enrichProject(nxProject);
   if (!project) {
@@ -90,6 +91,7 @@ async function publish(graph: ProjectGraph, projectName: string, mode?: string):
         }
       }
     }
+    invariant(project.outputPackageJson.keyword, LogLevel.WARN, `no keywords defined in package.json`);
     if (mode !== 'force') {
       warn(`skipping publishing ${project.sourcePackageJson.name}@${project.sourcePackageJson.version} because dry-run is enabled`);
       return;
@@ -121,8 +123,8 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
   const sourcePackageJsonPath = path.resolve(WORKSPACE_DIR, nxProject.data.root, 'package.json');
   try {
     project.sourcePackageJson = await readJson(sourcePackageJsonPath);
-  } catch {
-    error(`failed to read '${sourcePackageJsonPath}'`);
+  } catch (err) {
+    error(`failed to read '${sourcePackageJsonPath}': `, err);
     return undefined;
   }
   if (project.sourcePackageJson.private == true) {
@@ -144,8 +146,8 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
   const outputPackageJsonPath = path.resolve(WORKSPACE_DIR, project.outputDir, 'package.json');
   try {
     project.outputPackageJson = await readJson(outputPackageJsonPath);
-  } catch {
-    warn(`failed to read '${outputPackageJsonPath}'`);
+  } catch (err) {
+    warn(`failed to read '${outputPackageJsonPath}': `, err);
     return project;
   }
   invariant(
