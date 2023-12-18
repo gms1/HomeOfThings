@@ -1,3 +1,5 @@
+// TODO: use this from @homeofthings/node-utils
+
 export declare type PromiseFactory<T> = () => Promise<T>;
 export declare type PromiseFactories<T> = PromiseFactory<T>[];
 

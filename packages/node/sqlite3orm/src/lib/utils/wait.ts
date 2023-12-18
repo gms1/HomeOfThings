@@ -1,3 +1,4 @@
+// TODO: use this from @homeofthings/node-utils
 export function wait(cond: () => boolean, timeout: number = 0, intervall: number = 100): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     let counter = 0;
