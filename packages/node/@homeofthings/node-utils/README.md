@@ -8,3 +8,41 @@
 [![License](https://img.shields.io/npm/l/@homeofthings/node-utils.svg?style=flat-square)](https://github.com/gms1/HomeOfThings/blob/master/packages/node/@homeofthings/node-utils/LICENSE)
 
 # @homeofthings/node-utils
+
+- `AsyncContext<T>`: little wrapper around `AsyncLocalStorage` providing default value
+
+  ```Typescript
+  asyncContext = new AsyncContext(defaultContext);
+  ...
+  asyncContext.set(newContext)
+  ...
+  currentContext = asyncContext.get();
+
+  ```
+
+- `sequentialize`: run `Promises` in sequence
+
+  ```Typescript
+  await sequentialize(item.map(() => doWork(item)));
+  ```
+
+- `wait`: wait until a condition is true or timed out
+
+  ```Typescript
+  await wait(condition); // polls until condition is true
+  await wait(condition, 1000);  // polls until condition is true or timed out after 1000ms
+  ```
+
+- `LruCache<T>`: LRU cache
+
+  ```Typescript
+  cache = new LruCache<UserSession, number>(SESSION_CACHE_SIZE);
+
+  cache.set(id, userSession); // add this to the cache and mark it as least recently used
+  ...
+  cache.get(anotherId); // if it is available in the cache it will be marked as least recently used
+  ```
+
+- `WritableStrings`: a `Writable` for writing to a string array
+
+- `quoteArgs` and `quoteArg`: quote arguments for better readability (e.g. for logging)

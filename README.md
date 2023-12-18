@@ -22,9 +22,9 @@
 
   an asynchronous execution context
 
-- [@homeofthings/nestjs-utils](packages/node/@homeofthings/nestjs-utils/README.md)
+- [@homeofthings/nestjs-sqlite3](packages/node/@homeofthings/nestjs-sqlite3/README.md)
 
-  a nestjs module for common utilities
+  a sqlite3 module for [NestJS](https://docs.nestjs.com/) based on [sqlite3orm](packages/node/sqlite3orm/README.md)
 
 - [@homeofthings/nestjs-logger](packages/node/@homeofthings/nestjs-logger/README.md)
 
@@ -34,6 +34,10 @@
 
   a configuration module for [NestJS](https://docs.nestjs.com/) based on [node-config](https://www.npmjs.com/package/config)
 
-- [@homeofthings/nestjs-sqlite3](packages/node/@homeofthings/nestjs-sqlite3/README.md)
+- [@homeofthings/nestjs-utils](packages/node/@homeofthings/nestjs-utils/README.md)
 
-  a sqlite3 module for [NestJS](https://docs.nestjs.com/) based on [sqlite3orm](packages/node/sqlite3orm/README.md)
+  a nestjs module for common utilities, e.g for creating dynamic root modules either synchronously or asynchronously
+
+- [@homeofthings/node-sys](packages/node/@homeofthings/node-sys/README.md)
+
+  a node library for creating child processes and many file-system related functions
