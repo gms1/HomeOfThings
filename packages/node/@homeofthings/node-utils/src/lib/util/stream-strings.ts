@@ -10,8 +10,8 @@ export class WritableStrings extends Writable {
 
   constructor(options?: WritableOptions, data?: string[]) {
     super(options);
-    this.data = data ? data : [];
-    this.data.length = 0;
+    this._data = data ? data : [];
+    this._data.length = 0;
   }
 
   get data(): string[] {
