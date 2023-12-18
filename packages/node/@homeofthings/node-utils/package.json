@@ -4,6 +4,7 @@
   "dependencies": {
     "chalk": "*",
     "type-fest": "*",
-    "tslib": "*"
+    "tslib": "*",
+    "debug": "*"
   }
 }

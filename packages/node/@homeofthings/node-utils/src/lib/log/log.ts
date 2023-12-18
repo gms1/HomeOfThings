@@ -1,6 +1,9 @@
 import chalk from 'chalk';
+import * as debugjs from 'debug';
 
 import { Logger } from './logger';
+
+const debug = debugjs.default('hot:node-utils:log');
 
 class DefaultLogger implements Logger {
   readonly WARNING_PREFIX = 'WARNING: ';
@@ -27,6 +30,7 @@ let currentLogger: Logger = new DefaultLogger();
 
 export function setLogger(logger: Logger) {
   currentLogger = logger;
+  debug('changed logger');
 }
 
 export function getLogger(): Logger {
