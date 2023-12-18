@@ -8,7 +8,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as process from 'node:process';
 
-import { APPNAME, die, getWorkspaceDir, log, setApplication, warn } from './utils/app';
+import { APPNAME, LogLevel, die, getWorkspaceDir, invariant, log, setApplication, warn } from './utils/app';
 import { readJson, writeJson } from './utils/file';
 // -----------------------------------------------------------------------------------------
 // NOTE: call this script using `npx nx run <project>:version-bump --ver <new version>|increment|keep`
@@ -26,7 +26,7 @@ program
   .command(`${APPNAME} <project-name> <<new-version>|increment|keep> `, { isDefault: true })
   .description('bump version for all projects')
   .action(async (projectName: string, version: string) => {
-    return versionBump(readCachedProjectGraph(), projectName, version)
+    return versionBumpCommand(readCachedProjectGraph(), projectName, version)
       .catch((err) => {
         die(`failed: ${err}`);
       })
@@ -37,7 +37,7 @@ program
 program.parse(process.argv);
 
 // -----------------------------------------------------------------------------------------
-async function versionBump(graph: ProjectGraph, projectName: string, version: string): Promise<void> {
+async function versionBumpCommand(graph: ProjectGraph, projectName: string, version: string): Promise<void> {
   const nxProject = graph.nodes[projectName];
   if (!nxProject) {
     die(`project '${projectName}' not found`);
@@ -84,25 +84,32 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
     if (oldVersion !== newVersion) {
       packageJson.version = newVersion;
 
-      const rootPackageJson = await readJson(path.resolve(WORKSPACE_DIR, 'package.json'));
-      const internalDependencies: Dictionary = {};
-      for (const otherProjectName in graph.nodes) {
-        const otherNxProject = graph.nodes[otherProjectName];
-        if (otherNxProject.data.root === nxProject.data.root) {
-          continue;
-        }
-        const otherProjectPackageJson = path.resolve(WORKSPACE_DIR, otherNxProject.data.root, 'package.json');
-        if (!fs.existsSync(otherProjectPackageJson)) {
-          continue;
-        }
-        const otherPackageJson = await readJson(otherProjectPackageJson);
-        if (!otherPackageJson.name || !otherPackageJson.version || otherPackageJson.version === '0.0.0') {
-          continue;
-        }
-        internalDependencies[otherPackageJson.name] = otherPackageJson.version;
-      }
+      const externalPackageVersions = await getAllExternalPackageVersions();
+      const internalPackageVersions = await getAllInternalPackageVersions(graph, nxProject);
 
-      updatePackageDependencies(graph, packageJson, rootPackageJson, internalDependencies);
+      updatePackageDependencies(packageJson, externalPackageVersions, internalPackageVersions);
+      if (!packageJson.author?.email) {
+        packageJson.author = { email: 'www.gms@gmx.at', name: 'Guenter Sandner' };
+      }
+      if (!packageJson.license) {
+        packageJson.license = 'MIT';
+      }
+      if (!packageJson.repository?.url) {
+        packageJson.repository = {
+          type: 'git',
+          url: 'git+https://github.com/gms1/HomeOfThings.git',
+        };
+      }
+      if (!packageJson.homepage) {
+        packageJson.homepage = 'https://github.com/gms1/HomeOfThings';
+      }
+      if (!packageJson.bugs?.url) {
+        packageJson.bugs = {
+          url: 'https://github.com/gms1/HomeOfThings/issues',
+        };
+      }
+      invariant(packageJson.description, LogLevel.WARN, `no description defined in '${packageJsonPath}'`);
+      invariant(packageJson.keywords?.length, LogLevel.WARN, `no keywords defined in '${packageJsonPath}'`);
       await writeJson(packageJsonPath, packageJson);
       warn(`${projectName}: changed ${oldVersion} => ${newVersion}`);
     } else {
@@ -114,27 +121,51 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
   }
 }
 
-function updatePackageDependencies(graph: ProjectGraph, packageJson: any, rootPackageJson: any, internalDependencies: Dictionary) {
-  const externalDependencies = Object.assign(
+async function getAllExternalPackageVersions(): Promise<Dictionary> {
+  const rootPackageJson = await readJson(path.resolve(WORKSPACE_DIR, 'package.json'));
+  const externalPackageVersions = Object.assign(
     {},
     rootPackageJson.optionalDependencies,
     rootPackageJson.peerDependencies,
     rootPackageJson.devDependencies,
     rootPackageJson.dependencies,
   );
+  return externalPackageVersions;
+}
 
+async function getAllInternalPackageVersions(graph: ProjectGraph, nxProject: ProjectGraphProjectNode): Promise<Dictionary> {
+  const internalPackageVersions: Dictionary = {};
+  for (const otherProjectName in graph.nodes) {
+    const otherNxProject = graph.nodes[otherProjectName];
+    if (otherNxProject.data.root === nxProject.data.root) {
+      continue;
+    }
+    const otherProjectPackageJson = path.resolve(WORKSPACE_DIR, otherNxProject.data.root, 'package.json');
+    if (!fs.existsSync(otherProjectPackageJson)) {
+      continue;
+    }
+    const otherPackageJson = await readJson(otherProjectPackageJson);
+    if (!otherPackageJson.name || !otherPackageJson.version || otherPackageJson.version === '0.0.0') {
+      continue;
+    }
+    internalPackageVersions[otherPackageJson.name] = otherPackageJson.version;
+  }
+  return internalPackageVersions;
+}
+
+function updatePackageDependencies(packageJson: any, externalPackageVersions: Dictionary, internaPackageVersions: Dictionary) {
   for (const depType of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
     if (!packageJson[depType]) {
       continue;
     }
     const dependencies: { [name: string]: string } = packageJson[depType];
     for (const depPackageName in dependencies) {
-      if (externalDependencies[depPackageName]) {
-        dependencies[depPackageName] = externalDependencies[depPackageName];
+      if (externalPackageVersions[depPackageName]) {
+        dependencies[depPackageName] = externalPackageVersions[depPackageName];
         continue;
       }
-      if (internalDependencies[depPackageName]) {
-        dependencies[depPackageName] = '~' + internalDependencies[depPackageName];
+      if (internaPackageVersions[depPackageName]) {
+        dependencies[depPackageName] = '~' + internaPackageVersions[depPackageName];
         continue;
       }
       // console.log('internalDependencies: ', internalDependencies);

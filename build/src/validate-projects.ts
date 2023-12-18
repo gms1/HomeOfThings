@@ -33,7 +33,7 @@ program
   .command(APPNAME, { isDefault: true })
   .description('valid project configurations')
   .action(async () => {
-    return validate(readCachedProjectGraph())
+    return validateProjectsCommand(readCachedProjectGraph())
       .catch((err) => {
         die(`failed: ${err}`);
       })
@@ -44,7 +44,7 @@ program
 program.parse(process.argv);
 
 // -----------------------------------------------------------------------------------------
-async function validate(graph: ProjectGraph): Promise<void> {
+async function validateProjectsCommand(graph: ProjectGraph): Promise<void> {
   const nxWorkspaceLibraryProjects = Object.values(graph.nodes);
 
   for (const nxProject of nxWorkspaceLibraryProjects) {

@@ -2,7 +2,7 @@
   "name": "jsonpointerx",
   "version": "1.2.0",
   "description": "fast jsonpointer (rfc6901) implementation",
-  "tags": [
+  "keywords": [
     "javascript",
     "typescript",
     "json pointer",

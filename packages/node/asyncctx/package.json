@@ -2,7 +2,7 @@
   "name": "asyncctx",
   "version": "2.1.0",
   "description": "an asynchronous execution context for TypeScript/JavaScript",
-  "tags": [
+  "keywords": [
     "typescript",
     "asynchronous context",
     "execution context",

@@ -2,7 +2,7 @@
   "name": "sqlite3orm",
   "version": "2.7.0",
   "description": "ORM for sqlite3 and TypeScript/JavaScript",
-  "tags": [
+  "keywords": [
     "javascript",
     "typescript",
     "sqlite",

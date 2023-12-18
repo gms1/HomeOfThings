@@ -20,6 +20,7 @@ const CHANGELOG_FILE = 'CHANGELOG.md';
 const FILES = [README_FILE, LICENSE_FILE, CHANGELOG_FILE];
 
 interface Project extends ProjectGraphProjectNode {
+  sourcePackageJsonPath: string;
   sourcePackageJson: any;
   nonPublishableReasons: string[];
   publishable: boolean; // true if the project is not private and has a proper version
@@ -41,14 +42,14 @@ program
   .command(`${APPNAME} <project-name> [force|dry-run]`, { isDefault: true })
   .description('publish package')
   .action(async (projectName: string, mode?: string) => {
-    return publish(readCachedProjectGraph(), projectName, mode).catch((err) => {
+    return publishCommand(readCachedProjectGraph(), projectName, mode).catch((err) => {
       die(`failed: ${err}`);
     });
   });
 program.parse(process.argv);
 
 // -----------------------------------------------------------------------------------------
-async function publish(graph: ProjectGraph, projectName: string, mode?: string): Promise<void> {
+async function publishCommand(graph: ProjectGraph, projectName: string, mode?: string): Promise<void> {
   const nxProject = graph.nodes[projectName];
 
   if (!nxProject) {
@@ -91,7 +92,14 @@ async function publish(graph: ProjectGraph, projectName: string, mode?: string):
         }
       }
     }
-    invariant(project.outputPackageJson.keyword, LogLevel.WARN, `no keywords defined in package.json`);
+    invariant(project.outputPackageJson.description, LogLevel.WARN, `no description defined in '${project.sourcePackageJsonPath}'`);
+    invariant(project.outputPackageJson.keywords?.length, LogLevel.WARN, `no keywords defined in '${project.sourcePackageJsonPath}'`);
+
+    invariant(project.outputPackageJson.author?.email, LogLevel.FATAL, `no author.email defined in '${project.sourcePackageJsonPath}'`);
+    invariant(project.outputPackageJson.license, LogLevel.FATAL, `no license defined in '${project.sourcePackageJsonPath}'`);
+    invariant(project.outputPackageJson.repository?.url, LogLevel.FATAL, `no repository.url defined in '${project.sourcePackageJsonPath}'`);
+    invariant(project.outputPackageJson.homepage, LogLevel.FATAL, `no homepage defined in '${project.sourcePackageJsonPath}'`);
+    invariant(project.outputPackageJson.bugs?.url, LogLevel.FATAL, `no bugs.url defined in '${project.sourcePackageJsonPath}'`);
     if (mode !== 'force') {
       warn(`skipping publishing ${project.sourcePackageJson.name}@${project.sourcePackageJson.version} because dry-run is enabled`);
       return;
@@ -120,11 +128,11 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
   project.outputDir = project.data?.targets?.build?.options?.outputPath;
   invariant(project.outputDir, LogLevel.FATAL, `Could not find "build.options.outputPath" of project "${project.name}". Is project.json configured  correctly?`);
 
-  const sourcePackageJsonPath = path.resolve(WORKSPACE_DIR, nxProject.data.root, 'package.json');
+  project.sourcePackageJsonPath = path.resolve(WORKSPACE_DIR, nxProject.data.root, 'package.json');
   try {
-    project.sourcePackageJson = await readJson(sourcePackageJsonPath);
+    project.sourcePackageJson = await readJson(project.sourcePackageJsonPath);
   } catch (err) {
-    error(`failed to read '${sourcePackageJsonPath}': `, err);
+    error(`failed to read '${project.sourcePackageJsonPath}': `, err);
     return undefined;
   }
   if (project.sourcePackageJson.private == true) {
@@ -153,12 +161,12 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
   invariant(
     project.sourcePackageJson.name && project.sourcePackageJson.name == project.outputPackageJson.name,
     LogLevel.FATAL,
-    `name differs between package jsons in '${sourcePackageJsonPath}' and '${outputPackageJsonPath}'`,
+    `name differs between package jsons in '${project.sourcePackageJsonPath}' and '${outputPackageJsonPath}'`,
   );
   invariant(
     project.sourcePackageJson.version && project.sourcePackageJson.version == project.outputPackageJson.version,
     LogLevel.FATAL,
-    `version differs between package jsons in '${sourcePackageJsonPath}' and '${outputPackageJsonPath}'`,
+    `version differs between package jsons in '${project.sourcePackageJsonPath}' and '${outputPackageJsonPath}'`,
   );
 
   project.generated = true;
