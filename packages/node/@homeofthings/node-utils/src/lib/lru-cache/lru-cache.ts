@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
-export class LruCache<T> {
-  private _map: Map<string, T> = new Map<string, T>();
+export class LruCache<T, K = string> {
+  private _map: Map<K, T> = new Map<K, T>();
 
   get maxEntries(): number {
     return this._maxEntries;
@@ -18,7 +18,7 @@ export class LruCache<T> {
 
   constructor(private _maxEntries = 20) {}
 
-  get(key: string): T {
+  get(key: K): T {
     let item: T = undefined as T;
     if (this._map.has(key)) {
       // mark item as least recently used
@@ -30,7 +30,7 @@ export class LruCache<T> {
     return item;
   }
 
-  set(key: string, item: T) {
+  set(key: K, item: T) {
     if (!this.delete(key)) {
       this.resize(this._maxEntries - 1);
     }
@@ -38,11 +38,11 @@ export class LruCache<T> {
     this._map.set(key, item);
   }
 
-  has(key: string): boolean {
+  has(key: K): boolean {
     return this._map.has(key);
   }
 
-  delete(key: string): boolean {
+  delete(key: K): boolean {
     const item: T = this._map.get(key) as T;
     if (item) {
       this.onDelete(item);
