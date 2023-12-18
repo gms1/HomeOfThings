@@ -39,7 +39,7 @@ const WORKSPACE_DIR = path.resolve(getWorkspaceDir());
 const program = new Command();
 program
   .version('1.0')
-  .command(`${APPNAME} <project-name> [force|dry-run]`, { isDefault: true })
+  .command(`${APPNAME} <project-name> [dry-run|run|force]`, { isDefault: true })
   .description('publish package')
   .action(async (projectName: string, mode?: string) => {
     return publishCommand(readCachedProjectGraph(), projectName, mode).catch((err) => {
@@ -55,7 +55,7 @@ async function publishCommand(graph: ProjectGraph, projectName: string, mode?: s
   if (!nxProject) {
     die(`project '${projectName}' not found`);
   }
-  invariant(!mode || mode === 'dry-run' || mode === 'force', LogLevel.FATAL, `invalid argument'${mode}', only 'dry-run' or 'force' allowed`);
+  invariant(!mode || /^(dry-run|run|force)$/.test(mode), LogLevel.FATAL, `invalid argument '${mode}', only 'dry-run', 'run' or 'force' allowed`);
 
   const project = await enrichProject(nxProject);
   if (!project) {
@@ -104,7 +104,7 @@ async function publishCommand(graph: ProjectGraph, projectName: string, mode?: s
       warn(`skipping publishing ${project.sourcePackageJson.name}@${project.sourcePackageJson.version} because dry-run is enabled`);
       return;
     }
-    await exec('npm', 'publish', '--access public').run();
+    await exec('npm', 'publish', '--access', 'public').run();
     log(`succeeded`);
   } catch (err) {
     return Promise.reject(err);
@@ -141,7 +141,7 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
     if (!project.sourcePackageJson.version) {
       project.nonPublishableReasons.push('has no version');
     }
-    if (project.sourcePackageJson.version === '0.0.0') {
+    if (/^0\.0\.[01]{1}$/.test(project.sourcePackageJson.version)) {
       project.nonPublishableReasons.push(`has version '${project.sourcePackageJson.version}'`);
     }
   }
@@ -189,7 +189,14 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
     verbose(`${project.outputPackageJson.name} was never published`);
     return project;
   }
-  invariant(Array.isArray(json), LogLevel.FATAL, `data recieved from calling 'npm view ${project.outputPackageJson.name} versions --json' is not a JSON array: ${output}`);
+  invariant(
+    Array.isArray(json) || typeof json === 'string',
+    LogLevel.FATAL,
+    `data recieved from calling 'npm view ${project.outputPackageJson.name} versions --json' is not a JSON array or string: ${output}`,
+  );
+  if (!Array.isArray(json)) {
+    json = [json];
+  }
   debug('versions: ', output);
   if (json.indexOf(project.outputPackageJson.version) >= 0) {
     project.published = true;

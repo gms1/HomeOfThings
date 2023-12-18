@@ -62,9 +62,19 @@ async function validateProjectsCommand(graph: ProjectGraph): Promise<void> {
       project.projectJson = await readJson(projectJsonPath);
       invariant(project.projectJson, LogLevel.FATAL, `file '${projectJsonPath}' not found`);
 
+      // validate package.json
       const packageJsonPath = path.resolve(projectRootDir, 'package.json');
-      project.packageJson = await readJson(packageJsonPath);
-      invariant(project.projectJson, project.type === 'lib' ? LogLevel.ERROR : LogLevel.INFO, `file '${packageJsonPath}' not found`);
+      const foundPackageJsonPath = fs.existsSync(packageJsonPath);
+      invariant(project.type !== 'lib' || foundPackageJsonPath, LogLevel.ERROR, `file '${packageJsonPath}' not found`);
+
+      if (fs.existsSync(packageJsonPath)) {
+        project.packageJson = await readJson(packageJsonPath);
+        invariant(
+          project.packageJson.version != '0.0.1',
+          LogLevel.ERROR,
+          `wrong version in '${packageJsonPath}', we should not use the version '${project.packageJson.version}', since it is the default`,
+        );
+      }
 
       // validate $schema in project.json
       if (project.projectJson.$schema) {

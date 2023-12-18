@@ -88,17 +88,17 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
       const internalPackageVersions = await getAllInternalPackageVersions(graph, nxProject);
 
       updatePackageDependencies(packageJson, externalPackageVersions, internalPackageVersions);
+
+      packageJson.repository = {
+        type: 'git',
+        url: 'git+https://github.com/gms1/HomeOfThings.git',
+      };
+
       if (!packageJson.author?.email) {
         packageJson.author = { email: 'www.gms@gmx.at', name: 'Guenter Sandner' };
       }
       if (!packageJson.license) {
         packageJson.license = 'MIT';
-      }
-      if (!packageJson.repository?.url) {
-        packageJson.repository = {
-          type: 'git',
-          url: 'git+https://github.com/gms1/HomeOfThings.git',
-        };
       }
       if (!packageJson.homepage) {
         packageJson.homepage = 'https://github.com/gms1/HomeOfThings';
