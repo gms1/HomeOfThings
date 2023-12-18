@@ -10,7 +10,7 @@ import { HOT_SESSION_DB } from '../model';
 const SESSION_CACHE_SIZE = 20;
 
 export class UserSessionService {
-  private cache: LruCache<UserSession> = new LruCache(SESSION_CACHE_SIZE);
+  private cache = new LruCache<UserSession>(SESSION_CACHE_SIZE);
 
   constructor(
     @InjectConnectionPool(HOT_SESSION_DB)
