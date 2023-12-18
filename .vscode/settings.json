@@ -1,0 +1,10 @@
+{
+  "files.exclude": {
+    ".nx": true,
+    "coverage": true,
+    "tmp": true
+  },
+  "search.exclude": {
+    "dist": true
+  }
+}

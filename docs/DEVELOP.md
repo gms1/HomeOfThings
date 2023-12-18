@@ -15,7 +15,7 @@ npx nx run <project>:version-bump --ver <new version>|increment|keep
 publish a project by name:
 
 ```bash
-npx nx run <project>:publish
+npx nx run <project>:publish --mode dry-run|force
 ```
 
 publish all publishable projects:

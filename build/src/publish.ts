@@ -9,7 +9,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as process from 'node:process';
 
-import { APPNAME, LogLevel, die, error, getWorkspaceDir, invariant, log, setApplication, warn } from './utils/app';
+import { APPNAME, LogLevel, die, error, getWorkspaceDir, invariant, log, setApplication, verbose, warn } from './utils/app';
 import { readJson } from './utils/file';
 
 // -----------------------------------------------------------------------------------------
@@ -38,17 +38,17 @@ const WORKSPACE_DIR = path.resolve(getWorkspaceDir());
 const program = new Command();
 program
   .version('1.0')
-  .command(`${APPNAME} <project-name> `, { isDefault: true })
+  .command(`${APPNAME} <project-name> [force|dry-run]`, { isDefault: true })
   .description('publish package')
-  .action(async (projectName: string) => {
-    return publish(readCachedProjectGraph(), projectName).catch((err) => {
+  .action(async (projectName: string, mode?: string) => {
+    return publish(readCachedProjectGraph(), projectName, mode).catch((err) => {
       die(`failed: ${err}`);
     });
   });
 program.parse(process.argv);
 
 // -----------------------------------------------------------------------------------------
-async function publish(graph: ProjectGraph, projectName: string): Promise<void> {
+async function publish(graph: ProjectGraph, projectName: string, mode?: string): Promise<void> {
   const nxProject = graph.nodes[projectName];
 
   if (!nxProject) {
@@ -60,19 +60,19 @@ async function publish(graph: ProjectGraph, projectName: string): Promise<void> 
     return;
   }
   if (!project.publishable) {
-    log(`skipping non publishable project:   ${project.sourcePackageJson.name}: ` + project.nonPublishableReasons.join(', '));
+    verbose(`skipping non publishable project:   ${project.sourcePackageJson.name}: ` + project.nonPublishableReasons.join(', '));
     return;
   }
   if (!project.generated) {
-    log(`skipping not generated project:     ${project.sourcePackageJson.name}@${project.sourcePackageJson.version}`);
+    verbose(`skipping not generated project:     ${project.sourcePackageJson.name}@${project.sourcePackageJson.version}`);
     return;
   }
   if (project.published) {
-    log(`skipping already published version: ${project.sourcePackageJson.name}@${project.sourcePackageJson.version}`);
+    verbose(`skipping already published version: ${project.sourcePackageJson.name}@${project.sourcePackageJson.version}`);
     return;
   }
 
-  log(`publishing: '${project.outputPackageJson.name}@${project.outputPackageJson.version}'`);
+  log(`publishing: ${project.outputPackageJson.name}@${project.outputPackageJson.version} ...`);
   pushd(project.outputDir);
 
   try {
@@ -89,6 +89,10 @@ async function publish(graph: ProjectGraph, projectName: string): Promise<void> 
           warn(`missing ${fileName} file`);
         }
       }
+    }
+    if (mode !== 'force') {
+      warn(`skipping publishing ${project.sourcePackageJson.name}@${project.sourcePackageJson.version} because dry-run is enabled`);
+      return;
     }
     await exec('npm', 'publish', '--access public').run();
     log(`succeeded`);
@@ -135,6 +139,8 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
     return project;
   }
   project.publishable = true;
+
+  // validate package.json in output directory
   const outputPackageJsonPath = path.resolve(WORKSPACE_DIR, project.outputDir, 'package.json');
   try {
     project.outputPackageJson = await readJson(outputPackageJsonPath);
@@ -152,6 +158,7 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
     LogLevel.FATAL,
     `version differs between package jsons in '${sourcePackageJsonPath}' and '${outputPackageJsonPath}'`,
   );
+
   project.generated = true;
   const outputLines: string[] = [];
   const exitCode = await exec('npm', 'view', project.outputPackageJson.name as string, 'versions', '--json')
@@ -169,7 +176,7 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
   }
   if (exitCode) {
     invariant(json.error?.code === 'E404', LogLevel.FATAL, `data recieved from calling 'npm view ${project.outputPackageJson.name} versions --json' is not an error: ${output}`);
-    log(`${project.outputPackageJson.name} was never published`);
+    verbose(`${project.outputPackageJson.name} was never published`);
     return project;
   }
   invariant(Array.isArray(json), LogLevel.FATAL, `data recieved from calling 'npm view ${project.outputPackageJson.name} versions --json' is not a JSON array: ${output}`);
@@ -177,7 +184,7 @@ async function enrichProject(nxProject: ProjectGraphProjectNode): Promise<Projec
   if (json.indexOf(project.outputPackageJson.version) >= 0) {
     project.published = true;
   } else {
-    log(`${project.outputPackageJson.name}@${project.outputPackageJson.version} not yet published`);
+    verbose(`${project.outputPackageJson.name}@${project.outputPackageJson.version} not yet published`);
   }
   return project;
 }

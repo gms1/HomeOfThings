@@ -98,6 +98,11 @@ async function validate(graph: ProjectGraph): Promise<void> {
           LogLevel.ERROR,
           `argument 1 in targets.publish.options.command is '${args[2]}' instead of '${nxProject.name}' in project.json '${projectJsonPath}'`,
         );
+        invariant(
+          args[3] === '{args.mode}',
+          LogLevel.ERROR,
+          `argument 2 in targets.publish.options.command is '${args[3]}' instead of '{args.mode}' in project.json '${projectJsonPath}'`,
+        );
         const envFile = publish.options?.envFile;
         invariant(envFile === 'build/.env', LogLevel.ERROR, `targets.publish.options.envFile is set to '${envFile}' instead of 'build/.env' in project.json '${projectJsonPath}'`);
         const dependsOn = publish.dependsOn;
@@ -118,7 +123,7 @@ async function validate(graph: ProjectGraph): Promise<void> {
         invariant(
           args[3] === '{args.ver}',
           LogLevel.ERROR,
-          `argument 1 in targets.version-bump.options.command is '${args[2]}' instead of '{args.ver}' in project.json '${projectJsonPath}'`,
+          `argument 2 in targets.version-bump.options.command is '${args[3]}' instead of '{args.ver}' in project.json '${projectJsonPath}'`,
         );
         const envFile = versionBump.options?.envFile;
         invariant(

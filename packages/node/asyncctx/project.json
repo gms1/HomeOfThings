@@ -40,7 +40,7 @@
     "publish": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node dist/build/src/publish.js asyncctx",
+        "command": "node dist/build/src/publish.js asyncctx {args.mode}",
         "envFile": "build/.env"
       },
       "dependsOn": [{ "projects": "build", "target": "build" }, "build"]

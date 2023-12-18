@@ -1,4 +1,5 @@
 import { pwd } from '@homeofthings/node-sys';
+import { logError, logInfo, logVerbose, logWarn } from '@homeofthings/node-utils';
 import * as debugjs from 'debug';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -47,32 +48,39 @@ export function getWorkspaceDir(): string {
 }
 
 // -----------------------------------------------------------------------------------------
+export function verbose(message: string, ...params: unknown[]) {
+  logVerbose(`${APPNAME}: ${message} `, ...params);
+}
+
+// -----------------------------------------------------------------------------------------
 export function log(message: string, ...params: unknown[]) {
-  console.log(`${APPNAME}: ${message} `, ...params);
+  logInfo(`${APPNAME}: ${message} `, ...params);
 }
 
 // -----------------------------------------------------------------------------------------
 export function warn(message: string, ...params: unknown[]) {
-  console.warn(`${APPNAME}: WARNING: ${message} `, ...params);
+  logWarn(`${APPNAME}: WARNING: ${message} `, ...params);
   WARNINGS++;
 }
 
 // -----------------------------------------------------------------------------------------
 export function error(message: string, ...params: unknown[]) {
-  console.error(`${APPNAME}: ERROR: ${message} `, ...params);
+  logError(`${APPNAME}: ERROR: ${message} `, ...params);
   ERRORS++;
 }
 
 // -----------------------------------------------------------------------------------------
 export function die(message: string, ...params: unknown[]) {
-  error(message, ...params);
+  logError(`${APPNAME}: FATAL: ${message} `, ...params);
   process.exit(-1);
 }
 
 // -----------------------------------------------------------------------------------------
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function invariant(condition: any, level: LogLevel, message: string) {
+export function invariant(condition: any, level: LogLevel, message: string): boolean {
   if (!condition) {
     LOGGING[level](message);
+    return false;
   }
+  return true;
 }
