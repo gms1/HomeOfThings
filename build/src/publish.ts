@@ -100,11 +100,16 @@ async function publishCommand(graph: ProjectGraph, projectName: string, mode?: s
     invariant(project.outputPackageJson.repository?.url, LogLevel.FATAL, `no repository.url defined in '${project.sourcePackageJsonPath}'`);
     invariant(project.outputPackageJson.homepage, LogLevel.FATAL, `no homepage defined in '${project.sourcePackageJsonPath}'`);
     invariant(project.outputPackageJson.bugs?.url, LogLevel.FATAL, `no bugs.url defined in '${project.sourcePackageJsonPath}'`);
-    if (mode !== 'force') {
+    if (mode !== 'force' && mode !== 'run') {
       warn(`skipping publishing ${project.sourcePackageJson.name}@${project.sourcePackageJson.version} because dry-run is enabled`);
       return;
     }
     await exec('npm', 'publish', '--access', 'public').run();
+    if (project.outputPackageJson.deprecated) {
+      warn(`waiting 1min before deprecating this package`);
+      await new Promise((resolve) => setTimeout(resolve, 60000));
+      await exec('npm', 'deprecate', project.outputPackageJson.name, project.outputPackageJson.deprecated).run();
+    }
     log(`succeeded`);
   } catch (err) {
     return Promise.reject(err);
