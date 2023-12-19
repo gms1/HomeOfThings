@@ -1,7 +1,7 @@
 {
   "name": "@homeofthings/nestjs-logger",
   "description": "HomeOfThings - NestJs Logger: a logger for NestJs based on Winston",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "keywords": [
     "nestjs",
     "nest",
@@ -26,13 +26,13 @@
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {
-    "@nestjs/common": "*",
-    "@homeofthings/nestjs-utils": "*",
-    "chalk": "*",
-    "supports-color": "*",
-    "debug": "*",
-    "mkdirp": "*",
-    "tslib": "*",
-    "winston": "*"
+    "@nestjs/common": "^10.3.0",
+    "@homeofthings/nestjs-utils": "~2.0.0",
+    "chalk": "^4.1.2",
+    "supports-color": "^8.1.1",
+    "debug": "^4.3.4",
+    "mkdirp": "^3.0.1",
+    "tslib": "^2.6.2",
+    "winston": "^3.11.0"
   }
 }
