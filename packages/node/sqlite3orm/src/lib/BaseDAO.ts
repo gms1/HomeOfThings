@@ -158,7 +158,6 @@ export class BaseDAO<T extends Object> {
       sql += `  ${whereClause}`;
       const res = await this.sqldb.run(sql, params);
       if (!res.changes && !BaseDAO.options?.ignoreNoChanges) {
-        // TODO: Breaking Change: change to: BaseDAO.options?.ignoreNoChanges !== false
         return Promise.reject(new Error(`update '${this.table.name}' failed: nothing changed`));
       }
       return res.changes;
@@ -212,7 +211,6 @@ export class BaseDAO<T extends Object> {
       sql += `  ${whereClause}`;
       const res = await this.sqldb.run(sql, params);
       if (!res.changes && !BaseDAO.options?.ignoreNoChanges) {
-        // TODO: Breaking Change: change to: BaseDAO.options?.ignoreNoChanges !== false
         return Promise.reject(new Error(`delete from '${this.table.name}' failed: nothing changed`));
       }
       return Promise.resolve(res.changes);
@@ -251,7 +249,6 @@ export class BaseDAO<T extends Object> {
    * @returns A promise of model instance
    */
   public async selectByChild<C extends Object>(constraintName: string, childType: { new (): C }, childObj: C): Promise<T> {
-    // TODO: refactor to use QueryModel and a Where object
     // create child DAO
     const childDAO = new BaseDAO<C>(childType, this.sqldb);
     let output: T;
@@ -382,7 +379,6 @@ export class BaseDAO<T extends Object> {
    */
   public async selectAllOf<P extends Object>(constraintName: string, parentType: { new (): P }, parentObj: P, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
     try {
-      // TODO: refactor to use QueryModel and a Where object
       const fkPredicates = this.queryModel.getForeignKeyPredicates(constraintName);
       if (!fkPredicates) {
         throw new Error(`constraint '${constraintName}' is not defined`);

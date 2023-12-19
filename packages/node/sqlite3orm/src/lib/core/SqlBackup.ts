@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // online backup
-// https://github.com/mapbox/node-sqlite3/pull/1116
-// TODO(Backup API): typings not yet available
 import * as _dbg from 'debug';
 const debug = _dbg.default('sqlite3orm:backup');
 
 export class SqlBackup {
+  // TODO(Backup API): typings not yet available
+  // https://github.com/TryGhost/node-sqlite3/pull/1116
   private readonly backup: any;
 
   get idle(): boolean {
