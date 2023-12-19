@@ -29,14 +29,15 @@ export class ConfigService {
       return ConfigService._instance;
     }
     ConfigService._instance = this;
-    if (this._opts.configDirectory) {
-      process.env.NODE_CONFIG_DIR = this._opts.configDirectory;
-    }
-    if (this._opts.environment) {
-      process.env.NODE_CONFIG_ENV = this._opts.environment;
-    }
-    this.environment = process.env.NODE_CONFIG_ENV ?? '';
-    this.configDirectory = process.env.NODE_CONFIG_DIR ?? path.resolve(process.cwd(), 'config');
+
+    this.environment = this._opts.environment || process.env.NODE_CONFIG_ENV || process.env.NODE_ENV || '';
+    this.configDirectory = this._opts.configDirectory || process.env.NODE_CONFIG_DIR || path.resolve(process.cwd(), 'config');
+
+    // sync settings with node-config
+    // NOTE: but do not overwrite NODE_ENV
+    process.env.NODE_CONFIG_ENV = this.environment;
+    process.env.NODE_CONFIG_DIR = this.configDirectory;
+
     debug(`environment: '${this.environment}'`);
     debug(`config-directory: '${this.configDirectory}'`);
     config = require('config');

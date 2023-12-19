@@ -8,6 +8,7 @@ import * as config from 'config';
 import * as path from 'path';
 
 import { ConfigService } from './config.service';
+import { ConfigModuleOptions } from './model';
 
 describe('ConfigService', () => {
   let configService: ConfigService;
@@ -283,70 +284,87 @@ describe('ConfigService', () => {
 });
 
 describe('ConfigService instantiation', () => {
+  const givenNodeConfigEnv = 'envFromNodeConfigEnv';
+  const givenNodeEnv = 'envFromNodeEnv';
+  const givenOptionsEnv = 'envFromOptions';
+  const givenNodeConfigDir = 'dirFromNodeConfigDir';
+  const givenOptionsDir = 'dirFromOptions';
+  let givenOptions: ConfigModuleOptions;
+
+  beforeEach(() => {
+    givenOptions = { environment: givenOptionsEnv, configDirectory: givenOptionsDir };
+    process.env.NODE_CONFIG_ENV = givenNodeConfigEnv;
+    process.env.NODE_ENV = givenNodeEnv;
+    process.env.NODE_CONFIG_DIR = givenNodeConfigDir;
+  });
   afterEach(() => {
     (ConfigService as any)._instance = undefined;
   });
 
-  it('environment should be taken from NODE_CONFIG_ENV', () => {
-    const givenEnvironment = 'development';
-    const givenOptions = {};
-    process.env.NODE_CONFIG_ENV = givenEnvironment;
+  afterAll(() => {
+    delete process.env.NODE_CONFIG_ENV;
+    delete process.env.NODE_CONFIG_DIR;
+    process.env.NODE_ENV = 'test';
+  });
+
+  it('should set singleton', () => {
     const configService = new ConfigService(givenOptions);
-    expect(configService.environment).toBe(givenEnvironment);
+    expect(ConfigService.getInstance()).toBe(configService);
+  });
+
+  it('should set opts', () => {
+    const configService = new ConfigService(givenOptions);
     expect(configService.opts).toBe(givenOptions);
   });
 
-  it('environment should be empty on default', () => {
-    expect(ConfigService.getInstance()).toBeUndefined();
+  it('environment should be taken from options', () => {
+    const configService = new ConfigService(givenOptions);
+    expect(configService.environment).toBe(givenOptionsEnv);
+    expect(process.env.NODE_CONFIG_ENV).toBe(configService.environment);
+  });
+
+  it('environment should be taken from NODE_CONFIG_ENV', () => {
+    delete givenOptions.environment;
+    const configService = new ConfigService(givenOptions);
+    expect(configService.environment).toBe(givenNodeConfigEnv);
+    expect(process.env.NODE_CONFIG_ENV).toBe(configService.environment);
+  });
+
+  it('environment should be taken from NODE_ENV', () => {
+    delete givenOptions.environment;
     delete process.env.NODE_CONFIG_ENV;
-    const configService = new ConfigService({});
+    const configService = new ConfigService(givenOptions);
+    expect(configService.environment).toBe(givenNodeEnv);
+    expect(process.env.NODE_CONFIG_ENV).toBe(configService.environment);
+  });
+
+  it('environment should be empty by default', () => {
+    delete givenOptions.environment;
+    delete process.env.NODE_CONFIG_ENV;
+    delete process.env.NODE_ENV;
+    const configService = new ConfigService(givenOptions);
     expect(configService.environment).toBe('');
+    expect(process.env.NODE_CONFIG_ENV).toBe(configService.environment);
   });
 
-  it('config-directory should honor NODE_CONFIG_DIR', () => {
-    expect(ConfigService.getInstance()).toBeUndefined();
-    const givenDirectory = '/foo';
-    process.env.NODE_CONFIG_DIR = givenDirectory;
-    const configService = new ConfigService({});
-    expect(configService.configDirectory).toBe(givenDirectory);
+  it('config-directory should be taken from options', () => {
+    const configService = new ConfigService(givenOptions);
+    expect(configService.configDirectory).toBe(givenOptionsDir);
+    expect(process.env.NODE_CONFIG_DIR).toBe(configService.configDirectory);
   });
 
-  it('config-directory should be "config" inside current working directory on default', () => {
+  it('config-directory should be taken from NODE_CONFIG_DIR', () => {
+    delete givenOptions.configDirectory;
+    const configService = new ConfigService(givenOptions);
+    expect(configService.configDirectory).toBe(givenNodeConfigDir);
+    expect(process.env.NODE_CONFIG_DIR).toBe(configService.configDirectory);
+  });
+
+  it('config-directory should be "config" (inside current directory) by default', () => {
+    delete givenOptions.configDirectory;
     delete process.env.NODE_CONFIG_DIR;
-    const configService = new ConfigService({});
+    const configService = new ConfigService(givenOptions);
     expect(configService.configDirectory).toBe(path.resolve(process.cwd(), 'config'));
-  });
-
-  it('config-directory should be configurable via ConfigModuleOptions', () => {
-    const givenDirectory = '/foo';
-    process.env.NODE_CONFIG_DIR = '/tmp';
-    const configService = new ConfigService({
-      configDirectory: givenDirectory,
-    });
-    expect(configService.configDirectory).toBe(givenDirectory);
-    expect(process.env.NODE_CONFIG_DIR).toBe(givenDirectory);
-  });
-
-  it('environment should honor NODE_CONFIG_ENV', () => {
-    expect(ConfigService.getInstance()).toBeUndefined();
-    const givenEnvironment = 'test1';
-    process.env.NODE_CONFIG_ENV = givenEnvironment;
-    const configService = new ConfigService({});
-    expect(configService.environment).toBe(givenEnvironment);
-  });
-
-  it('environment should be empty string on default', () => {
-    delete process.env.NODE_CONFIG_ENV;
-    const configService = new ConfigService({});
-    expect(configService.environment).toBe('');
-  });
-
-  it('environment should be configurable via ConfigModuleOptions', () => {
-    expect(ConfigService.getInstance()).toBeUndefined();
-    const givenEnvironment = 'test1';
-    process.env.NODE_CONFIG_ENV = 'test2';
-    const configService = new ConfigService({ environment: givenEnvironment });
-    expect(configService.environment).toBe(givenEnvironment);
-    expect(process.env.NODE_CONFIG_ENV).toBe(givenEnvironment);
+    expect(process.env.NODE_CONFIG_DIR).toBe(configService.configDirectory);
   });
 });
