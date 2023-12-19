@@ -1,6 +1,6 @@
 {
   "name": "sqlite3orm",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "ORM for sqlite3 and TypeScript/JavaScript",
   "keywords": [
     "javascript",
@@ -29,9 +29,9 @@
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {
-    "debug": "*",
-    "reflect-metadata": "*",
-    "sqlite3": "*",
-    "tslib": "*"
+    "debug": "^4.3.4",
+    "reflect-metadata": "^0.2.1",
+    "sqlite3": "^5.1.6",
+    "tslib": "^2.6.2"
   }
 }

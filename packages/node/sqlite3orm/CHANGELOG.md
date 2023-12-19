@@ -2,6 +2,7 @@
 
 | Release   | Notes                                                                                                                       |
 |-----------|-----------------------------------------------------------------------------------------------------------------------------|
+| 2.7.1     | maintenance release                                                                                                         |
 | 2.7.0     | upgrade node-sqlite3 5.1.6                                                                                                  |
 | 2.6.4     | maintenance release                                                                                                         |
 | 2.6.3     | upgrade node-sqlite3 5.0.3 [TryGhost](https://github.com/TryGhost/node-sqlite3)                                             |
