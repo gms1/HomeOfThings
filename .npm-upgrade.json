@@ -4,6 +4,10 @@
       "versions": ">=5.0",
       "reason": "version 5 is ESM"
     },
+    "supports-color": {
+      "versions": ">=9.0",
+      "reason": "version 9 is ESM"
+    },
     "lcov-total": {
       "versions": ">=2.0",
       "reason": "version 2 is ESM"
