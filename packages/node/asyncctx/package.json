@@ -1,6 +1,6 @@
 {
   "name": "asyncctx",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "an asynchronous execution context for TypeScript/JavaScript",
   "keywords": [
     "typescript",
@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {
-    "tslib": "*"
+    "tslib": "^2.6.2"
   }
 }
