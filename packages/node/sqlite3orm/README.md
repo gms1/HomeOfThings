@@ -153,7 +153,7 @@ In order to read from or write to the database, you can use the `BaseDAO<Model>'
 
   // read all users having login-name starting with 'd':
   // (see section 'typesafe queries')
-  let selectedUsers = await userDAO.selectAll({userLoginName: {isLike: 'd%'});
+  let selectedUsers = await userDAO.selectAll({userLoginName: {isLike: 'd%'}});
 
   // read all users having a contact:
   let allUsersHavingContacts = await userDAO.selectAll(
