@@ -107,6 +107,7 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.1",
+    "rxjs": "^7.4.0",
     "sqlite3": "^5.1.6",
     "stat-mode": "^1.0.0",
     "supports-color": "^8.1.1",
