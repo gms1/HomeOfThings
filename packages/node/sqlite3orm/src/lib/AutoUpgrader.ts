@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { PromiseFactories, sequentialize } from '@homeofthings/node-utils';
 import * as _dbg from 'debug';
 
 import { SqlDatabase } from './core/SqlDatabase';
 import { DbCatalogDAO, DbTableInfo } from './dbcatalog';
 import { Field, FKDefinition, schema, Table } from './metadata';
-import { PromiseFactories, qualifiySchemaIdentifier, quoteIdentifier, sequentialize } from './utils';
+import { qualifiySchemaIdentifier, quoteIdentifier } from './utils';
 
 const debug = _dbg.default('sqlite3orm:autoupgrade');
 

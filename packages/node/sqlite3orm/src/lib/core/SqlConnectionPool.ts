@@ -1,9 +1,9 @@
+import { wait } from '@homeofthings/node-utils';
 import * as _dbg from 'debug';
 
 import { SqlConnectionPoolDatabase } from './SqlConnectionPoolDatabase';
 import { SQL_OPEN_CREATE, SQL_OPEN_DEFAULT, SqlDatabase } from './SqlDatabase';
 import { SqlDatabaseSettings } from './SqlDatabaseSettings';
-import { wait } from '../utils/wait';
 
 const debug = _dbg.default('sqlite3orm:pool');
 
