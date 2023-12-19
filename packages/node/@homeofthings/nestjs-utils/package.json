@@ -1,7 +1,7 @@
 {
   "name": "@homeofthings/nestjs-utils",
   "description": "HomeOfThings - NestJs Utils: various utilities and common types",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "keywords": [
     "nestjs",
     "nest",
@@ -21,9 +21,9 @@
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {
-    "@nestjs/common": "*",
-    "rxjs": "*",
-    "tslib": "*",
-    "@homeofthings/node-utils": "*"
+    "@nestjs/common": "^10.3.0",
+    "rxjs": "^7.4.0",
+    "tslib": "^2.6.2",
+    "@homeofthings/node-utils": "~1.0.0"
   }
 }
