@@ -2,6 +2,7 @@
   "name": "asyncctx",
   "version": "2.1.1",
   "description": "an asynchronous execution context for TypeScript/JavaScript",
+  "deprecated": "deprecated in favour of AsyncLocalStorage",
   "keywords": [
     "typescript",
     "asynchronous context",
