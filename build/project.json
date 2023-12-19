@@ -37,7 +37,15 @@
     "validate-projects": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node dist/build/src/validate-projects.js build",
+        "command": "node dist/build/src/validate-projects.js",
+        "envFile": "build/.env"
+      },
+      "dependsOn": ["build"]
+    },
+    "changelogs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/changelogs.js",
         "envFile": "build/.env"
       },
       "dependsOn": ["build"]
