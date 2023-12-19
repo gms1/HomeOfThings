@@ -364,7 +364,7 @@ ${sql}`);
     // TODO: node-sqlite3 does not yet support `sqlite3_txn_state`
     //   please see https://www.sqlite.org/draft/c3ref/txn_state.html
     // we would need this do test if a transaction is open
-    // so we cannot use commitTransaction/rollbackTransaction which would error if no transaction is open
+    // without this we have to manually ignore 'no transaction' errors
     const sql = commit ? `COMMIT TRANSACTION` : `ROLLBACK TRANSACTION`;
     return new Promise<void>((resolve, reject) => {
       if (!this.db) {

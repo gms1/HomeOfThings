@@ -7,6 +7,7 @@ const debug = _dbg.default('sqlite3orm:backup');
 
 export class SqlBackup {
   // TODO(Backup API): typings not yet available
+  // https://github.com/TryGhost/node-sqlite3/pull/1726
   // https://github.com/TryGhost/node-sqlite3/pull/1116
   private readonly backup: any;
 
