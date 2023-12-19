@@ -34,6 +34,7 @@
     "reflect-metadata": "^0.2.1",
     "sqlite3orm": "~2.7.1",
     "tslib": "^2.6.2",
-    "@homeofthings/node-utils": "~1.0.0"
+    "@homeofthings/node-utils": "~1.0.0",
+    "rxjs": "^7.4.0"
   }
 }
