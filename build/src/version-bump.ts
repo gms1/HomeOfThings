@@ -8,8 +8,10 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as process from 'node:process';
 
-import { APPNAME, LogLevel, die, getWorkspaceDir, invariant, log, setApplication, warn } from './utils/app';
+import { APPNAME, LogLevel, die, getWorkspaceDir, invariant, log, setApplication, verbose, warn } from './utils/app';
 import { readJson, writeJson } from './utils/file';
+import { gitLogChanges, logGitLogChanges } from './utils/git/log';
+import { GitCommit } from './utils/git/model/commit';
 // -----------------------------------------------------------------------------------------
 // NOTE: call this script using `npx nx run <project>:version-bump --ver <new version>|increment|keep`
 
@@ -52,32 +54,55 @@ async function versionBumpCommand(graph: ProjectGraph, projectName: string, vers
 }
 
 // -----------------------------------------------------------------------------------------
-function getNewVersion(packageJson: any, version: string): string {
+function getNewVersion(packageJson: any, version: string, commits: GitCommit[]): string {
   const currentVersionParts = packageJson.version.match(versionRegex);
   if (!currentVersionParts) {
     throw new Error(`current version '${packageJson.version}' is invalid`);
   }
-  if (version && version !== 'keep' && version !== 'increment') {
+  if (version === 'keep') {
+    return packageJson.version;
+  }
+  if (version === 'increment') {
+    if (currentVersionParts[4]) {
+      // release candidate
+      return `${currentVersionParts[1]}.${currentVersionParts[2]}.${currentVersionParts[3]}${currentVersionParts[5]}` + (parseInt(currentVersionParts[6], 10) + 1).toString();
+    }
+
+    let major = false;
+    let minor = false;
+    commits.forEach((commit) => {
+      if (commit.breakingChange) {
+        major = true;
+        return;
+      }
+      switch (commit.type) {
+        case 'feat':
+        case 'perf':
+          minor = true;
+          break;
+      }
+    });
+    const part = major ? 1 : minor ? 2 : 3;
+    currentVersionParts[part] = (parseInt(currentVersionParts[part], 10) + 1).toString();
+    return `${currentVersionParts[1]}.${currentVersionParts[2]}.${currentVersionParts[3]}`;
+  } else {
     if (!version.match(versionRegex)) {
       throw new Error(`new version '${version}' is invalid`);
     }
     return version;
-  }
-  const increment = version === 'keep' ? 0 : 1;
-  if (currentVersionParts[4]) {
-    return `${currentVersionParts[1]}.${currentVersionParts[2]}.${currentVersionParts[3]}${currentVersionParts[5]}` + (increment + parseInt(currentVersionParts[6], 10)).toString();
-  } else {
-    return `${currentVersionParts[1]}.${currentVersionParts[2]}.` + (increment + parseInt(currentVersionParts[3], 10)).toString();
   }
 }
 
 // -----------------------------------------------------------------------------------------
 async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphProjectNode, version: string): Promise<void> {
   try {
-    const packageJsonPath = path.resolve(WORKSPACE_DIR, nxProject.data.root, 'package.json');
+    const projectRoot = path.resolve(WORKSPACE_DIR, nxProject.data.root);
+    const packageJsonPath = path.resolve(projectRoot, 'package.json');
     const packageJson = await readJson(packageJsonPath);
     const projectName = packageJson.name;
-    const newVersion = getNewVersion(packageJson, version);
+
+    const commits = await gitLogChanges(projectRoot);
+    const newVersion = getNewVersion(packageJson, version, commits);
 
     const oldVersion = packageJson.version;
 
@@ -115,6 +140,8 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
     } else {
       warn(`${projectName}: ${oldVersion} not changed`);
     }
+    verbose('CHANGES:');
+    logGitLogChanges(commits);
     return;
   } catch (err) {
     return Promise.reject(err);

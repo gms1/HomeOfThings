@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node-script
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { exec, setEcho } from '@homeofthings/node-sys';
+import { setEcho } from '@homeofthings/node-sys';
 import { readCachedProjectGraph, ProjectGraph } from '@nx/devkit';
 import { Command } from 'commander';
 import * as debugjs from 'debug';
@@ -9,6 +9,7 @@ import * as path from 'node:path';
 import * as process from 'node:process';
 
 import { APPNAME, die, getWorkspaceDir, log, setApplication } from './utils/app';
+import { gitLogChanges, logGitLogChanges } from './utils/git/log';
 import { setProjectPublishable } from './utils/projects/enrich';
 import { Project } from './utils/projects/model/project';
 
@@ -59,11 +60,11 @@ async function changeLog(nxProject: Project): Promise<Project | undefined> {
   if (!project?.publishable) {
     return project;
   }
-  log(`changelog for project ${nxProject.name}...`);
-  const projectRoot = path.resolve(WORKSPACE_DIR, project.data.root);
-  const releaseLogs: string[] = [];
-  await exec('git', 'log', '-n', '1', '--grep', '^release:', projectRoot).setStdOut(releaseLogs).run();
-  console.log(releaseLogs.join('\n'));
-  log(`changelog for project ${nxProject.name}: done`);
+
+  const commits = await gitLogChanges(path.resolve(WORKSPACE_DIR, project.data.root));
+  if (!commits.length) {
+    return;
+  }
+  logGitLogChanges(commits);
   return project;
 }
