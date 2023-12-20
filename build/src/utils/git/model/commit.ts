@@ -1,6 +1,6 @@
-export type CommitType = 'feat' | 'fix' | 'perf' | 'refactor' | 'style' | 'build' | 'chore' | 'ci' | 'release' | 'docs' | 'test' | 'revert';
+export type CommitType = 'feat' | 'perf' | 'fix' | 'chore' | 'style' | 'refactor' | 'docs' | 'test' | 'build' | 'ci' | 'release' | 'revert';
 
-export const CHANGELOG_COMMIT_TYPES = ['feat', 'fix', 'perf', 'chore', 'revert'];
+export const CHANGELOG_COMMIT_TYPES = ['feat', 'perf', 'fix', 'chore', 'refactor', 'revert'];
 
 export interface GitCommit {
   hash: string;
