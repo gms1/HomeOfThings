@@ -4,11 +4,11 @@ import { CHANGELOG_COMMIT_TYPES, CommitType, GitCommit } from './model/commit';
 import { verbose, warn } from '../app';
 
 function parseGitLogHeaderLine(linenr: number, expect: string, line?: string): string {
-  const words = !line ? undefined : line.match(/^(\S*)\s+(.*)$/)?.slice(1);
+  const words = !line ? undefined : line.match(/^(\S*)\s+(\S.*)?$/)?.slice(1);
   if (!Array.isArray(words) || words[0] !== expect) {
     throw new Error(`expected line ${linenr} to start with '${expect}', but got: '${line}'`);
   }
-  return words[1] as string;
+  return words[1] ?? '';
 }
 
 function parseGitLogEmptyLine(linenr: number, line?: string): string {

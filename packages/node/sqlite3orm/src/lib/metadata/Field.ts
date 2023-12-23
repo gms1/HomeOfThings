@@ -141,6 +141,7 @@ export class Field {
   }
 
   static parseDbType(dbtype: string): DbColumnTypeInfo {
+    // eslint-disable-next-line redos-detector/no-unsafe-regex
     const typeDefMatches = /^\s*((\w+)(\s*\(\s*\d+\s*(,\s*\d+\s*)?\))?)(.*)$/.exec(dbtype);
 
     /* istanbul ignore if */
