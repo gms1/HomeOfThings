@@ -14,6 +14,7 @@
     "lib": ["esnext", "dom"],
     "allowUnreachableCode": false,
     "alwaysStrict": true,
+    "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
