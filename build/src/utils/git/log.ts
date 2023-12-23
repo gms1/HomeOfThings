@@ -4,11 +4,11 @@ import { CHANGELOG_COMMIT_TYPES, CommitType, GitCommit } from './model/commit';
 import { verbose, warn } from '../app';
 
 function parseGitLogHeaderLine(linenr: number, expect: string, line?: string): string {
-  const words = !line ? line : line.match(/^(\S*)\s+(.*)?$/)?.slice(1);
-  if (words?.[0] !== expect) {
+  const words = !line ? undefined : line.match(/^(\S*)\s+(.*)$/)?.slice(1);
+  if (!Array.isArray(words) || words[0] !== expect) {
     throw new Error(`expected line ${linenr} to start with '${expect}', but got: '${line}'`);
   }
-  return words[1];
+  return words[1] as string;
 }
 
 function parseGitLogEmptyLine(linenr: number, line?: string): string {
@@ -39,7 +39,7 @@ export async function gitLog(...argc: string[]): Promise<GitCommit[]> {
     linenr++;
     line = out.shift();
     words = line?.split(/\s+/);
-    if (words?.[0] === 'commit') {
+    if (words?.[0] === 'commit' && typeof words[1] === 'string') {
       if (current.hash) {
         commits.push(current);
       }

@@ -50,7 +50,7 @@ export class Pipe {
     }
 
     const exitCodes = await Promise.all(childContexts);
-    return exitCodes[exitCodes.length - 1];
+    return exitCodes.pop() ?? 0;
   }
 
   protected async spawn(detached: boolean): Promise<Pipe> {

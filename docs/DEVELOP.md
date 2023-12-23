@@ -11,7 +11,7 @@ Breaking changes must always append a '!' to the prefix, e.g.: "type!: descripti
 The type can be one of the following:
 
 | Type     | Description                                                                                                      | Update        |
-|----------|------------------------------------------------------------------------------------------------------------------|---------------|
+| -------- | ---------------------------------------------------------------------------------------------------------------- | ------------- |
 | feat     | A code change that about addition or removal of a feature.                                                       | minor version |
 | perf     | A code change that improves performance                                                                          | minor version |
 | fix      | A code change that fixes a bug.                                                                                  | patch version |
@@ -61,7 +61,7 @@ this bumps the version for a project:
 npx nx run <project>:version-bump --ver <new version>|increment|keep
 ```
 
-and logs the changelog relevant commits for this project
+and also logs the changelog relevant commits for this project
 
 > NOTE: using 'increment' takes the git changes into account to decide which part of the version must be incremented
 

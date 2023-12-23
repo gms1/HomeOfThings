@@ -19,6 +19,7 @@
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "noUncheckedIndexedAccess": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "strictBindCallApply": true,

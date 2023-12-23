@@ -43,6 +43,7 @@ async function versionBumpCommand(graph: ProjectGraph, projectName: string, vers
   const nxProject = graph.nodes[projectName];
   if (!nxProject) {
     die(`project '${projectName}' not found`);
+    return;
   }
 
   try {
@@ -163,7 +164,7 @@ async function getAllExternalPackageVersions(): Promise<Dictionary> {
 async function getAllInternalPackageVersions(graph: ProjectGraph, nxProject: ProjectGraphProjectNode): Promise<Dictionary> {
   const internalPackageVersions: Dictionary = {};
   for (const otherProjectName in graph.nodes) {
-    const otherNxProject = graph.nodes[otherProjectName];
+    const otherNxProject = graph.nodes[otherProjectName] as ProjectGraphProjectNode;
     if (otherNxProject.data.root === nxProject.data.root) {
       continue;
     }
@@ -188,7 +189,7 @@ function updatePackageDependencies(packageJson: any, externalPackageVersions: Di
     const dependencies: { [name: string]: string } = packageJson[depType];
     for (const depPackageName in dependencies) {
       if (externalPackageVersions[depPackageName]) {
-        dependencies[depPackageName] = externalPackageVersions[depPackageName];
+        dependencies[depPackageName] = externalPackageVersions[depPackageName] as string;
         continue;
       }
       if (internaPackageVersions[depPackageName]) {

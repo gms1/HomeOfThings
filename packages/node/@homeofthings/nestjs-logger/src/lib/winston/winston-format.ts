@@ -19,8 +19,8 @@ const colorizeContext: (context: string, text: string) => string =
   supportsColor && chalk.bold?.ansi256
     ? (context: string, text: string) => chalk.bold.ansi256(getContextColor(context))(text)
     : supportsColor && chalk.ansi256
-    ? (context: string, text: string) => chalk.ansi256(getContextColor(context))(text)
-    : (context: string, text: string) => text;
+      ? (context: string, text: string) => chalk.ansi256(getContextColor(context))(text)
+      : (context: string, text: string) => text;
 
 function fileLevelFormat(level: string) {
   return (level + ':      ').substr(0, 8);
@@ -89,7 +89,7 @@ const DEBUG_COLORS = [
   162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 178, 179, 184, 185, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 220, 221,
 ];
 
-function selectColor(namespace: string) {
+function selectColor(namespace: string): number {
   let hash = 0;
 
   for (let i = 0; i < namespace.length; i++) {
@@ -97,5 +97,5 @@ function selectColor(namespace: string) {
     hash |= 0; // Convert to 32bit integer
   }
 
-  return DEBUG_COLORS[Math.abs(hash) % DEBUG_COLORS.length];
+  return DEBUG_COLORS[Math.abs(hash) % DEBUG_COLORS.length] as number;
 }
