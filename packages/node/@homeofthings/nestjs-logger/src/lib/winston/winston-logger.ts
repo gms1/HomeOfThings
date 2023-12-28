@@ -5,9 +5,9 @@ import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 import * as winston from 'winston';
 
-import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
 import { LoggerOptions } from '../model';
 import { DEFAULT_CONSOLE_LOGLEVEL, DEFAULT_FILE_LOGLEVEL, LogLevel } from '../model/logger.constants';
+import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
 
 // NOTE: to be able to use WinstonLogger for 'debug'
 // waiting for

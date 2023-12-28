@@ -3,9 +3,9 @@ import { InjectRepository, Repository } from '@homeofthings/nestjs-sqlite3';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 
+import { HOT_MAIN_DB } from '../model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entity/user.entity';
-import { HOT_MAIN_DB } from '../model';
 
 @Injectable()
 export class UserService {

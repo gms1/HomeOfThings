@@ -1,7 +1,7 @@
 import * as debugjs from 'debug';
 
-import { SpawnContext } from './options';
 import { getPrompt } from '../log';
+import { SpawnContext } from './options';
 
 const debug = debugjs.default('hot:node-sys:process:error');
 

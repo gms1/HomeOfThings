@@ -1,12 +1,13 @@
 #!/usr/bin/env ts-node-script
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { setEcho } from '@homeofthings/node-sys';
-import { readCachedProjectGraph, ProjectGraph } from '@nx/devkit';
-import { Command } from 'commander';
-import * as debugjs from 'debug';
 import * as path from 'node:path';
 import * as process from 'node:process';
+
+import { setEcho } from '@homeofthings/node-sys';
+import { ProjectGraph, readCachedProjectGraph } from '@nx/devkit';
+import { Command } from 'commander';
+import * as debugjs from 'debug';
 
 import { APPNAME, die, getWorkspaceDir, log, setApplication } from './utils/app';
 import { gitLogChanges, logGitLogChanges } from './utils/git/log';

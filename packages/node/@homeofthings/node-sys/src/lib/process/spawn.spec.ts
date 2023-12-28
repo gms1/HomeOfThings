@@ -1,5 +1,6 @@
-import { WritableStrings } from '@homeofthings/node-utils';
 import { Readable } from 'node:stream';
+
+import { WritableStrings } from '@homeofthings/node-utils';
 
 import { ProcessError } from './error';
 import { INHERIT } from './options';

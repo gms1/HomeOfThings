@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable import/order */
+/* eslint-disable simple-import-sort/imports */
 import * as mockedConnectionManager from '../test/mocks/connection-manager';
+/* eslint-enable simple-import-sort/imports */
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { lastValueFrom, of, throwError } from 'rxjs';

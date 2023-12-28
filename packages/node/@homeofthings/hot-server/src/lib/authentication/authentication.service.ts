@@ -2,12 +2,12 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Request } from 'express';
 
-import { RegisterDto } from './dto/register.dto';
-import { AuthenticationModuleOptions, AUTHENTICATION_MODULE_OPTIONS_TOKEN, DEFAULT_BCRYPT_ROUNDS } from './model';
-import { UserSession } from '../user/entity/user-session';
 import { User } from '../user/entity/user.entity';
-import { UserSessionService } from '../user/user-ssession.service';
+import { UserSession } from '../user/entity/user-session';
 import { UserService } from '../user/user.service';
+import { UserSessionService } from '../user/user-ssession.service';
+import { RegisterDto } from './dto/register.dto';
+import { AUTHENTICATION_MODULE_OPTIONS_TOKEN, AuthenticationModuleOptions, DEFAULT_BCRYPT_ROUNDS } from './model';
 
 @Injectable()
 export class AuthenticationService {

@@ -1,9 +1,9 @@
 import { Readable } from 'node:stream';
 
+import { logCommand } from '../log';
 import { Exec } from './exec';
 import { PIPE } from './options';
 import { getCommand } from './spawn';
-import { logCommand } from '../log';
 
 export class Pipe {
   private _items: Exec[] = [];

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { TableOpts, FieldOpts } from './decorators';
+import { QueryModelCache } from '../query/QueryModelBase';
+import { FieldOpts, TableOpts } from './decorators';
 import { FKDefinition } from './FKDefinition';
 import { IDXDefinition } from './IDXDefinition';
 import { MetaProperty } from './MetaProperty';
 import { schema } from './Schema';
 import { Table } from './Table';
-import { QueryModelCache } from '../query/QueryModelBase';
 
 export type KeyType = string | number | symbol;
 

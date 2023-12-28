@@ -1,5 +1,5 @@
 import * as debugjs from 'debug';
-import { GlobOptionsWithFileTypesFalse, glob as _glob } from 'glob';
+import { glob as _glob, GlobOptionsWithFileTypesFalse } from 'glob';
 
 const debug = debugjs.default('build:utils:glob');
 

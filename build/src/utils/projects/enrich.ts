@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { IGNORE, exec, fs } from '@homeofthings/node-sys';
-import * as debugjs from 'debug';
 import * as path from 'node:path';
 
-import { Project } from './model/project';
-import { LogLevel, die, error, invariant, verbose, warn } from '../app';
+import { exec, fs, IGNORE } from '@homeofthings/node-sys';
+import * as debugjs from 'debug';
+
+import { die, error, invariant, LogLevel, verbose, warn } from '../app';
 import { readJson } from '../file';
+import { Project } from './model/project';
 
 const debug = debugjs.default('build:projects:enrich');
 

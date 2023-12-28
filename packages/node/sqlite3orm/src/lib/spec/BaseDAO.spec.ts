@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BaseDAO, BaseDAOInsertMode, field, fk, id, index, schema, SqlDatabase, SQL_MEMORY_DB_PRIVATE, table } from '..';
+import { BaseDAO, BaseDAOInsertMode, field, fk, id, index, schema, SQL_MEMORY_DB_PRIVATE, SqlDatabase, table } from '..';
 import { failTest } from '../test';
 
 describe(`BaseDAO`, () => {

@@ -1,11 +1,12 @@
 #!/usr/bin/env ts-node-script
 
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
 import { rm, setEcho } from '@homeofthings/node-sys';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import lcov_total from 'lcov-total';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
 
 import { APPNAME, die, getWorkspaceDir, log, setApplication } from './utils/app';
 import { writeFile } from './utils/file';

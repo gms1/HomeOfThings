@@ -1,16 +1,17 @@
+import { CopyOptions as NodeCopyOptions, Mode, promises as fsNode, Stats } from 'node:fs';
+import * as nodePath from 'node:path';
+import * as nodeProcess from 'node:process';
+import { promisify } from 'node:util';
+
 import * as externalChmodr from 'chmodr';
 import * as externalChownr from 'chownr';
 import * as externMkTemp from 'mktemp';
 import externalMv from 'mv';
-import { CopyOptions as NodeCopyOptions, Mode, Stats, promises as fsNode } from 'node:fs';
-import * as nodePath from 'node:path';
-import * as nodeProcess from 'node:process';
-import { promisify } from 'node:util';
 import { Mode as StatsMode } from 'stat-mode';
 import externalTouch from 'touch';
 import externalWhich from 'which';
 
-import { logCommandArgs, logCommand, logCommandResult } from '../log/command';
+import { logCommand, logCommandArgs, logCommandResult } from '../log/command';
 
 // NOTE:
 // shell would be needed for getting shell expansion (e.g for pathname expansion (globbing) of '*', '?', '[...]' wildcards)

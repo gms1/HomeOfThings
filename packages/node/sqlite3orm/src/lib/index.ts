@@ -6,24 +6,24 @@ export {
   SQL_MEMORY_DB_SHARED,
   SQL_OPEN_CREATE,
   SQL_OPEN_DEFAULT,
-  SQL_OPEN_DEFAULT_URI,
   SQL_OPEN_DEFAULT_NO_URI,
+  SQL_OPEN_DEFAULT_URI,
+  SQL_OPEN_PRIVATECACHE,
   SQL_OPEN_READONLY,
   SQL_OPEN_READWRITE,
-  SQL_OPEN_URI,
   SQL_OPEN_SHAREDCACHE,
-  SQL_OPEN_PRIVATECACHE,
+  SQL_OPEN_URI,
+  SqlBackup,
   SqlConnectionPool,
   SqlDatabase,
   SqlDatabaseSettings,
   SqlRunResult,
   SqlStatement,
-  SqlBackup,
 } from './core';
 export { DbCatalogDAO, DbColumnInfo, DbForeignKeyInfo, DbIndexInfo, DbTableInfo } from './dbcatalog';
 export {
-  field,
   Field,
+  field,
   FieldOpts,
   fk,
   FKDefinition,
@@ -39,11 +39,10 @@ export {
   PropertyType,
   Schema,
   schema,
-  table,
   Table,
+  table,
   TableOpts,
   ValueTransformer,
 } from './metadata';
 export { Columns, Condition, Filter, OrderColumns, PropertyComparisons, PropertyPredicates, QueryModel, TABLEALIAS, Where } from './query';
-
 export * from './utils';

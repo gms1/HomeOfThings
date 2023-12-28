@@ -3,9 +3,9 @@ import { LruCache } from '@homeofthings/node-utils';
 import { Request } from 'express';
 import { BaseDAO, SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
 
-import { UserSession } from './entity/user-session';
-import { User } from './entity/user.entity';
 import { HOT_SESSION_DB } from '../model';
+import { User } from './entity/user.entity';
+import { UserSession } from './entity/user-session';
 
 const SESSION_CACHE_SIZE = 20;
 

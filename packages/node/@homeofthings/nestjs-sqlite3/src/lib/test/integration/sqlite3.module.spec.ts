@@ -4,11 +4,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SqlConnectionPool } from 'sqlite3orm';
 
-import { Contact } from './fixtures/entity/contact';
-import { User } from './fixtures/entity/user';
-import { UserRepository } from './fixtures/repository/user.repository';
-import { ContactRepositoryService } from './fixtures/service/contact.repository.service';
-import { UserRepositoryService } from './fixtures/service/user.repository.service';
 import { InjectConnectionPool, InjectCustomRepository, InjectRepository } from '../../common/sqlite3.decorators';
 import { getConnectionPoolInjectionToken, getCustomRepositoryInjectionToken, getEntityManagerInjectionToken, getRepositoryInjectionToken } from '../../common/sqlite3.utils';
 import { Sqlite3ConnectionOptions } from '../../model';
@@ -17,6 +12,11 @@ import { EntityManager } from '../../service/entity-manager';
 import { Repository } from '../../service/repository';
 import { Sqlite3Module } from '../../sqlite3.module';
 import * as mockedLogger from '../mocks/logger';
+import { Contact } from './fixtures/entity/contact';
+import { User } from './fixtures/entity/user';
+import { UserRepository } from './fixtures/repository/user.repository';
+import { ContactRepositoryService } from './fixtures/service/contact.repository.service';
+import { UserRepositoryService } from './fixtures/service/user.repository.service';
 
 class ExtendedContactRepositoryService extends ContactRepositoryService {
   constructor(

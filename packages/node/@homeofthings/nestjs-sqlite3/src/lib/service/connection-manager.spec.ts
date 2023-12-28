@@ -1,10 +1,11 @@
 /* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable import/order */
 
+/* eslint-disable simple-import-sort/imports */
 import * as mockedLogger from '../test/mocks/logger';
 import * as mockedNodeUtils from '../test/mocks/node-utils';
 import * as mockedSqlite3Orm from '../test/mocks/sqlite3orm';
+/* eslint-enable simple-import-sort/imports */
 
 import { Test } from '@nestjs/testing';
 import { SqlDatabase } from 'sqlite3orm';

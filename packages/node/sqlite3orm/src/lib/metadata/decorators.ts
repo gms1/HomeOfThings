@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import 'reflect-metadata';
 
-import { MetaModel, KeyType } from './MetaModel';
+import { KeyType, MetaModel } from './MetaModel';
 import { ValueTransformer } from './ValueTransformer';
 
 export const METADATA_MODEL_KEY = 'sqlite3orm:model';

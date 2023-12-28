@@ -2,8 +2,8 @@ import * as nodeConsole from 'node:console';
 import { promises as fsNode } from 'node:fs';
 import * as path from 'node:path';
 
-import * as fs from './index';
 import * as logCommand from '../log/command';
+import * as fs from './index';
 
 // NOTE: most of this tests are integration tests, falling back to unit tests if the functionality cannot reliable be validated
 

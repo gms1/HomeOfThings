@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { promises as fsNode, WriteFileOptions } from 'node:fs';
+
 import { rename } from '@homeofthings/node-sys';
 import * as debugjs from 'debug';
-import { WriteFileOptions, promises as fsNode } from 'node:fs';
 import parseJson = require('parse-json');
 
 import { SearchReplace, stringSearchAndReplace } from './string';

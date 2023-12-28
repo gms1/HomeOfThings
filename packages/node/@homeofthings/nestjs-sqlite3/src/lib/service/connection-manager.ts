@@ -1,9 +1,9 @@
 import { AsyncContext, GenericDictionary } from '@homeofthings/node-utils';
 import { Injectable, Logger } from '@nestjs/common';
-import { SqlConnectionPool, SqlDatabase, SQL_OPEN_DEFAULT_URI, Table } from 'sqlite3orm';
+import { SQL_OPEN_DEFAULT_URI, SqlConnectionPool, SqlDatabase, Table } from 'sqlite3orm';
 
+import { SQLITE3_DEFAULT_CONNECTION_NAME, Sqlite3ConnectionOptions, Sqlite3ConnectionPools, Sqlite3Connections, Sqlite3EntityManagers } from '../model';
 import { EntityManager } from './entity-manager';
-import { Sqlite3ConnectionOptions, Sqlite3ConnectionPools, Sqlite3Connections, Sqlite3EntityManagers, SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
 
 @Injectable()
 export class ConnectionManager {

@@ -3,9 +3,9 @@
 import { GenericDictionary } from '@homeofthings/node-utils';
 import { SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
 
-import { Sqlite3ConnectionOptions } from './sqlite3.options';
 import { ConnectionManager, Repository } from '../..';
 import { EntityManager } from '../service/entity-manager';
+import { Sqlite3ConnectionOptions } from './sqlite3.options';
 
 export * from './sqlite3.constants';
 export * from './sqlite3.options';

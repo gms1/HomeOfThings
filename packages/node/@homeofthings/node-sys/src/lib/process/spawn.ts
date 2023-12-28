@@ -1,6 +1,7 @@
+import * as child_process from 'node:child_process';
+
 import { quoteArgs } from '@homeofthings/node-utils';
 import * as debugjs from 'debug';
-import * as child_process from 'node:child_process';
 
 import { ExitCodeError, ProcessError } from './error';
 import { SpawnContext, SpawnOptions } from './options';

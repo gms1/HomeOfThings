@@ -1,9 +1,9 @@
 // import * as core from './core';
 
-import { TableOpts } from './decorators';
-import { Table } from './Table';
 import { SqlDatabase } from '../core';
 import { qualifiySchemaIdentifier } from '../utils';
+import { TableOpts } from './decorators';
+import { Table } from './Table';
 
 /**
  * A singleton holding the database schema definitions

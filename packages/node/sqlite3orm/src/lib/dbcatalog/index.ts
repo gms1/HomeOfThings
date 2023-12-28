@@ -1,2 +1,2 @@
-export * from './DbTableInfo';
 export * from './DbCatalogDAO';
+export * from './DbTableInfo';

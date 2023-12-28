@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nx", "import", "redos-detector"],
+  "plugins": ["@nx", "simple-import-sort", "redos-detector"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -19,21 +19,8 @@
             ]
           }
         ],
-        "import/order": [
-          "error",
-          {
-            "groups": [
-              ["builtin", "external"],
-              ["internal", "parent", "sibling", "index"],
-              ["object", "type"]
-            ],
-            "newlines-between": "always",
-            "alphabetize": {
-              "order": "asc",
-              "caseInsensitive": true
-            }
-          }
-        ],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
         "redos-detector/no-unsafe-regex": "error"
       }
     },

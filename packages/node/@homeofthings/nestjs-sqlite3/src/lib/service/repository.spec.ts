@@ -1,12 +1,12 @@
-/* eslint-disable import/order */
+/* eslint-disable simple-import-sort/imports */
 import * as mockedLogger from '../test/mocks/logger';
+/* eslint-enable simple-import-sort/imports */
 
 import { Test } from '@nestjs/testing';
 
 import { Column, Entity, PrimaryKeyColumn } from '../common/sqlite3.decorators';
 import { getEntityManagerInjectionToken } from '../common/sqlite3.utils';
 import { SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
-
 import { ConnectionManager } from './connection-manager';
 import { EntityManager } from './entity-manager';
 import { Repository } from './repository';

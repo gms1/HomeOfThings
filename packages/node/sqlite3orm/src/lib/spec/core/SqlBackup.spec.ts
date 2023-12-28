@@ -1,4 +1,4 @@
-import { SqlDatabase, SQL_MEMORY_DB_PRIVATE } from '../../core';
+import { SQL_MEMORY_DB_PRIVATE, SqlDatabase } from '../../core';
 
 describe('test SqlBackup', () => {
   const TARGET_DB_FILE = 'testBackup.db';

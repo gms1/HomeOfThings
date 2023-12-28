@@ -1,5 +1,5 @@
 /* eslint-disable no-empty */
-import { ExecutionContext, Injectable, CanActivate, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class UserIsAuthenticatedGuard implements CanActivate {

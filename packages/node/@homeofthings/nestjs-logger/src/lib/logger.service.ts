@@ -1,7 +1,7 @@
 import { setLogger } from '@homeofthings/nestjs-utils';
 import { Inject, Injectable } from '@nestjs/common';
 
-import { LoggerModuleOptions, LOGGER_MODULE_OPTIONS_TOKEN, LogLevel } from './model';
+import { LOGGER_MODULE_OPTIONS_TOKEN, LoggerModuleOptions, LogLevel } from './model';
 import { NestLoggerService } from './nest-logger.service';
 import { WinstonLogger } from './winston/winston-logger';
 

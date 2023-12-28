@@ -1,10 +1,11 @@
-import { isIterable, WritableStrings } from '@homeofthings/node-utils';
 import { Readable } from 'node:stream';
 
+import { isIterable, WritableStrings } from '@homeofthings/node-utils';
+
+import { logCommand } from '../log';
 import { ExitCodeError } from './error';
 import { ExecOptions, IGNORE, INHERIT, IOType, PIPE, SpawnOptions } from './options';
 import { getCommand, onChildProcessExit, spawnChildProcess } from './spawn';
-import { logCommand } from '../log';
 
 export class Exec {
   protected _options: ExecOptions = {

@@ -1,7 +1,7 @@
 import { Type } from '@homeofthings/nestjs-utils';
 import { DynamicModule, Global, Module, Provider } from '@nestjs/common';
 
-import { getEntityManagerInjectionToken, getCustomRepositoryInjectionToken, getRepositoryInjectionToken } from './common/sqlite3.utils';
+import { getCustomRepositoryInjectionToken, getEntityManagerInjectionToken, getRepositoryInjectionToken } from './common/sqlite3.utils';
 import { Sqlite3AsyncModuleOptions, Sqlite3SyncModuleOptions } from './model';
 import { EntityManager } from './service/entity-manager';
 import { Repository } from './service/repository';

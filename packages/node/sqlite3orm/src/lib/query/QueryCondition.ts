@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { MetaModel } from '../metadata';
 import { QueryModelPredicates } from './QueryModelPredicates';
 import { QueryOperation } from './QueryOperation';
 import { Condition, isModelPredicates, LogicalOperatorType, ModelPredicates } from './Where';
-import { MetaModel } from '../metadata';
 
 export class QueryCondition<MT> implements QueryOperation {
   readonly op!: LogicalOperatorType;

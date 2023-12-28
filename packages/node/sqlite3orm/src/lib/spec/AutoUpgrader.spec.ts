@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AutoUpgrader, BaseDAO, BaseDAOInsertMode, DbCatalogDAO, field, id, schema, SqlDatabase, SQL_MEMORY_DB_PRIVATE, Table, table, UpgradeInfo } from '..';
+import { AutoUpgrader, BaseDAO, BaseDAOInsertMode, DbCatalogDAO, field, id, schema, SQL_MEMORY_DB_PRIVATE, SqlDatabase, Table, table, UpgradeInfo } from '..';
 import { fk, index } from '../metadata/decorators';
 import { failTest } from '../test';
 

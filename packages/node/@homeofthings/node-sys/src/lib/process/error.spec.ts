@@ -1,5 +1,5 @@
-import { ProcessError } from './error';
 import { getPrompt } from '../log';
+import { ProcessError } from './error';
 
 describe('ProcessError', () => {
   it('for cause', () => {

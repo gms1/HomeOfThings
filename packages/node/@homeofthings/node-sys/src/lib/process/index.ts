@@ -1,5 +1,5 @@
 export * from './error';
-export * from './options';
-export * from './spawn';
 export * from './exec';
+export * from './options';
 export * from './pipe';
+export * from './spawn';

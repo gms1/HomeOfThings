@@ -1,7 +1,7 @@
 import { exec } from '@homeofthings/node-sys';
 
-import { CHANGELOG_COMMIT_TYPES, CommitType, GitCommit } from './model/commit';
 import { verbose, warn } from '../app';
+import { CHANGELOG_COMMIT_TYPES, CommitType, GitCommit } from './model/commit';
 
 function parseGitLogHeaderLine(linenr: number, expect: string, line?: string): string {
   const words = !line ? undefined : line.match(/^(\S*)\s+(\S.*)?$/)?.slice(1);

@@ -1,11 +1,11 @@
+import * as core from '../core/core';
+import { qualifiySchemaIdentifier, quoteAndUnqualifyIdentifier, quoteIdentifier, quoteSimpleIdentifier, splitSchemaIdentifier } from '../utils';
 import { FieldOpts } from './decorators';
 import { Field } from './Field';
 import { FKDefinition } from './FKDefinition';
 import { IDXDefinition } from './IDXDefinition';
 import { MetaModel } from './MetaModel';
 import { PropertyType } from './PropertyType';
-import * as core from '../core/core';
-import { qualifiySchemaIdentifier, quoteAndUnqualifyIdentifier, quoteIdentifier, quoteSimpleIdentifier, splitSchemaIdentifier } from '../utils';
 
 /**
  * Class holding a table definition (name of the table and fields in the table)
