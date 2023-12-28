@@ -4,6 +4,7 @@
     "outDir": "../../../../dist/out-tsc",
     "module": "commonjs",
     "types": ["jest", "node"],
+    "strictPropertyInitialization": false,
     "strictNullChecks": false
   },
   "include": ["**/*.spec.ts", "**/*.test.ts", "**/test", "jest.config.ts"]
