@@ -21,9 +21,11 @@
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {
-    "@nestjs/common": "^10.3.0",
-    "rxjs": "^7.4.0",
     "tslib": "^2.6.2",
     "@homeofthings/node-utils": "~1.0.0"
+  },
+  "peerDependencies": {
+    "rxjs": "^7.4.0",
+    "@nestjs/common": "^10.3.0"
   }
 }

@@ -111,10 +111,10 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
     if (oldVersion !== newVersion) {
       packageJson.version = newVersion;
 
-      const externalPackageVersions = await getAllExternalPackageVersions();
+      const [externalPackageVersions, externalPeerDependencyVersions] = await getAllExternalPackageVersions();
       const internalPackageVersions = await getAllInternalPackageVersions(graph, nxProject);
 
-      updatePackageDependencies(packageJson, externalPackageVersions, internalPackageVersions);
+      updatePackageDependencies(packageJson, externalPackageVersions, internalPackageVersions, externalPeerDependencyVersions);
 
       packageJson.repository = {
         type: 'git',
@@ -150,16 +150,17 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
   }
 }
 
-async function getAllExternalPackageVersions(): Promise<Dictionary> {
+async function getAllExternalPackageVersions(): Promise<[Dictionary, Dictionary]> {
   const rootPackageJson = await readJson(path.resolve(WORKSPACE_DIR, 'package.json'));
+  const externalPeerDependencyVersions = Object.assign({}, rootPackageJson.peerDependencies);
   const externalPackageVersions = Object.assign(
     {},
     rootPackageJson.optionalDependencies,
-    rootPackageJson.peerDependencies,
     rootPackageJson.devDependencies,
     rootPackageJson.dependencies,
+    rootPackageJson.peerDependencies,
   );
-  return externalPackageVersions;
+  return [externalPackageVersions, externalPeerDependencyVersions];
 }
 
 async function getAllInternalPackageVersions(graph: ProjectGraph, nxProject: ProjectGraphProjectNode): Promise<Dictionary> {
@@ -182,23 +183,33 @@ async function getAllInternalPackageVersions(graph: ProjectGraph, nxProject: Pro
   return internalPackageVersions;
 }
 
-function updatePackageDependencies(packageJson: any, externalPackageVersions: Dictionary, internaPackageVersions: Dictionary) {
+function updatePackageDependencies(packageJson: any, externalPackageVersions: Dictionary, internaPackageVersions: Dictionary, externalPeerDependencyVersions: Dictionary) {
   for (const depType of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
     if (!packageJson[depType]) {
       continue;
     }
     const dependencies: { [name: string]: string } = packageJson[depType];
     for (const depPackageName in dependencies) {
-      if (externalPackageVersions[depPackageName]) {
-        dependencies[depPackageName] = externalPackageVersions[depPackageName] as string;
+      if (depType === 'peerDependencies') {
+        if (!externalPeerDependencyVersions[depPackageName]) {
+          die(`package '${depPackageName}' is not defined as '${depType}' in root package.json `);
+        }
+        dependencies[depPackageName] = externalPeerDependencyVersions[depPackageName] as string;
         continue;
+      } else {
+        if (externalPeerDependencyVersions[depPackageName]) {
+          die(`package '${depPackageName}' should be defined as peer dependency but is defined as '${depType}'`);
+        }
       }
       if (internaPackageVersions[depPackageName]) {
         dependencies[depPackageName] = '~' + internaPackageVersions[depPackageName];
         continue;
       }
-      // console.log('internalDependencies: ', internalDependencies);
-      die(`no version found for package '${depPackageName}' in ${depType}: `);
+      if (externalPackageVersions[depPackageName]) {
+        dependencies[depPackageName] = externalPackageVersions[depPackageName] as string;
+        continue;
+      }
+      die(`no version found for package '${depPackageName}' in ${depType}`);
     }
   }
 }

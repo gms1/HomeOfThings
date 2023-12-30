@@ -3,8 +3,6 @@
   "description": "HomeOfThings - hot-server",
   "version": "0.0.0",
   "dependencies": {
-    "@nestjs/common": "*",
-    "@homeofthings/nestjs-utils": "*",
     "@nestjs/passport": "*",
     "@nestjs/swagger": "*",
     "bcrypt": "*",
@@ -12,7 +10,7 @@
     "class-validator": "*",
     "express": "*",
     "express-session": "*",
-    "@nestjs/core": "*",
+    "@homeofthings/nestjs-utils": "*",
     "@homeofthings/nestjs-config": "*",
     "@homeofthings/nestjs-logger": "*",
     "@homeofthings/nestjs-sqlite3": "*",
@@ -21,5 +19,9 @@
     "sqlite3orm": "*",
     "tslib": "*",
     "@homeofthings/node-utils": "*"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "*",
+    "@nestjs/core": "*"
   }
 }

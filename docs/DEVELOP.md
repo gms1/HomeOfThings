@@ -61,7 +61,7 @@ this bumps the version for a project:
 npx nx run <project>:version-bump --ver <new version>|increment|keep
 ```
 
-and also logs the changelog relevant commits for this project
+updates the dependencies in package.json and also logs the changelog relevant commits for this project
 
 > NOTE: using 'increment' takes the git changes into account to decide which part of the version must be incremented
 

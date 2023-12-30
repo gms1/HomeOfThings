@@ -5,9 +5,11 @@
   "dependencies": {
     "@homeofthings/nestjs-config": "*",
     "@homeofthings/nestjs-logger": "*",
-    "@nestjs/common": "*",
     "debug": "*",
     "nestjs-console": "*",
     "tslib": "*"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "*"
   }
 }
