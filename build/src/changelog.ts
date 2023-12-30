@@ -26,10 +26,10 @@ const WORKSPACE_DIR = path.resolve(getWorkspaceDir());
 const program = new Command();
 program
   .version('1.0')
-  .command(APPNAME, { isDefault: true })
-  .description('print changelog for projects')
-  .action(async () => {
-    return changeLogsCommand(readCachedProjectGraph())
+  .command(`${APPNAME} <project-name>`, { isDefault: true })
+  .description('print changelog for project')
+  .action(async (projectName: string) => {
+    return changeLogsCommand(readCachedProjectGraph(), projectName)
       .catch((err) => {
         die(`failed: ${err}`);
       })
@@ -40,25 +40,23 @@ program
 program.parse(process.argv);
 
 // -----------------------------------------------------------------------------------------
-async function changeLogsCommand(graph: ProjectGraph): Promise<void> {
-  const nxWorkspaceLibraryProjects = Object.values(graph.nodes);
+async function changeLogsCommand(graph: ProjectGraph, projectName: string): Promise<void> {
+  const nxProject = graph.nodes[projectName];
+  if (!nxProject) {
+    die(`project '${projectName}' not found`);
+    return;
+  }
 
-  for (const nxProject of nxWorkspaceLibraryProjects) {
-    if (!nxProject.data.root || nxProject.data.root === '.') {
-      // this is the nx generated root project, we are not interested in;
-      continue;
-    }
-    try {
-      await changeLog(nxProject as Project);
-    } catch (err) {
-      die(`changelog for project ${nxProject.name}: failed: `, err);
-    }
+  try {
+    await changeLog(nxProject as Project);
+  } catch (err) {
+    die(`changelog for project ${nxProject.name}: failed: `, err);
   }
 }
 
 async function changeLog(nxProject: Project): Promise<Project | undefined> {
   const project = await setProjectPublishable(WORKSPACE_DIR, { ...nxProject } as Project);
-  if (!project?.publishable) {
+  if (!project) {
     return project;
   }
 
@@ -66,6 +64,7 @@ async function changeLog(nxProject: Project): Promise<Project | undefined> {
   if (!commits.length) {
     return;
   }
+  log(`${nxProject.name}: `);
   logGitLogChanges(commits);
   return project;
 }

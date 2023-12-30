@@ -94,10 +94,10 @@ async function validateProject(inputProject: Project) {
   }
 
   // validate targets.build command
-  const build = projectJson.targets?.build;
-  invariant(build, LogLevel.ERROR, `target named 'build' not in project.json '${projectJsonPath}'`);
-  if (build && project.sourcePackageJson) {
-    const outputPath = build.options.outputPath;
+  const buildTarget = projectJson.targets?.build;
+  invariant(buildTarget, LogLevel.ERROR, `target named 'build' not in project.json '${projectJsonPath}'`);
+  if (buildTarget && project.sourcePackageJson) {
+    const outputPath = buildTarget.options.outputPath;
     const expectedOutputPath = project.name === 'build' ? `dist/build` : `dist/packages/${project.sourcePackageJson.name}`;
     invariant(
       outputPath === expectedOutputPath,
@@ -107,10 +107,10 @@ async function validateProject(inputProject: Project) {
   }
 
   // validate targets.publish command
-  const publish = projectJson.targets?.publish;
-  invariant(publish, LogLevel.ERROR, `target named 'publish' not in project.json '${projectJsonPath}'`);
-  if (publish) {
-    const command = publish.options?.command ?? '';
+  const publishTarget = projectJson.targets?.publish;
+  invariant(publishTarget, LogLevel.ERROR, `target named 'publish' not in project.json '${projectJsonPath}'`);
+  if (publishTarget) {
+    const command = publishTarget.options?.command ?? '';
     const args = command.split(/ /);
     invariant(
       args[2] === project.name,
@@ -122,17 +122,17 @@ async function validateProject(inputProject: Project) {
       LogLevel.ERROR,
       `argument 2 in targets.publish.options.command is '${args[3]}' instead of '{args.mode}' in project.json '${projectJsonPath}'`,
     );
-    const envFile = publish.options?.envFile;
+    const envFile = publishTarget.options?.envFile;
     invariant(envFile === 'build/.env', LogLevel.ERROR, `targets.publish.options.envFile is set to '${envFile}' instead of 'build/.env' in project.json '${projectJsonPath}'`);
-    const dependsOn = publish.dependsOn;
+    const dependsOn = publishTarget.dependsOn;
     invariant(Array.isArray(dependsOn) && dependsOn.includes('build'), LogLevel.ERROR, `targets.publish does not depend on 'build' in project.json '${projectJsonPath}'`);
   }
 
   // validate targets.version-bump command
-  const versionBump = projectJson.targets?.['version-bump'];
-  invariant(versionBump, LogLevel.ERROR, `target named 'version-bump' not in project.json '${projectJsonPath}'`);
-  if (versionBump) {
-    const command = versionBump.options?.command ?? '';
+  const versionBumpTarget = projectJson.targets?.['version-bump'];
+  invariant(versionBumpTarget, LogLevel.ERROR, `target named 'version-bump' not in project.json '${projectJsonPath}'`);
+  if (versionBumpTarget) {
+    const command = versionBumpTarget.options?.command ?? '';
     const args = command.split(/ /);
     invariant(
       args[2] === project.name,
@@ -144,8 +144,23 @@ async function validateProject(inputProject: Project) {
       LogLevel.ERROR,
       `argument 2 in targets.version-bump.options.command is '${args[3]}' instead of '{args.ver}' in project.json '${projectJsonPath}'`,
     );
-    const envFile = versionBump.options?.envFile;
+    const envFile = versionBumpTarget.options?.envFile;
     invariant(envFile === 'build/.env', LogLevel.ERROR, `targets.version-bump.options.envFile is set to '${envFile}' instead of 'build/.env' in project.json '${projectJsonPath}'`);
+  }
+
+  // validate targets.changelog command
+  const changelogTarget = projectJson.targets?.['changelog'];
+  invariant(changelogTarget, LogLevel.ERROR, `target named 'changelog' not in project.json '${projectJsonPath}'`);
+  if (changelogTarget) {
+    const command = changelogTarget.options?.command ?? '';
+    const args = command.split(/ /);
+    invariant(
+      args[2] === project.name,
+      LogLevel.ERROR,
+      `argument 1 in targets.changelog.options.command is '${args[2]}' instead of '${project.name}' in project.json '${projectJsonPath}'`,
+    );
+    const envFile = changelogTarget.options?.envFile;
+    invariant(envFile === 'build/.env', LogLevel.ERROR, `targets.changelog.options.envFile is set to '${envFile}' instead of 'build/.env' in project.json '${projectJsonPath}'`);
   }
 
   // validate tsConfig*.json

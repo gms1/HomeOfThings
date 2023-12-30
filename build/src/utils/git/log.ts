@@ -1,6 +1,6 @@
 import { exec } from '@homeofthings/node-sys';
+import { logVerbose } from '@homeofthings/node-utils';
 
-import { verbose, warn } from '../app';
 import { CHANGELOG_COMMIT_TYPES, CommitType, GitCommit } from './model/commit';
 
 function parseGitLogHeaderLine(linenr: number, expect: string, line?: string): string {
@@ -54,7 +54,8 @@ export async function gitLog(...argc: string[]): Promise<GitCommit[]> {
       current.title = parseGitLogMessageLine(linenr, out.shift());
       const type = current.title.match(/^(feat|fix|perf|refactor|style|build|chore|ci|release|docs|test|revert)(\([^)]*\))?(!)?:/);
       if (!type) {
-        warn('failed to parse commit message: ', current.title);
+        // warn('failed to parse commit message: ', current.title);
+        current.type = 'unknown';
       } else {
         current.type = type[1] as CommitType;
         if (type[3]) {
@@ -104,6 +105,6 @@ export async function gitLogChanges(projectRoot: string) {
 
 export function logGitLogChanges(commits: GitCommit[]) {
   commits.forEach((commit) => {
-    verbose(commit.title);
+    logVerbose(commit.title);
   });
 }

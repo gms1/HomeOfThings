@@ -42,10 +42,10 @@
       },
       "dependsOn": ["build"]
     },
-    "changelogs": {
+    "changelog": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node dist/build/src/changelogs.js",
+        "command": "node dist/build/src/changelog.js build",
         "envFile": "build/.env"
       },
       "dependsOn": ["build"]
@@ -56,7 +56,7 @@
         "command": "node dist/build/src/version-bump.js build {args.ver}",
         "envFile": "build/.env"
       },
-      "dependsOn": [{ "projects": "build", "target": "build" }]
+      "dependsOn": ["build"]
     },
     "publish": {
       "executor": "nx:run-commands",

@@ -29,6 +29,14 @@
         "jestConfig": "packages/node/@homeofthings/node-sys/jest.config.ts"
       }
     },
+    "changelog": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/build/src/changelog.js node-sys",
+        "envFile": "build/.env"
+      },
+      "dependsOn": [{ "projects": "build", "target": "build" }]
+    },
     "version-bump": {
       "executor": "nx:run-commands",
       "options": {
