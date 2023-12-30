@@ -26,7 +26,6 @@ export class SqlBackup {
   /**
    * Returns an integer with the remaining number of pages left to copy
    * Returns -1 if `step` not yet called
-   *
    */
   get remaining(): number {
     return this.backup.remaining;
@@ -35,7 +34,6 @@ export class SqlBackup {
   /**
    * Returns an integer with the total number of pages
    * Returns -1 if `step` not yet called
-   *
    */
   get pageCount(): number {
     return this.backup.pageCount;
@@ -43,7 +41,6 @@ export class SqlBackup {
 
   /**
    * Returns the progress (percentage completion)
-   *
    */
   get progress(): number {
     const pageCount = this.pageCount;

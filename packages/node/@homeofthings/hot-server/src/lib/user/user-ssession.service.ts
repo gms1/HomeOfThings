@@ -12,10 +12,7 @@ const SESSION_CACHE_SIZE = 20;
 export class UserSessionService {
   private cache = new LruCache<UserSession>(SESSION_CACHE_SIZE);
 
-  constructor(
-    @InjectConnectionPool(HOT_SESSION_DB)
-    private sqlConnectionPool: SqlConnectionPool,
-  ) {}
+  constructor(@InjectConnectionPool(HOT_SESSION_DB) private sqlConnectionPool: SqlConnectionPool) {}
 
   async createSession(user: User, request: Request): Promise<UserSession> {
     let conn: SqlDatabase | undefined = undefined;

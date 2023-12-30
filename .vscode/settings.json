@@ -6,5 +6,22 @@
   },
   "search.exclude": {
     "dist": true
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[markdown]": {
+    "editor.wordBasedSuggestions": "off",
+    "editor.suggest.showSnippets": false,
+    "editor.defaultFormatter": "dprint.dprint"
   }
 }

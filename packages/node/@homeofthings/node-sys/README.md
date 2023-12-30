@@ -14,24 +14,24 @@ This library is mainly intended to be helpful for build and installation tasks. 
 ## Fluent API for spawning child processes
 
 ```Typescript
-  const out: string[] = []
-  await exec('node', '-e', `console.log("hello world")`).setStdOut(out).run();
+const out: string[] = [];
+await exec('node', '-e', `console.log("hello world")`).setStdOut(out).run();
 ```
 
 ```Typescript
-  const script: string[] = [`console.log("hello world")`];
-  await exec('node').setStdIn(script).run();
+const script: string[] = [`console.log("hello world")`];
+await exec('node').setStdIn(script).run();
 ```
 
 ```Typescript
-  const out: string[] = []
-  await sh('ls -l *.md').setStdOut(out).run();
+const out: string[] = [];
+await sh('ls -l *.md').setStdOut(out).run();
 ```
 
 ```Typescript
-  const out: string[] = []
-  await pipe(sh('ls -l *.md')).to(exec('wc', '-l').setStdOut(out)).run();
-  // out[0] contains the number of *.md files as string
+const out: string[] = [];
+await pipe(sh('ls -l *.md')).to(exec('wc', '-l').setStdOut(out)).run();
+// out[0] contains the number of *.md files as string
 ```
 
 ## file-system related functions
@@ -41,6 +41,6 @@ cd, pwd, pushd, popd, dirs, realpath, stat, which, unlink, ln, mktemp, chmod, ch
 
 ```Typescript
 await rm('myfile.bak');
-await rm(['myfile.bak', 'mytmpdir'], {recursive: true, force: true});
+await rm(['myfile.bak', 'mytmpdir'], { recursive: true, force: true });
 await rm(glob('**/*.bak'));
 ```

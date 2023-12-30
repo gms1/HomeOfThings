@@ -80,18 +80,22 @@ class ChildTable {
 
 @table({ name: TABLE_TESTTABLE_NAME, withoutRowId: true })
 class TestTable {
-  @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) public id?: number;
+  @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+  public id?: number;
 
-  @field({ name: 'NAME', dbtype: 'TEXT' }) public name?: string;
+  @field({ name: 'NAME', dbtype: 'TEXT' })
+  public name?: string;
 
-  @field({ name: 'NAME2', dbtype: 'TEXT' }) public name2?: string;
+  @field({ name: 'NAME2', dbtype: 'TEXT' })
+  public name2?: string;
 
   public constructor() {}
 }
 
 @table({ name: TABLE_TESTIDX_NAME })
 class TestIdx {
-  @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) public id!: number;
+  @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+  public id!: number;
 
   @field({ name: 'COL1', dbtype: 'TEXT' })
   @index(TABLE_TESTIDX_IDX_NAME_U, true, true)
@@ -103,7 +107,8 @@ class TestIdx {
 }
 @table()
 class TestEmptyTableOpts {
-  @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) public id!: number;
+  @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+  public id!: number;
 }
 
 // ---------------------------------------------

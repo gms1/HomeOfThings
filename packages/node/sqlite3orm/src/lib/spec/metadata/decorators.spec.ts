@@ -13,7 +13,8 @@ describe('test decorators', () => {
       @table({ name: 'D:TABLE1_FOR_SAME_CLASS', autoIncrement: true })
       @table({ name: 'D:TABLE1_FOR_SAME_CLASS', autoIncrement: true })
       class ClassUsingDifferentTables {
-        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) id!: number;
+        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+        id!: number;
       }
       failTest('should have thrown');
     } catch (err) {}
@@ -25,7 +26,8 @@ describe('test decorators', () => {
       @table({ name: 'D:TABLE1_FOR_SAME_CLASS', autoIncrement: true })
       @table({ name: 'D:TABLE2_FOR_SAME_CLASS', autoIncrement: true })
       class ClassUsingDifferentTables {
-        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) id!: number;
+        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+        id!: number;
       }
       failTest('should have thrown');
     } catch (err) {}
@@ -39,7 +41,8 @@ describe('test decorators', () => {
         autoIncrement: true,
       })
       class TableUsingStaticProperyForField {
-        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) static id: number = 5;
+        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+        static id: number = 5;
         constructor() {}
       }
       failTest('should have thrown');
@@ -54,9 +57,11 @@ describe('test decorators', () => {
         autoIncrement: true,
       })
       class TableUsingStaticProperyForIndex {
-        @index('PARENTIDX') static parentId?: number;
+        @index('PARENTIDX')
+        static parentId?: number;
 
-        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) id!: number;
+        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+        id!: number;
       }
       failTest('should have thrown');
     } catch (err) {}
@@ -73,7 +78,8 @@ describe('test decorators', () => {
         @fk('PARENTIDX', 'ANOTHER_TABLE', 'ANOTHER_FIELD')
         static parentId?: number;
 
-        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) id!: number;
+        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+        id!: number;
       }
       failTest('should have thrown');
     } catch (err) {}
@@ -124,7 +130,8 @@ describe('test decorators', () => {
         @field({ name: 'PARENTID', dbtype: 'INTEGER' })
         parentId?: number;
 
-        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) id!: number;
+        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+        id!: number;
       }
       failTest('should have thrown');
     } catch (err) {}
@@ -135,8 +142,10 @@ describe('test decorators', () => {
     try {
       @table({ name: 'D:PARENT_TABLE_FOR_DUPLICATE_FKS' })
       class ParentTableForDuplicateFKs {
-        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) id!: number;
-        @id({ name: 'ID2', dbtype: 'INTEGER NOT NULL' }) id2!: number;
+        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+        id!: number;
+        @id({ name: 'ID2', dbtype: 'INTEGER NOT NULL' })
+        id2!: number;
       }
 
       @table({ name: 'D:TABLE_USING_DUPLICATE_FK', autoIncrement: true })
@@ -146,7 +155,8 @@ describe('test decorators', () => {
         @field({ name: 'PARENTID1', dbtype: 'INTEGER' })
         parentId1?: number;
 
-        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' }) id!: number;
+        @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
+        id!: number;
       }
       failTest('should have thrown');
     } catch (err) {}

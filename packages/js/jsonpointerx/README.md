@@ -23,30 +23,29 @@ npm install jsonpointerx
 ### Usage
 
 ```JavaScript
-import {JsonPointer} from 'jsonpointerx';
+import { JsonPointer } from 'jsonpointerx';
 
-let content = { foo: ['bar', 'baz'], more: {x: 'y'} };
+let content = { foo: ['bar', 'baz'], more: { x: 'y' } };
 let jp = JsonPointer.compile('/foo/0');
 let jp2 = JsonPointer.compile('/more');
-let jp3 = new JsonPointer(['add','new']);    // another way to instantiate a JsonPointer using decoded path segments
-                                             // (property names)
+let jp3 = new JsonPointer(['add', 'new']); // another way to instantiate a JsonPointer using decoded path segments
+// (property names)
 
-jp.get(content);                             // returns 'bar' (content.foo[0])
+jp.get(content); // returns 'bar' (content.foo[0])
 
-jp.set(content, 'bak');                      // sets content.foo[0] to 'bak'
-jp.set(content);                             // deletes content.foo[0] (does not change the length of the array)
-jp2.set(content);                            // deletes content.more
+jp.set(content, 'bak'); // sets content.foo[0] to 'bak'
+jp.set(content); // deletes content.foo[0] (does not change the length of the array)
+jp2.set(content); // deletes content.more
 
-jp3.set(content, {key: 'value'});            // sets content.add.new.key to 'value'
+jp3.set(content, { key: 'value' }); // sets content.add.new.key to 'value'
 
-jp.toString();                               // returns '/foo/0'
-jp.toURIFragmentIdentifier();                // returns '#/foo/0'
+jp.toString(); // returns '/foo/0'
+jp.toURIFragmentIdentifier(); // returns '#/foo/0'
 
-jp2.concat(jp3).toString();                  // returns '/more/add/new'
-jp2.concatSegment('add').toString();         // returns '/more/add'
-jp2.concatSegment(['add','new']).toString(); // returns '/more/add/new'
-jp2.concatPointer('/add/new').toString();    // returns '/more/add/new'
-
+jp2.concat(jp3).toString(); // returns '/more/add/new'
+jp2.concatSegment('add').toString(); // returns '/more/add'
+jp2.concatSegment(['add', 'new']).toString(); // returns '/more/add/new'
+jp2.concatPointer('/add/new').toString(); // returns '/more/add/new'
 ```
 
 > NOTE: the 'get' method should never throw
@@ -54,10 +53,8 @@ jp2.concatPointer('/add/new').toString();    // returns '/more/add/new'
 for convenience these further static methods exist:
 
 ```JavaScript
-
-JsonPointer.set(content, '/foo/0', 'bar');      // sets content.foo[0] to 'bar'
-JsonPointer.get(content, '/foo/0');             // returns 'bar' (content.foo[0])
-
+JsonPointer.set(content, '/foo/0', 'bar'); // sets content.foo[0] to 'bar'
+JsonPointer.get(content, '/foo/0'); // returns 'bar' (content.foo[0])
 ```
 
 > NOTE: feel free to contribute if you have additional requirements
@@ -97,7 +94,6 @@ set property:
 │    2    │ 'jsonpointer.set'  │ '3,387,908' │  295.167381741252  │ '±0.78%' │ 1693955 │
 │    3    │ 'json_pointer.set' │  '395,497'  │ 2528.4619850516683 │ '±2.88%' │ 197749  │
 └─────────┴────────────────────┴─────────────┴────────────────────┴──────────┴─────────┘
-
 ```
 
 > NOTE: while 'json-ptr' is now similar fast for `get` operations, 'jsonpointerx' is about 2 times faster for the `set` operation
@@ -110,7 +106,7 @@ set property:
 > so you may want to disable this feature by setting the global 'noCompile' option to 'true':
 
 ```JavaScript
-JsonPointer.options({noCompile: true});
+JsonPointer.options({ noCompile: true });
 ```
 
 > NOTE: you can blacklist certain JSON pointer segments. By default only `__proto__` and `prototype` are blacklisted
@@ -124,7 +120,7 @@ JsonPointer.options().blacklist.push('foo');
 or
 
 ```Javascript
-JsonPointer.options({blacklist: ['__proto__', 'prototype', 'foo']});
+JsonPointer.options({ blacklist: ['__proto__', 'prototype', 'foo'] });
 ```
 
 ## License

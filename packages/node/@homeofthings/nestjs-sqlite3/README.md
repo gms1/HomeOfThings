@@ -31,7 +31,7 @@ npm install @homeofthings/nestjs-sqlite3
 ```Typescript
 @Module({
   imports: [
-    Sqlite3Module.register(Sqlite3Module, {file: SQL_MEMORY_DB_SHARED}),
+    Sqlite3Module.register(Sqlite3Module, { file: SQL_MEMORY_DB_SHARED }),
   ],
 })
 export class AppModule {}
@@ -44,9 +44,10 @@ export class AppModule {}
   imports: [
     Sqlite3Module.registerAsync(Sqlite3Module, {
       imports: [], // optional
-      useFactory: (): Promise<Sqlite3ConnectionOptions> => Promise.resolve({
-        // provide your options
-      }),
+      useFactory: (): Promise<Sqlite3ConnectionOptions> =>
+        Promise.resolve({
+          // provide your options
+        }),
       inject: [], // optional inject params for useFactory method
     }),
   ],
@@ -66,7 +67,7 @@ export class MyService {
 ### get connection
 
 ```Typescript
-  const connection = await this.connectionManager.getConnection(connectionName);
+const connection = await this.connectionManager.getConnection(connectionName);
 ```
 
 This is using asynchronous context tracking to get the same database connection from the pool throughout the lifetime of a web request or any other asynchronous duration
@@ -76,7 +77,7 @@ For web requests this is automatically accomblished by the provided `Sqlite3Inte
 If you need a connection which works independend from the asynchronous connection context (e.g for backup, schema creation/upgrade, ...), you can get it from the pool:
 
 ```Typescript
-  const connection = await this.connectionManager.getConnectionPool(connectionName).get();
+const connection = await this.connectionManager.getConnectionPool(connectionName).get();
 ```
 
 > NOTE: all repositories as well as the entity-manager require an asynchronous connection context to be created
@@ -201,14 +202,14 @@ please see (https://github.com/gms1/node-sqlite3-orm#schema-creation)
 ### ceeate/upgrade schema automatically
 
 ```Typescript
-  const connection = await this.connectionManager.getConnection(connectionName);
-  const autoUpgrader = new AutoUpgrader(connection);
+const connection = await this.connectionManager.getConnection(connectionName);
+const autoUpgrader = new AutoUpgrader(connection);
 
-  // run autoupgrade for all registered tables
-  autoUpgrader.upgradeAllTables();
+// run autoupgrade for all registered tables
+autoUpgrader.upgradeAllTables();
 
-  // run autoupgrade for all tables referenced by a connection:
-  autoUpgrader.upgradeTables(ConnectionManager.getTables(connectionName));
+// run autoupgrade for all tables referenced by a connection:
+autoUpgrader.upgradeTables(ConnectionManager.getTables(connectionName));
 ```
 
 > NOTE: if you are using a single database, you can call `upgradeAllTables`, otherwise you will need to specify the tables for the specific database that you want to upgrade.
@@ -219,10 +220,10 @@ please see (https://github.com/gms1/node-sqlite3-orm#schema-creation)
 to run the backup in one step you can call:
 
 ```Typescript
-  const connection = await this.connectionManager.getConnection(connectionName);
-  const backup = await connection.backup('backup.db');
-  await backup.step(-1);
-  backup.finish();
+const connection = await this.connectionManager.getConnection(connectionName);
+const backup = await connection.backup('backup.db');
+await backup.step(-1);
+backup.finish();
 ```
 
 ## tracing

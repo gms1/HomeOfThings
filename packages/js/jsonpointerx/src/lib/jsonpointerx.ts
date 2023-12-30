@@ -72,7 +72,7 @@ export class JsonPointer {
    */
   notCompiledGet(input: any): any {
     let node = input;
-    for (let idx = 0; idx < this._segments.length; ) {
+    for (let idx = 0; idx < this._segments.length;) {
       if (node == undefined) {
         return undefined;
       }
@@ -106,7 +106,7 @@ export class JsonPointer {
     let nextnode: any;
     let part: string;
 
-    for (let idx = 0; idx < len; ) {
+    for (let idx = 0; idx < len;) {
       part = this._segments[idx++];
       nextnode = node[part];
       if (nextnode == undefined) {
@@ -180,7 +180,7 @@ export class JsonPointer {
   private compileFunctions(): void {
     let body = '';
 
-    for (let idx = 0; idx < this._segments.length; ) {
+    for (let idx = 0; idx < this._segments.length;) {
       const segment = this._segments[idx++].replace(/\\/g, '\\\\').replace(/'/g, "\\'");
       body += `
       if (node == undefined) return undefined;

@@ -321,7 +321,6 @@ export class Table {
 
   /**
    * Generate SQL Statements
-   *
    */
   public createCreateTableStatement(force?: boolean, addFields?: Field[]): string {
     const colNamesPK: string[] = [];

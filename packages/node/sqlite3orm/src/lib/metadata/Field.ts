@@ -88,7 +88,6 @@ export class Field {
 
   /**
    * Creates an instance of Field.
-   *
    */
   public constructor(name: string, isIdentity?: boolean, opts?: FieldOpts, propertyType?: PropertyType) {
     this.name = name;

@@ -13,7 +13,6 @@ const debug = debugjs.default('build:projects:enrich');
 
 /*
  * set source package.json
- *
  */
 export async function setProjectSourcePackageJson(workspaceRootDir: string, project: Project): Promise<Project | undefined> {
   if (!project.data.root || project.data.root === '.') {
@@ -39,7 +38,6 @@ export async function setProjectSourcePackageJson(workspaceRootDir: string, proj
 
 /*
  * check if a probjects build is publishable
- *
  */
 export async function setProjectPublishable(workspaceRootDir: string, project: Project): Promise<Project | undefined> {
   project.nonPublishableReasons = [];
@@ -69,7 +67,6 @@ export async function setProjectPublishable(workspaceRootDir: string, project: P
 
 /*
  * check if the current version of a probject is already published
- *
  */
 export async function setProjectPublished(workspaceRootDir: string, project: Project): Promise<Project | undefined> {
   project.published = false;

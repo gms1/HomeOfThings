@@ -9,7 +9,7 @@ import { QueryModelPredicates } from './QueryModelPredicates';
 import { isModelPredicates, Where } from './Where';
 
 export class QueryModel<T> extends QueryModelBase<T> {
-  constructor(type: { new (): T }) {
+  constructor(type: { new(): T }) {
     super(type);
   }
 

@@ -7,7 +7,8 @@ const USERS_TABLE = 'QB:USERS TABLE';
 
 @table({ name: USERS_TABLE })
 class User {
-  @id({ name: 'user_id', dbtype: 'INTEGER NOT NULL' }) userId!: number;
+  @id({ name: 'user_id', dbtype: 'INTEGER NOT NULL' })
+  userId!: number;
 
   @field({ name: 'user_loginname', dbtype: 'TEXT NOT NULL' })
   userLoginName!: string;
@@ -15,18 +16,23 @@ class User {
   @field({ name: 'user_followers', dbtype: 'NUMBER NOT NULL' })
   userFollowers!: number;
 
-  @field({ name: 'user_likes1', dbtype: 'NUMBER' }) userLikes1?: number;
+  @field({ name: 'user_likes1', dbtype: 'NUMBER' })
+  userLikes1?: number;
 
-  @field({ name: 'user_likes2', dbtype: 'NUMBER' }) userLikes2?: number;
+  @field({ name: 'user_likes2', dbtype: 'NUMBER' })
+  userLikes2?: number;
 
-  @field({ name: 'user_flag1', dbtype: 'INTEGER' }) userFlag1?: boolean;
+  @field({ name: 'user_flag1', dbtype: 'INTEGER' })
+  userFlag1?: boolean;
 
-  @field({ name: 'user_flag2', dbtype: 'TEXT' }) userFlag2?: boolean;
+  @field({ name: 'user_flag2', dbtype: 'TEXT' })
+  userFlag2?: boolean;
 
   @field({ name: 'user_created', dbtype: 'INTEGER NOT NULL' })
   userCreated: Date;
 
-  @field({ name: 'user_updated', dbtype: 'TEXT NOT NULL' }) userUpdated: Date;
+  @field({ name: 'user_updated', dbtype: 'TEXT NOT NULL' })
+  userUpdated: Date;
 
   notMapped?: string;
 
@@ -761,7 +767,7 @@ describe('test QueryModel', () => {
         },
         order: {
           userFollowers: true,
-          notMapped: true /*should be ignored*/,
+          notMapped: true, /*should be ignored*/
           userId: false,
         },
       });
@@ -801,7 +807,7 @@ describe('test QueryModel', () => {
             and: [{ userFollowers: 4 }, { or: [] }, { not: { userLoginName: 'Charlie' } }],
           },
         },
-        order: {} /* empty order */,
+        order: {}, /* empty order */
       });
       expect(res.length).toBe(6);
     } catch (err) {
@@ -892,7 +898,7 @@ describe('test QueryModel', () => {
             and: [{ userFollowers: 4 }, { or: [] }, { not: { userLoginName: 'Charlie' } }],
           },
         },
-        order: {} /* empty order */,
+        order: {}, /* empty order */
       });
       expect(res.length).toBe(6);
       expect(res[0].userId).toBeUndefined();
@@ -912,7 +918,7 @@ describe('test QueryModel', () => {
             and: [{ userFollowers: 4 }, { or: [] }, { not: { userLoginName: 'Charlie' } }],
           },
         },
-        order: {} /* empty order */,
+        order: {}, /* empty order */
       });
       expect(res.length).toBe(6);
       expect(res[0].userId).toBeDefined();
@@ -932,7 +938,7 @@ describe('test QueryModel', () => {
             and: [{ userFollowers: 4 }, { or: [] }, { not: { userLoginName: 'Charlie' } }],
           },
         },
-        order: {} /* empty order */,
+        order: {}, /* empty order */
       });
       expect(res.length).toBe(6);
       expect(res[0].userId).toBeDefined();

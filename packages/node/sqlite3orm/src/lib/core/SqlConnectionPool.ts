@@ -39,7 +39,6 @@ export class SqlConnectionPool {
 
   /**
    * Creates an instance of SqlConnectionPool.
-   *
    */
   constructor(public readonly name: string = '') {
     this.databaseFile = undefined;
@@ -156,8 +155,8 @@ export class SqlConnectionPool {
       });
       this.inUse.clear();
       await Promise.all(promises);
-    } catch (err) /* istanbul ignore next */ {
-      debug(`pool ${this.name}: closing failed: ${(err as Error).message}`);
+    } catch (err) {
+      /* istanbul ignore next */ debug(`pool ${this.name}: closing failed: ${(err as Error).message}`);
       return Promise.reject(err);
     }
   }

@@ -47,7 +47,6 @@ async function benchGetPropertyFromNullAncestor(message: string): Promise<void> 
         jsonpointer.get(content2);
       } catch (e) {}
     })
-
     .add('json_pointer.get', () => {
       try {
         json_pointer.get(content2, jpstring);

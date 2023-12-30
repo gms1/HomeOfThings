@@ -23,15 +23,15 @@ This module allows you to create an asynchronous execution context for JavaScrip
 ### quick start using AsyncLocalStorage
 
 ```Typescript
- class ContinuationLocalStorage<T> extends AsyncLocalStorage<T> {
-   public getContext(): T | undefined {
-      return this.getStore();
-    }
-    public setContext(value: T): T {
-      this.enterWith(value);
-      return value;
-    }
+class ContinuationLocalStorage<T> extends AsyncLocalStorage<T> {
+  public getContext(): T | undefined {
+    return this.getStore();
   }
+  public setContext(value: T): T {
+    this.enterWith(value);
+    return value;
+  }
+}
 ```
 
 ## Introduction
@@ -46,14 +46,14 @@ class MyLocalStorage {
 }
 
 let cls = new ContinuationLocalStorage<MyLocalStorage>();
-cls.setRootContext({ value: 1});
+cls.setRootContext({ value: 1 });
 
 process.nextTick(() => {
   let curr1 = cls.getContext(); // value is 1
-  cls.setContext({ value: 2});  // value should be 2 in the current execution context and below
+  cls.setContext({ value: 2 }); // value should be 2 in the current execution context and below
   process.nextTick(() => {
     let curr2 = cls.getContext(); // value is 2
-    cls.setContext({ value: 3});  // value should be 3 in the current execution context and below
+    cls.setContext({ value: 3 }); // value should be 3 in the current execution context and below
     process.nextTick(() => {
       let curr3 = cls.getContext(); // value is 3
     });
@@ -72,4 +72,3 @@ process.nextTick(() => {
 
 **node-async-context (asyncctx)** is licensed under the MIT License:
 [LICENSE](./LICENSE)
-

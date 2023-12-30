@@ -17,7 +17,6 @@
   asyncContext.set(newContext)
   ...
   currentContext = asyncContext.get();
-
   ```
 
 - `sequentialize`: run `Promises` in sequence
@@ -30,7 +29,7 @@
 
   ```Typescript
   await wait(condition); // polls until condition is true
-  await wait(condition, 1000);  // polls until condition is true or timed out after 1000ms
+  await wait(condition, 1000); // polls until condition is true or timed out after 1000ms
   ```
 
 - `LruCache<T>`: LRU cache

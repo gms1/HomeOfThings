@@ -6,11 +6,11 @@ import { METADATA_MODEL_KEY, MetaModel, MetaProperty, Table } from '../metadata'
 export const TABLEALIAS = 'T';
 
 export class QueryModelBase<T> {
-  readonly type: { new (): T };
+  readonly type: { new(): T };
   readonly metaModel: MetaModel;
   readonly table: Table;
 
-  constructor(type: { new (): T }) {
+  constructor(type: { new(): T }) {
     this.type = type;
     this.metaModel = Reflect.getMetadata(METADATA_MODEL_KEY, type.prototype);
     if (!this.metaModel) {

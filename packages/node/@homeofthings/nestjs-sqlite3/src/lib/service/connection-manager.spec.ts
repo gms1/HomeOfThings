@@ -10,7 +10,7 @@ import * as mockedSqlite3Orm from '../test/mocks/sqlite3orm';
 import { Test } from '@nestjs/testing';
 import { SqlDatabase } from 'sqlite3orm';
 
-import { Sqlite3ConnectionOptions, SQLITE3_DEFAULT_CONNECTION_NAME } from '../model';
+import { SQLITE3_DEFAULT_CONNECTION_NAME, Sqlite3ConnectionOptions } from '../model';
 import { ConnectionManager } from './connection-manager';
 
 describe('ConnectionManager', () => {

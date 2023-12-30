@@ -22,36 +22,35 @@ If you are using **NestJs** please see [@HomeOfThings/nest-sqlite3](https://www.
 **node-sqlite3-orm** provides you with the ability to create the database schema for the mapped model and to store and retrieve the mapped data to and from the database,
 
 ```TypeScript
-import {table, id, field, index, fk, FieldOpts, TableOpts} from 'sqlite3orm';
+import { field, FieldOpts, fk, id, index, table, TableOpts } from 'sqlite3orm';
 
-@table({name: 'USERS'})
+@table({ name: 'USERS' })
 class User {
-  @id({name: 'user_id', dbtype: 'INTEGER NOT NULL'})
+  @id({ name: 'user_id', dbtype: 'INTEGER NOT NULL' })
   userId!: number;
 
-  @field({name: 'user_loginname', dbtype: 'TEXT NOT NULL'})
+  @field({ name: 'user_loginname', dbtype: 'TEXT NOT NULL' })
   userLoginName!: string;
 
-  @field({name: 'user_json', dbtype: 'TEXT', isJson: true})
+  @field({ name: 'user_json', dbtype: 'TEXT', isJson: true })
   userJsonData: any;
 
-  @field({name: 'user_deleted'})
+  @field({ name: 'user_deleted' })
   deleted?: boolean;
-
 }
 
-@table({name: 'CONTACTS', autoIncrement: true})
+@table({ name: 'CONTACTS', autoIncrement: true })
 class Contact {
-  @id({name: 'contact_id', dbtype: 'INTEGER NOT NULL'})
+  @id({ name: 'contact_id', dbtype: 'INTEGER NOT NULL' })
   contactId!: number;
 
-  @field({name: 'contact_email', dbtype: 'TEXT'})
+  @field({ name: 'contact_email', dbtype: 'TEXT' })
   emailAddress?: string;
 
-  @field({name: 'contact_mobile', dbtype: 'TEXT'})
+  @field({ name: 'contact_mobile', dbtype: 'TEXT' })
   mobile?: string;
 
-  @field({name: 'user_id', dbtype: 'INTEGER NOT NULL'})
+  @field({ name: 'user_id', dbtype: 'INTEGER NOT NULL' })
   @fk('fk_user_contacts', 'USERS', 'user_id')
   @index('idx_contacts_user')
   userId!: number;
@@ -75,21 +74,21 @@ With **node-sqlite3-orm** you have full control over the names for tables, field
 SqlDatabase is a thin promised-based wrapper around sqlite3.Database: [node-sqlite3](https://github.com/TryGhost/node-sqlite3)
 
 ```TypeScript
-import {SqlDatabase} from 'sqlite3orm';
+import { SqlDatabase } from 'sqlite3orm';
 
 (async () => {
   let sqldb = new SqlDatabase();
   // await sqldb.open(':memory:'); // would open a memory database in private mode
-  await sqldb.open('file:sqlite3orm?mode=memory&cache=shared') // opens a memory database in shared mode
+  await sqldb.open('file:sqlite3orm?mode=memory&cache=shared'); // opens a memory database in shared mode
 })();
 ```
 
 ## Schema Creation
 
 ```TypeScript
-import {schema} from 'sqlite3orm';
+import { schema } from 'sqlite3orm';
 
-(async() => {
+(async () => {
   // get the user_version from the database:
   let userVersion = await sqldb.getUserVersion();
 
@@ -103,7 +102,10 @@ import {schema} from 'sqlite3orm';
     // a column 'contact_mobile' has been added to the 'CONTACTS'
     // table in user_version 10
     await schema().alterTableAddColumn(
-        sqldb, 'CONTACTS', 'contact_mobile');
+      sqldb,
+      'CONTACTS',
+      'contact_mobile',
+    );
   }
   await sqldb.setUserVersion(10);
 })();
@@ -114,9 +116,7 @@ import {schema} from 'sqlite3orm';
 In order to read from or write to the database, you can use the `BaseDAO<Model>' class
 
 ```TypeScript
-
 (async () => {
-
   let userDAO = new BaseDAO(User, sqldb);
   let contactDAO = new BaseDAO(Contact, sqldb);
 
@@ -124,7 +124,7 @@ In order to read from or write to the database, you can use the `BaseDAO<Model>'
   let user = new User();
   user.userId = 1;
   user.userLoginName = 'donald';
-  user.userJsonData = { lastScores: [10, 42, 31]};
+  user.userJsonData = { lastScores: [10, 42, 31] };
   user = await userDAO.insert(user);
 
   // insert a contact:
@@ -141,7 +141,7 @@ In order to read from or write to the database, you can use the `BaseDAO<Model>'
   let userDonald = await userDAO.select(user);
 
   // update a user partially:
-  await userDAO.updatePartial({userId: userDonald.userId, deleted: true});
+  await userDAO.updatePartial({ userId: userDonald.userId, deleted: true });
 
   // read all contacts (child) for a given user (parent):
   let contactsDonald1 = await contactDAO.selectAllOf('fk_user_contacts', User, userDonald);
@@ -153,24 +153,24 @@ In order to read from or write to the database, you can use the `BaseDAO<Model>'
 
   // read all users having login-name starting with 'd':
   // (see section 'typesafe queries')
-  let selectedUsers = await userDAO.selectAll({userLoginName: {isLike: 'd%'}});
+  let selectedUsers = await userDAO.selectAll({ userLoginName: { isLike: 'd%' } });
 
   // read all users having a contact:
   let allUsersHavingContacts = await userDAO.selectAll(
-      'WHERE EXISTS(SELECT 1 FROM CONTACTS C WHERE C.user_id = T.user_id)');
+    'WHERE EXISTS(SELECT 1 FROM CONTACTS C WHERE C.user_id = T.user_id)',
+  );
 
   // read all contacts from 'duck.com':
   let allContactsFromDuckDotCom = await contactDAO.selectAll(
-      'WHERE contact_email like $contact_email',
-      {$contact_email: '%@duck.com'});
+    'WHERE contact_email like $contact_email',
+    { $contact_email: '%@duck.com' },
+  );
 
   // read user (parent) for a given contact (child)
   let userDonald1 = await userDAO.selectByChild('fk_user_contacts', Contact, contactsDonald1[0]);
   // or
   let userDonald2 = await contactDAO.selectParentOf('fk_user_contacts', User, contactsDonald2[0]);
-
 })();
-
 ```
 
 ## Typesafe query syntax
@@ -179,12 +179,12 @@ In order to read from or write to the database, you can use the `BaseDAO<Model>'
 
 ```TypeScript
 interface Filter<ModelType> {
-  select?: Columns<ModelType>;      // the columns which should be returned by the select
-  where?: Where<ModelType>;         // the conditions for the WHERE-clause
-  order?: OrderColumns<ModelType>;  // the columns to use for 'ORDER BY'-clause
-  limit?: number;                   // the limit for the 'LIMIT'-clause
-  offset?: number;                  // the offset for the 'LIMIT'-clause
-  tableAlias?: string;              // a table alias to use for the query
+  select?: Columns<ModelType>; // the columns which should be returned by the select
+  where?: Where<ModelType>; // the conditions for the WHERE-clause
+  order?: OrderColumns<ModelType>; // the columns to use for 'ORDER BY'-clause
+  limit?: number; // the limit for the 'LIMIT'-clause
+  offset?: number; // the offset for the 'LIMIT'-clause
+  tableAlias?: string; // a table alias to use for the query
 }
 ```
 
@@ -195,8 +195,8 @@ useful for methods that return an array of partials and is otherwise ignored
 
 ```TypeScript
 const filter = {
-  select: {userId: true, userLoginName: true}
-}
+  select: { userId: true, userLoginName: true },
+};
 ```
 
 #### where-object
@@ -206,13 +206,19 @@ The where-object consists of predicates and may be grouped by (nested conditions
 A simple predicate is defined for a specific property of the model, the comparison operator and the value:
 
 ```TypeScript
-{userLoginName: {eq: 'donald'}}   // transforms to: WHERE user_loginname = 'donald'
+{
+  userLoginName: {
+    eq: 'donald';
+  }
+} // transforms to: WHERE user_loginname = 'donald'
 ```
 
 For the 'eq' operator a shorthand form exist:
 
 ```TypeScript
-{userLoginName: 'donald'}         // transforms to: WHERE user_loginname = 'donald'
+{
+  userLoginName: 'donald';
+} // transforms to: WHERE user_loginname = 'donald'
 ```
 
 All the given values are not inserted directly into the SQL, but passed via parameters:
@@ -231,8 +237,8 @@ All predicates are combined using logical 'AND' operator, so if we have the need
 
 ```TypeScript
 {
-  or: [{deleted: true}, {deleted: {isNull: true}}]
-}   // transforms to: WHERE user_deleted = 1 OR user_deleted IS NULL
+  or: [{ deleted: true }, { deleted: { isNull: true } }];
+} // transforms to: WHERE user_deleted = 1 OR user_deleted IS NULL
 ```
 
 'and' and 'or' operators are expecing an array, the 'not' operator requires a single child-condition/predicates only
@@ -240,19 +246,21 @@ All predicates are combined using logical 'AND' operator, so if we have the need
 ```TypeScript
 {
   not: {
-    or: [{deleted: true}, {deleted: {isNull: true}}]
+    or: [{ deleted: true }, { deleted: { isNull: true } }];
   }
-}   // transforms to: WHERE NOT ( user_deleted = 1 OR user_deleted IS NULL )
+} // transforms to: WHERE NOT ( user_deleted = 1 OR user_deleted IS NULL )
 ```
 
 Furthermore, it is also possible to define parts of the query as sql expression, or replace the complete where-object with a sql where-clause:
 
 ```TypeScript
 {
-  and: [{deleted: true}, {sql: `
+  and: [{ deleted: true }, {
+    sql: `
 EXISTS (select 1 from CONTACTS C where C.user_id = T.user_id)
-  `}]
-}   // transforms to: WHERE NOT ( user_deleted = 1 OR user_deleted IS NULL )
+  `,
+  }];
+} // transforms to: WHERE NOT ( user_deleted = 1 OR user_deleted IS NULL )
 ```
 
 > NOTE: If you want to use user input as part of the sql expression, it is highly recommendet to use host variables instead. The value for the host variables can be defined using an additional and optional 'params' object
@@ -265,7 +273,7 @@ By defining the `tableAlias` property, the default alias 'T' for the main table 
 For all 'update*' and 'delete*' methods, only the where-object part is needed, not the complete filter definition:
 
 ```TypeScript
-userDAO.deleteAll({deleted: true});
+userDAO.deleteAll({ deleted: true });
 ```
 
 ## Supported data types
@@ -280,13 +288,13 @@ These are the corresponding defaults for a 'current timestamp':
 default for 'TEXT':
 
 ```TypeScript
- dbtype: 'TEXT    DEFAULT(datetime(\'now\') || \'Z\')'
+dbtype: "TEXT    DEFAULT(datetime('now') || 'Z')";
 ```
 
 default for 'INTEGER' (in seconds):
 
 ```TypeScript
- dbtype: 'INTEGER DEFAULT(CAST(strftime(\'%s\',\'now\') as INT))' // unix epoch in seconds
+dbtype: "INTEGER DEFAULT(CAST(strftime('%s','now') as INT))"; // unix epoch in seconds
 ```
 
 **Boolean** properties can either be mapped to 'TEXT' or to 'INTEGER' (default). On storing a boolean value **false** will be converted to '0' and **true** will be converted to '1', on reading '0' or 'false' will be converted to **false** and '1' or 'true' will be converted to **true**. All other values will result in **undefined**
@@ -304,7 +312,6 @@ One possibility to achieve this could be to use a connection pool and to perform
 > NOTE: instances of BaseDAO are lightweight objects and can be created on the fly and exclusively for one database transaction
 
 ```TypeScript
-
 (async () => {
   let pool = new SqlConnectionPool();
 
@@ -318,9 +325,7 @@ One possibility to achieve this could be to use a connection pool and to perform
   // free all connections to the pool:
   con1.close();
   pool.release(con2);
-
 })();
-
 ```
 
 ## Autoupgrade

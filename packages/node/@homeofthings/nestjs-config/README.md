@@ -37,9 +37,10 @@ export class AppModule {}
   imports: [
     ConfigModule.forRootAsync(ConfigModule, {
       imports: [], // optional
-      useFactory: (): Promise<ConfigModuleOptions> => Promise.resolve({
-        // provide your options
-      }),
+      useFactory: (): Promise<ConfigModuleOptions> =>
+        Promise.resolve({
+          // provide your options
+        }),
       inject: [], // optional inject params for useFactory method
     }),
   ],
@@ -54,7 +55,6 @@ const configService = ConfigModule.createConfigService({});
 
 ...
 bootstrap();
-
 ```
 
 > NOTE: if you decide to combine this method with the imports into `AppModule` from above, only the options given to the first method will be taken into account
@@ -65,24 +65,24 @@ using one of the methods provided by the `ConfigService`:
 
 ```TypeScript
 export declare class ConfigService {
-    readonly configDirectory: string;
-    readonly environment: string;
+  readonly configDirectory: string;
+  readonly environment: string;
 
-    constructor(_opts: ConfigModuleOptions);
+  constructor(_opts: ConfigModuleOptions);
 
-    getString(key: string, defaultValue: string): string;
-    getNumber(key: string, defaultValue: number): number;
-    getBoolean(key: string, defaultValue: boolean): boolean;
+  getString(key: string, defaultValue: string): string;
+  getNumber(key: string, defaultValue: number): number;
+  getBoolean(key: string, defaultValue: boolean): boolean;
 
-    // resolve path relative to config-directory
-    getPath(key: string, defaultValue: string): string;
+  // resolve path relative to config-directory
+  getPath(key: string, defaultValue: string): string;
 
-    getOptionalString(key: string): string | undefined;
-    getOptionalNumber(key: string): number | undefined;
-    getOptionalBoolean(key: string): boolean | undefined;
+  getOptionalString(key: string): string | undefined;
+  getOptionalNumber(key: string): number | undefined;
+  getOptionalBoolean(key: string): boolean | undefined;
 
-    // resolve path relative to config-directory
-    getOptionalPath(key: string): string | undefined;
+  // resolve path relative to config-directory
+  getOptionalPath(key: string): string | undefined;
 }
 ```
 

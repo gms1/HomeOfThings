@@ -56,7 +56,6 @@ export class ContinuationLocalStorage<T> {
 
   /**
    * Creates an instance of ContinuationLocalStorage.
-   *
    */
   public constructor() {
     this.initMap();
@@ -260,7 +259,6 @@ export class ContinuationLocalStorage<T> {
 
   /**
    * enable
-   *
    */
   public enable(): void {
     this.initMap(this.getRootContext());
@@ -269,7 +267,6 @@ export class ContinuationLocalStorage<T> {
 
   /**
    * disable
-   *
    */
   public disable(): void {
     this.hookInstance.disable();

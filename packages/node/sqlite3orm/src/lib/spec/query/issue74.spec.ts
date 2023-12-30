@@ -3,7 +3,8 @@ import { failTest } from '../../test';
 
 @table({ name: 'ISSUE74_TABLE' })
 class Issue74Model {
-  @id({ name: 'id', dbtype: 'INTEGER NOT NULL' }) id!: number;
+  @id({ name: 'id', dbtype: 'INTEGER NOT NULL' })
+  id!: number;
 
   @field({ name: 'loaded' })
   loaded: boolean = false;

@@ -5,7 +5,6 @@ import { MetaModel, Table } from './metadata';
 import { Filter, isFilter, QueryModel, TABLEALIAS, Where } from './query';
 
 /**
- *
  * @export
  * @enum
  */
@@ -16,7 +15,6 @@ export enum BaseDAOInsertMode {
   ForceAutoGeneration = 2,
 }
 /**
- *
  * @export
  * @interface BaseDAOOptions
  */
@@ -29,8 +27,6 @@ export interface BaseDAOOptions {
 }
 
 /**
- *
- *
  * @export
  * @class BaseDAO
  * @template T - The class mapped to the base table
@@ -38,7 +34,7 @@ export interface BaseDAOOptions {
 export class BaseDAO<T extends Object> {
   static options?: BaseDAOOptions;
 
-  readonly type: { new (): T };
+  readonly type: { new(): T };
   readonly metaModel: MetaModel;
   readonly table: Table;
   readonly sqldb: SqlDatabase;
@@ -50,7 +46,7 @@ export class BaseDAO<T extends Object> {
    * @param type - The class mapped to the base table
    * @param sqldb - The database connection
    */
-  public constructor(type: { new (): T }, sqldb: SqlDatabase) {
+  public constructor(type: { new(): T }, sqldb: SqlDatabase) {
     this.type = type;
     this.queryModel = new QueryModel<T>(this.type);
     this.metaModel = this.queryModel.metaModel;
@@ -248,7 +244,7 @@ export class BaseDAO<T extends Object> {
    * @param childObj - An instance of the class mapped to the child table
    * @returns A promise of model instance
    */
-  public async selectByChild<C extends Object>(constraintName: string, childType: { new (): C }, childObj: C): Promise<T> {
+  public async selectByChild<C extends Object>(constraintName: string, childType: { new(): C }, childObj: C): Promise<T> {
     // create child DAO
     const childDAO = new BaseDAO<C>(childType, this.sqldb);
     let output: T;
@@ -297,7 +293,7 @@ export class BaseDAO<T extends Object> {
    * @param childObj - An instance of the class mapped to the child table
    * @returns A promise of model instance
    */
-  public selectParentOf<P extends Object>(constraintName: string, parentType: { new (): P }, childObj: T): Promise<P> {
+  public selectParentOf<P extends Object>(constraintName: string, parentType: { new(): P }, childObj: T): Promise<P> {
     const parentDAO = new BaseDAO<P>(parentType, this.sqldb);
     return parentDAO.selectByChild(constraintName, this.type, childObj);
   }
@@ -377,7 +373,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of model instances
    */
-  public async selectAllOf<P extends Object>(constraintName: string, parentType: { new (): P }, parentObj: P, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
+  public async selectAllOf<P extends Object>(constraintName: string, parentType: { new(): P }, parentObj: P, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
     try {
       const fkPredicates = this.queryModel.getForeignKeyPredicates(constraintName);
       if (!fkPredicates) {
@@ -417,7 +413,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of model instances
    */
-  public selectAllChildsOf<C extends Object>(constraintName: string, childType: { new (): C }, parentObj: T, where?: string, params?: Object): Promise<C[]> {
+  public selectAllChildsOf<C extends Object>(constraintName: string, childType: { new(): C }, parentObj: T, where?: string, params?: Object): Promise<C[]> {
     const childDAO = new BaseDAO<C>(childType, this.sqldb);
     return childDAO.selectAllOf(constraintName, this.type, parentObj, where, params);
   }

@@ -31,7 +31,6 @@ export class Schema {
 
   /**
    * Creates an instance of Schema.
-   *
    */
   public constructor() {
     if (!Schema.schema) {

@@ -155,7 +155,6 @@ export class ConnectionManager {
 
   /*
    * get the instance of the connection manager singleton
-   *
    */
   static getInstance(): ConnectionManager {
     if (!this._instance) {

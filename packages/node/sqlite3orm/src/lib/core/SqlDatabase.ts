@@ -138,7 +138,7 @@ export class SqlDatabase {
       debug(`${this.dbId}: sql: ${sql}`);
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
-      this.db.run(sql, params, function (err: Error): void {
+      this.db.run(sql, params, function(err: Error): void {
         // do not use arrow function for this callback
         // the below 'this' does not reference ourself
         if (err) {
@@ -374,7 +374,7 @@ ${sql}`);
       debug(`${this.dbId}: sql: ${sql}`);
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
-      this.db.run(sql, undefined, function (err: Error): void {
+      this.db.run(sql, undefined, function(err: Error): void {
         // do not use arrow function for this callback
         // the below 'this' does not reference ourself
         /* istanbul ignore if */
@@ -401,7 +401,7 @@ ${sql}`,
    * @returns A promise
    */
 
-  public backup(database: string /* | SqlDatabase */, databaseIsDestination = true, destName = 'main', sourceName = 'main') {
+  public backup(database: string, /* | SqlDatabase */ databaseIsDestination = true, destName = 'main', sourceName = 'main') {
     return new Promise<SqlBackup>((resolve, reject) => {
       /* istanbul ignore if */
       if (!this.db) {
@@ -432,35 +432,26 @@ ${sql}`,
   }
 
   /**
-   *
    * @param event
    * @param listener
    */
   public on(event: 'trace', listener: (sql: string) => void): this;
   /**
-   *
-   *
    * @param event
    * @param listener
    */
   public on(event: 'profile', listener: (sql: string, time: number) => void): this;
   /**
-   *
-   *
    * @param event
    * @param listener
    */
   public on(event: 'error', listener: (err: Error) => void): this;
   /**
-   *
-   *
    * @param event
    * @param listener
    */
   public on(event: 'close', listener: () => void): this;
   /**
-   *
-   *
    * @param event
    * @param listener
    */

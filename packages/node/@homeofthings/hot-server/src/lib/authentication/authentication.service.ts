@@ -12,8 +12,7 @@ import { AUTHENTICATION_MODULE_OPTIONS_TOKEN, AuthenticationModuleOptions, DEFAU
 @Injectable()
 export class AuthenticationService {
   constructor(
-    @Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN)
-    private options: AuthenticationModuleOptions,
+    @Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN) private options: AuthenticationModuleOptions,
     private readonly userService: UserService,
     private readonly userSessionService: UserSessionService,
   ) {}

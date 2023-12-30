@@ -81,7 +81,7 @@ export class SqlStatement {
    */
   public run(params?: any): Promise<SqlRunResult> {
     return new Promise<SqlRunResult>((resolve, reject) => {
-      this.stmt.run(params, function (err: Error): void {
+      this.stmt.run(params, function(err: Error): void {
         if (err) {
           reject(err);
         } else {

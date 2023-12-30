@@ -6,6 +6,7 @@ import { Sqlite3AsyncModuleOptions, Sqlite3SyncModuleOptions } from './model';
 import { EntityManager } from './service/entity-manager';
 import { Repository } from './service/repository';
 import { Sqlite3CoreModule } from './sqlite3-core.module';
+
 @Global()
 @Module({})
 export class Sqlite3Module {

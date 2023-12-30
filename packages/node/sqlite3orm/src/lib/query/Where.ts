@@ -54,22 +54,22 @@ export interface PropertyComparisons<T> {
  *     title: 'hello',
  *     likes: {isBetween: [0, 4]}
  *   };
- *
- *
  */
 
 type ShortHandType = Primitive | Date;
 
 export type PropertyPredicates<PT> = PropertyComparisons<PT> | (PT & ShortHandType) | Promise<PT & ShortHandType>;
 
-export type ModelPredicates<MT> = {
-  [K in keyof MT]?: PropertyPredicates<MT[K]>;
-} & {
-  not?: never;
-  or?: never;
-  and?: never;
-  sql?: never;
-};
+export type ModelPredicates<MT> =
+  & {
+    [K in keyof MT]?: PropertyPredicates<MT[K]>;
+  }
+  & {
+    not?: never;
+    or?: never;
+    and?: never;
+    sql?: never;
+  };
 
 export function getPropertyPredicates<MT, K extends keyof MT>(modelPredicates: ModelPredicates<MT>, key: K): PropertyPredicates<MT[K]> {
   return (modelPredicates[key] == undefined ? { eq: undefined } : modelPredicates[key]) as PropertyPredicates<MT[K]>;
@@ -94,15 +94,14 @@ export function getPropertyComparison<MT, K extends keyof MT>(propertyPredicate:
  *   const cond3: Condition<Post> = {
  *     and: [{author: 'gms'}, {or: [{title: {isLike: '%hello%'}}, {title: {isLike: '%world%'}}]}]
  *   };
- *
  */
 
 export type LogicalOperatorType = 'not' | 'or' | 'and' | 'sql';
 
 export type Condition<MT> =
   | {
-      not: Condition<MT> | ModelPredicates<MT>;
-    }
+    not: Condition<MT> | ModelPredicates<MT>;
+  }
   | { or: (Condition<MT> | ModelPredicates<MT>)[] }
   | { and: (Condition<MT> | ModelPredicates<MT>)[] }
   | { sql: string }
@@ -116,6 +115,5 @@ export function isModelPredicates<MT>(cond?: Condition<MT>): cond is ModelPredic
  * Where<MT>
  *
  * alias for Condition<MT>|string
- *
  */
 export type Where<MT> = Condition<MT> | string;

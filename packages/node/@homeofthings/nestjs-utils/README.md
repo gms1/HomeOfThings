@@ -22,7 +22,6 @@ npm install @homeofthings/nestjs-utils
 ## quick start
 
 ```Typescript
-
 export const MY_MODULE_OPTIONS_TOKEN = 'MY_MODULE_OPTIONS_TOKEN';
 export interface MyModuleOptions {
   ....
@@ -53,7 +52,6 @@ const myModuleOptions: MyModuleOptions = {
   imports: [MyModule.forRoot(MyModule, myModuleOptions)],
 })
 export class AppModule {}
-
 ```
 
 - use it asynchonously:
@@ -67,7 +65,6 @@ const myAsyncModuleOptions: AsyncModuleOptions<MyModuleOptions> = {
   imports: [MyModule.forRootAsync(MyModule, myAsyncModuleOptions)],
 })
 export class AppModule {}
-
 ```
 
 > NOTE: forRoot/forRootAsync throws if the module is already registered.

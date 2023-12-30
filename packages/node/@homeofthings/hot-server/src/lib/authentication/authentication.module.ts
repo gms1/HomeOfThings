@@ -12,24 +12,19 @@ import { LocalSerializer } from './local.serializer';
 import { LocalStrategy } from './local.strategy';
 import { AUTHENTICATION_MODULE_OPTIONS_TOKEN, DEFAULT_SESSION_MAX_AGE, DEFAULT_SESSION_NAME, DEFAULT_SESSION_SECRET } from './model/authentication.constants';
 import { AuthenticationModuleOptions } from './model/authentication.options';
+
 @Module({
   imports: [UsersModule, PassportModule],
   providers: [LocalStrategy, LocalSerializer],
 })
-export class AuthenticationModule
-  extends createDynamicRootModule<AuthenticationModule, AuthenticationModuleOptions>(AUTHENTICATION_MODULE_OPTIONS_TOKEN, {
-    providers: [AuthenticationService, UserSessionService],
-    exports: [AuthenticationService, UserSessionService],
-    controllers: [AuthenticationController],
-  })
-  implements NestModule
-{
+export class AuthenticationModule extends createDynamicRootModule<AuthenticationModule, AuthenticationModuleOptions>(AUTHENTICATION_MODULE_OPTIONS_TOKEN, {
+  providers: [AuthenticationService, UserSessionService],
+  exports: [AuthenticationService, UserSessionService],
+  controllers: [AuthenticationController],
+}) implements NestModule {
   private readonly logger = new Logger(AuthenticationModule.name);
 
-  constructor(
-    @Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN)
-    private readonly options: AuthenticationModuleOptions,
-  ) {
+  constructor(@Inject(AUTHENTICATION_MODULE_OPTIONS_TOKEN) private readonly options: AuthenticationModuleOptions) {
     super();
   }
 

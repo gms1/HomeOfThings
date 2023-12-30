@@ -9,10 +9,7 @@ import { User } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User, HOT_MAIN_DB)
-    private usersRepository: Repository<User>,
-  ) {}
+  constructor(@InjectRepository(User, HOT_MAIN_DB) private usersRepository: Repository<User>) {}
 
   async getByEmail(email: string) {
     const user = await this.usersRepository.findOne({ email });

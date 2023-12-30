@@ -20,12 +20,12 @@ export interface Filter<MT> {
 
 export function isFilter<MT>(whereOrFilter?: Where<MT> | Filter<MT>): whereOrFilter is Filter<MT> {
   return whereOrFilter &&
-    ((whereOrFilter as Filter<MT>).select !== undefined ||
-      (whereOrFilter as Filter<MT>).where !== undefined ||
-      (whereOrFilter as Filter<MT>).order !== undefined ||
-      (whereOrFilter as Filter<MT>).limit !== undefined ||
-      (whereOrFilter as Filter<MT>).offset !== undefined ||
-      (whereOrFilter as Filter<MT>).tableAlias !== undefined)
+      ((whereOrFilter as Filter<MT>).select !== undefined ||
+        (whereOrFilter as Filter<MT>).where !== undefined ||
+        (whereOrFilter as Filter<MT>).order !== undefined ||
+        (whereOrFilter as Filter<MT>).limit !== undefined ||
+        (whereOrFilter as Filter<MT>).offset !== undefined ||
+        (whereOrFilter as Filter<MT>).tableAlias !== undefined)
     ? true
     : false;
 }

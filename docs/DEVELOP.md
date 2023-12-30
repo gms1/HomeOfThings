@@ -41,8 +41,8 @@ An optional footer can be added which begins one blank line after the body or th
 ### build/lint/test/format commands
 
 Please run the npm run-script having the same name: 'build', 'lint', 'test' and 'format'.
-To fix all fixable lint errors, you can call the npm run-script 'lint:fix'
-To run all of the above, please run `npm run all` which will also run 'lint:fix'.
+To format you can call the npm run-script 'format', to fix all fixable lint errors, you can call the npm run-script 'lint:fix'
+To run all of the above, please run `npm run all` which will also run 'format' and 'lint:fix'.
 To validate if all is working, you can run `npm run ci`, which will run 'build' and 'test' and will just validate the format and linting
 
 ### changelog

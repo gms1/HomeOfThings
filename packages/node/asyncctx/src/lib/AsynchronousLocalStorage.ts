@@ -1,8 +1,6 @@
 import { AsyncLocalStorage } from 'async_hooks';
 
 /**
- *
- *
  * @export
  * @class AsynchronousLocalStorage
  * @template T

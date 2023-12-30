@@ -19,5 +19,5 @@ export type Sqlite3Connections = GenericDictionary<SqlDatabase | undefined>;
 export type Sqlite3EntityManagers = GenericDictionary<EntityManager>;
 
 export interface RepositoryType<T = Repository<any>> extends Function {
-  new (connectionManager: ConnectionManager, connectionName: string): T;
+  new(connectionManager: ConnectionManager, connectionName: string): T;
 }

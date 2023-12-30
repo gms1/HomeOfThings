@@ -50,9 +50,10 @@ bootstrap();
   imports: [
     LoggerModule.forRootAsync(LoggerModule, {
       imports: [], // optional
-      useFactory: (): Promise<LoggerModuleOptions> => Promise.resolve({
-        // provide your options
-      }),
+      useFactory: (): Promise<LoggerModuleOptions> =>
+        Promise.resolve({
+          // provide your options
+        }),
       inject: [], // optional inject params for useFactory method
     }),
   ],
@@ -74,10 +75,10 @@ bootstrap();
 
 ```TypeScript
 const logger = LoggerModule.createLoggerService({
-      // provide your options
-    });
+  // provide your options
+});
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {loggger});
+  const app = await NestFactory.create(AppModule, { loggger });
 }
 bootstrap();
 ```
@@ -90,8 +91,7 @@ bootstrap();
 as recommended by nestjs:
 
 ```Typescript
-
-import { Logger, Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 class MyService {
