@@ -87,8 +87,8 @@ describe('ConfigService', () => {
     expect(value).toBe(givenValue);
   });
 
-  it('getOptionalNumber should return non-number value as number', () => {
-    const givenNumber = 4713;
+  it('getOptionalNumber should return string value as number', () => {
+    const givenNumber = 4713.5;
     const givenValue = `${givenNumber}`;
     has.mockReturnValueOnce(true);
     get.mockReturnValueOnce(givenValue);
@@ -96,6 +96,17 @@ describe('ConfigService', () => {
     expect(has).toHaveBeenCalledTimes(1);
     expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenNumber);
+  });
+
+  it('getOptionalNumber should return undefined if config value cannot be parsed as number', () => {
+    const givenNumber = 'not a number';
+    const givenValue = `${givenNumber}`;
+    has.mockReturnValueOnce(true);
+    get.mockReturnValueOnce(givenValue);
+    const value = configService.getOptionalNumber('testKey');
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
+    expect(value).toBeUndefined();
   });
 
   it('getOptionalNumber should return undefined', () => {
@@ -117,12 +128,23 @@ describe('ConfigService', () => {
     expect(value).toBe(givenValue);
   });
 
-  it('getNumber should return default value', () => {
+  it('getNumber should return default value if config value is not defined', () => {
     const defaultValue = 316;
     has.mockReturnValueOnce(false);
     const value = configService.getNumber('testKey', defaultValue);
     expect(has).toHaveBeenCalledTimes(1);
     expect(get).toHaveBeenCalledTimes(0);
+    expect(value).toBe(defaultValue);
+  });
+
+  it('getNumber should return default value if config value cannot be parsed as number', () => {
+    const givenValue = 'not a number';
+    const defaultValue = 316;
+    has.mockReturnValueOnce(true);
+    get.mockReturnValueOnce(givenValue);
+    const value = configService.getNumber('testKey', defaultValue);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(defaultValue);
   });
 
@@ -205,12 +227,23 @@ describe('ConfigService', () => {
     expect(value).toBe(givenValue);
   });
 
-  it('getBoolean should return default value', () => {
+  it('getBoolean should return default value if config value is not defined', () => {
     const defaultValue = true;
     has.mockReturnValueOnce(false);
     const value = configService.getBoolean('testKey', defaultValue);
     expect(has).toHaveBeenCalledTimes(1);
     expect(get).toHaveBeenCalledTimes(0);
+    expect(value).toBe(defaultValue);
+  });
+
+  it('getBoolean should return default value if config value cannot be parsed as boolean', () => {
+    const givenValue = 'not a boolean';
+    const defaultValue = false;
+    has.mockReturnValueOnce(true);
+    get.mockReturnValueOnce(givenValue);
+    const value = configService.getBoolean('testKey', defaultValue);
+    expect(has).toHaveBeenCalledTimes(1);
+    expect(get).toHaveBeenCalledTimes(1);
     expect(value).toBe(defaultValue);
   });
 

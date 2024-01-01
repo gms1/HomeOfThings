@@ -109,7 +109,11 @@ export class ConfigService {
 
   getOptionalNumber(key: string): number | undefined {
     const value = this.getValue<number>(key);
-    return typeof value === 'number' || value === undefined ? value : parseInt(`${value}`);
+    if (typeof value === 'number' || value === undefined) {
+      return value;
+    }
+    const parsedValue = parseFloat(`${value}`);
+    return isNaN(parsedValue) ? undefined : parsedValue;
   }
 
   /**
