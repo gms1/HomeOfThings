@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Logger as NodeSysLogger } from '@homeofthings/nestjs-utils';
+import { Logger as NodeUtilsLogger } from '@homeofthings/nestjs-utils';
 import _debug from 'debug';
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
@@ -17,7 +17,7 @@ import { DEFAULT_CONSOLE_FORMAT, DEFAULT_FILE_FORMAT } from './winston-format';
 const debug = _debug('hot:nestjs-logger');
 debug('Module "winston" imported');
 
-export class WinstonLogger implements NodeSysLogger {
+export class WinstonLogger implements NodeUtilsLogger {
   private _logger!: winston.Logger;
 
   get logger(): winston.Logger {
