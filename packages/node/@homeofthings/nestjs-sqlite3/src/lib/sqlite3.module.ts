@@ -27,24 +27,24 @@ export class Sqlite3Module {
   static forFeature(entitiesOrRepository: Type[], connectionName?: string): DynamicModule {
     const entityManagerInjectionToken = getEntityManagerInjectionToken(connectionName);
 
-    const providers: Provider[] = entitiesOrRepository.map((entityOrReository) => {
-      if (entityOrReository.prototype instanceof Repository) {
+    const providers: Provider[] = entitiesOrRepository.map((entityOrRepository) => {
+      if (entityOrRepository.prototype instanceof Repository) {
         return {
-          provide: getCustomRepositoryInjectionToken(entityOrReository.name, connectionName),
-          useFactory: (entityManager: EntityManager) => entityManager.getCustomRepository(entityOrReository),
+          provide: getCustomRepositoryInjectionToken(entityOrRepository.name, connectionName),
+          useFactory: (entityManager: EntityManager) => entityManager.getCustomRepository(entityOrRepository),
           inject: [entityManagerInjectionToken],
           // TODO: add extra property similar to the `target` property below
         };
       } else {
         return {
-          provide: getRepositoryInjectionToken(entityOrReository.name, connectionName),
-          useFactory: (entityManager: EntityManager) => entityManager.getRepository(entityOrReository),
+          provide: getRepositoryInjectionToken(entityOrRepository.name, connectionName),
+          useFactory: (entityManager: EntityManager) => entityManager.getRepository(entityOrRepository),
           inject: [entityManagerInjectionToken],
           /**
            * Extra property to workaround dynamic modules caching issue caused by metadata serialization
            * if different entities are using the same class name (having different namespace/module)
            */
-          target: EntityManager.getEntityTarget(entityOrReository),
+          target: EntityManager.getEntityTarget(entityOrRepository),
         };
       }
     });
