@@ -70,9 +70,12 @@ export declare class ConfigService {
 
   constructor(_opts: ConfigModuleOptions);
 
+  getConfig(key: string): object | undefined;
+
   getString(key: string, defaultValue: string): string;
   getNumber(key: string, defaultValue: number): number;
   getBoolean(key: string, defaultValue: boolean): boolean;
+  getObject(key: string, defaultValue: object): object;
 
   // resolve path relative to config-directory
   getPath(key: string, defaultValue: string): string;
@@ -80,6 +83,7 @@ export declare class ConfigService {
   getOptionalString(key: string): string | undefined;
   getOptionalNumber(key: string): number | undefined;
   getOptionalBoolean(key: string): boolean | undefined;
+  getOptionalObject(key: string): object | undefined;
 
   // resolve path relative to config-directory
   getOptionalPath(key: string): string | undefined;
