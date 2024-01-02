@@ -55,6 +55,12 @@ export declare class ConfigService {
 }
 ```
 
+reload on SIGHUP:
+
+```TypeScript
+process.on('SIGHUP', () => ConfigService.getInstance().reloadConfig());
+```
+
 - `LruCache<T>`: LRU cache
 
   ```Typescript
