@@ -19,6 +19,52 @@
   currentContext = asyncContext.get();
   ```
 
+- `ConfigService`: singleton service based on node-config
+
+```Typescript
+configService = new ConfigService({ configDirectory: 'path/to/config' });
+```
+
+then use one of the methods provided by the `ConfigService`:
+
+```TypeScript
+export declare class ConfigService {
+  readonly configDirectory: string;
+  readonly environment: string;
+
+  constructor(_opts: ConfigOptions);
+
+  getConfig(key: string): object | undefined;
+  reloadConfig(): void;
+
+  getString(key: string, defaultValue: string): string;
+  getNumber(key: string, defaultValue: number): number;
+  getBoolean(key: string, defaultValue: boolean): boolean;
+  getObject(key: string, defaultValue: object): object;
+
+  // resolve path relative to config-directory
+  getPath(key: string, defaultValue: string): string;
+
+  getOptionalString(key: string): string | undefined;
+  getOptionalNumber(key: string): number | undefined;
+  getOptionalBoolean(key: string): boolean | undefined;
+  getOptionalObject(key: string): object | undefined;
+
+  // resolve path relative to config-directory
+  getOptionalPath(key: string): string | undefined;
+}
+```
+
+- `LruCache<T>`: LRU cache
+
+  ```Typescript
+  cache = new LruCache<UserSession, number>(SESSION_CACHE_SIZE);
+
+  cache.set(id, userSession); // add this to the cache and mark it as least recently used
+  ...
+  cache.get(anotherId); // if it is available in the cache it will be marked as least recently used
+  ```
+
 - `sequentialize`: run `Promises` in sequence
 
   ```Typescript
@@ -30,16 +76,6 @@
   ```Typescript
   await wait(condition); // polls until condition is true
   await wait(condition, 1000); // polls until condition is true or timed out after 1000ms
-  ```
-
-- `LruCache<T>`: LRU cache
-
-  ```Typescript
-  cache = new LruCache<UserSession, number>(SESSION_CACHE_SIZE);
-
-  cache.set(id, userSession); // add this to the cache and mark it as least recently used
-  ...
-  cache.get(anotherId); // if it is available in the cache it will be marked as least recently used
   ```
 
 - `WritableStrings`: a `Writable` for writing to a string array

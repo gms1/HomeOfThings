@@ -7,8 +7,8 @@ jest.mock('config', () => ({
 import * as config from 'config';
 import * as path from 'path';
 
-import { ConfigService, DEFAULT_ENV } from './config.service';
-import { ConfigModuleOptions } from './model';
+import { ConfigOptions } from './config.options';
+import { ConfigService } from './config.service';
 
 describe('ConfigService', () => {
   let configService: ConfigService;
@@ -322,7 +322,7 @@ describe('ConfigService instantiation', () => {
   const givenOptionsEnv = 'envFromOptions';
   const givenNodeConfigDir = 'dirFromNodeConfigDir';
   const givenOptionsDir = 'dirFromOptions';
-  let givenOptions: ConfigModuleOptions;
+  let givenOptions: ConfigOptions;
 
   beforeEach(() => {
     givenOptions = { environment: givenOptionsEnv, configDirectory: givenOptionsDir };
@@ -376,8 +376,8 @@ describe('ConfigService instantiation', () => {
     delete process.env.NODE_CONFIG_ENV;
     delete process.env.NODE_ENV;
     const configService = new ConfigService(givenOptions);
-    expect(configService.environment).toBe(DEFAULT_ENV);
-    expect(process.env.NODE_CONFIG_ENV).toBe(DEFAULT_ENV);
+    expect(configService.environment).toBe(ConfigService.DEFAULT_ENV);
+    expect(process.env.NODE_CONFIG_ENV).toBe(ConfigService.DEFAULT_ENV);
   });
 
   it('config-directory should be taken from options', () => {

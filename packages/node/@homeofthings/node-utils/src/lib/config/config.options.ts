@@ -1,4 +1,4 @@
-export interface ConfigModuleOptions {
+export interface ConfigOptions {
   configDirectory?: string;
   environment?: string;
 }

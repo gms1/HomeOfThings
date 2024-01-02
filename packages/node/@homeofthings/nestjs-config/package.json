@@ -31,8 +31,7 @@
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {
     "@homeofthings/nestjs-utils": "~2.0.0",
-    "config": "^3.3.9",
-    "debug": "^4.3.4",
+    "@homeofthings/node-utils": "~1.0.0",
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
