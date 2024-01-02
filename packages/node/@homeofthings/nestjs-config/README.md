@@ -71,6 +71,7 @@ export declare class ConfigService {
   constructor(_opts: ConfigModuleOptions);
 
   getConfig(key: string): object | undefined;
+  reloadConfig(): void;
 
   getString(key: string, defaultValue: string): string;
   getNumber(key: string, defaultValue: number): number;
@@ -88,6 +89,12 @@ export declare class ConfigService {
   // resolve path relative to config-directory
   getOptionalPath(key: string): string | undefined;
 }
+```
+
+### reload configuration on SIGHUP
+
+```TypeScript
+process.on('SIGHUP', () => ConfigService.getInstance().reloadConfig());
 ```
 
 ## RELEASE NOTES

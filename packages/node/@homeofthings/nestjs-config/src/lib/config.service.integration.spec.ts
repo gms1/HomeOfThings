@@ -2,6 +2,8 @@
 import { ConfigService } from './config.service';
 import { DIRNAME } from './test';
 
+process.env.NODE_CONFIG = '{}';
+
 describe('', () => {
   let configService: ConfigService;
 

@@ -1,9 +1,5 @@
 # TODOs
 
-- support for reloading config using 'SIGHUP'
-
-https://www.npmjs.com/package/config-reloadable
-
 - support for docker secrets
 
 https://github.com/lee5i3/config-secrets

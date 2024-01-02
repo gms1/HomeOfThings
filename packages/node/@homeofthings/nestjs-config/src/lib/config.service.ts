@@ -35,14 +35,9 @@ export class ConfigService {
     this.environment = this._opts.environment || process.env.NODE_CONFIG_ENV || process.env.NODE_ENV || DEFAULT_ENV;
     this.configDirectory = this._opts.configDirectory || process.env.NODE_CONFIG_DIR || path.resolve(process.cwd(), 'config');
 
-    // sync our settings with node-config
-    // NOTE: but do not overwrite NODE_ENV
-    process.env.NODE_CONFIG_ENV = this.environment;
-    process.env.NODE_CONFIG_DIR = this.configDirectory;
-
-    config = require('config');
     debug(`environment: '${this.environment}'`);
     debug(`config-directory: '${this.configDirectory}'`);
+    this.reloadConfig();
   }
 
   private getValue<T>(key: string): T | undefined {
@@ -58,6 +53,27 @@ export class ConfigService {
   getConfig(key: string): object | undefined {
     const value = key ? this.getValue<object>(key) : config;
     return typeof value === 'object' ? value : undefined;
+  }
+
+  reloadConfig(): void {
+    // sync our settings with node-config
+    // NOTE: do not overwrite NODE_ENV
+    process.env.NODE_CONFIG_ENV = this.environment;
+    process.env.NODE_CONFIG_DIR = this.configDirectory;
+
+    if (config?.util?.getConfigSources) {
+      // NOTE: thanks to https://github.com/sjinks/node-config-reloadable
+      const sources = config.util.getConfigSources();
+      for (const { name } of sources) {
+        if (name === '$NODE_CONFIG' || name === '--NODE-CONFIG') {
+          continue;
+        }
+        delete require.cache[name];
+      }
+
+      delete require.cache[require.resolve('config')];
+    }
+    config = require('config');
   }
 
   /**
