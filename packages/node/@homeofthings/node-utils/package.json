@@ -1,6 +1,6 @@
 {
   "name": "@homeofthings/node-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "HomeOfThings - Node Utils: various utilities and common types",
   "keywords": [
     "lru-cache",
@@ -22,7 +22,7 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "config": "^3.3.9",
-    "type-fest": "^4.8.3",
+    "type-fest": "^4.9.0",
     "tslib": "^2.6.2",
     "debug": "^4.3.4"
   }
