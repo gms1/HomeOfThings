@@ -111,7 +111,7 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.1",
     "rxjs": "^7.4.0",
-    "sqlite3": "^5.1.6",
+    "sqlite3": "^5.1.7",
     "stat-mode": "^1.0.0",
     "supports-color": "^8.1.1",
     "swagger-ui-express": "^5.0.0",
