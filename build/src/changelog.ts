@@ -9,7 +9,7 @@ import { ProjectGraph, readCachedProjectGraph } from '@nx/devkit';
 import { Command } from 'commander';
 import * as debugjs from 'debug';
 
-import { APPNAME, die, getWorkspaceDir, log, setApplication } from './utils/app';
+import { APPNAME, die, getWorkspaceDir, setApplication } from './utils/app';
 import { gitLogChanges, logGitLogChanges } from './utils/git/log';
 import { setProjectPublishable } from './utils/projects/enrich';
 import { Project } from './utils/projects/model/project';
@@ -32,9 +32,6 @@ program
     return changeLogsCommand(readCachedProjectGraph(), projectName)
       .catch((err) => {
         die(`failed: ${err}`);
-      })
-      .then(() => {
-        log(`succeeded`);
       });
   });
 program.parse(process.argv);
@@ -64,7 +61,7 @@ async function changeLog(nxProject: Project): Promise<Project | undefined> {
   if (!commits.length) {
     return;
   }
-  log(`${nxProject.name}: `);
-  logGitLogChanges(commits);
+
+  logGitLogChanges(commits, project.publishable);
   return project;
 }

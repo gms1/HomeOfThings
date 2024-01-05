@@ -11,6 +11,7 @@ const debug = debugjs.default('build:utils:file');
 export let APPNAME: string = '<app>';
 
 export enum LogLevel {
+  'VERBOSE',
   'INFO',
   'WARN',
   'ERROR',
@@ -20,9 +21,10 @@ export enum LogLevel {
 export let ERRORS = 0;
 export let WARNINGS = 0;
 
-type LoggingFunction = (message: string, ...params: unknown[]) => void;
+export type LoggingFunction = (message: string, ...params: unknown[]) => void;
 
-const LOGGING: { [key in LogLevel]: LoggingFunction } = {
+export const LOGGING_FUNCTIONS: { [key in LogLevel]: LoggingFunction } = {
+  [LogLevel.VERBOSE]: verbose,
   [LogLevel.INFO]: log,
   [LogLevel.WARN]: warn,
   [LogLevel.ERROR]: error,
@@ -80,7 +82,7 @@ export function die(message: string, ...params: unknown[]) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function invariant(condition: any, level: LogLevel, message: string): boolean {
   if (!condition) {
-    LOGGING[level](message);
+    LOGGING_FUNCTIONS[level](message);
     return false;
   }
   return true;

@@ -1,5 +1,5 @@
 import { exec } from '@homeofthings/node-sys';
-import { logVerbose } from '@homeofthings/node-utils';
+import { logInfo, logVerbose } from '@homeofthings/node-utils';
 
 import { CHANGELOG_COMMIT_TYPES, CommitType, GitCommit } from './model/commit';
 
@@ -103,7 +103,10 @@ export async function gitLogChanges(projectRoot: string) {
   return gitLogChangesFrom(projectRoot, releaseCommits?.[0]);
 }
 
-export function logGitLogChanges(commits: GitCommit[]) {
+export function logGitLogChanges(commits: GitCommit[], publishable = true) {
+  if (publishable) {
+    logInfo('not yet published:');
+  }
   commits.forEach((commit) => {
     logVerbose(commit.title);
   });
