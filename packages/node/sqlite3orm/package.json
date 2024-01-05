@@ -1,6 +1,6 @@
 {
   "name": "sqlite3orm",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "description": "ORM for sqlite3 and TypeScript/JavaScript",
   "keywords": [
     "javascript",
@@ -31,8 +31,8 @@
   "dependencies": {
     "debug": "^4.3.4",
     "reflect-metadata": "^0.2.1",
-    "sqlite3": "^5.1.6",
+    "sqlite3": "^5.1.7",
     "tslib": "^2.6.2",
-    "@homeofthings/node-utils": "1.0.0"
+    "@homeofthings/node-utils": "~1.0.1"
   }
 }
