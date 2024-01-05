@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.1
+
+- maintenance release
+
 ## 1.2.0
 
 - refactor: moved to new repository

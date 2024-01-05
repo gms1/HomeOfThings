@@ -1,6 +1,6 @@
 {
   "name": "jsonpointerx",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "fast jsonpointer (rfc6901) implementation",
   "keywords": [
     "javascript",
