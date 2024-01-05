@@ -86,6 +86,9 @@ function getNewVersion(packageJson: any, version: string, commits: GitCommit[]):
     });
     const part = major ? 1 : minor ? 2 : 3;
     currentVersionParts[part] = (parseInt(currentVersionParts[part], 10) + 1).toString();
+    for (let n = part + 1; n <= 3; n++) {
+      currentVersionParts[n] = 0;
+    }
     return `${currentVersionParts[1]}.${currentVersionParts[2]}.${currentVersionParts[3]}`;
   } else {
     if (!version.match(versionRegex)) {
