@@ -30,7 +30,7 @@ export function readJson(filePath: string): Promise<any> {
 
 // -----------------------------------------------------------------------------------------
 export function writeJson(filePath: string, json: any, indent = DEFAULT_INDENT): Promise<void> {
-  return writeTextFile(filePath, JSON.stringify(json, undefined, indent));
+  return writeTextFile(filePath, JSON.stringify(json, undefined, indent) + '\n');
 }
 
 // -----------------------------------------------------------------------------------------
