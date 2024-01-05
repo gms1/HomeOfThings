@@ -1,7 +1,7 @@
 {
   "name": "@homeofthings/nestjs-config",
   "description": "HomeOfThings - NestJs config: a configuration service for NestJs based on 'node-config'",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "keywords": [
     "nestjs",
     "nest",
@@ -30,8 +30,8 @@
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {
-    "@homeofthings/nestjs-utils": "~2.0.0",
-    "@homeofthings/node-utils": "~1.0.0",
+    "@homeofthings/nestjs-utils": "~2.0.2",
+    "@homeofthings/node-utils": "~1.0.1",
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
