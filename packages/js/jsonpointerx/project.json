@@ -19,9 +19,8 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/js/jsonpointerx/**/*.ts", "packages/js/jsonpointerx/package.json"]
+        "lintFilePatterns": ["{projectRoot}/**/*.ts", "{projectRoot}/package.json"]
       }
     },
     "test": {
@@ -37,7 +36,12 @@
         "command": "node dist/build/src/changelog.js jsonpointerx",
         "envFile": "build/.env"
       },
-      "dependsOn": [{ "projects": "build", "target": "build" }]
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ]
     },
     "version-bump": {
       "executor": "nx:run-commands",
@@ -45,7 +49,12 @@
         "command": "node dist/build/src/version-bump.js jsonpointerx {args.ver}",
         "envFile": "build/.env"
       },
-      "dependsOn": [{ "projects": "build", "target": "build" }]
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ]
     },
     "publish": {
       "executor": "nx:run-commands",
@@ -53,7 +62,13 @@
         "command": "node dist/build/src/publish.js jsonpointerx {args.mode}",
         "envFile": "build/.env"
       },
-      "dependsOn": [{ "projects": "build", "target": "build" }, "build"]
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        },
+        "build"
+      ]
     }
   },
   "tags": []

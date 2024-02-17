@@ -17,9 +17,8 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/node/@homeofthings/hot-cli/**/*.ts", "packages/node/@homeofthings/hot-cli/package.json"]
+        "lintFilePatterns": ["{projectRoot}/**/*.ts", "{projectRoot}/package.json"]
       }
     },
     "test": {
@@ -35,7 +34,12 @@
         "command": "node dist/build/src/changelog.js hot-cli",
         "envFile": "build/.env"
       },
-      "dependsOn": [{ "projects": "build", "target": "build" }]
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ]
     },
     "version-bump": {
       "executor": "nx:run-commands",
@@ -43,7 +47,12 @@
         "command": "node dist/build/src/version-bump.js hot-cli {args.ver}",
         "envFile": "build/.env"
       },
-      "dependsOn": [{ "projects": "build", "target": "build" }]
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ]
     },
     "publish": {
       "executor": "nx:run-commands",
@@ -51,7 +60,13 @@
         "command": "node dist/build/src/publish.js hot-cli {args.mode}",
         "envFile": "build/.env"
       },
-      "dependsOn": [{ "projects": "build", "target": "build" }, "build"]
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        },
+        "build"
+      ]
     }
   },
   "tags": []
