@@ -27,4 +27,4 @@ export interface AdditionalSpawnOptions {
 
 export interface SpawnOptions extends Omit<child_process.SpawnOptions, 'argv0'>, AdditionalSpawnOptions {}
 
-export interface ExecOptions extends Omit<SpawnOptions, 'detached' | 'timeout'> {}
+export type ExecOptions = Omit<SpawnOptions, 'detached' | 'timeout'>;

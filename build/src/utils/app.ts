@@ -8,7 +8,7 @@ import * as debugjs from 'debug';
 const _BASE_DIR = path.resolve(__dirname, '..', '..', '..', '..');
 const debug = debugjs.default('build:utils:file');
 
-export let APPNAME: string = '<app>';
+export let APPNAME = '<app>';
 
 export enum LogLevel {
   'VERBOSE',

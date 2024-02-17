@@ -1,4 +1,4 @@
-export function wait(cond: () => boolean, timeout: number = 0, intervall: number = 100): Promise<void> {
+export function wait(cond: () => boolean, timeout = 0, intervall = 100): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     let counter = 0;
     const timer = setInterval(() => {

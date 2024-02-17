@@ -40,7 +40,7 @@ export class SqlConnectionPool {
   /**
    * Creates an instance of SqlConnectionPool.
    */
-  constructor(public readonly name: string = '') {
+  constructor(public readonly name = '') {
     this.databaseFile = undefined;
     this.mode = SQL_OPEN_DEFAULT;
     this.inUse = new Set<SqlConnectionPoolDatabase>();
@@ -58,7 +58,7 @@ export class SqlConnectionPool {
    * @param [max=0] maximum connections which can be opened by this connection pool
    * @returns A promise
    */
-  async open(databaseFile: string, mode: number = SQL_OPEN_DEFAULT, min: number = 1, max: number = 0, settings?: SqlDatabaseSettings): Promise<void> {
+  async open(databaseFile: string, mode: number = SQL_OPEN_DEFAULT, min = 1, max = 0, settings?: SqlDatabaseSettings): Promise<void> {
     if (this._opening) {
       try {
         await this._opening;
@@ -81,7 +81,7 @@ export class SqlConnectionPool {
     return;
   }
 
-  protected async openInternal(databaseFile: string, mode: number = SQL_OPEN_DEFAULT, min: number = 1, max: number = 0, settings?: SqlDatabaseSettings): Promise<void> {
+  protected async openInternal(databaseFile: string, mode: number = SQL_OPEN_DEFAULT, min = 1, max = 0, settings?: SqlDatabaseSettings): Promise<void> {
     try {
       await this.close();
     } catch (err) {
@@ -174,7 +174,7 @@ export class SqlConnectionPool {
    * @param [timeout=0] The timeout to wait for a connection ( 0 is infinite )
    * @returns A promise of the db connection
    */
-  async get(timeout: number = 0): Promise<SqlDatabase> {
+  async get(timeout = 0): Promise<SqlDatabase> {
     try {
       let sqldb: SqlConnectionPoolDatabase | undefined;
       const cond = () => this.inPool.length > 0;

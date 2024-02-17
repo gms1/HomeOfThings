@@ -38,7 +38,7 @@ export class WritableStrings extends Writable {
     callback();
   }
 
-  private append(chunk: string, flush: boolean = false): void {
+  private append(chunk: string, flush = false): void {
     this._buffer += chunk;
     if (this._buffer.length) {
       const lines = this._buffer.split(/\r?\n\r?/);

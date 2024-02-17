@@ -42,7 +42,7 @@ describe('test decorators', () => {
       })
       class TableUsingStaticProperyForField {
         @id({ name: 'ID', dbtype: 'INTEGER NOT NULL' })
-        static id: number = 5;
+        static id = 5;
         constructor() {}
       }
       failTest('should have thrown');

@@ -61,7 +61,7 @@ export class SqlBackup {
     debug(`backup initialized: page count: ${this.pageCount}`);
   }
 
-  step(pages: number = -1): Promise<void> {
+  step(pages = -1): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       /* istanbul ignore if */
       if (!this.backup) {

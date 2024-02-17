@@ -42,7 +42,7 @@ export const SQL_OPEN_DEFAULT = SQL_OPEN_DEFAULT_NO_URI; // TODO: Breaking Chang
  * @class SqlDatabase
  */
 export class SqlDatabase {
-  protected static lastId: number = 0;
+  protected static lastId = 0;
 
   protected db?: Database;
   protected dbId?: number;
@@ -578,7 +578,7 @@ ${sql}`,
     }
   }
 
-  protected _addPragmaSetting(promises: Promise<void>[], pragma: string, setting: string | number, schemaSupport: boolean = false): void {
+  protected _addPragmaSetting(promises: Promise<void>[], pragma: string, setting: string | number, schemaSupport = false): void {
     if (typeof setting === 'number') {
       promises.push(this.exec(`PRAGMA ${pragma} = ${setting}`));
       return;

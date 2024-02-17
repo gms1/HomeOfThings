@@ -7,7 +7,7 @@ class Issue74Model {
   id!: number;
 
   @field({ name: 'loaded' })
-  loaded: boolean = false;
+  loaded: boolean;
 }
 
 describe('test QueryModel', () => {
