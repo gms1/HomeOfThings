@@ -30,7 +30,7 @@ jobs:
         run: "npm run ci"
 
       - name: Upload jsonpointerx coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/js/jsonpointerx
           flags: "jsonpointerx"
@@ -38,7 +38,7 @@ jobs:
           verbose: true
 
       - name: Upload asyncctx coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/node/asyncctx
           flags: "asyncctx"
@@ -46,7 +46,7 @@ jobs:
           verbose: true
 
       - name: Upload sqlite3orm coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/node/sqlite3orm
           flags: "sqlite3orm"
@@ -54,7 +54,7 @@ jobs:
           verbose: true
 
       - name: Upload node-utils coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/node/@homeofthings/node-utils
           flags: "node-utils"
@@ -62,7 +62,7 @@ jobs:
           verbose: true
 
       - name: Upload node-sys coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/node/@homeofthings/node-sys
           flags: "node-sys"
@@ -70,7 +70,7 @@ jobs:
           verbose: true
 
       - name: Upload nestjs-utils coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-utils
           flags: "nestjs-utils"
@@ -78,7 +78,7 @@ jobs:
           verbose: true
 
       - name: Upload nestjs-config coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-config
           flags: "nestjs-config"
@@ -86,7 +86,7 @@ jobs:
           verbose: true
 
       - name: Upload nestjs-logger coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-logger
           flags: "nestjs-logger"
@@ -94,7 +94,7 @@ jobs:
           verbose: true
 
       - name: Upload nestjs-sqlite3 coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v2
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-sqlite3
           flags: "nestjs-sqlite3"
