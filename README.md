@@ -40,4 +40,4 @@
 
 - [@homeofthings/node-sys](packages/node/@homeofthings/node-sys/README.md)
 
-  a node library for creating child processes and many file-system related functions
+  a node library for creating child processes and for many file-system related functions

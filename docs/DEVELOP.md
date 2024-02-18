@@ -84,3 +84,29 @@ updates the dependencies in package.json and also logs the changelog relevant co
   > NOTE: this command is using `nx run-many` which should always run the commands in the order, which is based on the dpendencies between projects
 
   > NOTE: if you want to run `nx run-many  --target=publish` instead, please do not forget to add the `--nxBail` option
+
+### upgrade
+
+check what can be upgraded using
+
+```bash
+npx nx migrate latest
+npm install
+npx nx migrate --run-migrations
+npm run format:write
+npm run ci
+```
+
+on success remove migrations.json
+
+```bash
+rm migrations.json
+```
+
+commit changes and upgrade remaining packages
+
+```bash
+npx npm-upgrade
+npm install
+npm run ci
+```
