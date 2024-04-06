@@ -107,5 +107,5 @@ commit changes and upgrade remaining packages
 ```bash
 npx npm-upgrade
 npm install
-npm run ci
+npm run all
 ```
