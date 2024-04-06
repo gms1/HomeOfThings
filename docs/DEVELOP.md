@@ -85,7 +85,7 @@ updates the dependencies in package.json and also logs the changelog relevant co
 
   > NOTE: if you want to run `nx run-many  --target=publish` instead, please do not forget to add the `--nxBail` option
 
-### upgrade
+## upgrade dependencies
 
 check what can be upgraded using
 
@@ -93,8 +93,7 @@ check what can be upgraded using
 npx nx migrate latest
 npm install
 npx nx migrate --run-migrations
-npm run format:write
-npm run ci
+npm run all
 ```
 
 on success remove migrations.json
