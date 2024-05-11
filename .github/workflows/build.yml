@@ -14,7 +14,7 @@ jobs:
         os:
           - ubuntu-22.04
         node-version:
-          - 20.x
+          - 22.x
           - 18.x
     steps:
       - name: "Set up Node.js ${{ matrix.node-version }}"
@@ -30,76 +30,85 @@ jobs:
         run: "npm run ci"
 
       - name: Upload jsonpointerx coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./coverage/packages/js/jsonpointerx
           flags: "jsonpointerx"
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload asyncctx coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./coverage/packages/node/asyncctx
           flags: "asyncctx"
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload sqlite3orm coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./coverage/packages/node/sqlite3orm
           flags: "sqlite3orm"
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload node-utils coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./coverage/packages/node/@homeofthings/node-utils
           flags: "node-utils"
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload node-sys coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./coverage/packages/node/@homeofthings/node-sys
           flags: "node-sys"
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload nestjs-utils coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-utils
           flags: "nestjs-utils"
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload nestjs-config coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-config
           flags: "nestjs-config"
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload nestjs-logger coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-logger
           flags: "nestjs-logger"
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload nestjs-sqlite3 coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-sqlite3
           flags: "nestjs-sqlite3"
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: "Benchmark jsonpointerx"
         working-directory: "./tools/benchmarks/jsonpointerx"
