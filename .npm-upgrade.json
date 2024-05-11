@@ -16,6 +16,10 @@
       "versions": ">=6.0",
       "reason": "version 6 is ESM"
     },
+    "chownr": {
+      "versions": ">=3.0",
+      "reason": "version 3 is ESM"
+    },
     "rxjs": {
       "versions": ">=7.5",
       "reason": "not supported by Angular 17"

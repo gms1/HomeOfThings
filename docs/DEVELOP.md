@@ -92,14 +92,14 @@ check what can be upgraded using
 ```bash
 npx nx migrate latest
 npm install
-npx nx migrate --run-migrations
+[ ! -f migrations.json ] || npx nx migrate --run-migrations
 npm run all
 ```
 
 on success remove migrations.json
 
 ```bash
-rm migrations.json
+rm -f migrations.json
 ```
 
 commit changes and upgrade remaining packages
