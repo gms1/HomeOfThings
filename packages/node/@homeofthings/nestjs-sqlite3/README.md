@@ -199,7 +199,7 @@ please see (https://github.com/gms1/node-sqlite3-orm#typesafe-query-syntax)
 
 please see (https://github.com/gms1/node-sqlite3-orm#schema-creation)
 
-### ceeate/upgrade schema automatically
+### create/upgrade schema automatically
 
 ```Typescript
 const connection = await this.connectionManager.getConnection(connectionName);
