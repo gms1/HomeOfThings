@@ -34,8 +34,7 @@ An optional body can be added to the commit message, which begins one blank line
 
 An optional footer can be added which begins one blank line after the body or the description. A footer for a braking change must contain "BREAKING CHANGE" and a description or issue reference, e.g.: "BREAKING CHANGE Fixes #13"
 
-> NOTE: release commits should follow the convention: "release: <project-name> version <new-version>"
-
+> NOTE: release commits should follow the convention: "release: <project-name> version <new-version>" or "release: all version incremented"
 ## commands
 
 ### build/lint/test/format commands
@@ -64,6 +63,21 @@ npx nx run <project>:version-bump --ver <new version>|increment|keep
 updates the dependencies in package.json and also logs the changelog relevant commits for this project
 
 > NOTE: using 'increment' takes the git changes into account to decide which part of the version must be incremented
+
+```bash
+npx nx run jsonpointerx:version-bump --ver increment
+npx nx run asyncctx:version-bump --ver increment
+npx nx run node-utils:version-bump --ver increment
+npx nx run node-sys:version-bump --ver increment
+npx nx run sqlite3orm:version-bump --ver increment
+npx nx run nestjs-utils:version-bump --ver increment
+npx nx run nestjs-config:version-bump --ver increment
+npx nx run nestjs-sqlite3:version-bump --ver increment
+npx nx run nestjs-logger:version-bump --ver increment
+# npx nx run hot-server:version-bump --ver increment
+# npx nx run hot-cli:version-bump --ver increment
+# npx nx run hot-gateway:version-bump --ver increment
+```
 
 ### publish
 
