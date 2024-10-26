@@ -34,7 +34,7 @@ An optional body can be added to the commit message, which begins one blank line
 
 An optional footer can be added which begins one blank line after the body or the description. A footer for a braking change must contain "BREAKING CHANGE" and a description or issue reference, e.g.: "BREAKING CHANGE Fixes #13"
 
-> NOTE: release commits should follow the convention: "release: <project-name> version <new-version>" or "release: all version incremented"
+> NOTE: release commits should follow the convention: "release: <project-name> version <new-version>"
 ## commands
 
 ### build/lint/test/format commands
