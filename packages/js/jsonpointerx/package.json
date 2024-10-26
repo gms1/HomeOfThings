@@ -24,5 +24,6 @@
   "dependencies": {},
   "type": "commonjs",
   "main": "./index.cjs",
-  "module": "./index.js"
+  "module": "./index.esm",
+  "types": "./index.cjs"
 }

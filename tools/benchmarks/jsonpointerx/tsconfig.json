@@ -12,5 +12,6 @@
     "typeRoots": ["./node_modules/@types/", "./typings/"],
     "rootDir": "src"
   },
+  "include": ["src/jp-bench.ts"],
   "exclude": ["./cache/**/*", "./node_modules/**/*"]
 }

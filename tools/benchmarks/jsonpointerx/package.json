@@ -4,7 +4,7 @@
   "description": "benchmark several jsonpointer packages",
   "main": "index.js",
   "scripts": {
-    "test": "ts-node ./src/jp-bench.ts"
+    "test": "ts-node -P ./tsconfig.json src/jp-bench.ts"
   },
   "repository": {
     "type": "git",
@@ -20,8 +20,8 @@
     "jsonpointerx": "file:../../../dist/packages/jsonpointerx"
   },
   "devDependencies": {
-    "tinybench": "*",
-    "@types/node": "^18.0.0",
-    "ts-node": "^10.8.1"
+    "tinybench": "~2.9.0",
+    "@types/node": "^22.8.1",
+    "ts-node": "^10.9.2"
   }
 }
