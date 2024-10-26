@@ -5,11 +5,11 @@ import * as fs from 'fs';
 
 import { ContinuationLocalStorage } from '../ContinuationLocalStorage';
 
-const clsOld: ContinuationLocalStorage<Number> = new ContinuationLocalStorage<Number>();
+const clsOld: ContinuationLocalStorage<number> = new ContinuationLocalStorage<number>();
 
-let clsNew: ContinuationLocalStorage<Number>;
+let clsNew: ContinuationLocalStorage<number>;
 
-let cls: ContinuationLocalStorage<Number>;
+let cls: ContinuationLocalStorage<number>;
 
 const DODEBUG = 0;
 const nodeproc: any = process;
@@ -36,7 +36,7 @@ describe('test continuation but enable hooks right before each test:', () => {
     if (clsNew) {
       clsNew.dispose();
     }
-    clsNew = new ContinuationLocalStorage<Number>();
+    clsNew = new ContinuationLocalStorage<number>();
     clsNew.disable();
     cls = clsNew;
     done();

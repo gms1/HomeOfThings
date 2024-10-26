@@ -22,7 +22,7 @@ export class UserRepositoryService {
     return this.repository.findById({ userId });
   }
 
-  findOne(whereOrFilter?: Where<User> | Filter<User>, params?: Object): Promise<User> {
+  findOne(whereOrFilter?: Where<User> | Filter<User>, params?: object): Promise<User> {
     return this.repository.findOne(whereOrFilter, params);
   }
 
@@ -58,7 +58,7 @@ export class UserRepositoryService {
     return this.repository.updatePartial(user);
   }
 
-  updatePartialAll(input: Partial<User>, where?: Where<User>, params?: Object): Promise<number> {
+  updatePartialAll(input: Partial<User>, where?: Where<User>, params?: object): Promise<number> {
     return this.repository.updatePartialAll(input, where, params);
   }
 
@@ -66,7 +66,7 @@ export class UserRepositoryService {
     return this.repository.deleteById(input);
   }
 
-  deleteAll(where?: Where<User>, params?: Object): Promise<number> {
+  deleteAll(where?: Where<User>, params?: object): Promise<number> {
     return this.repository.deleteAll(where, params);
   }
 }

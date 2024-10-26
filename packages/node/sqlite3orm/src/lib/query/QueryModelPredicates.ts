@@ -27,7 +27,7 @@ export class QueryModelPredicates<MT> implements QueryOperation {
     });
   }
 
-  async toSql(metaModel: MetaModel, params: Object, tablePrefix: string): Promise<string> {
+  async toSql(metaModel: MetaModel, params: object, tablePrefix: string): Promise<string> {
     const parts: string[] = [];
     for (const predicate of this.subOperations) {
       const part = await predicate.toSql(metaModel, params, tablePrefix);

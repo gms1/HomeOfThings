@@ -46,7 +46,7 @@ export class QueryCondition<MT> implements QueryOperation {
     }
   }
 
-  async toSql(metaModel: MetaModel, params: Object, tablePrefix: string): Promise<string> {
+  async toSql(metaModel: MetaModel, params: object, tablePrefix: string): Promise<string> {
     if (this.op === 'sql') {
       return this.sql;
     }

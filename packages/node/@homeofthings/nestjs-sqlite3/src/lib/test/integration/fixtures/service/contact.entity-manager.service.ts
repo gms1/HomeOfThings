@@ -18,11 +18,11 @@ export class ContactEntityManagerService {
     return this.entityManager.count(Contact, { userId });
   }
 
-  findAllContacts(whereOrFilter?: Where<Contact> | Filter<Contact>, params?: Object): Promise<Contact[]> {
+  findAllContacts(whereOrFilter?: Where<Contact> | Filter<Contact>, params?: object): Promise<Contact[]> {
     return this.entityManager.findAll(Contact, whereOrFilter, params);
   }
 
-  findAllByParent(user: User, whereOrFilter?: Where<Contact> | Filter<Contact>, params?: Object): Promise<Contact[]> {
+  findAllByParent(user: User, whereOrFilter?: Where<Contact> | Filter<Contact>, params?: object): Promise<Contact[]> {
     return this.entityManager.findAllByParent(Contact, 'fk_user_contacts', User, user, whereOrFilter, params);
   }
 

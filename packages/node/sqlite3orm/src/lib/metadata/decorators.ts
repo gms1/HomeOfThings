@@ -100,7 +100,7 @@ function decorateTableClass(target: Function, opts: TableOpts): void {
  * primary key
  * @returns The field class instance
  */
-function decorateFieldProperty(target: Object | Function, key: KeyType, opts: FieldOpts, isIdentity: boolean): void {
+function decorateFieldProperty(target: object | Function, key: KeyType, opts: FieldOpts, isIdentity: boolean): void {
   if (typeof target === 'function') {
     // not decorating static property
     throw new Error(`decorating static property '${key.toString()}' using field-decorator is not supported`);
@@ -126,7 +126,7 @@ function decorateFieldProperty(target: Object | Function, key: KeyType, opts: Fi
  * @param foreignTableField - The referenced table field
  * @returns - The field class instance
  */
-function decorateForeignKeyProperty(target: Object | Function, key: KeyType, constraintName: string, foreignTableName: string, foreignTableField: string): void {
+function decorateForeignKeyProperty(target: object | Function, key: KeyType, constraintName: string, foreignTableName: string, foreignTableField: string): void {
   if (typeof target === 'function') {
     // not decorating static property
     throw new Error(`decorating static property '${key.toString()}' using fk-decorator is not supported`);
@@ -146,7 +146,7 @@ function decorateForeignKeyProperty(target: Object | Function, key: KeyType, con
  * @param [desc] - descending order for this column
  * @returns The field class instance
  */
-function decorateIndexProperty(target: Object | Function, key: KeyType, indexName: string, isUnique?: boolean, desc?: boolean): void {
+function decorateIndexProperty(target: object | Function, key: KeyType, indexName: string, isUnique?: boolean, desc?: boolean): void {
   if (typeof target === 'function') {
     // not decorating static property
     throw new Error(`decorating static property '${key.toString()}' using index-decorator is not supported`);
@@ -178,8 +178,8 @@ export function table(opts: TableOpts = {}): (target: Function) => void {
  * @param [dbtype] - The type of the field; defaults to 'TEXT'
  * @returns The decorator function
  */
-export function field(opts: FieldOpts = {}): (target: Object, key: KeyType) => void {
-  return (target: Object, key: KeyType) => {
+export function field(opts: FieldOpts = {}): (target: object, key: KeyType) => void {
+  return (target: object, key: KeyType) => {
     decorateFieldProperty(target, key, opts, false);
   };
 }
@@ -192,8 +192,8 @@ export function field(opts: FieldOpts = {}): (target: Object, key: KeyType) => v
  * @param [dbtype] - The type of the field; defaults to 'TEXT'
  * @returns The decorator function
  */
-export function id(opts: FieldOpts = {}): (target: Object, key: KeyType) => void {
-  return (target: Object, key: KeyType) => {
+export function id(opts: FieldOpts = {}): (target: object, key: KeyType) => void {
+  return (target: object, key: KeyType) => {
     decorateFieldProperty(target, key, opts, true);
   };
 }
@@ -208,8 +208,8 @@ export function id(opts: FieldOpts = {}): (target: Object, key: KeyType) => void
  * @param foreignTableField - The referenced table field
  * @returns The decorator function
  */
-export function fk(constraintName: string, foreignTableName: string, foreignTableField: string): (target: Object, key: KeyType) => void {
-  return (target: Object, key: KeyType) => {
+export function fk(constraintName: string, foreignTableName: string, foreignTableField: string): (target: object, key: KeyType) => void {
+  return (target: object, key: KeyType) => {
     decorateForeignKeyProperty(target, key, constraintName, foreignTableName, foreignTableField);
   };
 }
@@ -223,8 +223,8 @@ export function fk(constraintName: string, foreignTableName: string, foreignTabl
  * @param [desc] - descending order for this column
  * @returns The decorator function
  */
-export function index(indexName: string, isUnique?: boolean, desc?: boolean): (target: Object, key: KeyType) => void {
-  return (target: Object, key: KeyType) => {
+export function index(indexName: string, isUnique?: boolean, desc?: boolean): (target: object, key: KeyType) => void {
+  return (target: object, key: KeyType) => {
     decorateIndexProperty(target, key, indexName, isUnique, desc);
   };
 }

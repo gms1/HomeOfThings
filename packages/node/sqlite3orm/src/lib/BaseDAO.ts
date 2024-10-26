@@ -31,7 +31,7 @@ export interface BaseDAOOptions {
  * @class BaseDAO
  * @template T - The class mapped to the base table
  */
-export class BaseDAO<T extends Object> {
+export class BaseDAO<T extends object> {
   static options?: BaseDAOOptions;
 
   readonly type: { new(): T };
@@ -145,7 +145,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the updated model class instance
    */
-  public async updatePartialAll(input: Partial<T>, where?: Where<T>, params?: Object): Promise<number> {
+  public async updatePartialAll(input: Partial<T>, where?: Where<T>, params?: object): Promise<number> {
     try {
       const keys = Object.keys(input);
       let sql = this.queryModel.getUpdateAllStatement(keys as (keyof T)[]);
@@ -199,7 +199,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise
    */
-  public async deleteAll(where?: Where<T>, params?: Object): Promise<number> {
+  public async deleteAll(where?: Where<T>, params?: object): Promise<number> {
     try {
       let sql = this.queryModel.getDeleteAllStatement();
       params = Object.assign({}, params);
@@ -244,7 +244,7 @@ export class BaseDAO<T extends Object> {
    * @param childObj - An instance of the class mapped to the child table
    * @returns A promise of model instance
    */
-  public async selectByChild<C extends Object>(constraintName: string, childType: { new(): C }, childObj: C): Promise<T> {
+  public async selectByChild<C extends object>(constraintName: string, childType: { new(): C }, childObj: C): Promise<T> {
     // create child DAO
     const childDAO = new BaseDAO<C>(childType, this.sqldb);
     let output: T;
@@ -266,7 +266,7 @@ export class BaseDAO<T extends Object> {
         throw new Error(`in '${this.metaModel.name}': no property mapped to these fields: ${s}`);
       }
       // bind parameters
-      const hostParams: Object = {};
+      const hostParams: object = {};
       for (let i = 0; i < fkProps.length; ++i) {
         this.queryModel.setHostParamValue(hostParams, props[i], fkProps[i].getDBValueFromModel(childObj));
       }
@@ -293,7 +293,7 @@ export class BaseDAO<T extends Object> {
    * @param childObj - An instance of the class mapped to the child table
    * @returns A promise of model instance
    */
-  public selectParentOf<P extends Object>(constraintName: string, parentType: { new(): P }, childObj: T): Promise<P> {
+  public selectParentOf<P extends object>(constraintName: string, parentType: { new(): P }, childObj: T): Promise<P> {
     const parentDAO = new BaseDAO<P>(parentType, this.sqldb);
     return parentDAO.selectByChild(constraintName, this.type, childObj);
   }
@@ -307,7 +307,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the selected model instance; rejects if result is not exactly one row
    */
-  public selectOne(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T> {
+  public selectOne(whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<T> {
     return this.queryModel.selectOne(this.sqldb, this.toFilter(whereOrFilter, TABLEALIAS), params);
   }
 
@@ -320,7 +320,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of model instances
    */
-  public selectAll(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
+  public selectAll(whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<T[]> {
     return this.queryModel.selectAll(this.sqldb, this.toFilter(whereOrFilter, TABLEALIAS), params);
   }
 
@@ -333,7 +333,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the count value
    */
-  public countAll(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<number> {
+  public countAll(whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<number> {
     return this.queryModel.countAll(this.sqldb, this.toFilter(whereOrFilter, TABLEALIAS), params);
   }
 
@@ -346,7 +346,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the count value
    */
-  public exists(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<boolean> {
+  public exists(whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<boolean> {
     return this.queryModel.exists(this.sqldb, this.toFilter(whereOrFilter, TABLEALIAS), params);
   }
 
@@ -357,7 +357,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of model instances
    */
-  public selectPartialAll(filter: Filter<T>, params?: Object): Promise<Partial<T>[]> {
+  public selectPartialAll(filter: Filter<T>, params?: object): Promise<Partial<T>[]> {
     return this.queryModel.selectPartialAll(this.sqldb, filter, params);
   }
 
@@ -373,7 +373,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of model instances
    */
-  public async selectAllOf<P extends Object>(constraintName: string, parentType: { new(): P }, parentObj: P, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
+  public async selectAllOf<P extends object>(constraintName: string, parentType: { new(): P }, parentObj: P, whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<T[]> {
     try {
       const fkPredicates = this.queryModel.getForeignKeyPredicates(constraintName);
       if (!fkPredicates) {
@@ -413,7 +413,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of model instances
    */
-  public selectAllChildsOf<C extends Object>(constraintName: string, childType: { new(): C }, parentObj: T, where?: string, params?: Object): Promise<C[]> {
+  public selectAllChildsOf<C extends object>(constraintName: string, childType: { new(): C }, parentObj: T, where?: string, params?: object): Promise<C[]> {
     const childDAO = new BaseDAO<C>(childType, this.sqldb);
     return childDAO.selectAllOf(constraintName, this.type, parentObj, where, params);
   }
@@ -428,7 +428,7 @@ export class BaseDAO<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise
    */
-  public async selectEach(callback: (err: Error, model: T) => void, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<number> {
+  public async selectEach(callback: (err: Error, model: T) => void, whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<number> {
     return this.queryModel.selectEach(this.sqldb, callback, this.toFilter(whereOrFilter, TABLEALIAS), params);
   }
 

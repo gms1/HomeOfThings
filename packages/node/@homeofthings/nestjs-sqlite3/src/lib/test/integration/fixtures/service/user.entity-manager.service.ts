@@ -27,7 +27,7 @@ export class UserEntityManagerService {
     return this.entityManager.findById(User, { userId });
   }
 
-  findOne(whereOrFilter?: Where<User> | Filter<User>, params?: Object): Promise<User> {
+  findOne(whereOrFilter?: Where<User> | Filter<User>, params?: object): Promise<User> {
     return this.entityManager.findOne(User, whereOrFilter, params);
   }
 
@@ -64,7 +64,7 @@ export class UserEntityManagerService {
     return this.entityManager.updatePartial(User, user);
   }
 
-  updatePartialAll(input: Partial<User>, where?: Where<User>, params?: Object): Promise<number> {
+  updatePartialAll(input: Partial<User>, where?: Where<User>, params?: object): Promise<number> {
     return this.entityManager.updatePartialAll(User, input, where, params);
   }
 
@@ -72,7 +72,7 @@ export class UserEntityManagerService {
     return this.entityManager.deleteById(User, input);
   }
 
-  deleteAll(where?: Where<User>, params?: Object): Promise<number> {
+  deleteAll(where?: Where<User>, params?: object): Promise<number> {
     return this.entityManager.deleteAll(User, where, params);
   }
 }

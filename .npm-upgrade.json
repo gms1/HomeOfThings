@@ -27,6 +27,10 @@
     "typescript": {
       "versions": ">=5.3",
       "reason": "not supported by Angular 17"
+    },
+    "eslint-plugin-redos-detector": {
+      "versions": ">=2.4.3",
+      "reason": "throws error (e.g for /\\s+/) which is not thrown wit 2.4.2"
     }
   }
 }

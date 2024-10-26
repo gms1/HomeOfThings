@@ -250,8 +250,8 @@ export class QueryModelBase<T> {
     return res;
   }
 
-  public bindForeignParams<F extends Object>(foreignQueryModel: QueryModelBase<F>, constraintName: string, foreignObject: F, more: Object = {}): Object {
-    const hostParams: Object = Object.assign({}, more);
+  public bindForeignParams<F extends object>(foreignQueryModel: QueryModelBase<F>, constraintName: string, foreignObject: F, more: object = {}): object {
+    const hostParams: object = Object.assign({}, more);
     const fkProps = this.getForeignKeyProps(constraintName);
     const refCols = this.getForeignKeyRefCols(constraintName);
 
@@ -276,8 +276,8 @@ export class QueryModelBase<T> {
     return hostParams;
   }
 
-  public bindAllInputParams(model: Partial<T>, keys?: (keyof T)[], addIdentity?: boolean): Object {
-    const hostParams: Object = {};
+  public bindAllInputParams(model: Partial<T>, keys?: (keyof T)[], addIdentity?: boolean): object {
+    const hostParams: object = {};
     const props = this.getPropertiesFromKeys(keys, addIdentity);
     props.forEach((prop) => {
       this.setHostParam(hostParams, prop, model);
@@ -287,8 +287,8 @@ export class QueryModelBase<T> {
 
   /* istanbul ignore next */
   // obsolete
-  public bindNonPrimaryKeyInputParams(model: Partial<T>, keys?: (keyof T)[]): Object {
-    const hostParams: Object = {};
+  public bindNonPrimaryKeyInputParams(model: Partial<T>, keys?: (keyof T)[]): object {
+    const hostParams: object = {};
     const props = this.getPropertiesFromKeys(keys);
     props
       .filter((prop) => !prop.field.isIdentity)
@@ -298,8 +298,8 @@ export class QueryModelBase<T> {
     return hostParams;
   }
 
-  public bindPrimaryKeyInputParams(model: Partial<T>): Object {
-    const hostParams: Object = {};
+  public bindPrimaryKeyInputParams(model: Partial<T>): object {
+    const hostParams: object = {};
     this.metaModel.qmCache.primaryKeyProps.forEach((prop: MetaProperty) => {
       this.setHostParam(hostParams, prop, model);
     });

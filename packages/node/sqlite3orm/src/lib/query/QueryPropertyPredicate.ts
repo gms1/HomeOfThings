@@ -37,7 +37,7 @@ export class QueryPropertyPredicate<PT> implements QueryOperation {
     }
   }
 
-  async toSql(metaModel: MetaModel, params: Object, tablePrefix: string): Promise<string> {
+  async toSql(metaModel: MetaModel, params: object, tablePrefix: string): Promise<string> {
     const prop = metaModel.getProperty(this.propertyKey);
     let sql = `${tablePrefix}${prop.field.quotedName} `;
     const value = await this.value;

@@ -25,7 +25,7 @@ export class EntityManager {
    * @param entity - The entity class value
    * @returns A promise of the repository instance
    */
-  getRepository<T extends Object>(entity: Type<T>): Promise<Repository<T>> {
+  getRepository<T extends object>(entity: Type<T>): Promise<Repository<T>> {
     try {
       const repo = new Repository(entity, this._connectionManager, this._connectionName);
       return Promise.resolve(repo);
@@ -57,7 +57,7 @@ export class EntityManager {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of true if at least one row exists or false otherwise
    */
-  exists<T extends Object>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<boolean> {
+  exists<T extends object>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<boolean> {
     return this.getDao<T>(entity).then((dao) => dao.exists(whereOrFilter, params));
   }
 
@@ -72,7 +72,7 @@ export class EntityManager {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the count number of rows
    */
-  count<T extends Object>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<number> {
+  count<T extends object>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<number> {
     return this.getDao<T>(entity).then((dao) => dao.countAll(whereOrFilter, params));
   }
 
@@ -84,7 +84,7 @@ export class EntityManager {
    * @param input - A partial instance of the entity class
    * @returns A promise of the entity class instance
    */
-  findById<T extends Object>(entity: Type<T>, input: Partial<T>): Promise<T> {
+  findById<T extends object>(entity: Type<T>, input: Partial<T>): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.selectById(input));
   }
 
@@ -96,7 +96,7 @@ export class EntityManager {
    * @param input - A partial instance of the entity class
    * @returns A promise of the entity instance
    */
-  findOne<T extends Object>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T> {
+  findOne<T extends object>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.selectOne(whereOrFilter, params));
   }
 
@@ -111,7 +111,7 @@ export class EntityManager {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of entity class instances
    */
-  findAll<T extends Object>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
+  findAll<T extends object>(entity: Type<T>, whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<T[]> {
     return this.getDao<T>(entity).then((dao) => dao.selectAll(whereOrFilter, params));
   }
 
@@ -126,7 +126,7 @@ export class EntityManager {
    * @returns A promise of the parent entity instance
    */
 
-  findByChild<T extends Object, C extends Object>(entity: Type<T>, constraintName: string, childEntity: Type<C>, childObj: C): Promise<T> {
+  findByChild<T extends object, C extends object>(entity: Type<T>, constraintName: string, childEntity: Type<C>, childObj: C): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.selectByChild(constraintName, childEntity, childObj));
   }
 
@@ -143,13 +143,13 @@ export class EntityManager {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of child entity instances
    */
-  findAllByParent<T extends Object, P extends Object>(
+  findAllByParent<T extends object, P extends object>(
     entity: Type<T>,
     constraintName: string,
     parentEntity: Type<P>,
     parentObj: P,
     whereOrFilter?: Where<T> | Filter<T>,
-    params?: Object,
+    params?: object,
   ): Promise<T[]> {
     return this.getDao<T>(entity).then((dao) => dao.selectAllOf(constraintName, parentEntity, parentObj, whereOrFilter, params));
   }
@@ -164,7 +164,7 @@ export class EntityManager {
    * @param model - An entity class instance
    * @returns A promise of the inserted or updated entity class instance
    */
-  save<T extends Object>(entity: Type<T>, model: T): Promise<T> {
+  save<T extends object>(entity: Type<T>, model: T): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.replace(model));
   }
 
@@ -180,7 +180,7 @@ export class EntityManager {
    * @param input - A partial instance of the entity class
    * @returns A promise of the partial instance of the entity class
    */
-  savePartial<T extends Object>(entity: Type<T>, input: Partial<T>): Promise<Partial<T>> {
+  savePartial<T extends object>(entity: Type<T>, input: Partial<T>): Promise<Partial<T>> {
     return this.getDao<T>(entity).then((dao) => dao.replacePartial(input));
   }
 
@@ -193,7 +193,7 @@ export class EntityManager {
    * @param mode - optional insert mode (default: BaseDAOInsertMode.ForceAutoGeneration)
    * @returns A promise of the inserted entity class instance
    */
-  insert<T extends Object>(entity: Type<T>, model: T, mode = BaseDAOInsertMode.ForceAutoGeneration): Promise<T> {
+  insert<T extends object>(entity: Type<T>, model: T, mode = BaseDAOInsertMode.ForceAutoGeneration): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.insert(model, mode));
   }
 
@@ -209,7 +209,7 @@ export class EntityManager {
    * @param mode - optional insert mode (default: BaseDAOInsertMode.ForceAutoGeneration)
    * @returns A promise of the partial instance of the entity class
    */
-  insertPartial<T extends Object>(entity: Type<T>, input: Partial<T>, mode = BaseDAOInsertMode.ForceAutoGeneration): Promise<Partial<T>> {
+  insertPartial<T extends object>(entity: Type<T>, input: Partial<T>, mode = BaseDAOInsertMode.ForceAutoGeneration): Promise<Partial<T>> {
     return this.getDao<T>(entity).then((dao) => dao.insertPartial(input, mode));
   }
 
@@ -221,7 +221,7 @@ export class EntityManager {
    * @param model - An entity class instance
    * @returns A promise of the updated entity class instance
    */
-  update<T extends Object>(entity: Type<T>, model: T): Promise<T> {
+  update<T extends object>(entity: Type<T>, model: T): Promise<T> {
     return this.getDao<T>(entity).then((dao) => dao.update(model));
   }
 
@@ -236,7 +236,7 @@ export class EntityManager {
    * @param input - A partial instance of the entity class
    * @returns A promise of the partial instance of the entity class
    */
-  updatePartial<T extends Object>(entity: Type<T>, input: Partial<T>): Promise<Partial<T>> {
+  updatePartial<T extends object>(entity: Type<T>, input: Partial<T>): Promise<Partial<T>> {
     return this.getDao<T>(entity).then((dao) => dao.updatePartial(input));
   }
 
@@ -256,7 +256,7 @@ export class EntityManager {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the number of updated rows
    */
-  updatePartialAll<T extends Object>(entity: Type<T>, input: Partial<T>, where?: Where<T>, params?: Object): Promise<number> {
+  updatePartialAll<T extends object>(entity: Type<T>, input: Partial<T>, where?: Where<T>, params?: object): Promise<number> {
     return this.getDao<T>(entity).then((dao) => dao.updatePartialAll(input, where, params));
   }
 
@@ -268,7 +268,7 @@ export class EntityManager {
    * @param input - A partial instance of the entity class
    * @returns A void promise
    */
-  deleteById<T extends Object>(entity: Type<T>, input: Partial<T>): Promise<void> {
+  deleteById<T extends object>(entity: Type<T>, input: Partial<T>): Promise<void> {
     return this.getDao<T>(entity).then((dao) => dao.deleteById(input));
   }
 
@@ -282,11 +282,11 @@ export class EntityManager {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the deleted number of rows
    */
-  deleteAll<T extends Object>(entity: Type<T>, where?: Where<T>, params?: Object): Promise<number> {
+  deleteAll<T extends object>(entity: Type<T>, where?: Where<T>, params?: object): Promise<number> {
     return this.getDao<T>(entity).then((dao) => dao.deleteAll(where, params));
   }
 
-  private getDao<T extends Object>(type: Type<T>): Promise<BaseDAO<T>> {
+  private getDao<T extends object>(type: Type<T>): Promise<BaseDAO<T>> {
     return this.connection.then((sqlDb) => new BaseDAO<T>(type, sqlDb));
   }
 

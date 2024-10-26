@@ -130,7 +130,7 @@ export function which(name: string, options?: { all: boolean }): Promise<string[
 
   if (options?.all) {
     logCommandArgs('which', '-a', name);
-    res = _which(name, { nothrow: true, all: true });
+    res = _which(name, { nothrow: true, all: true }).then((path) => (path ? [...path] : []));
   } else {
     logCommandArgs('which', name);
     res = _which(name, { nothrow: true }).then((path) => (path ? [path] : []));

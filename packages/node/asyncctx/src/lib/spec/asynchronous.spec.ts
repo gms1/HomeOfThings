@@ -5,7 +5,7 @@ import * as fs from 'fs';
 
 import { AsynchronousLocalStorage } from '../AsynchronousLocalStorage';
 
-const cls: AsynchronousLocalStorage<Number> = new AsynchronousLocalStorage<Number>();
+const cls: AsynchronousLocalStorage<number> = new AsynchronousLocalStorage<number>();
 
 const DODEBUG = 0;
 

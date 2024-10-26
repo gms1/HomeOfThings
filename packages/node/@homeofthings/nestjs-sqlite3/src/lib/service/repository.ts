@@ -4,7 +4,7 @@ import { BaseDAO, BaseDAOInsertMode, Filter, METADATA_MODEL_KEY, MetaModel, SqlD
 
 import { ConnectionManager } from './connection-manager';
 
-export class Repository<T extends Object> {
+export class Repository<T extends object> {
   private readonly table: Table;
 
   constructor(
@@ -37,7 +37,7 @@ export class Repository<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of true if at least one row exists or false otherwise
    */
-  exists(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<boolean> {
+  exists(whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<boolean> {
     return this.dao.then((dao) => dao.exists(whereOrFilter, params));
   }
 
@@ -50,7 +50,7 @@ export class Repository<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the count number of rows
    */
-  count(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<number> {
+  count(whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<number> {
     return this.dao.then((dao) => dao.countAll(whereOrFilter, params));
   }
 
@@ -70,7 +70,7 @@ export class Repository<T extends Object> {
    * @param input - A partial instance of the entity class
    * @returns A promise of the entity instance
    */
-  findOne(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T> {
+  findOne(whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<T> {
     return this.dao.then((dao) => dao.selectOne(whereOrFilter, params));
   }
 
@@ -83,7 +83,7 @@ export class Repository<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of entity instances
    */
-  findAll(whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
+  findAll(whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<T[]> {
     return this.dao.then((dao) => dao.selectAll(whereOrFilter, params));
   }
 
@@ -97,7 +97,7 @@ export class Repository<T extends Object> {
    * @returns A promise of the parent entity instance
    */
 
-  findByChild<C extends Object>(constraintName: string, childEntity: Type<C>, childObj: C): Promise<T> {
+  findByChild<C extends object>(constraintName: string, childEntity: Type<C>, childObj: C): Promise<T> {
     return this.dao.then((dao) => dao.selectByChild(constraintName, childEntity, childObj));
   }
 
@@ -113,7 +113,7 @@ export class Repository<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of child entity instances
    */
-  findAllByParent<P extends Object>(constraintName: string, parentEntity: Type<P>, parentObj: P, whereOrFilter?: Where<T> | Filter<T>, params?: Object): Promise<T[]> {
+  findAllByParent<P extends object>(constraintName: string, parentEntity: Type<P>, parentObj: P, whereOrFilter?: Where<T> | Filter<T>, params?: object): Promise<T[]> {
     return this.dao.then((dao) => dao.selectAllOf(constraintName, parentEntity, parentObj, whereOrFilter, params));
   }
 
@@ -126,7 +126,7 @@ export class Repository<T extends Object> {
    * @param childObj - An instance of the entity class mapped to the child table
    * @returns A promise of parent entity instance
    */
-  findParentOf<P extends Object>(constraintName: string, parentEntity: Type<P>, childObj: T): Promise<P> {
+  findParentOf<P extends object>(constraintName: string, parentEntity: Type<P>, childObj: T): Promise<P> {
     return this.dao.then((dao) => dao.selectParentOf(constraintName, parentEntity, childObj));
   }
 
@@ -142,7 +142,7 @@ export class Repository<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of child entity instances
    */
-  findAllChildsOf<C extends Object>(constraintName: string, childEntity: Type<C>, parentObj: T, where?: string, params?: Object): Promise<C[]> {
+  findAllChildsOf<C extends object>(constraintName: string, childEntity: Type<C>, parentObj: T, where?: string, params?: object): Promise<C[]> {
     return this.dao.then((dao) => dao.selectAllChildsOf(constraintName, childEntity, parentObj, where, params));
   }
 
@@ -237,7 +237,7 @@ export class Repository<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the number of updated rows
    */
-  updatePartialAll(input: Partial<T>, where?: Where<T>, params?: Object): Promise<number> {
+  updatePartialAll(input: Partial<T>, where?: Where<T>, params?: object): Promise<number> {
     return this.dao.then((dao) => dao.updatePartialAll(input, where, params));
   }
 
@@ -260,7 +260,7 @@ export class Repository<T extends Object> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the number of deleted rows
    */
-  deleteAll(where?: Where<T>, params?: Object): Promise<number> {
+  deleteAll(where?: Where<T>, params?: object): Promise<number> {
     return this.dao.then((dao) => dao.deleteAll(where, params));
   }
 }

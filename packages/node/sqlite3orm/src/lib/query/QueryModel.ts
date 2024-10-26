@@ -21,7 +21,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
    * @param [params] - An optional object with additional host parameter
    * @returns promise of the number of models
    */
-  async countAll(sqldb: SqlDatabase, filter?: Filter<T>, params?: Object): Promise<number> {
+  async countAll(sqldb: SqlDatabase, filter?: Filter<T>, params?: object): Promise<number> {
     try {
       params = Object.assign({}, params);
       const select = await this.getSelectStatementForColumnExpression('COUNT(*) as result', filter || {}, params);
@@ -40,7 +40,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
    * @param [params] - An optional object with additional host parameter
    * @returns promise for boolean result
    */
-  async exists(sqldb: SqlDatabase, filter?: Filter<T>, params?: Object): Promise<boolean> {
+  async exists(sqldb: SqlDatabase, filter?: Filter<T>, params?: object): Promise<boolean> {
     try {
       params = Object.assign({}, params);
       const subQuery = await this.getSelectStatementForColumnExpression('1', filter || {}, params);
@@ -60,7 +60,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of the selected model instance; rejects if result is not exactly one row
    */
-  async selectOne(sqldb: SqlDatabase, filter?: Filter<T>, params?: Object): Promise<T> {
+  async selectOne(sqldb: SqlDatabase, filter?: Filter<T>, params?: object): Promise<T> {
     try {
       params = Object.assign({}, params);
       const select = await this.getSelectStatement(this.toSelectAllColumnsFilter(filter), params);
@@ -82,7 +82,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of model instances
    */
-  async selectAll(sqldb: SqlDatabase, filter?: Filter<T>, params?: Object): Promise<T[]> {
+  async selectAll(sqldb: SqlDatabase, filter?: Filter<T>, params?: object): Promise<T[]> {
     try {
       params = Object.assign({}, params);
       const select = await this.getSelectStatement(this.toSelectAllColumnsFilter(filter), params);
@@ -105,7 +105,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
    * @param [params] - An optional object with additional host parameter
    * @returns A promise of array of partial models
    */
-  async selectPartialAll(sqldb: SqlDatabase, filter: Filter<T>, params?: Object): Promise<Partial<T>[]> {
+  async selectPartialAll(sqldb: SqlDatabase, filter: Filter<T>, params?: object): Promise<Partial<T>[]> {
     try {
       params = Object.assign({}, params);
       const select = await this.getSelectStatement(filter, params);
@@ -158,7 +158,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
   /*
    * select each model using a callback
    */
-  async selectEach(sqldb: SqlDatabase, callback: (err: Error, model: T) => void, filter?: Filter<T>, params?: Object): Promise<number> {
+  async selectEach(sqldb: SqlDatabase, callback: (err: Error, model: T) => void, filter?: Filter<T>, params?: object): Promise<number> {
     try {
       params = Object.assign({}, params);
       const select = await this.getSelectStatement(this.toSelectAllColumnsFilter(filter), params);
@@ -172,7 +172,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
     }
   }
 
-  public async getWhereClause(filter: Filter<T>, params: Object): Promise<string> {
+  public async getWhereClause(filter: Filter<T>, params: object): Promise<string> {
     if (!filter || !filter.where) {
       return '';
     }
@@ -201,7 +201,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
     return whereClause.length ? `WHERE ${whereClause}` : whereClause;
   }
 
-  protected async getSelectStatement(filter: Filter<T>, params: Object): Promise<string> {
+  protected async getSelectStatement(filter: Filter<T>, params: object): Promise<string> {
     try {
       let sql = this.getSelectAllStatement(this.getSelectColumns(filter), filter.tableAlias);
       sql += await this.getNonColumnClauses(filter, params);
@@ -211,7 +211,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
     }
   }
 
-  protected async getSelectStatementForColumnExpression(colexpr: string, filter: Filter<T>, params: Object): Promise<string> {
+  protected async getSelectStatementForColumnExpression(colexpr: string, filter: Filter<T>, params: object): Promise<string> {
     try {
       let sql = this.getSelectAllStatementForColumnExpression(colexpr, filter.tableAlias);
       sql += await this.getNonColumnClauses(filter, params);
@@ -238,7 +238,7 @@ export class QueryModel<T> extends QueryModelBase<T> {
     return columns.length ? columns : undefined;
   }
 
-  protected async getNonColumnClauses(filter: Filter<T>, params: Object): Promise<string> {
+  protected async getNonColumnClauses(filter: Filter<T>, params: object): Promise<string> {
     let sql = '';
     const whereClause = await this.getWhereClause(filter, params);
     if (whereClause.length) {
