@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/gms1/HomeOfThings",
   "dependencies": {},
-  "type": "commonjs",
+  "type": "module",
   "main": "./index.cjs",
   "module": "./index.esm",
   "types": "./index.cjs"

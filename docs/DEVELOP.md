@@ -34,7 +34,7 @@ An optional body can be added to the commit message, which begins one blank line
 
 An optional footer can be added which begins one blank line after the body or the description. A footer for a braking change must contain "BREAKING CHANGE" and a description or issue reference, e.g.: "BREAKING CHANGE Fixes #13"
 
-> NOTE: release commits should follow the convention: "release: <project-name> version <new-version>"
+> NOTE: release commits for a single package should follow the convention: "release: <project-name> version <new-version>", but you can also create a release commit for multiple packages
 
 ## commands
 
@@ -80,6 +80,12 @@ npx nx run nestjs-logger:version-bump --ver increment
 # npx nx run hot-gateway:version-bump --ver increment
 ```
 
+> NOTE: please update all changelogs after bumping a version
+
+```bash
+find packages/ -name "CHANGELOG.md" -exec code {} \;
+```
+
 ### publish
 
 > NOTE: versions already published will be skipped, non-publishable projects too
@@ -123,4 +129,13 @@ commit changes and upgrade remaining packages
 npx npm-upgrade
 npm install
 npm run all
+```
+
+optional: upgrade tools/benchmarks/jsonpointerx
+
+```bash
+cd tools/benchmarks/jsonpointerx
+npx npm-upgrade
+npm install
+npm run test
 ```

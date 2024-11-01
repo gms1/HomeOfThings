@@ -39,5 +39,13 @@
     "sharedGlobals": []
   },
   "defaultBase": "master",
-  "useLegacyCache": true
+  "useLegacyCache": true,
+  "plugins": [
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ]
 }
