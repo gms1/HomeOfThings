@@ -2,6 +2,6 @@
 
 | Release | Notes                                   |
 | ------- | --------------------------------------- |
-| 1.0.2   | maintenance release                     |
+| 1.0.2-3 | maintenance release                     |
 | 1.0.1   | feature: config service for node-config |
 | 1.0.0   | initial release                         |
