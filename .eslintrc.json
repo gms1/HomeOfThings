@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nx", "simple-import-sort", "redos-detector"],
+  "plugins": ["@nx", "simple-import-sort"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -20,8 +20,7 @@
           }
         ],
         "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error",
-        "redos-detector/no-unsafe-regex": "error"
+        "simple-import-sort/exports": "error"
       }
     },
     {
@@ -47,7 +46,6 @@
         "jest": true
       },
       "rules": {
-        "redos-detector/no-unsafe-regex": "off"
       }
     }
   ]

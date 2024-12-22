@@ -41,7 +41,7 @@ function consoleContextFormat(context?: string) {
 }
 
 export const DEFAULT_CONSOLE_FORMAT = winston.format.printf(({ level, message, timestamp, stack, context, ...meta }) => {
-  let line = `${timestamp} ${consoleLevelFormat(level)}${consoleContextFormat(context)} ${message}`;
+  let line = `${timestamp} ${consoleLevelFormat(level)}${consoleContextFormat(context as string | undefined)} ${message}`;
   if (Object.keys(meta).length) {
     line += ' ' + JSON.stringify(meta);
   }
@@ -52,7 +52,7 @@ export const DEFAULT_CONSOLE_FORMAT = winston.format.printf(({ level, message, t
 });
 
 export const DEFAULT_FILE_FORMAT = winston.format.printf(({ level, message, timestamp, stack, context, ...meta }) => {
-  let line = `${timestamp} ${fileLevelFormat(level)}${fileContextFormat(context)} ${message}`;
+  let line = `${timestamp} ${fileLevelFormat(level)}${fileContextFormat(context as string | undefined)} ${message}`;
   if (Object.keys(meta).length) {
     line += ' ' + JSON.stringify(meta);
   }

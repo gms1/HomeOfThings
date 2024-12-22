@@ -20,8 +20,8 @@
     "jsonpointerx": "file:../../../dist/packages/jsonpointerx"
   },
   "devDependencies": {
-    "tinybench": "~2.9.0",
-    "@types/node": "^22.8.1",
+    "tinybench": "~3.0.7",
+    "@types/node": "^22.10.2",
     "ts-node": "^10.9.2"
   }
 }

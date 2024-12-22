@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
 export class LruCache<T, K = string> {
+  // NOTE: javascript Map remembers the original insertion order
   private _map: Map<K, T> = new Map<K, T>();
 
   get maxEntries(): number {
@@ -55,7 +56,7 @@ export class LruCache<T, K = string> {
 
   private resize(newSize: number): void {
     while (this._map.size > newSize) {
-      this.delete(this._map.keys().next().value);
+      this.delete(this._map.keys().next().value as K);
     }
   }
 }
