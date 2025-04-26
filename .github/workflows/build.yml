@@ -14,8 +14,8 @@ jobs:
         os:
           - ubuntu-22.04
         node-version:
+          - 24.x
           - 22.x
-          - 18.x
     steps:
       - name: "Set up Node.js ${{ matrix.node-version }}"
         uses: actions/setup-node@v4
