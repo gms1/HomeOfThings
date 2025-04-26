@@ -61,7 +61,7 @@ export default [
       files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
       rules: {
         ...config.rules,
-        '@typescript-eslint/no-unused-vars': "off",
+        '@typescript-eslint/no-unused-vars': 'off',
       },
     })),
   ...compat
