@@ -127,7 +127,6 @@ export class ConnectionManager {
     }
 
     return Promise.allSettled(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       connections.map((connection) => connection.close()),
     ).then(() => Promise.resolve());
   }

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
 import { Filter, Where } from 'sqlite3orm';
 
 import { InjectRepository } from '../../../../common/sqlite3.decorators';

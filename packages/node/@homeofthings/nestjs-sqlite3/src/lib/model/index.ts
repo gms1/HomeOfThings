@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { GenericDictionary } from '@homeofthings/node-utils';
 import { SqlConnectionPool, SqlDatabase } from 'sqlite3orm';
 

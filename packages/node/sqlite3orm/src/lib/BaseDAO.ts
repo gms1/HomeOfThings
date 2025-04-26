@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-types */
 import { SqlDatabase } from './core';
 import { MetaModel, Table } from './metadata';
 import { Filter, isFilter, QueryModel, TABLEALIAS, Where } from './query';

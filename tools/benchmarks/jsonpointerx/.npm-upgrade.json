@@ -1,0 +1,8 @@
+{
+  "ignore": {
+    "tinybench": {
+      "versions": ">=4.0",
+      "reason": "version 4 is ESM"
+    }
+  }
+}

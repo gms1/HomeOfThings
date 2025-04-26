@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'asyncctx',
   preset: '../../../jest.preset.js',

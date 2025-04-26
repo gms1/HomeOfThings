@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'node-sys',
   preset: '../../../../jest.preset.js',

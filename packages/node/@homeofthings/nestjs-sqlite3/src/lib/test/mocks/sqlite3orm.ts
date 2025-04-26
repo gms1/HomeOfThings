@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/naming-convention */
+
 export const sqlConnectionPool = jest.fn();
 export const sqlConnectionPoolOpen = jest.fn();
 export const sqlConnectionPoolClose = jest.fn();

@@ -19,6 +19,12 @@ export async function setProjectSourcePackageJson(workspaceRootDir: string, proj
     // this is the nx generated root project, we are not interested in;
     return undefined;
   }
+
+  if (!project.data?.targets?.build) {
+    // ignore projects which do not have a build target
+    return undefined;
+  }
+
   project.outputDir = project.data?.targets?.build?.options?.outputPath;
   invariant(project.outputDir, LogLevel.FATAL, `Could not find "build.options.outputPath" of project "${project.name}". Is project.json configured  correctly?`);
 

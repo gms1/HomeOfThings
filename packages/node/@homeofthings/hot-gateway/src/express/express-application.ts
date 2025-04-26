@@ -124,7 +124,7 @@ export class ExpressApplication {
       }
       redirectUrl += req.url ?? '';
       debug(`redirecting to ${redirectUrl}`);
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+
       res.writeHead(this._options?.http?.redirectCode ?? 307, {
         Location: redirectUrl,
       });

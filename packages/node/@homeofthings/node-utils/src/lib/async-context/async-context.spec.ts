@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 const mockConstructor = jest.fn();
 const mockGetStore = jest.fn();
 const mockEnterWith = jest.fn();

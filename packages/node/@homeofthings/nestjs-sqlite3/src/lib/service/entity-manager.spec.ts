@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable simple-import-sort/imports */
 import * as mockedLogger from '../test/mocks/logger';
 /* eslint-enable simple-import-sort/imports */

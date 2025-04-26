@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'nestjs-sqlite3',
   preset: '../../../../jest.preset.js',

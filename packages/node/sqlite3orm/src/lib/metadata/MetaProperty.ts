@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { FieldOpts } from './decorators';
 import { DEFAULT_VALUE_TRANSFORMERS } from './DefaultValueTransformers';
 import { Field } from './Field';

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { Type } from '@homeofthings/nestjs-utils';
 import { Logger } from '@nestjs/common';
 import { BaseDAO, BaseDAOInsertMode, Filter, METADATA_MODEL_KEY, MetaModel, SqlDatabase, Where } from 'sqlite3orm';

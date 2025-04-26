@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/naming-convention */
+
 export const connectionManager = jest.fn();
 export const openConnectionPool = jest.fn();
 export const getEntityManager = jest.fn();

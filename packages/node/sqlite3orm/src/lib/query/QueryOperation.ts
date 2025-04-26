@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { MetaModel } from '../metadata';
 
 export interface QueryOperation {

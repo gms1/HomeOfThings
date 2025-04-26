@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/ban-types */
 import * as fs from 'fs';
 
 import { ContinuationLocalStorage } from '../ContinuationLocalStorage';

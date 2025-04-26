@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-empty-function */
+
 export class LruCache<T, K = string> {
   // NOTE: javascript Map remembers the original insertion order
   private _map: Map<K, T> = new Map<K, T>();

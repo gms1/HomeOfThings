@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import * as winston from 'winston';
 
 import { LogLevel } from '../model';

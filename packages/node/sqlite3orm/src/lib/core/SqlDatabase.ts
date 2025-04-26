@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as _dbg from 'debug';
 import { Database, OPEN_CREATE, OPEN_PRIVATECACHE, OPEN_READONLY, OPEN_READWRITE, OPEN_SHAREDCACHE, OPEN_URI, verbose as sqlverbose } from 'sqlite3';

@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'sqlite3orm',
   preset: '../../../jest.preset.js',

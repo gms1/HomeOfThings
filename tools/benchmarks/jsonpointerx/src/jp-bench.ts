@@ -1,7 +1,9 @@
-// tslint:disable no-require-imports no-var-requires variable-name no-null-keyword
-import { Bench } from 'tinybench';
-import { JsonPointer as JsonPointerX } from 'jsonpointerx';
+/* eslint-disable no-empty */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { JsonPointer as json_ptr_i } from 'json-ptr';
+import { JsonPointer as JsonPointerX } from 'jsonpointerx';
+import { Bench } from 'tinybench';
 const jsonpointer_i = require('jsonpointer');
 const json_pointer_i = require('json-pointer');
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env ts-node-script
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';

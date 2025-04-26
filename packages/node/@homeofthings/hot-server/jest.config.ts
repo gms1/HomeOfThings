@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'hot-server',
   preset: '../../../../jest.preset.js',

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 let mockReadFileResult: string | undefined | Error;
 let mockWriteFileResult: undefined | Error;
 

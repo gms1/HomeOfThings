@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import 'reflect-metadata';
 
 import { Type } from '@homeofthings/nestjs-utils';

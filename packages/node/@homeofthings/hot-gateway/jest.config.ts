@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'hot-gateway',
   preset: '../../../../jest.preset.js',

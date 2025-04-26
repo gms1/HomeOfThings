@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-empty-function */
+
 import * as path from 'path';
 
 import { SQL_MEMORY_DB_PRIVATE, SQL_OPEN_DEFAULT, SQL_OPEN_READWRITE, SqlDatabase, SqlDatabaseSettings } from '../..';

@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-empty-function */
+
 import { PromiseFactories, sequentialize } from '@homeofthings/node-utils';
 import * as _dbg from 'debug';
 
