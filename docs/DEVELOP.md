@@ -71,10 +71,12 @@ npx nx run asyncctx:version-bump --ver increment
 npx nx run node-utils:version-bump --ver increment
 npx nx run node-sys:version-bump --ver increment
 npx nx run sqlite3orm:version-bump --ver increment
+
 npx nx run nestjs-utils:version-bump --ver increment
 npx nx run nestjs-config:version-bump --ver increment
 npx nx run nestjs-sqlite3:version-bump --ver increment
 npx nx run nestjs-logger:version-bump --ver increment
+
 # npx nx run hot-server:version-bump --ver increment
 # npx nx run hot-cli:version-bump --ver increment
 # npx nx run hot-gateway:version-bump --ver increment

@@ -2,6 +2,7 @@
 
 | Release | Notes                                               |
 | ------- | --------------------------------------------------- |
+| 2.2.0   | nestjs 11x                                          |
 | 2.1.1-2 | maintenance release                                 |
 | 2.1.0   | please see changes below                            |
 | 2.0.1   | maintenance release                                 |

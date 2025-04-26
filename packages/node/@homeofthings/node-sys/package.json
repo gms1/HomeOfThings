@@ -1,6 +1,6 @@
 {
   "name": "@homeofthings/node-sys",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "HomeOfThings - fluent API for spawning child processes and shell-like filesystem function",
   "keywords": [
     "fluent-API",
@@ -18,7 +18,7 @@
     "which": "^5.0.0",
     "mv": "^2.1.1",
     "stat-mode": "^1.0.0",
-    "@homeofthings/node-utils": "~1.0.3"
+    "@homeofthings/node-utils": "~1.0.4"
   },
   "author": {
     "email": "www.gms@gmx.at",
