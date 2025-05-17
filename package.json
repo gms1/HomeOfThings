@@ -91,7 +91,7 @@
     "@nestjs/platform-express": "^11.1.0",
     "@nestjs/swagger": "^11.1.5",
     "@swc/helpers": "0.5.17",
-    "bcrypt": "^5.1.1",
+    "bcrypt": "^6.0.0",
     "chalk": "^4.1.2",
     "chmodr": "^1.2.0",
     "chownr": "^2.0.0",
