@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "chalk": "^4.1.2",
-    "config": "^3.3.12",
-    "type-fest": "^4.40.0",
+    "config": "^4.1.1",
+    "type-fest": "^5.0.1",
     "tslib": "^2.8.1",
     "debug": "^4.4.0"
   }
