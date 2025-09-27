@@ -13,7 +13,8 @@
     "commander": "*",
     "helmet": "*",
     "tslib": "*",
-    "@homeofthings/node-utils": "*"
+    "@homeofthings/node-utils": "*",
+    "escape-html": "^1.0.3"
   },
   "peerDependencies": {
     "@nestjs/core": "*",

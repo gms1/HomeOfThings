@@ -2,6 +2,7 @@ import { LoggerService } from '@homeofthings/nestjs-logger';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import _debug from 'debug';
 import express from 'express';
+import escapeHtml from 'escape-html';
 import * as fs from 'fs';
 import helmet from 'helmet';
 import * as http from 'http';
@@ -128,7 +129,7 @@ export class ExpressApplication {
       res.writeHead(this._options?.http?.redirectCode ?? 307, {
         Location: redirectUrl,
       });
-      res.end(redirectUrl);
+      res.end(escapeHtml(redirectUrl));
       next();
     }
     return next();
