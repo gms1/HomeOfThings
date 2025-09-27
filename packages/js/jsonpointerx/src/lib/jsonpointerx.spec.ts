@@ -156,7 +156,7 @@ describe('json-pointer', () => {
     let setValue: any = {};
     let jp: JsonPointer;
 
-    expect(() => JsonPointer.compile('').set(rfcExample, setValue)).toThrowError('Set for root JSON pointer is not allowed.');
+    expect(() => JsonPointer.compile('').set(rfcExample, setValue)).toThrow('Set for root JSON pointer is not allowed.');
 
     setValue = ['baz', 'bar'];
     jp = JsonPointer.compile('/foo');
@@ -251,17 +251,17 @@ describe('json-pointer', () => {
 
     setValue = 2;
 
-    expect(() => JsonPointer.compile('/unknown1/grz/blub/xx').set(rfcExample, setValue)).toThrowError(/^Cannot create property/);
+    expect(() => JsonPointer.compile('/unknown1/grz/blub/xx').set(rfcExample, setValue)).toThrow(/^Cannot create property/);
 
-    expect(() => JsonPointer.compile('/unknown1/grz/blub').set(rfcExample, setValue)).toThrowError(/^Cannot create property/);
+    expect(() => JsonPointer.compile('/unknown1/grz/blub').set(rfcExample, setValue)).toThrow(/^Cannot create property/);
 
-    expect(() => JsonPointer.compile('/foo/unknown2/unknown3').set(rfcExample, setValue)).toThrowError('Invalid JSON pointer array index reference (level 2).');
+    expect(() => JsonPointer.compile('/foo/unknown2/unknown3').set(rfcExample, setValue)).toThrow('Invalid JSON pointer array index reference (level 2).');
 
-    expect(() => JsonPointer.compile('/foo/unknown2').set(rfcExample, setValue)).toThrowError('Invalid JSON pointer array index reference at end of pointer.');
+    expect(() => JsonPointer.compile('/foo/unknown2').set(rfcExample, setValue)).toThrow('Invalid JSON pointer array index reference at end of pointer.');
 
     // more:
-    expect(() => JsonPointer.compile('/grz/brz').set(43)).toThrowError('Invalid input object.');
-    expect(() => JsonPointer.compile('/grz/brz').set('')).toThrowError('Invalid input object.');
+    expect(() => JsonPointer.compile('/grz/brz').set(43)).toThrow('Invalid input object.');
+    expect(() => JsonPointer.compile('/grz/brz').set('')).toThrow('Invalid input object.');
   });
 
   it('concat', () => {

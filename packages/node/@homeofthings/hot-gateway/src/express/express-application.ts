@@ -1,8 +1,8 @@
 import { LoggerService } from '@homeofthings/nestjs-logger';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import _debug from 'debug';
-import express from 'express';
 import escapeHtml from 'escape-html';
+import express from 'express';
 import * as fs from 'fs';
 import helmet from 'helmet';
 import * as http from 'http';

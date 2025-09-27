@@ -40,7 +40,6 @@
     "sharedGlobals": []
   },
   "defaultBase": "master",
-  "useLegacyCache": true,
   "plugins": [
     {
       "plugin": "@nx/eslint/plugin",
@@ -48,5 +47,8 @@
         "targetName": "lint"
       }
     }
-  ]
+  ],
+  "tui": {
+    "enabled": false
+  }
 }
