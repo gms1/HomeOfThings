@@ -1,4 +1,6 @@
 name: Build Workflow
+permissions:
+  contents: read
 "on":
   push:
     branches:
