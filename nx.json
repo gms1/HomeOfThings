@@ -50,5 +50,6 @@
   ],
   "tui": {
     "enabled": false
-  }
+  },
+  "analytics": true
 }
