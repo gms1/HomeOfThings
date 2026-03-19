@@ -140,5 +140,4 @@ cd tools/benchmarks/jsonpointerx
 npx npm-upgrade
 npm install
 npm run test
-npm run format:write
 ```
