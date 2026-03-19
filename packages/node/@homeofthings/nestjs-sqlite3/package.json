@@ -1,7 +1,7 @@
 {
   "name": "@homeofthings/nestjs-sqlite3",
   "description": "HomeOfThings - NestJs Sqlite3: Sqlite3 module for NestJs based on 'sqlite3orm'",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "keywords": [
     "nestjs",
     "nest",
@@ -30,7 +30,7 @@
   "dependencies": {
     "@homeofthings/nestjs-utils": "~2.1.1",
     "reflect-metadata": "^0.2.2",
-    "sqlite3orm": "~2.7.6",
+    "sqlite3orm": "~2.7.7",
     "tslib": "^2.8.1",
     "@homeofthings/node-utils": "~1.0.5"
   },
