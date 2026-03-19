@@ -15,7 +15,8 @@
         "assets": [],
         "project": "packages/js/jsonpointerx/package.json",
         "compiler": "swc",
-        "format": ["cjs", "esm"]
+        "format": ["cjs", "esm"],
+        "sourceMap": true
       }
     },
     "lint": {
