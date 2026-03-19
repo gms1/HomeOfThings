@@ -92,7 +92,7 @@ export class MetaProperty {
     try {
       this._field = model.table.getOrAddTableField(name, isIdentity, opts, this.propertyType);
     } catch (err) {
-      throw new Error(`property '${this.className}.${this.key.toString()}': failed to add field: ${(err as Error).message}`);
+      throw new Error(`property '${this.className}.${this.key.toString()}': failed to add field: ${(err as Error).message}`, { cause: err });
     }
 
     // add mapping from column name to this property

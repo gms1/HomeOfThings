@@ -399,7 +399,7 @@ describe(`BaseDAO`, () => {
     // ---------------------------------------------
     it('expect setProperty to work if conversion is required', async () => {
       const testDao: BaseDAO<TestSetProperty> = new BaseDAO(TestSetProperty, sqldb);
-      let testRow: TestSetProperty = new TestSetProperty();
+      let testRow: TestSetProperty;
       try {
         await testDao.createTable();
         await sqldb.exec(`

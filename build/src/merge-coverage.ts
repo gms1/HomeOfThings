@@ -29,11 +29,10 @@ program
     try {
       await rm(coverageReport, { force: true });
       const files = await glob(path.join(coverageDirectory, '**', 'lcov.info'));
-      const mergedReport = files.reduce((mergedReport, currFile) => (mergedReport += fs.readFileSync(currFile)), '');
-      await writeFile(coverageReport, mergedReport);
+      await writeFile(coverageReport, files.reduce((acc, currFile) => acc + fs.readFileSync(currFile), ''));
       const result: number = lcov_total(coverageReport);
       const color = result >= COVERAGE_GREEN_LOWER_LIMIT ? 82 : result >= 70 ? 136 : 196;
-      log(`overall coverage result: ${chalk.bold!.ansi256(color)(result.toFixed(2))}`);
+      log(`overall coverage result: ${chalk.bold.ansi256(color)(result.toFixed(2))}`);
     } catch (err) {
       die(`failed: ${err}`);
     }

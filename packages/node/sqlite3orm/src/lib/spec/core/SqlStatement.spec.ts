@@ -74,7 +74,7 @@ describe('test SqlStatement', () => {
     try {
       // select all rows having id>0 using callback
       const allRows: any[] = [];
-      await selStmt.each(0, (err: any, row: any) => allRows.push(row));
+      await selStmt.each(0, (_err: any, row: any) => allRows.push(row));
       expect(allRows.length).toBe(2);
       expect(allRows[0].id).toBe(0);
       expect(allRows[0].col).toBe('testvalue 0');

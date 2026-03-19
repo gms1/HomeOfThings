@@ -9,7 +9,7 @@ import { ConfigOptions } from './config.options';
 process.env.SUPPRESS_NO_CONFIG_WARNING = '1';
 const debug = debugjs.default('hot:node-utils');
 
-let config: configType.IConfig;
+let config: configType.Config;
 
 /** ConfigService to read configured values. */
 export class ConfigService {
@@ -114,7 +114,7 @@ export class ConfigService {
    */
   getObject(key: string, defaultValue: object): object {
     const value = this.getOptionalObject(key);
-    return value != undefined ? value : config.util.cloneDeep(defaultValue);
+    return value != undefined ? value : config.util.toObject(defaultValue);
   }
 
   /**

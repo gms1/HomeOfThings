@@ -99,7 +99,7 @@ export class SqlConnectionPoolDatabase extends SqlDatabase {
     if (sqldb.db) {
       try {
         await sqldb.endTransaction(false);
-      } catch (err) {
+      } catch (_err) {
         /* empty */
       }
       sqldb.db.removeAllListeners();
@@ -112,7 +112,7 @@ export class SqlConnectionPoolDatabase extends SqlDatabase {
       if (settings) {
         try {
           await this.applySettings(settings);
-        } catch (err) {
+        } catch (_err) {
           /* empty */
         }
       }

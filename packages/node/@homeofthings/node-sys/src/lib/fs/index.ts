@@ -3,8 +3,8 @@ import * as nodePath from 'node:path';
 import * as nodeProcess from 'node:process';
 import { promisify } from 'node:util';
 
-import * as externalChmodr from 'chmodr';
-import * as externalChownr from 'chownr';
+import { chmodr as externalChmodr } from 'chmodr';
+import externalChownr from 'chownr';
 import * as externMkTemp from 'mktemp';
 import externalMv from 'mv';
 import { Mode as StatsMode } from 'stat-mode';
@@ -25,8 +25,8 @@ export interface TouchOptions extends Pick<externalTouch.Options, 'time' | 'atim
 export type CopyOptions = Pick<NodeCopyOptions, 'dereference' | 'preserveTimestamps' | 'recursive'>;
 
 // to call the external function directly
-export const _chmodR = promisify(externalChmodr.default);
-export const _chownR = promisify(externalChownr.default);
+export const _chmodR = externalChmodr;
+export const _chownR = promisify(externalChownr);
 export const _mkTemp = promisify(externMkTemp.createFile);
 export const _touch = externalTouch;
 export const _mv = promisify(externalMv);
@@ -170,7 +170,7 @@ export async function chmod(path: string | string[] | Promise<string[]>, mode: M
   const paths = await (typeof path === 'string' ? [path] : path);
   if (options?.recursive) {
     logCommandArgs('chmod', '-r', mode.toString(), ...paths);
-    return Promise.all(paths.map((p) => _chmodR(p, mode))).then(() => {});
+    return Promise.all(paths.map((p) => _chmodR(p, typeof mode === 'string' ? parseInt(mode, 8) : mode))).then(() => {});
   } else {
     logCommandArgs('chmod', mode.toString(), ...paths);
     return Promise.all(paths.map((p) => fsNode.chmod(p, mode))).then(() => {});

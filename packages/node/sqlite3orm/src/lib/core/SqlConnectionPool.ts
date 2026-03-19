@@ -66,7 +66,7 @@ export class SqlConnectionPool {
           // already opened
           return;
         }
-      } catch (err) {
+      } catch (_err) {
         /* empty */
       }
     }
@@ -84,7 +84,7 @@ export class SqlConnectionPool {
   protected async openInternal(databaseFile: string, mode: number = SQL_OPEN_DEFAULT, min = 1, max = 0, settings?: SqlDatabaseSettings): Promise<void> {
     try {
       await this.close();
-    } catch (err) {
+    } catch (_err) {
       /* empty */
     }
     try {
@@ -118,7 +118,7 @@ export class SqlConnectionPool {
     } catch (err) {
       try {
         await this.close();
-      } catch (_ignore) {
+      } catch {
         /* empty */
       }
       debug(`pool ${this.name}: opening ${databaseFile} failed: ${(err as Error).message}`);

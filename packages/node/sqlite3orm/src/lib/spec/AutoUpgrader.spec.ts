@@ -217,7 +217,7 @@ describe('test autoupgrade', () => {
       expect(actual).toBeFalsy();
 
       failTest(`should have failed: Cannot add a NOT NULL column without default value`);
-    } catch (err) {}
+    } catch (_err) {}
   });
 
   // ---------------------------------------------
