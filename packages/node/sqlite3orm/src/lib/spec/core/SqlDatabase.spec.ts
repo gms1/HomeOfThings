@@ -475,7 +475,7 @@ describe('test SqlDatabase when sqlcipher IS NOT available', () => {
 
   it('', async () => {
     if (sqlcipherVersion) {
-      pending(`sqlcipher IS available: version is '${sqlcipherVersion}'`);
+      console.warn(`sqlcipher IS available: version is '${sqlcipherVersion}'`);
       return;
     }
     try {
