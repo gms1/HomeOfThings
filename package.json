@@ -65,7 +65,7 @@
     "@typescript-eslint/utils": "8.57.1",
     "dotenv": "^17.3.1",
     "dprint": "^0.53.0",
-    "esbuild": "^0.27.4",
+    "esbuild": "^0.28.0",
     "eslint": "10.0.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-simple-import-sort": "^12.1.1",
