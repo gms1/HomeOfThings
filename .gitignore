@@ -56,3 +56,6 @@ Thumbs.db
 .roomodes
 /memory-bank
 /plans
+
+.nx/polygraph
+.nx/self-healing
