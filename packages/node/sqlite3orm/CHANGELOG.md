@@ -2,6 +2,7 @@
 
 | Release   | Notes                                                                                                                       |
 | --------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 3.0.0     | migrate sqlite3 from deprecated TryGhost/node-sqlite3 to HomeOfThings/node-sqlite3                                          |
 | 2.7.3-7   | maintenance release                                                                                                         |
 | 2.7.2     | maintenance release upgrade node-sqlite3 5.1.7                                                                              |
 | 2.7.1     | maintenance release                                                                                                         |

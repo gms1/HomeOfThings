@@ -1,5 +1,5 @@
 /* eslint-disable no-empty */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable simple-import-sort/imports */
 import * as mockedLogger from '../test/mocks/logger';

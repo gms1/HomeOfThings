@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Database, OPEN_CREATE, OPEN_PRIVATECACHE, OPEN_READONLY, OPEN_READWRITE, OPEN_SHAREDCACHE, OPEN_URI, verbose as sqlverbose } from '@homeofthings/sqlite3';
 import * as _dbg from 'debug';
-import { Database, OPEN_CREATE, OPEN_PRIVATECACHE, OPEN_READONLY, OPEN_READWRITE, OPEN_SHAREDCACHE, OPEN_URI, verbose as sqlverbose } from 'sqlite3';
 
 import { SqlBackup } from './SqlBackup';
 import { SqlDatabaseSettings } from './SqlDatabaseSettings';

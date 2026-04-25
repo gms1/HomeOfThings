@@ -50,6 +50,7 @@ export default [
       rules: {
         ...config.rules,
         '@typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
       },
     })),
   ...compat

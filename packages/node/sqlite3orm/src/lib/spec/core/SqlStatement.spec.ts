@@ -52,12 +52,12 @@ describe('test SqlStatement', () => {
       // statement is not prepared
       await selStmt.run();
       failTest('"run" should failed on finalized statement');
-    } catch (err) {}
+    } catch (_err) {}
     try {
       // statement is not prepared
       await selStmt.get();
       failTest('"get" should failed on finalized statement');
-    } catch (err) {}
+    } catch (_err) {}
     // prepare select where id>=?
     selStmt = await sqldb.prepare('SELECT id, col FROM TEST WHERE id>=? ORDER BY id');
     try {
