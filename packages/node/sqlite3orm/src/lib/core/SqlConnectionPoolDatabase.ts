@@ -1,5 +1,5 @@
+import { Database } from '@homeofthings/sqlite3';
 import * as _dbg from 'debug';
-import { Database } from 'sqlite3';
 
 import { SqlConnectionPool } from './SqlConnectionPool';
 import { SQL_OPEN_DEFAULT, SqlDatabase } from './SqlDatabase';

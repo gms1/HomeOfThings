@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import * as core from './core';
 
-import { Statement } from 'sqlite3';
+import { Statement } from '@homeofthings/sqlite3';
 
 export interface SqlRunResult {
   lastID: number;

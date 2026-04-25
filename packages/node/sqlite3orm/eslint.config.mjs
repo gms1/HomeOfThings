@@ -32,7 +32,7 @@ export default [
   {
     files: ['**/*.json'],
     rules: {
-      '@nx/dependency-checks': 'error',
+      '@nx/dependency-checks': ['error', { ignoredDependencies: ['@homeofthings/sqlite3'] }],
     },
     languageOptions: {
       parser: await import('jsonc-eslint-parser'),
