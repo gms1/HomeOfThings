@@ -4,7 +4,7 @@
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -28,7 +28,6 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "strict": true,
-    "baseUrl": ".",
     "paths": {
       "@homeofthings/hot-server": ["packages/node/@homeofthings/hot-server/src/index.ts"],
       "@homeofthings/nestjs-config": ["packages/node/@homeofthings/nestjs-config/src/index.ts"],
