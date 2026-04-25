@@ -92,7 +92,11 @@ async function publishCommand(graph: ProjectGraph, projectName: string, mode?: s
       warn(`skipping publishing ${project.sourcePackageJson.name}@${project.sourcePackageJson.version} because dry-run is enabled`);
       return;
     }
-    await exec('npm', 'publish', '--access', 'public').run();
+    const publishArgs = ['publish', '--access', 'public'];
+    if (process.env.CI) {
+      publishArgs.push('--provenance');
+    }
+    await exec('npm', ...publishArgs).run();
     if (project.outputPackageJson.deprecated) {
       warn(`waiting 4 mins before deprecating this package`);
       await new Promise((resolve) => setTimeout(resolve, 240000));

@@ -108,6 +108,31 @@ find packages/ -name "CHANGELOG.md" -exec code {} \;
 
   > NOTE: if you want to run `nx run-many  --target=publish` instead, please do not forget to add the `--nxBail` option
 
+### publish via CI (trusted publishing)
+
+Packages can be published to npm via the **Publish to npm** GitHub Actions workflow, which uses [npm trusted publishers](https://docs.npmjs.com/trusted-publishers) (OIDC) — no `NPM_TOKEN` secret is required.
+
+**Prerequisites (one-time setup per package):**
+
+Each package must be configured on npmjs.com to trust this repository:
+
+1. Go to the package settings on npmjs.com → **Integrations** → **Publishing access**
+2. Add a trusted publisher:
+   - **Repository owner**: `gms1`
+   - **Repository name**: `HomeOfThings`
+   - **Workflow filename**: `publish.yml`
+
+**Publishing steps:**
+
+1. Ensure changelogs are already prepared and committed
+2. Go to **Actions** → **Publish to npm** → **Run workflow**
+3. Select the publish mode:
+   - `dry-run` — validates everything but skips actual publish (default)
+   - `run` — publishes packages that are not yet published
+   - `force` — publishes even if version already exists on npm
+4. The workflow runs: `npm ci` → `npm run ci` → `npm run build` → `npm run validate-projects` → `npm run publish`
+5. Published packages are signed with npm provenance (`--provenance` flag is automatically added in CI)
+
 ## upgrade dependencies
 
 check what can be upgraded using

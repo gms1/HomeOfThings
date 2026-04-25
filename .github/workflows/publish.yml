@@ -1,0 +1,49 @@
+name: Publish to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Publish mode'
+        required: true
+        default: 'dry-run'
+        type: choice
+        options:
+          - dry-run
+          - run
+          - force
+
+permissions:
+  contents: write
+  id-token: write
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run CI checks
+        run: npm run ci
+
+      - name: Build all packages
+        run: npm run build
+
+      - name: Validate projects
+        run: npm run validate-projects
+
+      - name: Publish packages
+        run: npm run publish -- --mode=${{ inputs.mode }}
