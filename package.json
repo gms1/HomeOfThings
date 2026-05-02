@@ -76,7 +76,7 @@
     "lcov-total": "^1.0.7",
     "npm-upgrade": "^3.1.2",
     "nx": "22.7.0",
-    "parse-json": "^5.2.0",
+    "parse-json": "^8.3.0",
     "prettier": "^3.8.3",
     "supertest": "^7.2.2",
     "ts-jest": "29.4.9",
