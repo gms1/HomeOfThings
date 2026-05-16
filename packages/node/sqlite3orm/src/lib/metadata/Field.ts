@@ -140,14 +140,38 @@ export class Field {
   }
 
   static parseDbType(dbtype: string): DbColumnTypeInfo {
-    const typeDefMatches = /^\s*((\w+)(\s*\(\s*\d+\s*(,\s*\d+\s*)?\))?)(.*)$/.exec(dbtype);
+    const trimmed = dbtype.trimStart();
 
-    /* istanbul ignore if */
-    if (!typeDefMatches) {
+    const typeNameMatches = /^(\w+)/.exec(trimmed);
+    if (!typeNameMatches) {
       throw new Error(`failed to parse '${dbtype}'`);
     }
-    const typeAffinity = DbCatalogDAO.getTypeAffinity(typeDefMatches[2]);
-    const rest = typeDefMatches[5];
+
+    const CONSTRAINT_KEYWORDS = new Set([
+      'CONSTRAINT',
+      'PRIMARY',
+      'NOT',
+      'NULL',
+      'UNIQUE',
+      'CHECK',
+      'DEFAULT',
+      'COLLATE',
+      'REFERENCES',
+      'GENERATED',
+    ]);
+
+    let typeAffinity: string;
+    let rest: string;
+    const firstWord = typeNameMatches[1].toUpperCase();
+    if (CONSTRAINT_KEYWORDS.has(firstWord)) {
+      typeAffinity = 'NUMERIC';
+      rest = trimmed;
+    } else {
+      typeAffinity = DbCatalogDAO.getTypeAffinity(typeNameMatches[1]);
+      const afterType = trimmed.slice(typeNameMatches[0].length);
+      const sizeMatches = /^\s*\(\s*\d+\s*(?:,\s*\d+\s*)?\)/.exec(afterType);
+      rest = sizeMatches ? afterType.slice(sizeMatches[0].length) : afterType;
+    }
 
     const notNull = /\bNOT\s+NULL\b/i.exec(rest) ? true : false;
 
@@ -159,11 +183,26 @@ export class Field {
     const defaultLiteralMatches = /\bDEFAULT\s+(('[^']*')+)/i.exec(rest);
     if (defaultLiteralMatches) {
       defaultValue = defaultLiteralMatches[1];
-      defaultValue.replace(/''/g, "'");
+      defaultValue = defaultValue.replace(/''/g, "'");
     }
-    const defaultExprMatches = /\bDEFAULT\s*\(([^)]*)\)/i.exec(rest);
-    if (defaultExprMatches) {
-      defaultValue = defaultExprMatches[1];
+    const defaultExprIdx = /\bDEFAULT\s*\(/i.exec(rest);
+    if (defaultExprIdx) {
+      const start = defaultExprIdx.index + defaultExprIdx[0].length;
+      let depth = 1;
+      let end = start;
+      while (end < rest.length && depth > 0) {
+        if (rest[end] === '(') {
+          depth++;
+        } else if (rest[end] === ')') {
+          depth--;
+        }
+        end++;
+      }
+      if (depth === 0) {
+        defaultValue = rest.slice(start, end - 1);
+      } else {
+        throw new Error(`failed to parse '${dbtype}': unclosed parenthesis in DEFAULT expression`);
+      }
     }
 
     // debug(`dbtype='${dbtype}'`);
