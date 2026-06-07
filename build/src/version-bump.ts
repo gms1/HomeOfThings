@@ -145,7 +145,12 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
     } else {
       warn(`${projectName}: ${oldVersion} not changed`);
     }
-    verbose('CHANGES:');
+    const changelogPath = path.resolve(projectRoot, 'CHANGELOG.md');
+    if (fs.existsSync(changelogPath)) {
+      verbose(`CHANGES (${path.relative(WORKSPACE_DIR, changelogPath)}):`);
+    } else {
+      verbose('CHANGES:');
+    }
     logGitLogChanges(commits);
     return;
   } catch (err) {

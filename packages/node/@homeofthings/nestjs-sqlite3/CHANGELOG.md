@@ -2,6 +2,7 @@
 
 | Release | Notes                                                                              |
 | ------- | ---------------------------------------------------------------------------------- |
+| 3.0.1   | nmaintenance release                                                               |
 | 3.0.0   | migrate sqlite3 from deprecated TryGhost/node-sqlite3 to HomeOfThings/node-sqlite3 |
 | 2.1.1-2 | nmaintenance release                                                               |
 | 2.1.0   | nestjs 11x                                                                         |
