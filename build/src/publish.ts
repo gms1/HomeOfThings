@@ -100,7 +100,11 @@ async function publishCommand(graph: ProjectGraph, projectName: string, mode?: s
     if (project.outputPackageJson.deprecated) {
       warn(`waiting 4 mins before deprecating this package`);
       await new Promise((resolve) => setTimeout(resolve, 240000));
-      await exec('npm', 'deprecate', project.outputPackageJson.name, project.outputPackageJson.deprecated).run();
+      try {
+        await exec('npm', 'deprecate', project.outputPackageJson.name, project.outputPackageJson.deprecated).run();
+      } catch (deprecateErr) {
+        warn(`failed to deprecate package: ${deprecateErr}`);
+      }
     }
     log(`succeeded`);
   } catch (err) {
