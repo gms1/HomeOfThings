@@ -48,7 +48,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/chmodr": "^1.0.3",
     "@types/chownr": "^1.0.3",
-    "@types/config": "^3.3.5",
+    "@types/config": "^4.4.0",
     "@types/debug": "^4.1.13",
     "@types/escape-html": "^1.0.4",
     "@types/express": "5.0.6",
