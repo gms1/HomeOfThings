@@ -54,10 +54,17 @@
       "options": {
         "targetName": "lint"
       }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      }
     }
   ],
   "tui": {
     "enabled": false
   },
-  "analytics": true
+  "analytics": true,
+  "neverConnectToCloud": true
 }

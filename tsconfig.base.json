@@ -39,7 +39,9 @@
       "asyncctx": ["packages/node/asyncctx/src/index.ts"],
       "jsonpointerx": ["packages/js/jsonpointerx/src/index.ts"],
       "sqlite3orm": ["packages/node/sqlite3orm/src/index.ts"]
-    }
+    },
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"]
   },
   "exclude": ["node_modules", "tmp"]
 }

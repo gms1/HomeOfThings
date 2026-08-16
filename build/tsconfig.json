@@ -12,6 +12,7 @@
   ],
   "compilerOptions": {
     "typeRoots": ["../node_modules/@types", "typings"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "ignoreDeprecations": "6.0"
   }
 }

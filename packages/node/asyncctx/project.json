@@ -22,51 +22,55 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/node/asyncctx/jest.config.ts"
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "coverage": true
+        }
       }
     },
     "changelog": {
       "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ],
       "options": {
         "command": "node dist/build/src/changelog.js asyncctx",
         "envFile": "build/.env"
-      },
-      "dependsOn": [
-        {
-          "projects": "build",
-          "target": "build"
-        }
-      ]
+      }
     },
     "version-bump": {
       "executor": "nx:run-commands",
-      "options": {
-        "command": "node dist/build/src/version-bump.js asyncctx {args.ver}",
-        "envFile": "build/.env"
-      },
       "dependsOn": [
         {
           "projects": "build",
           "target": "build"
         }
-      ]
+      ],
+      "options": {
+        "command": "node dist/build/src/version-bump.js asyncctx {args.ver}",
+        "envFile": "build/.env"
+      }
     },
     "publish": {
       "executor": "nx:run-commands",
-      "options": {
-        "command": "node dist/build/src/publish.js asyncctx {args.mode}",
-        "envFile": "build/.env"
-      },
       "dependsOn": [
         {
           "projects": "build",
           "target": "build"
         },
         "build"
-      ]
+      ],
+      "options": {
+        "command": "node dist/build/src/publish.js asyncctx {args.mode}",
+        "envFile": "build/.env"
+      }
     }
   }
 }

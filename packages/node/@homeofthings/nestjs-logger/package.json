@@ -35,6 +35,6 @@
     "winston": "^3.19.0"
   },
   "peerDependencies": {
-    "@nestjs/common": "^11.1.19"
+    "@nestjs/common": "^11.2.1"
   }
 }

@@ -17,52 +17,56 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "build/jest.config.ts"
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "coverage": true
+        }
       }
     },
     "merge-coverage": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build"],
       "options": {
         "command": "node dist/build/src/merge-coverage.js",
         "envFile": "build/.env"
-      },
-      "dependsOn": ["build"]
+      }
     },
     "validate-projects": {
       "executor": "nx:run-commands",
       "cache": false,
+      "dependsOn": ["build"],
       "options": {
         "command": "node dist/build/src/validate-projects.js",
         "envFile": "build/.env"
-      },
-      "dependsOn": ["build"]
+      }
     },
     "changelog": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build"],
       "options": {
         "command": "node dist/build/src/changelog.js build",
         "envFile": "build/.env"
-      },
-      "dependsOn": ["build"]
+      }
     },
     "version-bump": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build"],
       "options": {
         "command": "node dist/build/src/version-bump.js build {args.ver}",
         "envFile": "build/.env"
-      },
-      "dependsOn": ["build"]
+      }
     },
     "publish": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build"],
       "options": {
         "command": "node dist/build/src/publish.js build {args.mode}",
         "envFile": "build/.env"
-      },
-      "dependsOn": ["build"]
+      }
     }
   }
 }

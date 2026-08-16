@@ -3,7 +3,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "strictPropertyInitialization": false,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "ignoreDeprecations": "6.0"
   },
   "files": [],
   "include": [],

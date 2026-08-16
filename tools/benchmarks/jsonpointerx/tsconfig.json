@@ -10,7 +10,11 @@
     "sourceMap": false,
     "inlineSources": false,
     "typeRoots": ["./node_modules/@types/", "./typings/"],
-    "rootDir": "src"
+    "rootDir": "src",
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "esModuleInterop": false,
+    "ignoreDeprecations": "6.0"
   },
   "include": ["src/jp-bench.ts"],
   "exclude": ["./cache/**/*", "./node_modules/**/*"]
