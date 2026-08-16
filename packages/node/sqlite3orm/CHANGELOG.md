@@ -2,6 +2,7 @@
 
 | Release   | Notes                                                                                                                       |
 | --------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 3.1.1     | maintenance release                                                                                                         |
 | 3.1.0     | improved parsing column-type and column-constraint                                                                          |
 | 3.0.0     | migrate sqlite3 from deprecated TryGhost/node-sqlite3 to HomeOfThings/node-sqlite3                                          |
 | 2.7.3-7   | maintenance release                                                                                                         |
