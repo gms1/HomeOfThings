@@ -166,7 +166,7 @@ A fully automated version bump script at `build/sh/version-bump.sh` detects chan
 4. **Phase 2: Propagate** — Iteratively bumps packages whose dependencies were bumped (ensures dependents get version updates)
 5. **Phase 3: Write changelogs** — `npm run changelogs:write` updates all CHANGELOG.md files
 6. **Phase 4: Validate** — `npm run all` (format, lint, build, test)
-7. **Phase 5: Auto-commit** — If the repo was clean before the bump: commits with `"chore: bumped versions and updated changelogs"` and pushes. Otherwise prints a warning to commit manually.
+7. **Phase 5: Auto-commit** — If the repo was clean before the bump: commits with a `release:` message listing each bumped project and version, then pushes. Otherwise prints a warning to commit manually.
 
 **Helper functions** are sourced from `build/sh/common`:
 

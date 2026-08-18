@@ -79,7 +79,7 @@ The script performs these steps in order:
 4. **Phase 2: Propagate** — Iteratively bumps packages whose dependencies were bumped (ensures dependents get version updates)
 5. **Phase 3: Write changelogs** — `npm run changelogs:write` updates all CHANGELOG.md files
 6. **Phase 4: Validate** — `npm run all` (format, lint, build, test)
-7. **Phase 5: Auto-commit** — If the repo was clean before the bump: commits with `"chore: bumped versions and updated changelogs"` and pushes. Otherwise prints a warning to commit manually.
+7. **Phase 5: Auto-commit** — If the repo was clean before the bump: commits with a `release:` message listing each bumped project and version, then pushes. Otherwise prints a warning to commit manually.
 
 > NOTE: the repo should be clean (no uncommitted changes) before running the script, otherwise auto-commit is skipped
 

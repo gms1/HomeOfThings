@@ -87,7 +87,16 @@ npm run all || die "npm run all failed"
 if [ -n "$(git status --porcelain)" ]; then
   if [ "$REPO_WAS_CLEAN" = true ]; then
     git add -A
-    git commit -m 'chore: bumped versions and updated changelogs'
+    # Build commit message with release: line per project for change detection
+    COMMIT_MSG="release: bumped versions and updated changelogs"
+    for PROJ in $BUMPED; do
+      PROJ_ROOT=$(npx nx show project "$PROJ" --json 2>/dev/null | jq -r '.data.root')
+      PROJ_VER=$(jq -r '.version' "$PROJ_ROOT/package.json" 2>/dev/null)
+      COMMIT_MSG="${COMMIT_MSG}
+
+release: ${PROJ} version ${PROJ_VER}"
+    done
+    git commit -m "$COMMIT_MSG"
     git push || die "git push failed"
   else
     echo "WARNING: versions/changelogs have changed, but the repo was not clean before the version bump. Please review and commit manually."
