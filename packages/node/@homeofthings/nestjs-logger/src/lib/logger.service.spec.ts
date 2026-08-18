@@ -1,25 +1,67 @@
-import { LoggerService } from './logger.service';
-import { LogLevel } from './model';
-import { WinstonLogger } from './winston/winston-logger';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { jest } from '@jest/globals';
+
+jest.unstable_mockModule('winston', () => ({
+  format: {
+    printf: jest.fn(),
+    padLevels: jest.fn(),
+    colorize: jest.fn(),
+    timestamp: jest.fn(),
+    errors: jest.fn(),
+    combine: jest.fn(),
+  },
+
+  createLogger: jest.fn().mockReturnValue({
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+    verbose: jest.fn(),
+    transports: [],
+    add: jest.fn(),
+  }),
+
+  transports: {
+    Console: jest.fn().mockReturnValue({}),
+    File: jest.fn().mockReturnValue({}),
+  },
+}));
+
+jest.unstable_mockModule('config/lib/util.js', () => ({
+  Util: { getPath: jest.fn(), toObject: jest.fn() },
+  Load: { fromEnvironment: jest.fn() },
+}));
+
+const { LoggerService } = await import('./logger.service');
+const { WinstonLogger } = await import('./winston/winston-logger');
+const { LogLevel } = await import('./model');
 
 describe('LoggerService', () => {
-  let loggerService: LoggerService;
-
+  let loggerService: InstanceType<typeof LoggerService>;
   const givenServiceContext = 'test service context';
 
   beforeAll(() => {
     const givenOptions = {};
     const logger = new WinstonLogger(givenOptions); // provide the singleton
-    logger.info = jest.fn();
-    logger.error = jest.fn();
-    logger.warn = jest.fn();
-    logger.debug = jest.fn();
-    logger.verbose = jest.fn();
-    logger.setConsoleLogLevel = jest.fn();
-    logger.setFileLogLevel = jest.fn();
-    logger.setConsoleLogSilent = jest.fn();
-    logger.setFileLogSilent = jest.fn();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+    logger.info = jest.fn() as any;
+
+    logger.error = jest.fn() as any;
+
+    logger.warn = jest.fn() as any;
+
+    logger.debug = jest.fn() as any;
+
+    logger.verbose = jest.fn() as any;
+
+    logger.setConsoleLogLevel = jest.fn() as any;
+
+    logger.setFileLogLevel = jest.fn() as any;
+
+    logger.setConsoleLogSilent = jest.fn() as any;
+
+    logger.setFileLogSilent = jest.fn() as any;
+
     (LoggerService as any)._instance = logger; // set the singleton
 
     loggerService = new LoggerService({});

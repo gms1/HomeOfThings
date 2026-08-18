@@ -20,10 +20,6 @@
       "versions": ">=3.0",
       "reason": "version 3 is ESM"
     },
-    "config": {
-      "versions": ">=5.0",
-      "reason": "version 5 is ESM with CJS wrapper, which would require jest ESM interop"
-    },
     "typescript": {
       "versions": ">=7.0",
       "reason": "version 7 is not yet supported by ts-jest and typescript-eslint dependencies"

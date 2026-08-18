@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 import { LruCache } from './lru-cache';
 
 class TestLruCache<T> extends LruCache<T> {

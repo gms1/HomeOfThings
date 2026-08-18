@@ -2,6 +2,8 @@ import * as nodeConsole from 'node:console';
 import { promises as fsNode } from 'node:fs';
 import * as path from 'node:path';
 
+import { jest } from '@jest/globals';
+
 import { getEcho, setEcho, setPrompt } from '../log';
 import * as fs from './index';
 
@@ -10,7 +12,8 @@ import * as fs from './index';
 const warn = nodeConsole.warn;
 
 describe('fs', () => {
-  let info: jest.SpyInstance<void, [message?: unknown, ...optionalParams: unknown[]], unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let info: any;
   let workspace: string;
   let tmpFolder: string;
   let testFolder: string;

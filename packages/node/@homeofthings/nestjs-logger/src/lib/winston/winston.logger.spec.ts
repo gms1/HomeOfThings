@@ -1,9 +1,7 @@
-import * as winston from 'winston';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { jest } from '@jest/globals';
 
-import { LogLevel } from '../model';
-import { WinstonLogger } from './winston-logger';
-
-jest.mock('winston', () => ({
+jest.unstable_mockModule('winston', () => ({
   format: {
     printf: jest.fn(),
     padLevels: jest.fn(),
@@ -29,18 +27,25 @@ jest.mock('winston', () => ({
   },
 }));
 
+jest.unstable_mockModule('config/lib/util.js', () => ({
+  Util: { getPath: jest.fn(), toObject: jest.fn() },
+  Load: { fromEnvironment: jest.fn() },
+}));
+
+const winston = (await import('winston')) as any;
+const { WinstonLogger } = await import('./winston-logger');
+const { LogLevel } = await import('../model');
+
 describe('WinstonLogger with file logging and logLevels', () => {
-  let winstonLogger: WinstonLogger;
-  let spyCreateLogger: jest.SpyInstance<winston.Logger, [options?: winston.LoggerOptions]>;
+  let winstonLogger: InstanceType<typeof WinstonLogger>;
 
   beforeAll(() => {
-    spyCreateLogger = jest.spyOn(winston, 'createLogger');
     winstonLogger = new WinstonLogger({
       consoleLogLevel: LogLevel.Verbose,
       fileLogFileName: 'winston.logger.spec.log',
       fileLogLevel: LogLevel.Verbose,
     });
-    expect(spyCreateLogger).toHaveBeenCalledTimes(1);
+    expect(winston.createLogger).toHaveBeenCalledTimes(1);
   });
 
   beforeEach(() => {
@@ -107,15 +112,13 @@ describe('WinstonLogger with file logging and logLevels', () => {
 });
 
 describe('WinstonLogger with file logging and logLevels', () => {
-  let winstonLogger: WinstonLogger;
-  let spyCreateLogger: jest.SpyInstance<winston.Logger, [options?: winston.LoggerOptions]>;
+  let winstonLogger: InstanceType<typeof WinstonLogger>;
 
   beforeAll(() => {
-    spyCreateLogger = jest.spyOn(winston, 'createLogger');
     winstonLogger = new WinstonLogger({
       fileLogFileName: 'winston.logger.spec.log',
     });
-    expect(spyCreateLogger).toHaveBeenCalledTimes(1);
+    expect(winston.createLogger).toHaveBeenCalledTimes(1);
   });
 
   beforeEach(() => {
@@ -130,15 +133,13 @@ describe('WinstonLogger with file logging and logLevels', () => {
 });
 
 describe('WinstonLogger without file logging', () => {
-  let winstonLogger: WinstonLogger;
-  let spyCreateLogger: jest.SpyInstance<winston.Logger, [options?: winston.LoggerOptions]>;
+  let winstonLogger: InstanceType<typeof WinstonLogger>;
 
   beforeAll(() => {
-    spyCreateLogger = jest.spyOn(winston, 'createLogger');
     winstonLogger = new WinstonLogger({
       consoleLogLevel: LogLevel.Verbose,
     });
-    expect(spyCreateLogger).toHaveBeenCalledTimes(1);
+    expect(winston.createLogger).toHaveBeenCalledTimes(1);
   });
 
   beforeEach(() => {

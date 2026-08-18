@@ -1,22 +1,73 @@
 import * as nodeConsole from 'node:console';
-import { promises as fsNode } from 'node:fs';
+import * as nodeFs from 'node:fs';
 import * as path from 'node:path';
 
-import * as logCommand from '../log/command';
-import * as fs from './index';
+import { jest } from '@jest/globals';
 
 // NOTE: most of this tests are integration tests, falling back to unit tests if the functionality cannot reliable be validated
 
 const warn = nodeConsole.warn;
 
+// Mock node:process to prevent process.exit from killing the test runner.
+// Source imports `import * as nodeProcess from 'node:process'` and uses
+// cwd(), env, exit(), etc. We mock only `exit` and pass through everything else.
+jest.unstable_mockModule('node:process', () => {
+  const actual = jest.requireActual('node:process') as any;
+
+  const { default: _default, ...rest } = actual;
+  return { ...rest, exit: jest.fn() };
+});
+
+// Mock chownr — delegate to real by default, override in specific tests
+jest.unstable_mockModule('chownr', () => {
+  const actual = jest.requireActual('chownr') as any;
+  return {
+    default: jest.fn((...args: any[]) => actual.default(...args)),
+  };
+});
+
+// Mock chmodr — delegate to real by default, override in specific tests
+jest.unstable_mockModule('chmodr', () => {
+  const actual = jest.requireActual('chmodr') as any;
+  return {
+    chmodr: jest.fn((...args: any[]) => actual.chmodr(...args)),
+  };
+});
+
+// Mock touch so we can verify touch calls
+jest.unstable_mockModule('touch', () => ({
+  default: jest.fn((..._args: any[]) => Promise.resolve()),
+}));
+
+// Mock ../log/command so we can verify log calls
+jest.unstable_mockModule('../log/command', () => ({
+  logCommand: jest.fn(),
+  logCommandArgs: jest.fn(),
+  logCommandResult: jest.fn((...args: any[]) => args[args.length - 1]),
+}));
+
+const fs = await import('./index');
+
 describe('fs', () => {
-  let info: jest.SpyInstance<void, [message?: unknown, ...optionalParams: unknown[]], unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let info: any;
   let workspace: string;
   let tmpFolder: string;
   let testFolder: string;
 
+  // Spies on node:fs.promises methods — using jest.spyOn on the mutable promises
+  // object works because the source module's fsNode binding points to the same object.
+  let realpathSpy: jest.SpiedFunction<typeof nodeFs.promises.realpath>;
+  let chmodSpy: jest.SpiedFunction<typeof nodeFs.promises.chmod>;
+  let chownSpy: jest.SpiedFunction<typeof nodeFs.promises.chown>;
+
   beforeAll(async () => {
     info = jest.spyOn(global.console, 'info').mockImplementation(() => {});
+
+    // Set up spies on fs.promises methods (delegating to real implementation by default)
+    realpathSpy = jest.spyOn(nodeFs.promises, 'realpath');
+    chmodSpy = jest.spyOn(nodeFs.promises, 'chmod');
+    chownSpy = jest.spyOn(nodeFs.promises, 'chown');
 
     workspace = fs.pwd();
     tmpFolder = path.resolve(workspace, 'tmp');
@@ -31,6 +82,9 @@ describe('fs', () => {
       await fs.rm(testFolder, { force: true, recursive: true });
     }
 
+    realpathSpy.mockRestore();
+    chmodSpy.mockRestore();
+    chownSpy.mockRestore();
     info.mockReset();
   });
 
@@ -40,23 +94,22 @@ describe('fs', () => {
     jest.clearAllMocks();
   });
 
-  it('`exit` should call process.exit', () => {
+  it('`exit` should call process.exit', async () => {
     const givenExitCode = 42;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const exitMock: any = () => {};
-    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(exitMock);
+    const nodeProcess = await import('node:process');
+    const exitSpy = nodeProcess.exit as any as jest.Mock;
 
     fs.exit(givenExitCode);
 
     expect(exitSpy).toHaveBeenCalledTimes(1);
     expect(exitSpy).toHaveBeenCalledWith(givenExitCode);
-    exitSpy.mockReset();
   });
 
   it('`realpath` should call node:fs:realpath', async () => {
     const givenPath = 'testpath';
-    const realpathSpy = jest.spyOn(fsNode, 'realpath').mockImplementation(() => Promise.resolve(''));
+
+    // Mock realpath to return a value since 'testpath' doesn't exist
+    realpathSpy.mockImplementationOnce((() => Promise.resolve('/resolved/testpath')) as any);
 
     await fs.realpath(givenPath);
     expect(realpathSpy).toHaveBeenCalledTimes(1);
@@ -68,11 +121,11 @@ describe('fs', () => {
     const givenMode = 0o777;
 
     if (fs.IS_WIN) {
-      const chmodSpy = jest.spyOn(fsNode, 'chmod').mockImplementation(() => Promise.resolve());
+      chmodSpy.mockImplementation(() => Promise.resolve());
       await fs.chmod(givenFile, givenMode);
       expect(chmodSpy).toHaveBeenCalledTimes(1);
       expect(chmodSpy).toHaveBeenCalledWith(givenFile, givenMode);
-      chmodSpy.mockReset();
+      chmodSpy.mockRestore();
       return;
     }
 
@@ -89,11 +142,11 @@ describe('fs', () => {
     const givenMode = 0o777;
 
     if (fs.IS_WIN) {
-      const chmodSpy = jest.spyOn(fsNode, 'chmod').mockImplementation(() => Promise.resolve());
+      chmodSpy.mockImplementation(() => Promise.resolve());
       await fs.chmod([givenDir], givenMode);
       expect(chmodSpy).toHaveBeenCalledTimes(1);
       expect(chmodSpy).toHaveBeenCalledWith(givenDir, givenMode);
-      chmodSpy.mockReset();
+      chmodSpy.mockRestore();
       return;
     }
 
@@ -111,11 +164,13 @@ describe('fs', () => {
     const givenModeString = '-rwxrw-r--';
 
     if (fs.IS_WIN) {
-      const chmodSpy = jest.spyOn(fs, '_chmodR').mockImplementation(() => Promise.resolve());
+      const chmodrModule = await import('chmodr');
+      const chmodrSpy = chmodrModule.chmodr as any as jest.Mock;
+      chmodrSpy.mockImplementation((_path: any, _mode: any, callback: any) => callback(null));
       await fs.chmod([givenDir], givenMode, { recursive: true });
-      expect(chmodSpy).toHaveBeenCalledTimes(1);
-      expect(chmodSpy).toHaveBeenCalledWith(givenDir, givenMode);
-      chmodSpy.mockReset();
+      expect(chmodrSpy).toHaveBeenCalledTimes(1);
+      expect(chmodrSpy).toHaveBeenCalledWith(givenDir, givenMode, expect.any(Function));
+      chmodrSpy.mockRestore();
       return;
     }
 
@@ -132,10 +187,11 @@ describe('fs', () => {
     const givenOwner = 1000;
     const givenGroup = 1000;
 
-    const chownSpy = jest.spyOn(fsNode, 'chown').mockImplementation(() => Promise.resolve());
+    chownSpy.mockImplementation(() => Promise.resolve());
     await fs.chown([givenFile], givenOwner, givenGroup);
     expect(chownSpy).toHaveBeenCalledTimes(1);
     expect(chownSpy).toHaveBeenCalledWith(givenFile, givenOwner, givenGroup);
+    chownSpy.mockRestore();
   });
 
   it('`chown` should call chownr if called recursively', async () => {
@@ -143,41 +199,57 @@ describe('fs', () => {
     const givenOwner = 1000;
     const givenGroup = 1000;
 
-    const chownSpy = jest.spyOn(fs, '_chownR').mockImplementation(() => Promise.resolve());
+    const chownrModule = await import('chownr');
+    const chownrSpy = chownrModule.default as any as jest.Mock;
+    // chownr uses callback-style: chownr(path, uid, gid, callback)
+    // our _chownR = promisify(chownr), so it calls chownr.default with (path, uid, gid, callback)
+    // we need the mock to call the callback to resolve the promise
+    chownrSpy.mockImplementation((...args: any[]) => {
+      const callback = args[args.length - 1];
+      callback(null);
+    });
     await fs.chown(givenDir, givenOwner, givenGroup, { recursive: true });
-    expect(chownSpy).toHaveBeenCalledTimes(1);
-    expect(chownSpy).toHaveBeenCalledWith(givenDir, givenOwner, givenGroup);
+    expect(chownrSpy).toHaveBeenCalledTimes(1);
+    // _chownR = promisify(chownr) passes (path, uid, gid) as positional args
+    expect(chownrSpy).toHaveBeenCalledWith(givenDir, givenOwner, givenGroup, expect.any(Function));
+    chownrSpy.mockRestore();
   });
 
   it('`touch` should log nocreate option', async () => {
     const givenPath = 'testpath';
-    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
-    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+    const logCommandModule = await import('../log/command');
+    const logCommandArgsSpy = logCommandModule.logCommandArgs as any as jest.Mock;
+    const touchModule = await import('touch');
+    const touchSpy = touchModule.default as any as jest.Mock;
 
     await fs.touch(givenPath, { nocreate: true });
-    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(touchSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-c', givenPath);
   });
 
   it('`touch` should log atime option', async () => {
     const givenPath = 'testpath';
-    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
-    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+    const logCommandModule = await import('../log/command');
+    const logCommandArgsSpy = logCommandModule.logCommandArgs as any as jest.Mock;
+    const touchModule = await import('touch');
+    const touchSpy = touchModule.default as any as jest.Mock;
 
     await fs.touch([givenPath], { atime: true });
-    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(touchSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-a', givenPath);
   });
 
   it('`touch` should log mtime option', async () => {
     const givenPath = 'testpath';
-    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
-    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+    const logCommandModule = await import('../log/command');
+    const logCommandArgsSpy = logCommandModule.logCommandArgs as any as jest.Mock;
+    const touchModule = await import('touch');
+    const touchSpy = touchModule.default as any as jest.Mock;
 
     await fs.touch(givenPath, { mtime: true });
-    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(touchSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-m', givenPath);
   });
@@ -185,11 +257,13 @@ describe('fs', () => {
   it('`touch` should log ref option', async () => {
     const givenPath = 'testpath';
     const givenRef = 'testref';
-    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
-    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+    const logCommandModule = await import('../log/command');
+    const logCommandArgsSpy = logCommandModule.logCommandArgs as any as jest.Mock;
+    const touchModule = await import('touch');
+    const touchSpy = touchModule.default as any as jest.Mock;
 
     await fs.touch(givenPath, { ref: givenRef });
-    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(touchSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-r', givenRef, givenPath);
   });
@@ -197,11 +271,13 @@ describe('fs', () => {
   it('`touch` should log time option', async () => {
     const givenPath = 'testpath';
     const givenTime = new Date();
-    const logCommandArgsSpy = jest.spyOn(logCommand, 'logCommandArgs').mockImplementation(() => {});
-    const _touchSpy = jest.spyOn(fs, '_touch').mockImplementation(() => Promise.resolve());
+    const logCommandModule = await import('../log/command');
+    const logCommandArgsSpy = logCommandModule.logCommandArgs as any as jest.Mock;
+    const touchModule = await import('touch');
+    const touchSpy = touchModule.default as any as jest.Mock;
 
     await fs.touch(givenPath, { time: givenTime });
-    expect(_touchSpy).toHaveBeenCalledTimes(1);
+    expect(touchSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledTimes(1);
     expect(logCommandArgsSpy).toHaveBeenCalledWith('touch', '-t', givenTime.toString(), givenPath);
   });

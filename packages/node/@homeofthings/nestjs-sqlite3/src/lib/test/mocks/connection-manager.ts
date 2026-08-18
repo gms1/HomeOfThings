@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { jest } from '@jest/globals';
 
 export const connectionManager = jest.fn();
 export const openConnectionPool = jest.fn();
@@ -20,7 +21,7 @@ const ConnectionManager: any = connectionManager.mockImplementation(() => {
 // ConnectionManager static methods:
 ConnectionManager.registerTable = registerTable;
 
-jest.mock('../../service/connection-manager', () => {
+jest.unstable_mockModule('../../service/connection-manager', () => {
   return {
     ConnectionManager,
   };

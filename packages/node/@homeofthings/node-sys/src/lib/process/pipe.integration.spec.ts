@@ -1,12 +1,15 @@
 import * as nodeConsole from 'node:console';
 
+import { jest } from '@jest/globals';
+
 import { exec } from './exec';
 import { pipe } from './pipe';
 
 const warn = nodeConsole.warn;
 
 describe('pipe', () => {
-  let info: jest.SpyInstance<void, [message?: unknown, ...optionalParams: unknown[]], unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let info: any;
 
   beforeAll(async () => {
     info = jest.spyOn(global.console, 'info').mockImplementation(() => {});

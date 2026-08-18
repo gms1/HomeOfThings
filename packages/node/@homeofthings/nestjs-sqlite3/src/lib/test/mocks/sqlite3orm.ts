@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { jest } from '@jest/globals';
 
 export const sqlConnectionPool = jest.fn();
 export const sqlConnectionPoolOpen = jest.fn();
@@ -22,10 +23,30 @@ const SqlDatabase: any = sqlDatabase.mockImplementation(() => {
   return { close: sqlDatabaseClose, endTransaction: sqlDatabaseEndTransaction };
 });
 
-jest.mock('sqlite3orm', () => {
+// Mock BaseDAO class
+const BaseDAO: any = jest.fn().mockImplementation(() => {
+  return {};
+});
+BaseDAO.options = {};
+
+// Mock Table decorator and helper
+const Table: any = jest.fn();
+
+// Mock SQL_OPEN_DEFAULT_URI constant
+const SQL_OPEN_DEFAULT_URI = 68;
+
+jest.unstable_mockModule('sqlite3orm', () => {
   return {
     SqlConnectionPool,
     SqlDatabase,
+    BaseDAO,
+    BaseDAOInsertMode: { ForceAutoGeneration: 0, EmptyIsNull: 1 },
+    Table,
+    SQL_OPEN_DEFAULT_URI,
+    METADATA_MODEL_KEY: '__metadata_model__',
+    MetaModel: jest.fn(),
+    Where: jest.fn(),
+    Filter: jest.fn(),
   };
 });
 

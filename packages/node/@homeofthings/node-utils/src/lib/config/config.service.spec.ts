@@ -1,27 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-jest.mock('config', () => ({
-  has: jest.fn(),
-  get: jest.fn(),
-}));
-
-import * as config from 'config';
+import { jest } from '@jest/globals';
 import * as path from 'path';
 
-import { ConfigOptions } from './config.options';
-import { ConfigService } from './config.service';
+import type { ConfigOptions } from './config.options';
+
+const mockGetPath = jest.fn();
+const mockToObject = jest.fn((obj: any) => obj);
+const mockScan = jest.fn();
+const mockFromEnvironment = jest.fn();
+
+jest.unstable_mockModule('config/lib/util.js', () => ({
+  Util: {
+    getPath: mockGetPath,
+    toObject: mockToObject,
+  },
+  Load: {
+    fromEnvironment: mockFromEnvironment,
+  },
+}));
+
+const { ConfigService } = await import('./config.service');
 
 describe('ConfigService', () => {
-  let configService: ConfigService;
-  let has: jest.Mock;
-  let get: jest.Mock;
+  let configService: InstanceType<typeof ConfigService>;
 
   beforeAll(() => {
-    has = config.has as jest.Mock;
-    get = config.get as jest.Mock;
+    mockFromEnvironment.mockReturnValue({ scan: mockScan, config: {} });
   });
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockToObject.mockImplementation((obj: any) => obj);
+    mockFromEnvironment.mockReturnValue({ scan: mockScan, config: {} });
     configService = new ConfigService({});
   });
 
@@ -31,287 +41,237 @@ describe('ConfigService', () => {
 
   it('getOptionalString should return string', () => {
     const givenValue = 'foo';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalString('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
   it('getOptionalString should return non-string value as string', () => {
     const givenValue = 4711;
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalString('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(`${givenValue}`);
   });
 
   it('getOptionalString should return undefined', () => {
-    has.mockReturnValueOnce(false);
+    mockGetPath.mockReturnValueOnce(undefined);
     const value = configService.getOptionalString('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(0);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBeUndefined();
   });
 
   it('getString should return config value', () => {
     const givenValue = 'foo';
     const defaultValue = 'bar';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getString('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
   it('getString should return default value', () => {
     const defaultValue = 'bar';
-    has.mockReturnValueOnce(false);
+    mockGetPath.mockReturnValueOnce(undefined);
     const value = configService.getString('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(0);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(defaultValue);
   });
 
   it('getOptionalNumber should return number', () => {
     const givenValue = 4712;
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalNumber('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
   it('getOptionalNumber should return string value as number', () => {
     const givenNumber = 4713.5;
     const givenValue = `${givenNumber}`;
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalNumber('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenNumber);
   });
 
   it('getOptionalNumber should return undefined if config value cannot be parsed as number', () => {
-    const givenNumber = 'not a number';
-    const givenValue = `${givenNumber}`;
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    const givenValue = 'not a number';
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalNumber('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBeUndefined();
   });
 
   it('getOptionalNumber should return undefined', () => {
-    has.mockReturnValueOnce(false);
+    mockGetPath.mockReturnValueOnce(undefined);
     const value = configService.getOptionalNumber('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(0);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBeUndefined();
   });
 
   it('getNumber should return config value', () => {
     const givenValue = 314;
     const defaultValue = 315;
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getNumber('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
   it('getNumber should return default value if config value is not defined', () => {
     const defaultValue = 316;
-    has.mockReturnValueOnce(false);
+    mockGetPath.mockReturnValueOnce(undefined);
     const value = configService.getNumber('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(0);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(defaultValue);
   });
 
   it('getNumber should return default value if config value cannot be parsed as number', () => {
     const givenValue = 'not a number';
     const defaultValue = 316;
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getNumber('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(defaultValue);
   });
 
   it('getOptionalBoolean should return boolean', () => {
     const givenValue = true;
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
   it('getOptionalBoolean should return non-boolean value "true" as boolean', () => {
     const givenValue = 'true';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(true);
   });
 
   it('getOptionalBoolean should return non-boolean value "1" as boolean', () => {
     const givenValue = '1';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(true);
   });
 
   it('getOptionalBoolean should return non-boolean value "false" as boolean', () => {
     const givenValue = 'false';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(false);
   });
 
   it('getOptionalBoolean should return non-boolean value "0" as boolean', () => {
     const givenValue = '0';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(false);
   });
 
   it('getOptionalBoolean should return non-boolean value "foo" as undefined', () => {
     const givenValue = 'foo';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(undefined);
   });
 
   it('getOptionalBoolean should return undefined', () => {
-    has.mockReturnValueOnce(false);
+    mockGetPath.mockReturnValueOnce(undefined);
     const value = configService.getOptionalBoolean('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(0);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBeUndefined();
   });
 
   it('getBoolean should return config value', () => {
     const givenValue = true;
     const defaultValue = false;
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getBoolean('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
   it('getBoolean should return default value if config value is not defined', () => {
     const defaultValue = true;
-    has.mockReturnValueOnce(false);
+    mockGetPath.mockReturnValueOnce(undefined);
     const value = configService.getBoolean('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(0);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(defaultValue);
   });
 
   it('getBoolean should return default value if config value cannot be parsed as boolean', () => {
     const givenValue = 'not a boolean';
     const defaultValue = false;
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getBoolean('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(defaultValue);
   });
 
   it('getOptionalPath should return absolute path as is', () => {
     const givenValue = '/foo';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalPath('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
   it('getOptionalPath should return resolved path', () => {
     const givenValue = 'foo';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getOptionalPath('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(path.resolve(configService.configDirectory, givenValue));
   });
 
   it('getOptionalPath should return undefined', () => {
-    has.mockReturnValueOnce(false);
+    mockGetPath.mockReturnValueOnce(undefined);
     const value = configService.getOptionalPath('testKey');
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(0);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBeUndefined();
   });
 
   it('getPath should return absolute path as is', () => {
     const givenValue = '/foo';
     const defaultValue = '/bar';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getPath('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(givenValue);
   });
 
   it('getPath should return resolved path', () => {
     const givenValue = 'foo';
     const defaultValue = '/bar';
-    has.mockReturnValueOnce(true);
-    get.mockReturnValueOnce(givenValue);
+    mockGetPath.mockReturnValueOnce(givenValue);
     const value = configService.getPath('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(1);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(path.resolve(configService.configDirectory, givenValue));
   });
 
   it('getPath should return absolute default path as is', () => {
     const defaultValue = '/bar';
-    has.mockReturnValueOnce(false);
+    mockGetPath.mockReturnValueOnce(undefined);
     const value = configService.getPath('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(0);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(defaultValue);
   });
 
   it('getPath should return resolved default path', () => {
     const defaultValue = 'bar';
-    has.mockReturnValueOnce(false);
+    mockGetPath.mockReturnValueOnce(undefined);
     const value = configService.getPath('testKey', defaultValue);
-    expect(has).toHaveBeenCalledTimes(1);
-    expect(get).toHaveBeenCalledTimes(0);
+    expect(mockGetPath).toHaveBeenCalledTimes(1);
     expect(value).toBe(path.resolve(configService.configDirectory, defaultValue));
   });
 });
@@ -329,6 +289,7 @@ describe('ConfigService instantiation', () => {
     process.env.NODE_CONFIG_ENV = givenNodeConfigEnv;
     process.env.NODE_ENV = givenNodeEnv;
     process.env.NODE_CONFIG_DIR = givenNodeConfigDir;
+    mockFromEnvironment.mockReturnValue({ scan: mockScan, config: {} });
   });
   afterEach(() => {
     (ConfigService as any)._instance = undefined;

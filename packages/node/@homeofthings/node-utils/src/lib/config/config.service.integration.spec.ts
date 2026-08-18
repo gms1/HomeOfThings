@@ -1,11 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
 import { ConfigService } from './config.service';
-import { DIRNAME } from './test';
+
+const DIRNAME = path.join(path.dirname(fileURLToPath(import.meta.url)), 'test');
 
 process.env.NODE_CONFIG = '{}';
 
+// NOTE: This test is excluded via testPathIgnorePatterns in jest.config.ts
+// because config v5 is intentionally dual CJS/ESM — config.js is CJS, config.mjs
+// is ESM, but util.js uses ESM syntax without "type":"module" in package.json.
+// Jest's ESM mode cannot resolve these deep .js imports properly because
+// cjs-module-lexer fails when it encounters ESM syntax in a .js file without
+// "type":"module". This is NOT a bug in config v5; it's a Jest limitation.
+// See ADR-001 in memory-bank/decisions/.
 describe('', () => {
-  let configService: ConfigService;
+  let configService: InstanceType<typeof ConfigService>;
 
   beforeEach(() => {
     configService = new ConfigService({ configDirectory: DIRNAME });
