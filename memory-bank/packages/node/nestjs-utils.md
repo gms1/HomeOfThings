@@ -28,29 +28,23 @@ Provides utilities for:
 
 ### DynamicRootModule
 
-```typescript
-interface DynamicRootModule {
-  // Create synchronous module
-  forRoot<T>(options: T): DynamicModule;
+Created via `createDynamicRootModule<T, Os, Oa>(token, properties?)` which returns a base class. The resulting module type (`DynamicRootBaseModuleExtended`) provides:
 
-  // Create asynchronous module
-  forRootAsync<T>(options: AsyncOptions<T>): DynamicModule;
-}
+```typescript
+type DynamicRootBaseModuleExtended<T, Os, Oa> = {
+  forRoot(moduleCtor: Type<T>, moduleOptions: Os): DynamicModule;
+  forRootAsync(moduleCtor: Type<T>, asyncModuleOptions: Oa): DynamicModule;
+  register(moduleCtor: Type<T>, moduleOptions: Os): DynamicModule;
+  registerAsync(moduleCtor: Type<T>, asyncModuleOptions: Oa): DynamicModule;
+  forChild(): Promise<DynamicModule>;
+};
 ```
 
 ### Module Options Pattern
 
 ```typescript
-interface ModuleOptions {
-  // Synchronous options
-  forRoot(options: ModuleOptions): DynamicModule;
-
-  // Asynchronous options
-  forRootAsync(options: ModuleAsyncOptions): DynamicModule;
-}
-
-interface ModuleAsyncOptions {
-  useFactory: (...args: any[]) => Promise<ModuleOptions> | ModuleOptions;
+interface AsyncModuleOptions<Os> {
+  useFactory: (...args: any[]) => Promise<Os> | Os;
   inject?: any[];
   imports?: Module[];
 }

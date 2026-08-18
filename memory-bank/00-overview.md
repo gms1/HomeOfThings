@@ -21,7 +21,7 @@ HomeOfThings is a collection of reusable JavaScript/TypeScript packages, primari
 
 ## Monorepo Structure
 
-```
+```text
 HomeOfThings/
 ├── packages/
 │   ├── js/                    # Browser/JS packages
@@ -55,7 +55,7 @@ HomeOfThings/
 
 ## Package Dependencies Graph
 
-```
+```text
 jsonpointerx (standalone)
 asyncctx (standalone)
 sqlite3orm (standalone)

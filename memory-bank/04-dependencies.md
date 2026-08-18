@@ -249,7 +249,7 @@ Nx automatically determines build order based on dependencies:
 
 ### Avoiding Dependency Issues
 
-1. **Lock versions** - Use exact versions in `package.json`
+1. **Lock versions** - Use exact versions for runtime dependencies in published packages; dev dependencies may use ranges
 2. **Use `npm ci`** - Not `npm install` in CI
 3. **Commit lockfile** - Always commit `package-lock.json`
 4. **Regular updates** - Schedule regular dependency updates
@@ -274,7 +274,7 @@ npx nx reset
 # Clear npm cache
 npm cache clean --force
 
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
+# Reinstall dependencies (preserves lockfile)
+rm -rf node_modules
+npm ci
 ```

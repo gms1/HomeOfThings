@@ -16,7 +16,7 @@ The `config` package (node-config) v5 ships `.js` files that use ESM syntax (`im
 
 When running tests with Jest in ESM mode (`--experimental-vm-modules`), Jest uses `cjs-module-lexer` to parse `.js` files that it treats as CJS (because the package lacks `"type": "module"`). The `cjs-module-lexer` cannot handle ESM syntax (`import`/`export`) in files it considers CJS, causing it to fail with:
 
-```
+```text
 Unexpected import statement in CJS module.
   at @:2:8
   esmSyntaxErr (node_modules/cjs-module-lexer/lexer.js:1317:24)

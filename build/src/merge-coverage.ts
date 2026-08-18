@@ -41,4 +41,4 @@ program
     log(`succeeded`);
   });
 
-program.parse(process.argv);
+program.parseAsync(process.argv);

@@ -52,6 +52,6 @@ Proposed
 
 ## Index
 
-| ADR | Title | Status |
-|-----|-------|--------|
-| - | - | - |
+| ADR                                                                 | Title                                          | Status   |
+| ------------------------------------------------------------------- | ---------------------------------------------- | -------- |
+| [ADR-001](ADR-001-jest-esm-deep-imports.md) | Jest ESM Mode Cannot Load the `config` Package | Accepted |

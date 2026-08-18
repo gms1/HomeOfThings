@@ -123,6 +123,6 @@ function someAsyncFunction() {
 
 ## Related Files
 
-- [`README.md`](packages/node/asyncctx/README.md) - Package documentation
-- [`CHANGELOG.md`](packages/node/asyncctx/CHANGELOG.md) - Version history
-- [`project.json`](packages/node/asyncctx/project.json) - Nx configuration
+- [`README.md`](../../../packages/node/asyncctx/README.md) - Package documentation
+- [`CHANGELOG.md`](../../../packages/node/asyncctx/CHANGELOG.md) - Version history
+- [`project.json`](../../../packages/node/asyncctx/project.json) - Nx configuration

@@ -173,6 +173,6 @@ Tests run in Jest ESM mode (`--experimental-vm-modules`). Key setup:
 
 ## Related Files
 
-- [`README.md`](packages/node/@homeofthings/nestjs-config/README.md) - Package documentation
-- [`project.json`](packages/node/@homeofthings/nestjs-config/project.json) - Nx configuration
-- [`TODO.md`](packages/node/@homeofthings/nestjs-config/TODO.md) - Pending tasks
+- [`README.md`](../../../../packages/node/@homeofthings/nestjs-config/README.md) - Package documentation
+- [`project.json`](../../../../packages/node/@homeofthings/nestjs-config/project.json) - Nx configuration
+- [`TODO.md`](../../../../packages/node/@homeofthings/nestjs-config/TODO.md) - Pending tasks

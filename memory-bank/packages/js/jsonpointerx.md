@@ -104,6 +104,6 @@ JsonPointer.parse('/foo/bar').set(doc, 'qux');
 
 ## Related Files
 
-- [`README.md`](packages/js/jsonpointerx/README.md) - Package documentation
-- [`CHANGELOG.md`](packages/js/jsonpointerx/CHANGELOG.md) - Version history
-- [`project.json`](packages/js/jsonpointerx/project.json) - Nx configuration
+- [`README.md`](../../../packages/js/jsonpointerx/README.md) - Package documentation
+- [`CHANGELOG.md`](../../../packages/js/jsonpointerx/CHANGELOG.md) - Version history
+- [`project.json`](../../../packages/js/jsonpointerx/project.json) - Nx configuration

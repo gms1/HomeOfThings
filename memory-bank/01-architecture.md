@@ -60,7 +60,7 @@ Packages that integrate with NestJS:
 
 ### Dependency Flow
 
-```
+```typescript
 ┌─────────────────────────────────────────────────────────────┐
 │                    Application Layer                        │
 │  (uses nestjs-config, nestjs-logger, nestjs-sqlite3)       │
@@ -122,7 +122,7 @@ Two implementations:
 
 ## Build Pipeline
 
-```
+```text
 ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
 │   Lint       │───▶│   Build      │───▶│   Test       │
 │  (ESLint)    │    │  (TypeScript)│    │   (Jest)     │
@@ -171,6 +171,6 @@ What are the trade-offs?
 
 ### Active ADRs
 
-| ADR                                                               | Title                                          | Status   |
-| ----------------------------------------------------------------- | ---------------------------------------------- | -------- |
-| [ADR-001](memory-bank/decisions/ADR-001-jest-esm-deep-imports.md) | Jest ESM Mode Cannot Load the `config` Package | Accepted |
+| ADR                                                                   | Title                                          | Status   |
+| --------------------------------------------------------------------- | ---------------------------------------------- | -------- |
+| [ADR-001](decisions/ADR-001-jest-esm-deep-imports.md) | Jest ESM Mode Cannot Load the `config` Package | Accepted |

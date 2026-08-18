@@ -210,6 +210,6 @@ export class UserDAO extends BaseDAO<User> {
 
 ## Related Files
 
-- [`README.md`](packages/node/@homeofthings/nestjs-sqlite3/README.md) - Package documentation
-- [`CHANGELOG.md`](packages/node/@homeofthings/nestjs-sqlite3/CHANGELOG.md) - Version history
-- [`project.json`](packages/node/@homeofthings/nestjs-sqlite3/project.json) - Nx configuration
+- [`README.md`](../../../../packages/node/@homeofthings/nestjs-sqlite3/README.md) - Package documentation
+- [`CHANGELOG.md`](../../../../packages/node/@homeofthings/nestjs-sqlite3/CHANGELOG.md) - Version history
+- [`project.json`](../../../../packages/node/@homeofthings/nestjs-sqlite3/project.json) - Nx configuration

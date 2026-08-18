@@ -2,11 +2,13 @@
 
 ## Git Commits
 
-When creating git commits with AI assistance, always add a `Co-authored-by` trailer identifying both the AI agent and model:
+When creating git commits with AI assistance, always add a `Co-authored-by` trailer identifying the AI agent and model used:
 
+```text
+Co-authored-by: <AgentName> (<Model>) <email>
 ```
-Co-authored-by: Zoo (GLM-5.1) <zoo@z.ai>
-```
+
+Never commit or amend without explicit user request.
 
 ## General
 
