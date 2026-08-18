@@ -1,0 +1,57 @@
+# Architecture Decision Records
+
+This directory contains Architecture Decision Records (ADRs) for the HomeOfThings project.
+
+## What is an ADR?
+
+An ADR is a document that captures an important architectural decision made along with its context and consequences.
+
+## ADR Format
+
+```markdown
+# ADR-XXX: Title
+
+## Status
+[Proposed | Accepted | Deprecated | Superseded]
+
+## Context
+What is the issue we're addressing?
+
+## Decision
+What is the change we're proposing?
+
+## Consequences
+What are the trade-offs?
+```
+
+## Creating a New ADR
+
+1. Copy the template below
+2. Name file as `ADR-NNN-short-title.md` (e.g., `ADR-001-use-nx-monorepo.md`)
+3. Fill in all sections
+4. Set status to "Proposed"
+5. After discussion, update status to "Accepted"
+
+## Template
+
+```markdown
+# ADR-NNN: [Title]
+
+## Status
+Proposed
+
+## Context
+[Describe the situation and problem]
+
+## Decision
+[Describe the decision made]
+
+## Consequences
+[Describe the results and trade-offs]
+```
+
+## Index
+
+| ADR | Title | Status |
+|-----|-------|--------|
+| - | - | - |
