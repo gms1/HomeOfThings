@@ -1,6 +1,6 @@
 # Development Workflows
 
-> **Last Updated**: 2026-04-25
+> **Last Updated**: 2026-08-18
 > **Purpose**: Document build, test, and release workflows
 
 ## Development Setup
@@ -349,11 +349,48 @@ npx nx graph
 
 ### Update Dependencies
 
-```bash
-# Interactive update
-npm run package-upgrade
+#### Automated Upgrade Script
 
-# Or manually
+The project provides a fully automated upgrade script at [`build/sh/package-upgrade.sh`](../build/sh/package-upgrade.sh) that handles the complete dependency upgrade workflow in one run:
+
+```bash
+./build/sh/package-upgrade.sh
+```
+
+**What the script does (in order):**
+
+1. **Pull latest changes** — `git pull --rebase --autostash` (fails if pull fails)
+2. **Check repo cleanliness** — Records whether the repo was clean before starting, to decide auto-commit behavior later
+3. **Nx migration phase:**
+   - `npx nx migrate latest --include=all` — Migrate Nx workspace and all dependencies
+   - `npm install` — Install updated dependencies
+   - Run pending Nx migrations if `migrations.json` exists (`npx nx migrate --run-migrations`)
+   - Clean up `migrations.json`
+   - `npm run all` — Full validation (format, lint, build, test)
+4. **npm-upgrade phase:**
+   - `npx npm-upgrade` — Interactive upgrade of remaining packages
+   - `npm run format:write` — Reformat files after changes
+   - `npm install` — Install newly upgraded packages
+   - `npm run all` — Full validation again
+5. **Auto-commit (conditional):**
+   - If `package.json` or `package-lock.json` changed **and** the repo was clean before the upgrade: automatically commits with message `"chore: upgraded dependencies"` and pushes
+   - If the repo was **not** clean before the upgrade: prints a warning to review and commit manually
+
+**Helper functions** are sourced from [`build/sh/common`](../build/sh/common):
+
+- `die "<message>"` — Print error and exit with code 1
+- `succeeded` — Print "succeeded" and exit with code 0
+
+**Prerequisites:**
+
+- Clean working tree recommended (for auto-commit to work)
+- [`npm-upgrade`](https://www.npmjs.com/package/npm-upgrade) must be available (`npx` will prompt to install if missing)
+- No uncommitted changes that could conflict with the upgrade
+
+#### Manual Dependency Installation
+
+```bash
+# Install a single package
 npm install <package>@<version> --save-dev
 ```
 
@@ -366,4 +403,3 @@ npx nx reset
 # Clean node_modules
 rm -rf node_modules
 npm install
-```

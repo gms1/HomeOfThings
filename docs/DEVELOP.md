@@ -135,7 +135,28 @@ Each package must be configured on npmjs.com to trust this repository:
 
 ## upgrade dependencies
 
-check what can be upgraded using
+### automated upgrade (recommended)
+
+A fully automated upgrade script is provided at `build/sh/package-upgrade.sh`. It handles Nx migration, npm package upgrades, validation, and auto-commit in one run:
+
+```bash
+./build/sh/package-upgrade.sh
+```
+
+The script performs these steps in order:
+
+1. `git pull --rebase --autostash` — pull latest changes
+2. Nx migration: `npx nx migrate latest --include=all` → `npm install` → run migrations → `npm run all`
+3. npm-upgrade: `npx npm-upgrade` → format → `npm install` → `npm run all`
+4. Auto-commit and push if the repo was clean before the upgrade (otherwise prints a warning to commit manually)
+
+> NOTE: the repo should be clean (no uncommitted changes) before running the script, otherwise auto-commit is skipped
+
+### manual upgrade
+
+If you prefer to run the steps individually:
+
+Nx migration:
 
 ```bash
 npx nx migrate latest
@@ -145,7 +166,7 @@ rm -f migrations.json
 npm run all
 ```
 
-commit changes and upgrade remaining packages
+Then upgrade remaining packages:
 
 ```bash
 npx npm-upgrade
@@ -153,11 +174,10 @@ npm install
 npm run all
 ```
 
-optional: upgrade tools/benchmarks/jsonpointerx
+Optional: upgrade tools/benchmarks/jsonpointerx
 
 ```bash
 cd tools/benchmarks/jsonpointerx
 npx npm-upgrade
 npm install
 npm run test
-```

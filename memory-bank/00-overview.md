@@ -1,6 +1,6 @@
 # HomeOfThings - Project Overview
 
-> **Last Updated**: 2026-03-29
+> **Last Updated**: 2026-08-18
 > **Purpose**: High-level project context for AI assistants
 
 ## Project Identity
@@ -80,12 +80,14 @@ node-utils (standalone)
 
 ## Important Files
 
-| File                 | Purpose                                   |
-| -------------------- | ----------------------------------------- |
-| `nx.json`            | Nx workspace configuration                |
-| `tsconfig.base.json` | Shared TypeScript configuration           |
-| `package.json`       | Root package scripts and dev dependencies |
-| `.roomodes`          | AI assistant instructions                 |
+| File                          | Purpose                                           |
+| ----------------------------- | ------------------------------------------------- |
+| `nx.json`                     | Nx workspace configuration                        |
+| `tsconfig.base.json`          | Shared TypeScript configuration                   |
+| `package.json`                | Root package scripts and dev dependencies          |
+| `build/sh/package-upgrade.sh` | Automated dependency upgrade script                |
+| `build/sh/common`             | Shared shell script helpers (`die`, `succeeded`)   |
+| `.roomodes`                   | AI assistant instructions                         |
 
 ## Context for AI Assistants
 
