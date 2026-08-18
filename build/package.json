@@ -6,7 +6,6 @@
     "tslib": "*",
     "chalk": "*",
     "commander": "*",
-    "lcov-total": "*",
     "@nx/devkit": "*",
     "debug": "*",
     "parse-json": "*",

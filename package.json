@@ -77,7 +77,6 @@
     "jest": "30.4.2",
     "jest-environment-node": "^30.4.1",
     "jest-util": "30.4.1",
-    "lcov-total": "^2.1.1",
     "nx": "23.1.1",
     "parse-json": "^8.3.0",
     "prettier": "^3.9.6",
