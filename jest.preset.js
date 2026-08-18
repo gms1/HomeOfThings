@@ -29,19 +29,20 @@ nxPreset.transform = {
   ],
 };
 
-// Absolute path to the config/lib/util.js stub – must be computed here because
-// <rootDir> in moduleNameMapper resolves per-package (to the package directory),
-// not to the workspace root. Individual tests that need specific mock behavior
-// use jest.unstable_mockModule('config/lib/util.js', ...) which takes precedence
-// over this moduleNameMapper entry.
-const configLibUtilStubPath = path.resolve(__dirname, 'jest.mocks/config-lib-util.js');
+// The `config` npm package (node-config) v5 ships .js files that contain ESM
+// syntax (import/export) without "type": "module" in package.json. Jest's ESM
+// mode uses cjs-module-lexer to parse such .js files as CJS, which fails on
+// ESM syntax. This stub allows unit tests to import `config` without loading
+// the real module. Unit tests override this stub with
+// jest.unstable_mockModule('config', ...).
+const configStubPath = path.resolve(__dirname, 'jest.mocks/config.js');
 
 module.exports = {
   ...nxPreset,
   coveragePathIgnorePatterns: ['node_modules', 'test'],
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
-    '^config/lib/util\\.js$': configLibUtilStubPath,
+    '^config$': configStubPath,
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
 };

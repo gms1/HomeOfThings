@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// NOTE: This integration test file is excluded from Jest via testPathIgnorePatterns
+// in jest.config.ts because it needs to load the real `config` module, which
+// cannot be loaded in Jest ESM mode. The `config` npm package ships .js files
+// that use ESM syntax (import/export) without "type": "module" in package.json,
+// causing cjs-module-lexer to fail when parsing them as CJS.
 import { ConfigService } from './config.service';
 import { DIRNAME } from './test';
 
 process.env.NODE_CONFIG = '{}';
 
-// NOTE: This test is excluded via testPathIgnorePatterns in jest.config.ts
-// because config v5 is intentionally dual CJS/ESM — config.js is CJS, config.mjs
-// is ESM, but util.js uses ESM syntax without "type":"module" in package.json.
-// Jest's ESM mode cannot resolve these deep .js imports properly because
-// cjs-module-lexer fails when it encounters ESM syntax in a .js file without
-// "type":"module". This is NOT a bug in config v5; it's a Jest limitation.
-// See ADR-001 in memory-bank/decisions/.
-describe('', () => {
+describe('ConfigService integration', () => {
   let configService: ConfigService;
 
   beforeEach(() => {

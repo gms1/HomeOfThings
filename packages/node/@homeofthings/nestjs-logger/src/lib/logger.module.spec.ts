@@ -29,9 +29,12 @@ jest.unstable_mockModule('winston', () => ({
   },
 }));
 
-jest.unstable_mockModule('config/lib/util.js', () => ({
-  Util: { getPath: jest.fn(), toObject: jest.fn() },
-  Load: { fromEnvironment: jest.fn() },
+jest.unstable_mockModule('config', () => ({
+  default: {
+    util: {
+      loadFileConfigs: jest.fn().mockReturnValue({}),
+    },
+  },
 }));
 
 const { LoggerModule } = await import('./logger.module');

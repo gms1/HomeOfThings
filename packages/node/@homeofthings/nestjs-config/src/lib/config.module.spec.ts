@@ -5,18 +5,13 @@ import { Test } from '@nestjs/testing';
 
 import type { ConfigModuleOptions } from './model';
 
-const mockGetPath = jest.fn();
-const mockToObject = jest.fn((obj: any) => obj);
-const mockScan = jest.fn();
-const mockFromEnvironment = jest.fn();
+const mockLoadFileConfigs = jest.fn();
 
-jest.unstable_mockModule('config/lib/util.js', () => ({
-  Util: {
-    getPath: mockGetPath,
-    toObject: mockToObject,
-  },
-  Load: {
-    fromEnvironment: mockFromEnvironment,
+jest.unstable_mockModule('config', () => ({
+  default: {
+    util: {
+      loadFileConfigs: mockLoadFileConfigs,
+    },
   },
 }));
 
@@ -44,7 +39,7 @@ describe('ConfigModule', () => {
   });
 
   it('for root sync', async () => {
-    mockFromEnvironment.mockReturnValue({ scan: mockScan, config: {} });
+    mockLoadFileConfigs.mockReturnValue({});
     const appModule = await Test.createTestingModule({
       imports: [ConfigModule.forRoot(ConfigModule, givenOptions), ChildModule],
     }).compile();
@@ -58,7 +53,7 @@ describe('ConfigModule', () => {
   });
 
   it('for root async ', async () => {
-    mockFromEnvironment.mockReturnValue({ scan: mockScan, config: {} });
+    mockLoadFileConfigs.mockReturnValue({});
     const appModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRootAsync(ConfigModule, {
@@ -80,7 +75,7 @@ describe('ConfigModule', () => {
   });
 
   it('create', async () => {
-    mockFromEnvironment.mockReturnValue({ scan: mockScan, config: {} });
+    mockLoadFileConfigs.mockReturnValue({});
     const configService = ConfigModule.createConfigService(givenOptions);
     expect(configService).toBeInstanceOf(ConfigServiceClass);
 
