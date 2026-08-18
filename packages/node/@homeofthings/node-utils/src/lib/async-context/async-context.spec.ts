@@ -1,27 +1,27 @@
+import { jest } from '@jest/globals';
+
 const mockConstructor = jest.fn();
 const mockGetStore = jest.fn();
 const mockEnterWith = jest.fn();
 const mockRun = jest.fn();
 
-jest.mock('async_hooks', () => {
-  return {
-    AsyncLocalStorage: mockConstructor.mockImplementation(() => {
-      return { getStore: mockGetStore, enterWith: mockEnterWith, run: mockRun };
-    }),
-  };
-});
+jest.unstable_mockModule('async_hooks', () => ({
+  AsyncLocalStorage: mockConstructor.mockImplementation(() => {
+    return { getStore: mockGetStore, enterWith: mockEnterWith, run: mockRun };
+  }),
+}));
 
-import { AsyncContext } from './async-context';
+const { AsyncContext } = await import('./async-context');
 
 describe('AsyncContext', () => {
   const givenDefault = 42;
-  let asyncContext: AsyncContext<number>;
+  let asyncContext: InstanceType<typeof AsyncContext<number>>;
 
   beforeEach(() => {
-    asyncContext = new AsyncContext(givenDefault);
     mockGetStore.mockClear();
     mockEnterWith.mockClear();
     mockRun.mockClear();
+    asyncContext = new AsyncContext(givenDefault);
   });
 
   it('should get the default value', () => {

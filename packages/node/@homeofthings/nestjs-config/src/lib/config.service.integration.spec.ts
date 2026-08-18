@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// NOTE: This integration test file is excluded from Jest via testPathIgnorePatterns
+// in jest.config.ts because it needs to load the real `config` module, which
+// cannot be loaded in Jest ESM mode. The `config` npm package ships .js files
+// that use ESM syntax (import/export) without "type": "module" in package.json,
+// causing cjs-module-lexer to fail when parsing them as CJS.
 import { ConfigService } from './config.service';
 import { DIRNAME } from './test';
 
 process.env.NODE_CONFIG = '{}';
 
-describe('', () => {
+describe('ConfigService integration', () => {
   let configService: ConfigService;
 
   beforeEach(() => {

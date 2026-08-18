@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { jest } from '@jest/globals';
 
 export const asyncContext = jest.fn();
 export const asyncContextGet = jest.fn();
@@ -9,7 +10,7 @@ const AsyncContext: any = asyncContext.mockImplementation(() => {
   return { get: asyncContextGet, set: asyncContextSet };
 });
 
-jest.mock('@homeofthings/node-utils', () => {
+jest.unstable_mockModule('@homeofthings/node-utils', () => {
   return {
     AsyncContext,
   };

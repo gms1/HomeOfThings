@@ -2,8 +2,11 @@ import { ConfigModule } from '@homeofthings/nestjs-config';
 import { LoggerModule } from '@homeofthings/nestjs-logger';
 import { Module } from '@nestjs/common';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
 import { ServerModule } from '../../../server/server.module';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 @Module({
   imports: [

@@ -1,21 +1,25 @@
 /* eslint-disable no-empty */
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable simple-import-sort/imports */
+import { jest } from '@jest/globals';
+
 import * as mockedLogger from '../test/mocks/logger';
 import * as mockedNodeUtils from '../test/mocks/node-utils';
 import * as mockedSqlite3Orm from '../test/mocks/sqlite3orm';
 /* eslint-enable simple-import-sort/imports */
 
 import { Test } from '@nestjs/testing';
-import { SqlDatabase } from 'sqlite3orm';
+import type { SqlDatabase } from 'sqlite3orm';
 
 import { SQLITE3_DEFAULT_CONNECTION_NAME, Sqlite3ConnectionOptions } from '../model';
-import { ConnectionManager } from './connection-manager';
+
+// Dynamic imports for modules that depend on mocked modules
+const { SqlDatabase: SqlDatabaseClass } = await import('sqlite3orm');
+const { ConnectionManager } = await import('./connection-manager');
 
 describe('ConnectionManager', () => {
   const givenConnectionName = 'test';
-  let connectionManager: ConnectionManager;
+  let connectionManager: InstanceType<typeof ConnectionManager>;
 
   beforeEach(async () => {
     (ConnectionManager as any)._instance = undefined;
@@ -136,7 +140,7 @@ describe('ConnectionManager', () => {
 
     it('should close connection context (commit=true)', async () => {
       mockedNodeUtils.asyncContextGet.mockReturnValue({
-        test: new SqlDatabase(),
+        test: new SqlDatabaseClass(),
       });
       mockedSqlite3Orm.sqlDatabaseClose.mockReturnValue(Promise.resolve());
       await connectionManager.closeConnectionContext(true);
@@ -145,7 +149,7 @@ describe('ConnectionManager', () => {
 
     it('should close connection context (commit=false)', async () => {
       mockedNodeUtils.asyncContextGet.mockReturnValue({
-        test: new SqlDatabase(),
+        test: new SqlDatabaseClass(),
       });
       mockedSqlite3Orm.sqlDatabaseClose.mockReturnValue(Promise.resolve());
       await connectionManager.closeConnectionContext(false);
@@ -178,7 +182,7 @@ describe('ConnectionManager', () => {
     });
 
     it('`getConnection` should succeed inside of connection context if connection already open', async () => {
-      const givenConnection = new SqlDatabase();
+      const givenConnection = new SqlDatabaseClass();
       mockedNodeUtils.asyncContextGet.mockReturnValue({
         test: givenConnection,
       });
@@ -192,7 +196,7 @@ describe('ConnectionManager', () => {
     });
 
     it('`getConnection` should fail for undefined connection name', async () => {
-      const givenConnection = new SqlDatabase();
+      const givenConnection = new SqlDatabaseClass();
       mockedNodeUtils.asyncContextGet.mockReturnValue({
         test: givenConnection,
       });

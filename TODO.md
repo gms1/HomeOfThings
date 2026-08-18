@@ -1,5 +1,8 @@
 # TODOs
 
+These to-do list items are merely notes about what might need to be done, without resulting in any decision.
+Therefore, it should generally be ignored by AI agents, unless the user specifically refers to a task that needs to be done.
+
 - node-sys
   - run tests on windows
 - sqlite3orm

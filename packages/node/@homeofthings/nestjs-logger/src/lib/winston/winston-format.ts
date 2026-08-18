@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import * as supports_color from 'supports-color';
+import supportsColorResult from 'supports-color';
 import * as winston from 'winston';
 
 const colorizer = winston.format.colorize();
@@ -7,7 +7,7 @@ const colorizer = winston.format.colorize();
 // unit test should not depend on the provided terminal
 
 /* istanbul ignore next */
-const supportsColor = (supports_color.stdout || supports_color.stderr || process.env.FORCE_COLOR) && !process.env.NO_COLORS;
+const supportsColor = (supportsColorResult.stdout || supportsColorResult.stderr || process.env.FORCE_COLOR) && !process.env.NO_COLORS;
 
 /* istanbul ignore next */
 const colorizeLevel: (level: string, text: string) => string = supportsColor

@@ -3,10 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
 import { SQL_MEMORY_DB_PRIVATE, SQL_OPEN_DEFAULT, SQL_OPEN_READWRITE, SqlDatabase, SqlDatabaseSettings } from '../..';
 import { failTest } from '../../test';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CIPHER_DB = path.resolve(__dirname, '../fixtures/cipher.db');
 const CIPHER_COMPATIBILITY = 3;
 const CIPHER_KEY = 'sqlite3orm';

@@ -6,7 +6,6 @@ import * as path from 'node:path';
 import { rm, setEcho } from '@homeofthings/node-sys';
 import chalk from 'chalk';
 import { Command } from 'commander';
-import lcov_total from 'lcov-total';
 
 import { APPNAME, die, getWorkspaceDir, log, setApplication } from './utils/app';
 import { writeFile } from './utils/file';
@@ -26,6 +25,16 @@ program
   .command(APPNAME, { isDefault: true })
   .description(`merge coverage reports found in '${coverageDirectory}'`)
   .action(async () => {
+    // lcov-total v2 is ESM-only with no CJS entry point. The package has no
+    // "exports" field, so bare specifier "lcov-total" cannot be resolved by
+    // Node's ESM loader. A deep path import is required instead.
+    // If a public export is added in a future version, switch to:
+    //   import("lcov-total")
+    const lcov_total_module = await import('lcov-total/src/index.js');
+    const lcov_total = lcov_total_module.default as (filename: string) => number;
+    if (typeof lcov_total !== 'function') {
+      die(`lcov-total did not export a callable default — got ${typeof lcov_total}`);
+    }
     try {
       await rm(coverageReport, { force: true });
       const files = await glob(path.join(coverageDirectory, '**', 'lcov.info'));
@@ -39,4 +48,10 @@ program
     log(`succeeded`);
   });
 
-program.parse(process.argv);
+async function main(): Promise<void> {
+  await program.parseAsync(process.argv);
+}
+
+main().catch((err) => {
+  die(`unexpected error: ${err}`);
+});

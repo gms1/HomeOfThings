@@ -1,5 +1,7 @@
 import * as nodeConsole from 'node:console';
 
+import { jest } from '@jest/globals';
+
 import { ProcessError } from './error';
 import { exec, sh } from './exec';
 import { IGNORE, INHERIT } from './options';
@@ -7,7 +9,8 @@ import { IGNORE, INHERIT } from './options';
 const warn = nodeConsole.warn;
 
 describe('exec', () => {
-  let info: jest.SpyInstance<void, [message?: unknown, ...optionalParams: unknown[]], unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let info: any;
 
   beforeAll(async () => {
     info = jest.spyOn(global.console, 'info').mockImplementation(() => {});

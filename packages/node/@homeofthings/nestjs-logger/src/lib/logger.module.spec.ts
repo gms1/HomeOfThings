@@ -1,19 +1,56 @@
-import { Module } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { jest } from '@jest/globals';
+import { Inject, Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
-import { LoggerModule } from './logger.module';
-import { LoggerService } from './logger.service';
-import { LoggerModuleOptions, LogLevel } from './model';
-import { WinstonLogger } from './winston/winston-logger';
+jest.unstable_mockModule('winston', () => ({
+  format: {
+    printf: jest.fn(),
+    padLevels: jest.fn(),
+    colorize: jest.fn(),
+    timestamp: jest.fn(),
+    errors: jest.fn(),
+    combine: jest.fn(),
+  },
+
+  createLogger: jest.fn().mockReturnValue({
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+    verbose: jest.fn(),
+    transports: [],
+    add: jest.fn(),
+  }),
+
+  transports: {
+    Console: jest.fn().mockReturnValue({}),
+    File: jest.fn().mockReturnValue({}),
+  },
+}));
+
+jest.unstable_mockModule('config', () => ({
+  default: {
+    util: {
+      loadFileConfigs: jest.fn().mockReturnValue({}),
+    },
+  },
+}));
+
+const { LoggerModule } = await import('./logger.module');
+const { LoggerService: LoggerServiceClass } = await import('./logger.service');
+const { WinstonLogger } = await import('./winston/winston-logger');
+import type { LoggerModuleOptions } from './model';
+const { LogLevel } = await import('./model');
 
 describe('LoggerModule', () => {
   @Module({
     imports: [LoggerModule.forChild()],
   })
   class ChildModule {
-    static loggerService: LoggerService;
+    static loggerService: typeof LoggerServiceClass;
 
-    constructor(loggerService: LoggerService) {
+    constructor(@Inject(LoggerServiceClass) loggerService: typeof LoggerServiceClass) {
       ChildModule.loggerService = loggerService;
     }
   }
@@ -23,7 +60,7 @@ describe('LoggerModule', () => {
   };
 
   beforeEach(() => {
-    ChildModule.loggerService = undefined;
+    ChildModule.loggerService = undefined as any;
   });
   afterEach(() => {
     LoggerModule.isRegistered = false;
@@ -35,8 +72,8 @@ describe('LoggerModule', () => {
     }).compile();
 
     // get appModule provided instance
-    const loggerService = appModule.get(LoggerService);
-    expect(loggerService).toBeInstanceOf(LoggerService);
+    const loggerService = appModule.get(LoggerServiceClass);
+    expect(loggerService).toBeInstanceOf(LoggerServiceClass);
     expect(loggerService.logger).toBeInstanceOf(WinstonLogger);
 
     // ChildModule should have same instance
@@ -57,8 +94,8 @@ describe('LoggerModule', () => {
     }).compile();
 
     // get appModule provided instance
-    const loggerService = appModule.get(LoggerService);
-    expect(loggerService).toBeInstanceOf(LoggerService);
+    const loggerService = appModule.get(LoggerServiceClass);
+    expect(loggerService).toBeInstanceOf(LoggerServiceClass);
     expect(loggerService.logger).toBeInstanceOf(WinstonLogger);
 
     // ChildModule should have same instance
@@ -67,15 +104,15 @@ describe('LoggerModule', () => {
 
   it('create', async () => {
     const createdLoggerService = LoggerModule.createLoggerService(givenOptions);
-    expect(createdLoggerService).toBeInstanceOf(LoggerService);
+    expect(createdLoggerService).toBeInstanceOf(LoggerServiceClass);
 
     const appModule = await Test.createTestingModule({
       imports: [LoggerModule.forRoot(LoggerModule, {}), ChildModule], // given option are ignored
     }).compile();
 
     // get appModule provided instance
-    const loggerService = appModule.get(LoggerService);
-    expect(loggerService).toBeInstanceOf(LoggerService);
+    const loggerService = appModule.get(LoggerServiceClass);
+    expect(loggerService).toBeInstanceOf(LoggerServiceClass);
     expect(loggerService.logger).toBeInstanceOf(WinstonLogger);
 
     // ChildModule should have same instance

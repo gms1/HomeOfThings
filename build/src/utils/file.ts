@@ -4,7 +4,7 @@ import { promises as fsNode, WriteFileOptions } from 'node:fs';
 
 import { rename } from '@homeofthings/node-sys';
 import * as debugjs from 'debug';
-import parseJson = require('parse-json');
+import parseJson from 'parse-json';
 
 import { SearchReplace, stringSearchAndReplace } from './string';
 

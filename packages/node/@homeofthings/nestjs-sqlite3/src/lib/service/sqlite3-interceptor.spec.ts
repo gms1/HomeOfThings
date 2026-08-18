@@ -1,13 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable simple-import-sort/imports */
+import { jest } from '@jest/globals';
+
 import * as mockedConnectionManager from '../test/mocks/connection-manager';
 /* eslint-enable simple-import-sort/imports */
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { lastValueFrom, of, throwError } from 'rxjs';
 
-import { ConnectionManager } from './connection-manager';
 import { Sqlite3Interceptor } from './sqlite3-interceptor';
+
+// Dynamic imports for modules that depend on mocked modules
+const { ConnectionManager } = await import('./connection-manager');
 
 describe('Sqlite3Interceptor', () => {
   let appModule: TestingModule;

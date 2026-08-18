@@ -4,7 +4,7 @@ import * as nodeProcess from 'node:process';
 import { promisify } from 'node:util';
 
 import { chmodr as externalChmodr } from 'chmodr';
-import externalChownr from 'chownr';
+import { chownr as externalChownr } from 'chownr';
 import * as externMkTemp from 'mktemp';
 import externalMv from 'mv';
 import { Mode as StatsMode } from 'stat-mode';

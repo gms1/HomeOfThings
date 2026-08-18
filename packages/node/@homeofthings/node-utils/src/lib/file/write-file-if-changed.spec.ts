@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 let mockReadFileResult: string | undefined | Error;
 let mockWriteFileResult: undefined | Error;
 
@@ -5,7 +7,7 @@ const mockedReadFile = jest.fn().mockImplementation(() => (mockReadFileResult in
 const mockedWiteFile = jest.fn().mockImplementation(() => (mockWriteFileResult instanceof Error ? Promise.reject(mockWriteFileResult) : Promise.resolve()));
 const mockedMkdir = jest.fn().mockImplementation(() => Promise.resolve());
 
-jest.mock('node:fs', () => ({
+jest.unstable_mockModule('node:fs', () => ({
   promises: {
     readFile: mockedReadFile,
     writeFile: mockedWiteFile,
@@ -13,7 +15,7 @@ jest.mock('node:fs', () => ({
   },
 }));
 
-import { writeFileIfChanged } from './write-file-if-changed';
+const { writeFileIfChanged } = await import('./write-file-if-changed');
 
 describe('writeFileIfChanged', () => {
   beforeEach(() => {

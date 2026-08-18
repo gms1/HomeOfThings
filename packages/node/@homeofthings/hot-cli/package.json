@@ -11,5 +11,8 @@
   },
   "peerDependencies": {
     "@nestjs/common": "*"
+  },
+  "engines": {
+    "node": ">=24.9.0"
   }
 }
