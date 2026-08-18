@@ -13,4 +13,3 @@
 - chore: remove deprecated script
 - chore: upgrade dependencies
 - chore: do not fail on deprecation
-
