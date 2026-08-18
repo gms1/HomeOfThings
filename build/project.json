@@ -52,6 +52,14 @@
         "envFile": "build/.env"
       }
     },
+    "changelog:write": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node dist/build/src/changelog.js build --write",
+        "envFile": "build/.env"
+      }
+    },
     "version-bump": {
       "executor": "nx:run-commands",
       "dependsOn": ["build"],

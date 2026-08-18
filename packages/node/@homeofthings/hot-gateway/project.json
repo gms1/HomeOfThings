@@ -7,18 +7,26 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/@homeofthings/hot-gateway",
         "tsConfig": "packages/node/@homeofthings/hot-gateway/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/hot-gateway/package.json",
         "main": "packages/node/@homeofthings/hot-gateway/src/index.ts",
-        "assets": ["packages/node/@homeofthings/hot-gateway/*.md", "packages/node/@homeofthings/hot-gateway/LICENSE"]
+        "assets": [
+          "packages/node/@homeofthings/hot-gateway/*.md",
+          "packages/node/@homeofthings/hot-gateway/LICENSE"
+        ]
       }
     },
     "lint": {
       "options": {
-        "args": ["**/*.ts", "package.json"]
+        "args": [
+          "**/*.ts",
+          "package.json"
+        ]
       }
     },
     "test": {
@@ -69,6 +77,19 @@
       ],
       "options": {
         "command": "node dist/build/src/publish.js hot-gateway {args.mode}",
+        "envFile": "build/.env"
+      }
+    },
+    "changelog:write": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "node dist/build/src/changelog.js hot-gateway --write",
         "envFile": "build/.env"
       }
     }

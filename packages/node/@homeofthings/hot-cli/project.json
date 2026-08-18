@@ -7,18 +7,26 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/@homeofthings/hot-cli",
         "tsConfig": "packages/node/@homeofthings/hot-cli/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/hot-cli/package.json",
         "main": "packages/node/@homeofthings/hot-cli/src/index.ts",
-        "assets": ["packages/node/@homeofthings/hot-cli/*.md", "packages/node/@homeofthings/hot-cli/LICENSE"]
+        "assets": [
+          "packages/node/@homeofthings/hot-cli/*.md",
+          "packages/node/@homeofthings/hot-cli/LICENSE"
+        ]
       }
     },
     "lint": {
       "options": {
-        "args": ["**/*.ts", "package.json"]
+        "args": [
+          "**/*.ts",
+          "package.json"
+        ]
       }
     },
     "test": {
@@ -69,6 +77,19 @@
       ],
       "options": {
         "command": "node dist/build/src/publish.js hot-cli {args.mode}",
+        "envFile": "build/.env"
+      }
+    },
+    "changelog:write": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "node dist/build/src/changelog.js hot-cli --write",
         "envFile": "build/.env"
       }
     }

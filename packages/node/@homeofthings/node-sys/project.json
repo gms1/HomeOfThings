@@ -7,18 +7,26 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/@homeofthings/node-sys",
         "tsConfig": "packages/node/@homeofthings/node-sys/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/node-sys/package.json",
         "main": "packages/node/@homeofthings/node-sys/src/index.ts",
-        "assets": ["packages/node/@homeofthings/node-sys/*.md", "packages/node/@homeofthings/node-sys/LICENSE"]
+        "assets": [
+          "packages/node/@homeofthings/node-sys/*.md",
+          "packages/node/@homeofthings/node-sys/LICENSE"
+        ]
       }
     },
     "lint": {
       "options": {
-        "args": ["**/*.ts", "package.json"]
+        "args": [
+          "**/*.ts",
+          "package.json"
+        ]
       }
     },
     "test": {
@@ -69,6 +77,19 @@
       ],
       "options": {
         "command": "node dist/build/src/publish.js node-sys {args.mode}",
+        "envFile": "build/.env"
+      }
+    },
+    "changelog:write": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "node dist/build/src/changelog.js node-sys --write",
         "envFile": "build/.env"
       }
     }

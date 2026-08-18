@@ -28,7 +28,9 @@
     "validate-projects": "nx run build:validate-projects --verbose",
     "changelogs": "nx run-many --target=changelog --output-style=static",
     "publish": "nx run-many --target=publish --nxBail --output-style=static",
-    "prepare": "husky"
+    "prepare": "husky",
+    "changelogs:write": "nx run-many --target=changelog:write --output-style=static",
+    "version-bump": "bash build/sh/version-bump.sh"
   },
   "private": true,
   "devDependencies": {

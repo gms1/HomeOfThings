@@ -7,18 +7,26 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/@homeofthings/nestjs-logger",
         "tsConfig": "packages/node/@homeofthings/nestjs-logger/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/nestjs-logger/package.json",
         "main": "packages/node/@homeofthings/nestjs-logger/src/index.ts",
-        "assets": ["packages/node/@homeofthings/nestjs-logger/*.md", "packages/node/@homeofthings/nestjs-logger/LICENSE"]
+        "assets": [
+          "packages/node/@homeofthings/nestjs-logger/*.md",
+          "packages/node/@homeofthings/nestjs-logger/LICENSE"
+        ]
       }
     },
     "lint": {
       "options": {
-        "args": ["**/*.ts", "package.json"]
+        "args": [
+          "**/*.ts",
+          "package.json"
+        ]
       }
     },
     "test": {
@@ -69,6 +77,19 @@
       ],
       "options": {
         "command": "node dist/build/src/publish.js nestjs-logger {args.mode}",
+        "envFile": "build/.env"
+      }
+    },
+    "changelog:write": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "node dist/build/src/changelog.js nestjs-logger --write",
         "envFile": "build/.env"
       }
     }

@@ -7,18 +7,26 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/@homeofthings/node-utils",
         "tsConfig": "packages/node/@homeofthings/node-utils/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/node-utils/package.json",
         "main": "packages/node/@homeofthings/node-utils/src/index.ts",
-        "assets": ["packages/node/@homeofthings/node-utils/*.md", "packages/node/@homeofthings/node-utils/LICENSE"]
+        "assets": [
+          "packages/node/@homeofthings/node-utils/*.md",
+          "packages/node/@homeofthings/node-utils/LICENSE"
+        ]
       }
     },
     "lint": {
       "options": {
-        "args": ["**/*.ts", "package.json"]
+        "args": [
+          "**/*.ts",
+          "package.json"
+        ]
       }
     },
     "test": {
@@ -69,6 +77,19 @@
       ],
       "options": {
         "command": "node dist/build/src/publish.js node-utils {args.mode}",
+        "envFile": "build/.env"
+      }
+    },
+    "changelog:write": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "node dist/build/src/changelog.js node-utils --write",
         "envFile": "build/.env"
       }
     }

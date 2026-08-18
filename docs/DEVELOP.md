@@ -47,21 +47,51 @@ To validate if all is working, you can run `npm run ci`, which will run 'build' 
 
 ### changelog
 
-this logs the changelog relevant commits for each project:
+Print changelog relevant commits for each project (for review):
 
 ```bash
 npm run changelogs
 ```
 
+Write changelogs to CHANGELOG.md files:
+
+```bash
+npm run changelogs:write
+```
+
+> NOTE: `changelogs:write` updates each package's `CHANGELOG.md` with a standardized entry for the current version, deduplicating commits by hash. Entries use the format `- type: message` or `- maintenance release`.
+
 ### version bump
 
-this bumps the version for a project:
+#### automated version bump (recommended)
+
+A fully automated version bump script is provided at `build/sh/version-bump.sh`. It detects changed packages, bumps their versions, propagates bumps through the dependency graph, writes changelogs, and auto-commits:
+
+```bash
+./build/sh/version-bump.sh
+```
+
+The script performs these steps in order:
+
+1. **Check repo state** — Records whether the repo was clean before starting
+2. **Build** — `npm run build` (ensures the version-bump tool is available)
+3. **Phase 1: Detect changes** — For each publishable project, checks for changes in `src/` or `package.json` since the last `release:` commit
+4. **Phase 2: Propagate** — Iteratively bumps packages whose dependencies were bumped (ensures dependents get version updates)
+5. **Phase 3: Write changelogs** — `npm run changelogs:write` updates all CHANGELOG.md files
+6. **Phase 4: Validate** — `npm run all` (format, lint, build, test)
+7. **Phase 5: Auto-commit** — If the repo was clean before the bump: commits with `"chore: bumped versions and updated changelogs"` and pushes. Otherwise prints a warning to commit manually.
+
+> NOTE: the repo should be clean (no uncommitted changes) before running the script, otherwise auto-commit is skipped
+
+#### manual version bump
+
+Bump the version for a single project:
 
 ```bash
 npx nx run <project>:version-bump --ver <new version>|increment|keep
 ```
 
-updates the dependencies in package.json and also logs the changelog relevant commits for this project
+This updates the version in `package.json` and also updates dependency references.
 
 > NOTE: using 'increment' takes the git changes into account to decide which part of the version must be incremented
 
@@ -82,10 +112,10 @@ npx nx run nestjs-logger:version-bump --ver increment
 # npx nx run hot-gateway:version-bump --ver increment
 ```
 
-> NOTE: please update all changelogs after bumping a version
+After bumping, write changelogs:
 
 ```bash
-find packages/ -name "CHANGELOG.md" -exec code {} \;
+npm run changelogs:write
 ```
 
 ### publish
@@ -181,3 +211,28 @@ cd tools/benchmarks/jsonpointerx
 npx npm-upgrade
 npm install
 npm run test
+```
+
+## CHANGELOG format
+
+All CHANGELOG.md files follow a standardized format:
+
+```markdown
+# CHANGELOG for <package-name>
+
+## <version>
+
+- type: message
+- type: message
+
+## <previous-version>
+
+- maintenance release
+```
+
+- Title: `# CHANGELOG for <package-name>`
+- Version headers: `## <version>` (no date ranges)
+- Entries: `- type: message` (using conventional commit types: feat, fix, perf, chore, refactor, revert)
+- Breaking changes: `- type!: message`
+- Maintenance releases: `- maintenance release`
+- Deduplication: the `changelogs:write` command deduplicates by commit hash

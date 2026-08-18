@@ -7,18 +7,26 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/@homeofthings/nestjs-sqlite3",
         "tsConfig": "packages/node/@homeofthings/nestjs-sqlite3/tsconfig.lib.json",
         "packageJson": "packages/node/@homeofthings/nestjs-sqlite3/package.json",
         "main": "packages/node/@homeofthings/nestjs-sqlite3/src/index.ts",
-        "assets": ["packages/node/@homeofthings/nestjs-sqlite3/*.md", "packages/node/@homeofthings/nestjs-sqlite3/LICENSE"]
+        "assets": [
+          "packages/node/@homeofthings/nestjs-sqlite3/*.md",
+          "packages/node/@homeofthings/nestjs-sqlite3/LICENSE"
+        ]
       }
     },
     "lint": {
       "options": {
-        "args": ["**/*.ts", "package.json"]
+        "args": [
+          "**/*.ts",
+          "package.json"
+        ]
       }
     },
     "test": {
@@ -69,6 +77,19 @@
       ],
       "options": {
         "command": "node dist/build/src/publish.js nestjs-sqlite3 {args.mode}",
+        "envFile": "build/.env"
+      }
+    },
+    "changelog:write": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "node dist/build/src/changelog.js nestjs-sqlite3 --write",
         "envFile": "build/.env"
       }
     }

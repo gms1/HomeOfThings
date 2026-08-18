@@ -150,14 +150,44 @@ This runs:
 
 ## Version Management
 
-### Check Current Versions
+### Automated Version Bump (Recommended)
+
+A fully automated version bump script at `build/sh/version-bump.sh` detects changed packages, bumps their versions, propagates through the dependency graph, writes changelogs, validates, and auto-commits:
+
+```bash
+./build/sh/version-bump.sh
+```
+
+**What the script does (in order):**
+
+1. **Check repo state** — Records whether the repo was clean before starting
+2. **Build** — `npm run build` (ensures version-bump tool is available)
+3. **Phase 1: Detect changes** — For each publishable project, checks for changes in `src/` or `package.json` since the last `release:` commit
+4. **Phase 2: Propagate** — Iteratively bumps packages whose dependencies were bumped (ensures dependents get version updates)
+5. **Phase 3: Write changelogs** — `npm run changelogs:write` updates all CHANGELOG.md files
+6. **Phase 4: Validate** — `npm run all` (format, lint, build, test)
+7. **Phase 5: Auto-commit** — If the repo was clean before the bump: commits with `"chore: bumped versions and updated changelogs"` and pushes. Otherwise prints a warning to commit manually.
+
+**Helper functions** are sourced from `build/sh/common`:
+
+- `die "<message>"` — Print error and exit with code 1
+- `succeeded` — Print "succeeded" and exit with code 0
+
+**Prerequisites:**
+
+- Clean working tree recommended (for auto-commit to work)
+- No uncommitted changes that could conflict with the version bump
+
+### Manual Version Bump
+
+#### Check Current Versions
 
 ```bash
 # View package.json versions
 cat packages/node/sqlite3orm/package.json | grep version
 ```
 
-### Version Bump
+#### Version Bump
 
 ```bash
 # Automatic version increment based on commits
@@ -170,7 +200,7 @@ npx nx run <project>:version-bump --ver 2.0.0
 npx nx run <project>:version-bump --ver keep
 ```
 
-### Version Bump Examples
+#### Version Bump Examples
 
 ```bash
 # Foundation packages
@@ -188,13 +218,45 @@ npx nx run nestjs-logger:version-bump --ver increment
 
 ## Changelog Management
 
-### Generate Changelogs
+### Standardized CHANGELOG Format
+
+All CHANGELOG.md files follow a standardized format:
+
+```markdown
+# CHANGELOG for <package-name>
+
+## <version>
+
+- type: message
+- type: message
+
+## <previous-version>
+
+- maintenance release
+```
+
+- Title: `# CHANGELOG for <package-name>`
+- Version headers: `## <version>` (no date ranges)
+- Entries: `- type: message` (using conventional commit types: feat, fix, perf, chore, refactor, revert)
+- Breaking changes: `- type!: message`
+- Maintenance releases: `- maintenance release`
+- Deduplication: the `changelogs:write` command deduplicates by commit hash
+
+### Print Changelogs (Review)
+
+Print changelog relevant commits for each project (for review, may contain duplicates):
 
 ```bash
 npm run changelogs
 ```
 
-This generates changelog entries from conventional commits for each package.
+### Write Changelogs (Update Files)
+
+Write standardized changelog entries to CHANGELOG.md files (deduplicated):
+
+```bash
+npm run changelogs:write
+```
 
 ### Manual Changelog Review
 

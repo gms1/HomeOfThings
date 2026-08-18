@@ -70,13 +70,16 @@ node-utils (standalone)
 
 ## Quick Commands
 
-| Command         | Purpose                                      |
-| --------------- | -------------------------------------------- |
-| `npm run build` | Build all packages                           |
-| `npm run test`  | Run all tests                                |
-| `npm run lint`  | Lint all packages                            |
-| `npm run ci`    | CI validation (build + test + lint check)    |
-| `npm run all`   | Full workflow (build + test + lint + format) |
+| Command              | Purpose                                           |
+| -------------------- | ------------------------------------------------- |
+| `npm run build`      | Build all packages                                |
+| `npm run test`       | Run all tests                                     |
+| `npm run lint`       | Lint all packages                                 |
+| `npm run ci`         | CI validation (build + test + lint check)         |
+| `npm run all`        | Full workflow (build + test + lint + format)      |
+| `npm run changelogs` | Print changelog commits for review                |
+| `npm run changelogs:write` | Write changelogs to CHANGELOG.md files      |
+| `npm run version-bump` | Automated version bump (detect, bump, propagate) |
 
 ## Important Files
 
@@ -86,7 +89,10 @@ node-utils (standalone)
 | `tsconfig.base.json`          | Shared TypeScript configuration                   |
 | `package.json`                | Root package scripts and dev dependencies          |
 | `build/sh/package-upgrade.sh` | Automated dependency upgrade script                |
+| `build/sh/version-bump.sh`    | Automated version bump script                     |
 | `build/sh/common`             | Shared shell script helpers (`die`, `succeeded`)   |
+| `build/src/changelog.ts`      | Changelog generation tool (print + write modes)    |
+| `build/src/version-bump.ts`   | Version bump tool (increment versions + deps)     |
 | `.roomodes`                   | AI assistant instructions                         |
 
 ## Context for AI Assistants

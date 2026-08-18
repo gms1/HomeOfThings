@@ -7,18 +7,26 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/sqlite3orm",
         "tsConfig": "packages/node/sqlite3orm/tsconfig.lib.json",
         "packageJson": "packages/node/sqlite3orm/package.json",
         "main": "packages/node/sqlite3orm/src/index.ts",
-        "assets": ["packages/node/sqlite3orm/*.md", "packages/node/sqlite3orm/LICENSE"]
+        "assets": [
+          "packages/node/sqlite3orm/*.md",
+          "packages/node/sqlite3orm/LICENSE"
+        ]
       }
     },
     "lint": {
       "options": {
-        "args": ["**/*.ts", "package.json"]
+        "args": [
+          "**/*.ts",
+          "package.json"
+        ]
       }
     },
     "test": {
@@ -69,6 +77,19 @@
       ],
       "options": {
         "command": "node dist/build/src/publish.js sqlite3orm {args.mode}",
+        "envFile": "build/.env"
+      }
+    },
+    "changelog:write": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "node dist/build/src/changelog.js sqlite3orm --write",
         "envFile": "build/.env"
       }
     }

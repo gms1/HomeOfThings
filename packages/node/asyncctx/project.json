@@ -7,18 +7,26 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/asyncctx",
         "tsConfig": "packages/node/asyncctx/tsconfig.lib.json",
         "packageJson": "packages/node/asyncctx/package.json",
         "main": "packages/node/asyncctx/src/index.ts",
-        "assets": ["packages/node/asyncctx/*.md", "packages/node/asyncctx/LICENSE"]
+        "assets": [
+          "packages/node/asyncctx/*.md",
+          "packages/node/asyncctx/LICENSE"
+        ]
       }
     },
     "lint": {
       "options": {
-        "args": ["**/*.ts", "package.json"]
+        "args": [
+          "**/*.ts",
+          "package.json"
+        ]
       }
     },
     "test": {
@@ -69,6 +77,19 @@
       ],
       "options": {
         "command": "node dist/build/src/publish.js asyncctx {args.mode}",
+        "envFile": "build/.env"
+      }
+    },
+    "changelog:write": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": "build",
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "node dist/build/src/changelog.js asyncctx --write",
         "envFile": "build/.env"
       }
     }
