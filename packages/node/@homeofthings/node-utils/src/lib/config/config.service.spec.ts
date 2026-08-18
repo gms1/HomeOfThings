@@ -266,6 +266,93 @@ describe('ConfigService', () => {
   });
 });
 
+describe('ConfigService getConfig/getObject', () => {
+  let configService: InstanceType<typeof ConfigService>;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockLoadFileConfigs.mockReturnValue({});
+    configService = new ConfigService({});
+  });
+
+  afterEach(() => {
+    (ConfigService as any)._instance = undefined;
+  });
+
+  it('getConfig should return config object for key', () => {
+    const givenValue = { subKey: 'subValue' };
+    mockLoadFileConfigs.mockReturnValue({ testKey: givenValue });
+    configService.reloadConfig();
+    const value = configService.getConfig('testKey');
+    expect(value).toEqual(givenValue);
+  });
+
+  it('getConfig should return undefined for non-object value', () => {
+    const givenValue = 'foo';
+    mockLoadFileConfigs.mockReturnValue({ testKey: givenValue });
+    configService.reloadConfig();
+    const value = configService.getConfig('testKey');
+    expect(value).toBeUndefined();
+  });
+
+  it('getConfig should return full config when no key is provided', () => {
+    const givenConfig = { key1: 'val1', key2: 'val2' };
+    mockLoadFileConfigs.mockReturnValue(givenConfig);
+    configService.reloadConfig();
+    const value = configService.getConfig('');
+    expect(value).toEqual(givenConfig);
+  });
+
+  it('getObject should return cloned object for key', () => {
+    const givenValue = { subKey: 'subValue' };
+    mockLoadFileConfigs.mockReturnValue({ testKey: givenValue });
+    configService.reloadConfig();
+    const value = configService.getObject('testKey', {});
+    expect(value).toEqual(givenValue);
+    // verify it's a clone, not the same reference
+    expect(value).not.toBe(givenValue);
+  });
+
+  it('getObject should return cloned default value when key not found', () => {
+    const defaultValue = { defaultKey: 'defaultValue' };
+    mockLoadFileConfigs.mockReturnValue({});
+    configService.reloadConfig();
+    const value = configService.getObject('testKey', defaultValue);
+    expect(value).toEqual(defaultValue);
+    expect(value).not.toBe(defaultValue);
+  });
+
+  it('getOptionalObject should return cloned object for key', () => {
+    const givenValue = { subKey: 'subValue' };
+    mockLoadFileConfigs.mockReturnValue({ testKey: givenValue });
+    configService.reloadConfig();
+    const value = configService.getOptionalObject('testKey');
+    expect(value).toEqual(givenValue);
+    expect(value).not.toBe(givenValue);
+  });
+
+  it('getOptionalObject should return undefined for non-object value', () => {
+    const givenValue = 'foo';
+    mockLoadFileConfigs.mockReturnValue({ testKey: givenValue });
+    configService.reloadConfig();
+    const value = configService.getOptionalObject('testKey');
+    expect(value).toBeUndefined();
+  });
+
+  it('getOptionalObject should return undefined when key not found', () => {
+    mockLoadFileConfigs.mockReturnValue({});
+    configService.reloadConfig();
+    const value = configService.getOptionalObject('testKey');
+    expect(value).toBeUndefined();
+  });
+
+  it('should return existing instance when constructed twice', () => {
+    const first = new ConfigService({});
+    const second = new ConfigService({});
+    expect(second).toBe(first);
+  });
+});
+
 describe('ConfigService instantiation', () => {
   const givenNodeConfigEnv = 'envFromNodeConfigEnv';
   const givenNodeEnv = 'envFromNodeEnv';
