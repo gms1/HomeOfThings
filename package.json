@@ -87,7 +87,7 @@
     "tsx": "^4.23.12",
     "typescript": "6.0.3",
     "typescript-eslint": "8.67.0",
-    "verdaccio": "6.9.2"
+    "verdaccio": "6.10.0"
   },
   "dependencies": {
     "@commitlint/cli": "^21.2.2",
@@ -97,7 +97,7 @@
     "@nestjs/core": "^11.2.1",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.2.1",
-    "@nestjs/swagger": "^11.4.6",
+    "@nestjs/swagger": "^11.4.7",
     "@swc/helpers": "0.5.23",
     "bcrypt": "^6.0.0",
     "chalk": "^6.0.0",
