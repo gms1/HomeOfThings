@@ -171,6 +171,6 @@ What are the trade-offs?
 
 ### Active ADRs
 
-| ADR                                                                   | Title                                          | Status   |
-| --------------------------------------------------------------------- | ---------------------------------------------- | -------- |
+| ADR                                                   | Title                                          | Status   |
+| ----------------------------------------------------- | ---------------------------------------------- | -------- |
 | [ADR-001](decisions/ADR-001-jest-esm-deep-imports.md) | Jest ESM Mode Cannot Load the `config` Package | Accepted |

@@ -27,8 +27,7 @@ program
   .action(async () => {
     // lcov-total v2 is ESM-only with no CJS entry point. The package has no
     // "exports" field, so bare specifier "lcov-total" cannot be resolved by
-    // Node's ESM loader. Version is pinned in package.json ("2.1.1" — no
-    // caret) to guard against breakage if the internal path changes.
+    // Node's ESM loader. A deep path import is required instead.
     // If a public export is added in a future version, switch to:
     //   import("lcov-total")
     const lcov_total_module = await import('lcov-total/src/index.js');

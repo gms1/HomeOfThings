@@ -36,6 +36,8 @@ This checkpoint exists because implementing changes and committing them are sepa
 
 ## Coding
 
+- **Test your changes** — After implementing any code change, run the relevant tests to verify correctness before considering the task complete. If a project-level CI command exists (e.g. `npm run ci`), use it to validate. Do not mark work as done until tests pass.
+
 - Do not add comments for trivial code, e.g:
   ```
   // Trim leading whitespace
