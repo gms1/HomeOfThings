@@ -39,9 +39,12 @@ const configStubPath = path.resolve(__dirname, 'jest.mocks/config.js');
 
 module.exports = {
   ...nxPreset,
-  coveragePathIgnorePatterns: ['node_modules', 'test'],
+  // Merge inherited coveragePathIgnorePatterns (if any) with our local entries.
+  coveragePathIgnorePatterns: [...(nxPreset.coveragePathIgnorePatterns || []), 'node_modules', 'test'],
   extensionsToTreatAsEsm: ['.ts'],
+  // Merge inherited moduleNameMapper (if any) with our local mappings.
   moduleNameMapper: {
+    ...(nxPreset.moduleNameMapper || {}),
     '^config$': configStubPath,
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },

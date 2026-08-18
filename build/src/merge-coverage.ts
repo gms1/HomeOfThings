@@ -25,9 +25,17 @@ program
   .command(APPNAME, { isDefault: true })
   .description(`merge coverage reports found in '${coverageDirectory}'`)
   .action(async () => {
-    // lcov-total v2 is ESM-only with no CJS entry point — use dynamic import
-    // (bare specifier 'lcov-total' has no "exports" field, so deep path is required)
-    const lcov_total = (await import('lcov-total/src/index.js')).default as (filename: string) => number;
+    // lcov-total v2 is ESM-only with no CJS entry point. The package has no
+    // "exports" field, so bare specifier "lcov-total" cannot be resolved by
+    // Node's ESM loader. Version is pinned in package.json ("2.1.1" — no
+    // caret) to guard against breakage if the internal path changes.
+    // If a public export is added in a future version, switch to:
+    //   import("lcov-total")
+    const lcov_total_module = await import('lcov-total/src/index.js');
+    const lcov_total = lcov_total_module.default as (filename: string) => number;
+    if (typeof lcov_total !== 'function') {
+      die(`lcov-total did not export a callable default — got ${typeof lcov_total}`);
+    }
     try {
       await rm(coverageReport, { force: true });
       const files = await glob(path.join(coverageDirectory, '**', 'lcov.info'));

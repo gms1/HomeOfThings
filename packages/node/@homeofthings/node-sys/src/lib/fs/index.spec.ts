@@ -125,7 +125,7 @@ describe('fs', () => {
       await fs.chmod(givenFile, givenMode);
       expect(chmodSpy).toHaveBeenCalledTimes(1);
       expect(chmodSpy).toHaveBeenCalledWith(givenFile, givenMode);
-      chmodSpy.mockRestore();
+      chmodSpy.mockReset();
       return;
     }
 
@@ -146,7 +146,7 @@ describe('fs', () => {
       await fs.chmod([givenDir], givenMode);
       expect(chmodSpy).toHaveBeenCalledTimes(1);
       expect(chmodSpy).toHaveBeenCalledWith(givenDir, givenMode);
-      chmodSpy.mockRestore();
+      chmodSpy.mockReset();
       return;
     }
 
@@ -191,7 +191,7 @@ describe('fs', () => {
     await fs.chown([givenFile], givenOwner, givenGroup);
     expect(chownSpy).toHaveBeenCalledTimes(1);
     expect(chownSpy).toHaveBeenCalledWith(givenFile, givenOwner, givenGroup);
-    chownSpy.mockRestore();
+    chownSpy.mockReset();
   });
 
   it('`chown` should call chownr if called recursively', async () => {
