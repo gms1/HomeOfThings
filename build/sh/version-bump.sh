@@ -12,15 +12,26 @@ fi
 # Build so version-bump tool is available
 npm run build || die "build failed"
 
-# Get list of publishable projects with version-bump target
-PROJECTS=$(npx nx show projects --with-target version-bump 2>/dev/null)
+# Get list of publishable projects with version-bump target (skip private and unpublished packages)
+ALL_PROJECTS=$(npx nx show projects --with-target version-bump 2>/dev/null)
+PROJECTS=""
+for P in $ALL_PROJECTS; do
+  P_ROOT=$(npx nx show project "$P" --json 2>/dev/null | jq -r '.root')
+  if [ -f "$P_ROOT/package.json" ] && jq -e '.private' "$P_ROOT/package.json" > /dev/null 2>&1; then
+    echo "Skipping $P (private package)"
+  elif [ -f "$P_ROOT/package.json" ] && [ "$(jq -r '.version' "$P_ROOT/package.json" 2>/dev/null)" = "0.0.0" ]; then
+    echo "Skipping $P (never published, version 0.0.0)"
+  else
+    PROJECTS="$PROJECTS $P"
+  fi
+done
 
 BUMPED=""
 CHANGED=true
 
 # Phase 1: Detect projects with source or package.json changes and bump them
 for PROJECT in $PROJECTS; do
-  PROJECT_ROOT=$(npx nx show project "$PROJECT" --json 2>/dev/null | jq -r '.data.root')
+  PROJECT_ROOT=$(npx nx show project "$PROJECT" --json 2>/dev/null | jq -r '.root')
 
   # Find last release commit for this project
   LAST_RELEASE=$(git log --max-count=1 --grep="^release: ${PROJECT}" --format="%H" -- "$PROJECT_ROOT" 2>/dev/null)
@@ -49,7 +60,7 @@ while [ "$CHANGED" = true ]; do
       *" $PROJECT "*) continue ;;
     esac
 
-    PROJECT_ROOT=$(npx nx show project "$PROJECT" --json 2>/dev/null | jq -r '.data.root')
+    PROJECT_ROOT=$(npx nx show project "$PROJECT" --json 2>/dev/null | jq -r '.root')
     PKG_JSON="${PROJECT_ROOT}/package.json"
 
     # Skip if no package.json
@@ -57,7 +68,7 @@ while [ "$CHANGED" = true ]; do
 
     # Check if any dependency was bumped
     for BUMPED_PROJ in $BUMPED; do
-      BUMPED_ROOT=$(npx nx show project "$BUMPED_PROJ" --json 2>/dev/null | jq -r '.data.root')
+      BUMPED_ROOT=$(npx nx show project "$BUMPED_PROJ" --json 2>/dev/null | jq -r '.root')
       BUMPED_PKG_NAME=$(jq -r '.name' "$BUMPED_ROOT/package.json" 2>/dev/null)
 
       # Check if this project depends on the bumped package
@@ -90,7 +101,7 @@ if [ -n "$(git status --porcelain)" ]; then
     # Build commit message with release: line per project for change detection
     COMMIT_MSG="release: bumped versions and updated changelogs"
     for PROJ in $BUMPED; do
-      PROJ_ROOT=$(npx nx show project "$PROJ" --json 2>/dev/null | jq -r '.data.root')
+      PROJ_ROOT=$(npx nx show project "$PROJ" --json 2>/dev/null | jq -r '.root')
       PROJ_VER=$(jq -r '.version' "$PROJ_ROOT/package.json" 2>/dev/null)
       COMMIT_MSG="${COMMIT_MSG}
 

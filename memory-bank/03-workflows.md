@@ -162,7 +162,7 @@ A fully automated version bump script at `build/sh/version-bump.sh` detects chan
 
 1. **Check repo state** — Records whether the repo was clean before starting
 2. **Build** — `npm run build` (ensures version-bump tool is available)
-3. **Phase 1: Detect changes** — For each publishable project, checks for changes in `src/` or `package.json` since the last `release:` commit
+3. **Phase 1: Detect changes** — For each publishable project (private packages and never-published packages with version `0.0.0` are skipped), checks for changes in `src/` or `package.json` since the last `release:` commit
 4. **Phase 2: Propagate** — Iteratively bumps packages whose dependencies were bumped (ensures dependents get version updates)
 5. **Phase 3: Write changelogs** — `npm run changelogs:write` updates all CHANGELOG.md files
 6. **Phase 4: Validate** — `npm run all` (format, lint, build, test)
