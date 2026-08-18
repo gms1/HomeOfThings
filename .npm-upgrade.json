@@ -1,25 +1,5 @@
 {
   "ignore": {
-    "chalk": {
-      "versions": ">=5.0",
-      "reason": "version 5 is ESM"
-    },
-    "supports-color": {
-      "versions": ">=9.0",
-      "reason": "version 9 is ESM"
-    },
-    "lcov-total": {
-      "versions": ">=2.0",
-      "reason": "version 2 is ESM"
-    },
-    "parse-json": {
-      "versions": ">=6.0",
-      "reason": "version 6 is ESM"
-    },
-    "chownr": {
-      "versions": ">=3.0",
-      "reason": "version 3 is ESM"
-    },
     "typescript": {
       "versions": ">=7.0",
       "reason": "version 7 is not yet supported by ts-jest and typescript-eslint dependencies"

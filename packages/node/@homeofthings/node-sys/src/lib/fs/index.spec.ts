@@ -22,7 +22,7 @@ jest.unstable_mockModule('node:process', () => {
 jest.unstable_mockModule('chownr', () => {
   const actual = jest.requireActual('chownr') as any;
   return {
-    default: jest.fn((...args: any[]) => actual.default(...args)),
+    chownr: jest.fn((...args: any[]) => actual.chownr(...args)),
   };
 });
 
@@ -200,9 +200,9 @@ describe('fs', () => {
     const givenGroup = 1000;
 
     const chownrModule = await import('chownr');
-    const chownrSpy = chownrModule.default as any as jest.Mock;
-    // chownr uses callback-style: chownr(path, uid, gid, callback)
-    // our _chownR = promisify(chownr), so it calls chownr.default with (path, uid, gid, callback)
+    const chownrSpy = chownrModule.chownr as any as jest.Mock;
+    // chownr v3 exports named function: chownr(path, uid, gid, callback)
+    // our _chownR = promisify(chownr), so it calls chownr with (path, uid, gid, callback)
     // we need the mock to call the callback to resolve the promise
     chownrSpy.mockImplementation((...args: any[]) => {
       const callback = args[args.length - 1];

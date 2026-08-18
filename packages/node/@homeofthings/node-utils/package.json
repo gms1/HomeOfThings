@@ -20,7 +20,7 @@
     "url": "https://github.com/gms1/HomeOfThings/issues"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
+    "chalk": "^6.0.0",
     "config": "^5.0.0",
     "type-fest": "^5.8.0",
     "tslib": "^2.8.1",

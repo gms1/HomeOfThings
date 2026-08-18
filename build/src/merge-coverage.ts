@@ -6,7 +6,6 @@ import * as path from 'node:path';
 import { rm, setEcho } from '@homeofthings/node-sys';
 import chalk from 'chalk';
 import { Command } from 'commander';
-import lcov_total from 'lcov-total';
 
 import { APPNAME, die, getWorkspaceDir, log, setApplication } from './utils/app';
 import { writeFile } from './utils/file';
@@ -26,6 +25,9 @@ program
   .command(APPNAME, { isDefault: true })
   .description(`merge coverage reports found in '${coverageDirectory}'`)
   .action(async () => {
+    // lcov-total v2 is ESM-only with no CJS entry point — use dynamic import
+    // (bare specifier 'lcov-total' has no "exports" field, so deep path is required)
+    const lcov_total = (await import('lcov-total/src/index.js')).default as (filename: string) => number;
     try {
       await rm(coverageReport, { force: true });
       const files = await glob(path.join(coverageDirectory, '**', 'lcov.info'));
