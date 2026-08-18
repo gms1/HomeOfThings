@@ -48,4 +48,10 @@ program
     log(`succeeded`);
   });
 
-program.parseAsync(process.argv);
+async function main(): Promise<void> {
+  await program.parseAsync(process.argv);
+}
+
+main().catch((err) => {
+  die(`unexpected error: ${err}`);
+});
