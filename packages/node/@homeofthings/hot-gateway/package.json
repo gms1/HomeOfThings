@@ -20,5 +20,8 @@
     "@nestjs/core": "*",
     "@nestjs/common": "*",
     "@nestjs/platform-express": "*"
+  },
+  "engines": {
+    "node": ">=24.9.0"
   }
 }
