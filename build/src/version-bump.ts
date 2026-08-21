@@ -107,7 +107,7 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
     const projectName = packageJson.name;
 
     const hashMap = loadHashMap(WORKSPACE_DIR);
-    const commits = await gitLogChanges(projectRoot, hashMap);
+    const commits = await gitLogChanges(projectRoot, WORKSPACE_DIR, hashMap);
     const newVersion = getNewVersion(packageJson, version, commits);
 
     const oldVersion = packageJson.version;

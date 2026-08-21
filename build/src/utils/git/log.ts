@@ -36,7 +36,7 @@ function parseGitLogMessageLine(linenr: number, line?: string): string {
 
 export async function gitLog(hashMap: Record<string, string>, ...argc: string[]): Promise<GitCommit[]> {
   const out: string[] = [];
-  await exec('git', 'log', '--pretty=fuller', ...argc)
+  await exec('git', 'log', '--no-merges', '--pretty=fuller', ...argc)
     .setStdOut(out)
     .run();
   let linenr = 0;
@@ -97,14 +97,15 @@ export function gitIsChange(commit: GitCommit): boolean {
   return CHANGELOG_COMMIT_TYPES.includes(commit.type);
 }
 
-export async function gitLogChanges(projectRoot: string, hashMap: Record<string, string> = {}) {
+export async function gitLogChanges(projectRoot: string, workspaceDir: string, hashMap: Record<string, string> = {}) {
   const releaseCommits = await gitLogLastRelease(projectRoot, hashMap);
   const firstCommit = releaseCommits[0];
+  const rootPaths = [path.resolve(workspaceDir, 'package-lock.json'), path.resolve(workspaceDir, 'package.json')];
   let commits: GitCommit[];
   if (firstCommit) {
-    commits = await gitLog(hashMap, `${firstCommit.hash}..`, projectRoot);
+    commits = await gitLog(hashMap, `${firstCommit.hash}..`, projectRoot, ...rootPaths);
   } else {
-    commits = await gitLog(hashMap, projectRoot);
+    commits = await gitLog(hashMap, projectRoot, ...rootPaths);
   }
   return commits.filter((commit) => gitIsChange(commit));
 }

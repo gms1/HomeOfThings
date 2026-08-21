@@ -57,12 +57,15 @@ async function changeLogsCommand(graph: ProjectGraph, projectName: string, write
 // -----------------------------------------------------------------------------------------
 async function changeLog(nxProject: Project, writeMode?: boolean): Promise<Project | undefined> {
   const project = await setProjectPublishable(WORKSPACE_DIR, { ...nxProject } as Project);
-  if (!project) {
+  if (!project || !project.publishable) {
+    if (project?.nonPublishableReasons?.length) {
+      verbose(`skipping ${nxProject.name}: ${project.nonPublishableReasons.join(', ')}`);
+    }
     return project;
   }
 
   const hashMap = loadHashMap(WORKSPACE_DIR);
-  const commits = await gitLogChanges(path.resolve(WORKSPACE_DIR, project.data.root), hashMap);
+  const commits = await gitLogChanges(path.resolve(WORKSPACE_DIR, project.data.root), WORKSPACE_DIR, hashMap);
   if (!commits.length) {
     if (writeMode) {
       // Still write "maintenance release" if there are no changelog-relevant commits but version was bumped
