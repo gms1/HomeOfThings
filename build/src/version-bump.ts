@@ -11,7 +11,7 @@ import { Command } from 'commander';
 
 import { APPNAME, die, getWorkspaceDir, invariant, log, LogLevel, setApplication, verbose, warn } from './utils/app';
 import { readJson, writeJson } from './utils/file';
-import { gitLogChanges, logGitLogChanges } from './utils/git/log';
+import { gitLogChanges, loadHashMap, logGitLogChanges } from './utils/git/log';
 import { GitCommit } from './utils/git/model/commit';
 // -----------------------------------------------------------------------------------------
 // NOTE: call this script using `npx nx run <project>:version-bump --ver <new version>|increment|keep`
@@ -106,7 +106,8 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
     const packageJson = await readJson(packageJsonPath);
     const projectName = packageJson.name;
 
-    const commits = await gitLogChanges(projectRoot);
+    const hashMap = loadHashMap(WORKSPACE_DIR);
+    const commits = await gitLogChanges(projectRoot, hashMap);
     const newVersion = getNewVersion(packageJson, version, commits);
 
     const oldVersion = packageJson.version;

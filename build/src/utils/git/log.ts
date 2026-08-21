@@ -1,10 +1,18 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
 import { exec } from '@homeofthings/node-sys';
 import { logInfo, logVerbose } from '@homeofthings/node-utils';
 
 import { CHANGELOG_COMMIT_TYPES, CommitType, GitCommit } from './model/commit';
 
+function stripCr(line: string | undefined): string | undefined {
+  return line?.replace(/\r/g, '');
+}
+
 function parseGitLogHeaderLine(linenr: number, expect: string, line?: string): string {
-  const words = !line ? undefined : line.match(/^(\S*)\s+(\S.*)?$/)?.slice(1);
+  const stripped = stripCr(line);
+  const words = !stripped ? undefined : stripped.match(/^(\S*)\s+(\S.*)?$/)?.slice(1);
   if (!Array.isArray(words) || words[0] !== expect) {
     throw new Error(`expected line ${linenr} to start with '${expect}', but got: '${line}'`);
   }
@@ -12,20 +20,21 @@ function parseGitLogHeaderLine(linenr: number, expect: string, line?: string): s
 }
 
 function parseGitLogEmptyLine(linenr: number, line?: string): string {
-  if (line?.length !== 0) {
+  const stripped = stripCr(line);
+  if (stripped?.length !== 0) {
     throw new Error(`expected line ${linenr} to be empty, but got: '${line}'`);
   }
-  return line;
+  return stripped;
 }
 
 function parseGitLogMessageLine(linenr: number, line?: string): string {
   if (line === undefined) {
     throw new Error(`expected line ${linenr} to be non-empty, but got undefined`);
   }
-  return line.trimStart();
+  return stripCr(line)!.trimStart();
 }
 
-export async function gitLog(...argc: string[]): Promise<GitCommit[]> {
+export async function gitLog(hashMap: Record<string, string>, ...argc: string[]): Promise<GitCommit[]> {
   const out: string[] = [];
   await exec('git', 'log', '--pretty=fuller', ...argc)
     .setStdOut(out)
@@ -52,6 +61,8 @@ export async function gitLog(...argc: string[]): Promise<GitCommit[]> {
       current.commitdate = parseGitLogHeaderLine(linenr++, 'CommitDate:', out.shift());
       parseGitLogEmptyLine(linenr, out.shift());
       current.title = parseGitLogMessageLine(linenr, out.shift());
+      const shortHash = current.hash.substring(0, 7);
+      current.title = hashMap[current.hash] ?? hashMap[shortHash] ?? current.title;
       const type = current.title.match(/^(feat|fix|perf|refactor|style|build|chore|ci|release|docs|test|revert)(\([^)]*\))?(!)?:/);
       if (!type) {
         // warn('failed to parse commit message: ', current.title);
@@ -75,16 +86,8 @@ export async function gitLog(...argc: string[]): Promise<GitCommit[]> {
   return commits;
 }
 
-export async function gitLogLastRelease(projectRoot: string): Promise<GitCommit[]> {
-  return await gitLog('--max-count=1', '--grep', '^release:', projectRoot);
-}
-
-export async function gitLogFrom(projectRoot: string, firstCommit?: GitCommit): Promise<GitCommit[]> {
-  if (firstCommit) {
-    return await gitLog(`${firstCommit.hash}..`, projectRoot);
-  } else {
-    return await gitLog(projectRoot);
-  }
+export async function gitLogLastRelease(projectRoot: string, hashMap: Record<string, string> = {}): Promise<GitCommit[]> {
+  return await gitLog(hashMap, '--max-count=1', '--grep', '^release:', projectRoot);
 }
 
 export function gitIsChange(commit: GitCommit): boolean {
@@ -94,13 +97,37 @@ export function gitIsChange(commit: GitCommit): boolean {
   return CHANGELOG_COMMIT_TYPES.includes(commit.type);
 }
 
-export async function gitLogChangesFrom(projectRoot: string, firstCommit?: GitCommit): Promise<GitCommit[]> {
-  return (await gitLogFrom(projectRoot, firstCommit)).filter((commit) => gitIsChange(commit));
+export async function gitLogChanges(projectRoot: string, hashMap: Record<string, string> = {}) {
+  const releaseCommits = await gitLogLastRelease(projectRoot, hashMap);
+  const firstCommit = releaseCommits[0];
+  let commits: GitCommit[];
+  if (firstCommit) {
+    commits = await gitLog(hashMap, `${firstCommit.hash}..`, projectRoot);
+  } else {
+    commits = await gitLog(hashMap, projectRoot);
+  }
+  return commits.filter((commit) => gitIsChange(commit));
 }
 
-export async function gitLogChanges(projectRoot: string) {
-  const releaseCommits = await gitLogLastRelease(projectRoot);
-  return gitLogChangesFrom(projectRoot, releaseCommits?.[0]);
+/**
+ * Load a hash mapping file from tmp/changelog-hash-map.json.
+ * The file should contain a JSON object mapping commit hashes to override commit titles.
+ * Keys can be either full commit hashes or short hashes (at least 7 characters).
+ * When a commit title is overridden, its type is re-parsed from the new title.
+ * Commits whose overridden type is not in CHANGELOG_COMMIT_TYPES will be excluded from the changelog.
+ * Example: { "9ecf4dc": "build: restructure project layout", "93ac0db": "fix: correct typo" }
+ */
+export function loadHashMap(workspaceDir: string): Record<string, string> {
+  const hashMapPath = path.resolve(workspaceDir, 'tmp', 'changelog-hash-map.json');
+  try {
+    if (fs.existsSync(hashMapPath)) {
+      const content = fs.readFileSync(hashMapPath, 'utf-8');
+      return JSON.parse(content);
+    }
+  } catch {
+    // ignore errors, return empty map
+  }
+  return {};
 }
 
 export function logGitLogChanges(commits: GitCommit[], publishable = true) {
@@ -108,6 +135,7 @@ export function logGitLogChanges(commits: GitCommit[], publishable = true) {
     logInfo('not yet published:');
   }
   commits.forEach((commit) => {
-    logVerbose(commit.title);
+    const shortHash = commit.hash.substring(0, 7);
+    logVerbose(`${shortHash} ${commit.title}`);
   });
 }

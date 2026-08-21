@@ -11,9 +11,8 @@ import * as debugjs from 'debug';
 
 import { APPNAME, die, getWorkspaceDir, log, setApplication, verbose, warn } from './utils/app';
 import { readTextFile, writeFile, writeTextFile } from './utils/file';
-import { gitLogChanges, logGitLogChanges } from './utils/git/log';
+import { gitLogChanges, loadHashMap, logGitLogChanges } from './utils/git/log';
 import { GitCommit } from './utils/git/model/commit';
-import { CHANGELOG_COMMIT_TYPES } from './utils/git/model/commit';
 import { setProjectPublishable } from './utils/projects/enrich';
 import { Project } from './utils/projects/model/project';
 
@@ -62,7 +61,8 @@ async function changeLog(nxProject: Project, writeMode?: boolean): Promise<Proje
     return project;
   }
 
-  const commits = await gitLogChanges(path.resolve(WORKSPACE_DIR, project.data.root));
+  const hashMap = loadHashMap(WORKSPACE_DIR);
+  const commits = await gitLogChanges(path.resolve(WORKSPACE_DIR, project.data.root), hashMap);
   if (!commits.length) {
     if (writeMode) {
       // Still write "maintenance release" if there are no changelog-relevant commits but version was bumped
