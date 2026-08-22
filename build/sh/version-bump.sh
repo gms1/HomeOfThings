@@ -108,7 +108,6 @@ if [ -n "$(git status --porcelain)" ]; then
 release: ${PROJ} version ${PROJ_VER}"
     done
     git commit -m "$COMMIT_MSG"
-    git push || die "git push failed"
   else
     echo "WARNING: versions/changelogs have changed, but the repo was not clean before the version bump. Please review and commit manually."
   fi

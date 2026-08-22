@@ -84,6 +84,14 @@ async function changeLog(nxProject: Project, writeMode?: boolean): Promise<Proje
 }
 
 // -----------------------------------------------------------------------------------------
+const COMMIT_TYPE_PRIORITY: Record<string, number> = {
+  feat: 1,
+  perf: 2,
+  fix: 3,
+  revert: 4,
+  unknown: 5,
+};
+
 function formatChangelogEntry(version: string, commits: GitCommit[]): string {
   // Deduplicate by commit hash
   const seen = new Set<string>();
@@ -97,29 +105,33 @@ function formatChangelogEntry(version: string, commits: GitCommit[]): string {
 
   const lines: string[] = [];
 
-  if (uniqueCommits.length === 0) {
-    lines.push(`## ${version}`);
-    lines.push('');
+  // Check if all commits are just chore commits (dependency upgrades etc.)
+  const isMaintenance = uniqueCommits.length === 0 || uniqueCommits.every(
+    (commit) => commit.type === 'chore' || commit.type === 'refactor' || commit.type === 'style',
+  );
+
+  lines.push(`## ${version}`);
+  lines.push('');
+
+  if (isMaintenance) {
     lines.push('- maintenance release');
-    lines.push('');
   } else {
-    // Check if all commits are just chore commits (dependency upgrades etc.)
-    const isMaintenance = uniqueCommits.every(
-      (commit) => commit.type === 'chore' || commit.type === 'refactor' || commit.type === 'style',
+    const filteredCommits = uniqueCommits.filter(
+      (commit) => commit.type !== 'chore' && commit.type !== 'refactor' && commit.type !== 'style',
     );
-
-    lines.push(`## ${version}`);
-    lines.push('');
-
-    if (isMaintenance) {
-      lines.push('- maintenance release');
-    } else {
-      for (const commit of uniqueCommits) {
-        lines.push(`- ${commit.title}`);
+    filteredCommits.sort((a, b) => {
+      const priorityA = COMMIT_TYPE_PRIORITY[a.type] ?? 99;
+      const priorityB = COMMIT_TYPE_PRIORITY[b.type] ?? 99;
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
       }
+      return a.title.localeCompare(b.title);
+    });
+    for (const commit of filteredCommits) {
+      lines.push(`- ${commit.title}`);
     }
-    lines.push('');
   }
+  lines.push('');
 
   return lines.join('\n');
 }
