@@ -1,11 +1,5 @@
 # CHANGELOG for @homeofthings/nestjs-config
 
-## 2.2.3
-
-- chore: add node engine >=24.9.0 to packages with ESM dependencies
-- fix: replace deep import into node-config with public API
-- feat: enable ESM Jest mode across all packages
-
 ## 2.2.1 - 2.2.3
 
 - maintenance release

@@ -2,8 +2,7 @@
 
 ## 3.1.1
 
-- chore: add node engine >=24.9.0 to packages with ESM dependencies
-- feat: enable ESM Jest mode across all packages
+- maintenance release
 
 ## 3.1.0
 

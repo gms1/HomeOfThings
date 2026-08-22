@@ -1,10 +1,5 @@
 # CHANGELOG for @homeofthings/nestjs-sqlite3
 
-## 3.0.2
-
-- chore: add node engine >=24.9.0 to packages with ESM dependencies
-- feat: enable ESM Jest mode across all packages
-
 ## 3.0.1 - 3.0.2
 
 - maintenance release

@@ -34,6 +34,6 @@
     "url": "https://github.com/gms1/HomeOfThings/issues"
   },
   "engines": {
-    "node": ">=24.9.0"
+    "node": ">=22.22.2"
   }
 }

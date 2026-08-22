@@ -125,7 +125,7 @@ Packages **without** ESM dependencies (no engine constraint required):
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "engines": { "node": ">=24.9.0" },
+  "engines": { "node": ">=22.22.2" },
   "scripts": {
     "build": "...",
     "test": "..."

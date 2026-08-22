@@ -1,10 +1,5 @@
 # CHANGELOG for asyncctx
 
-## 2.1.7
-
-- feat: upgrade ESM-only packages and fix API changes
-- feat: enable ESM Jest mode across all packages
-
 ## 2.1.0 - 2.1.7
 
 - maintenance release

@@ -1,10 +1,5 @@
 # CHANGELOG for @homeofthings/nestjs-utils
 
-## 2.1.3
-
-- chore: add node engine >=24.9.0 to packages with ESM dependencies
-- feat: enable ESM Jest mode across all packages
-
 ## 2.1.1 - 2.1.3
 
 - maintenance release
