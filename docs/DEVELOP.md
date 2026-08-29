@@ -71,6 +71,12 @@ A fully automated version bump script is provided at `build/sh/version-bump.sh`.
 ./build/sh/version-bump.sh
 ```
 
+To run in interactive mode, which allows overwriting the auto-incremented version for each package:
+
+```bash
+./build/sh/version-bump.sh --interactive   # or -i
+```
+
 The script performs these steps in order:
 
 1. **Check repo state** — Records whether the repo was clean before starting

@@ -1,8 +1,18 @@
 #!/bin/bash
+# Usage: version-bump.sh [-i|--interactive]
+#   -i, --interactive  After incrementing each version, prompt to optionally overwrite it
 BN=$(basename "$0")
 DN=$(dirname "$0")
 . "${DN}/common"
 #--------------------------------------------------------------
+
+# Parse arguments
+INTERACTIVE=false
+for arg in "$@"; do
+  case "$arg" in
+    -i|--interactive) INTERACTIVE=true ;;
+  esac
+done
 
 REPO_WAS_CLEAN=true
 if [ -n "$(git status --porcelain)" ]; then
@@ -128,6 +138,22 @@ for PROJECT in $SORTED_PROJECTS; do
       echo "Bumping $PROJECT (dependency bumped)"
     fi
     npx nx run "$PROJECT:version-bump" --ver increment || die "version-bump failed for $PROJECT"
+
+    # In interactive mode, allow overwriting the incremented version
+    if [ "$INTERACTIVE" = true ]; then
+      PROJECT_PKG="${WORKSPACE_DIR}/${PROJECT_ROOT}/package.json"
+      CURRENT_VER=$(jq -r '.version' "$PROJECT_PKG" 2>/dev/null)
+      echo ""
+      echo "  $PROJECT version bumped to: $CURRENT_VER"
+      read -r -p "  Overwrite version? (leave empty to keep, or enter new version): " OVERWRITE_VER
+      if [ -n "$OVERWRITE_VER" ]; then
+        npx nx run "$PROJECT:version-bump" --ver "$OVERWRITE_VER" || die "version-bump overwrite failed for $PROJECT"
+        NEW_VER=$(jq -r '.version' "$PROJECT_PKG" 2>/dev/null)
+        echo "  $PROJECT version overwritten to: $NEW_VER"
+      fi
+      echo ""
+    fi
+
     BUMPED="$BUMPED $PROJECT"
   else
     echo "Skipping $PROJECT (no changes, no bumped dependencies)"
