@@ -12,3 +12,31 @@ succeeded() {
   echo "succeeded"
   exit 0
 }
+
+# Confirm prompt: asks user a yes/no question
+# Usage: confirm "Continue?" && echo "yes" || echo "no"
+# With optional second arg for default: confirm "Continue?" Y  (default=Y)
+confirm() {
+  local prompt="$1"
+  local default="${2:-}"
+  local options="(y/n)"
+  local default_hint=""
+
+  if [ "$default" = "Y" ] || [ "$default" = "y" ]; then
+    options="(Y/n)"
+    default_hint="Y"
+  elif [ "$default" = "N" ] || [ "$default" = "n" ]; then
+    options="(y/N)"
+    default_hint="N"
+  fi
+
+  while true; do
+    read -r -p "$prompt $options " answer
+    answer="${answer:-$default_hint}"
+    case "$answer" in
+      [Yy]*) return 0 ;;
+      [Nn]*) return 1 ;;
+      *) echo "Please answer yes or no." ;;
+    esac
+  done
+}

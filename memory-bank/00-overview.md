@@ -70,16 +70,18 @@ node-utils (standalone)
 
 ## Quick Commands
 
-| Command                    | Purpose                                          |
-| -------------------------- | ------------------------------------------------ |
-| `npm run build`            | Build all packages                               |
-| `npm run test`             | Run all tests                                    |
-| `npm run lint`             | Lint all packages                                |
-| `npm run ci`               | CI validation (build + test + lint check)        |
-| `npm run all`              | Full workflow (build + test + lint + format)     |
-| `npm run changelogs`       | Print changelog commits for review               |
-| `npm run changelogs:write` | Write changelogs to CHANGELOG.md files           |
-| `npm run version-bump`     | Automated version bump (detect, bump, propagate) |
+| Command                         | Purpose                                                         |
+| ------------------------------- | --------------------------------------------------------------- |
+| `npm run build`                 | Build all packages                                              |
+| `npm run test`                  | Run all tests                                                   |
+| `npm run lint`                  | Lint all packages                                               |
+| `npm run ci`                    | CI validation (validate + format check + lint + build + test)   |
+| `npm run all`                   | Full workflow (validate:fix + format + lint:fix + build + test) |
+| `npm run validate-projects`     | Validate project configs (check only)                           |
+| `npm run validate-projects:fix` | Validate project configs (auto-fix peerDependency mismatches)   |
+| `npm run changelogs`            | Print changelog commits for review                              |
+| `npm run changelogs:write`      | Write changelogs to CHANGELOG.md files                          |
+| `npm run version-bump`          | Automated version bump (detect, bump, propagate)                |
 
 ## Important Files
 

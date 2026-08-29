@@ -3,6 +3,18 @@
     "typescript": {
       "versions": ">=7.0",
       "reason": "version 7 is not yet supported by ts-jest and typescript-eslint dependencies"
+    },
+    "jest": {
+      "versions": ">=30.5.0",
+      "reason": "Jest 30.5.0 regresses ESM module evaluation order on Node 24+, causing TDZ errors with ESM-only packages like chalk@6 (supportsColor before initialization)"
+    },
+    "jest-environment-node": {
+      "versions": ">=30.5.0",
+      "reason": "must stay in sync with jest"
+    },
+    "jest-util": {
+      "versions": ">=30.5.0",
+      "reason": "must stay in sync with jest"
     }
   }
 }

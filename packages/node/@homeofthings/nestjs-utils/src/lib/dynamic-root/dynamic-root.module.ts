@@ -1,5 +1,4 @@
-import { DynamicModule, Type } from '@nestjs/common';
-import { ModuleMetadata } from '@nestjs/common/interfaces';
+import { DynamicModule, ModuleMetadata, Type } from '@nestjs/common';
 import { firstValueFrom, ReplaySubject } from 'rxjs';
 
 import { Constructor } from '../model/common-types';

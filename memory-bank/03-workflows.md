@@ -130,10 +130,11 @@ npm run ci
 
 This runs:
 
-1. Build all packages
-2. Run all tests
+1. Validate projects (check only, no auto-fix)
+2. Check formatting (no fixes)
 3. Check linting (no fixes)
-4. Check formatting (no fixes)
+4. Build all packages
+5. Run all tests
 
 ### Complete Workflow (Local)
 
@@ -143,10 +144,11 @@ npm run all
 
 This runs:
 
-1. Format files
-2. Fix lint issues
-3. Build all packages
-4. Run all tests
+1. Validate projects (with auto-fix for peerDependency mismatches)
+2. Format files
+3. Fix lint issues
+4. Build all packages
+5. Run all tests
 
 ## Version Management
 
@@ -375,6 +377,27 @@ Packages requiring trusted publisher setup:
 npm run ci
 ```
 
+### Project Validation (`validate-projects`)
+
+The `validate-projects` command checks project configurations and root `package.json` consistency:
+
+```bash
+# Check only (used in CI)
+npm run validate-projects
+
+# Auto-fix peerDependency mismatches (used in local workflow)
+npm run validate-projects:fix
+```
+
+**Checks performed:**
+
+- **Root `package.json` peerDependency consistency** — For each package in `peerDependencies`, verifies the version range intersects with the corresponding range in `dependencies` or `devDependencies`. With `--fix`, auto-updates `peerDependencies` to match the `dependencies`/`devDependencies` range.
+- **Project version checks** — Ensures no packages use version `0.0.1`
+- **`project.json` validation** — Schema, build/publish/version-bump/changelog targets, output paths
+- **`tsconfig.json` validation** — `outDir` paths
+
+**Why this matters:** After `npm-upgrade` bumps `dependencies` (e.g., `@nestjs/common` from `^11.2.1` to `^12.0.1`), the `peerDependencies` may still reference the old range (`^11.2.1`), causing `@nx/dependency-checks` lint failures with circular fix warnings. Running `validate-projects:fix` (part of `npm run all`) auto-corrects these mismatches before lint runs.
+
 ## Debugging
 
 ### Run Tests in Debug Mode
@@ -431,6 +454,7 @@ The project provides a fully automated upgrade script at [`build/sh/package-upgr
    - `npm run all` — Full validation (format, lint, build, test)
 4. **npm-upgrade phase:**
    - `npx npm-upgrade` — Interactive upgrade of remaining packages
+   - **Confirmation prompt** — Shows a diff of root `package.json` changes and asks the user to confirm or revert. If declined, `package.json` is reverted and the script aborts.
    - `npm run format:write` — Reformat files after changes
    - `npm install` — Install newly upgraded packages
    - `npm run all` — Full validation again

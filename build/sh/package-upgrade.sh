@@ -18,7 +18,32 @@ rm -f migrations.json
 
 npm run all || die "npm run script 'all' failed after nx migration"
 
+echo "--- saving package.json before npm-upgrade ---"
+PKG_JSON_BACKUP=$(mktemp)
+cp package.json "$PKG_JSON_BACKUP"
+
 npx npm-upgrade || die "npm-upgrade failed"
+
+if ! diff -q package.json "$PKG_JSON_BACKUP" > /dev/null 2>&1; then
+  echo ""
+  echo "--- package.json changes from npm-upgrade ---"
+  diff --unified=0 "$PKG_JSON_BACKUP" package.json || true
+  echo "--------------------------------------------"
+  echo ""
+  if confirm "Accept these dependency changes?" Y; then
+    rm -f "$PKG_JSON_BACKUP"
+  else
+    echo "--- reverting package.json changes ---"
+    cp "$PKG_JSON_BACKUP" package.json
+    rm -f "$PKG_JSON_BACKUP"
+    echo "package.json reverted. Aborting."
+    exit 1
+  fi
+else
+  rm -f "$PKG_JSON_BACKUP"
+  echo "--- no changes from npm-upgrade ---"
+fi
+
 npm run format:write || die "failed to format"
 
 npm install || die "npm install failed after npm-upgrade"

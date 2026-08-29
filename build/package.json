@@ -10,7 +10,8 @@
     "debug": "*",
     "parse-json": "*",
     "glob": "*",
-    "@homeofthings/node-utils": "*"
+    "@homeofthings/node-utils": "*",
+    "semver": "*"
   },
   "main": "./main.js",
   "type": "commonjs"

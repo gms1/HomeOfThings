@@ -9,12 +9,16 @@ import { setEcho } from '@homeofthings/node-sys';
 import { ProjectGraph, readCachedProjectGraph } from '@nx/devkit';
 import { Command } from 'commander';
 import * as debugjs from 'debug';
+import * as semver from 'semver';
 
 import { APPNAME, die, ERRORS, getWorkspaceDir, invariant, log, LogLevel, setApplication, WARNINGS } from './utils/app';
-import { readJson } from './utils/file';
+import { readJson, writeJson } from './utils/file';
 import { glob } from './utils/glob';
 import { setProjectSourcePackageJson } from './utils/projects/enrich';
 import { Project } from './utils/projects/model/project';
+
+// NOTE: call this script using `npx nx run build:validate-projects`
+//       to auto-fix, use `npx nx run build:validate-projects --fix`
 
 // -----------------------------------------------------------------------------------------
 
@@ -28,10 +32,12 @@ const WORKSPACE_DIR = path.resolve(getWorkspaceDir());
 const program = new Command();
 program
   .version('1.0')
+  .option('--fix', 'auto-fix issues where possible')
   .command(APPNAME, { isDefault: true })
   .description('valid project configurations')
   .action(async () => {
-    return validateProjectsCommand(readCachedProjectGraph())
+    const options = program.opts();
+    return validateProjectsCommand(readCachedProjectGraph(), options.fix ?? false)
       .catch((err) => {
         die(`failed: ${err}`);
       })
@@ -42,7 +48,61 @@ program
 program.parse(process.argv);
 
 // -----------------------------------------------------------------------------------------
-async function validateProjectsCommand(graph: ProjectGraph): Promise<void> {
+const DEP_SECTIONS = ['dependencies', 'devDependencies'] as const;
+
+// -----------------------------------------------------------------------------------------
+async function validateRootPackageJson(fix: boolean): Promise<void> {
+  const rootPackageJsonPath = path.join(WORKSPACE_DIR, 'package.json');
+  const rootPackageJson = await readJson(rootPackageJsonPath);
+  const peerDeps = rootPackageJson.peerDependencies ?? {};
+  let needsWrite = false;
+
+  log(`validating root package.json...`);
+
+  for (const [pkgName, peerRange] of Object.entries(peerDeps as Record<string, string>)) {
+    let depRange: string | undefined;
+    let depSection: string | undefined;
+    for (const section of DEP_SECTIONS) {
+      const range = rootPackageJson[section]?.[pkgName];
+      if (range) {
+        depRange = range;
+        depSection = section;
+        break; // prefer dependencies over devDependencies
+      }
+    }
+
+    if (!depRange) {
+      // peer-only dependency, no cross-check needed
+      continue;
+    }
+
+    if (!semver.intersects(peerRange, depRange)) {
+      if (fix) {
+        log(`fixing peerDependency '${pkgName}': '${peerRange}' -> '${depRange}' (matching ${depSection})`);
+        rootPackageJson.peerDependencies[pkgName] = depRange;
+        needsWrite = true;
+      } else {
+        invariant(
+          false,
+          LogLevel.ERROR,
+          `incompatible version ranges for '${pkgName}': ${depSection} has '${depRange}' but peerDependencies has '${peerRange}'`,
+        );
+      }
+    }
+  }
+
+  if (needsWrite) {
+    await writeJson(rootPackageJsonPath, rootPackageJson);
+    log(`updated ${rootPackageJsonPath}`);
+  }
+
+  log(`validating root package.json: done`);
+}
+
+// -----------------------------------------------------------------------------------------
+async function validateProjectsCommand(graph: ProjectGraph, fix: boolean): Promise<void> {
+  await validateRootPackageJson(fix);
+
   const nxWorkspaceLibraryProjects = Object.values(graph.nodes);
 
   for (const nxProject of nxWorkspaceLibraryProjects) {

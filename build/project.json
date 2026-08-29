@@ -44,6 +44,15 @@
         "envFile": "build/.env"
       }
     },
+    "validate-projects:fix": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node dist/build/src/validate-projects.js --fix",
+        "envFile": "build/.env"
+      }
+    },
     "changelog": {
       "executor": "nx:run-commands",
       "dependsOn": ["build"],
