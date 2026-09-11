@@ -140,5 +140,16 @@
   },
   "nx": {
     "includedScripts": []
+  },
+  "allowScripts": {
+    "@homeofthings/sqlite3": true,
+    "@swc/core": true,
+    "bcrypt": true,
+    "dprint": true,
+    "esbuild": true,
+    "nx": true,
+    "oxc-resolver": true,
+    "unrs-resolver": true,
+    "@scarf/scarf": false
   }
 }
