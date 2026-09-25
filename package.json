@@ -79,7 +79,7 @@
     "husky": "^9.1.7",
     "jest": "30.4.2",
     "jest-environment-node": "^30.4.1",
-    "jest-util": "30.4.1",
+    "jest-util": "30.5.1",
     "nx": "23.2.1",
     "parse-json": "^8.3.0",
     "prettier": "^3.9.9",
