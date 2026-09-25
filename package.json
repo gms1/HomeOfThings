@@ -78,7 +78,7 @@
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "husky": "^9.1.7",
     "jest": "30.4.2",
-    "jest-environment-node": "^30.4.1",
+    "jest-environment-node": "^30.5.2",
     "jest-util": "30.4.1",
     "nx": "23.2.1",
     "parse-json": "^8.3.0",
