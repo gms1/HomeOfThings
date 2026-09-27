@@ -16,7 +16,9 @@ npm install || die "npm install failed after nx migration"
 [ ! -f migrations.json ] || npx nx migrate --run-migrations || die "nx migration failed"
 rm -f migrations.json
 
-npm run all || die "npm run script 'all' failed after nx migration"
+if [ -n "$(git status --porcelain)" ]; then
+  npm run all || die "npm run script 'all' failed after nx migration"
+fi
 
 echo "--- saving package.json before npm-upgrade ---"
 PKG_JSON_BACKUP=$(mktemp)
