@@ -59,24 +59,29 @@ export class SqlConnectionPool {
    * @returns A promise
    */
   async open(databaseFile: string, mode: number = SQL_OPEN_DEFAULT, min = 1, max = 0, settings?: SqlDatabaseSettings): Promise<void> {
-    if (this._opening) {
-      try {
-        await this._opening;
+    // serialize concurrent open calls: each caller has to await the open of the
+    // caller before it and may observe state mutated by that open only,
+    // otherwise concurrent opens would interfere with each other
+    const previous = this._opening;
+    let resolveOpen!: () => void;
+    const opened = new Promise<void>((resolve) => (resolveOpen = resolve));
+    this._opening = opened;
+    try {
+      if (previous) {
+        await previous;
         if (this.databaseFile === databaseFile && (mode & ~SQL_OPEN_CREATE) === this.mode) {
           // already opened
           return;
         }
-      } catch (_err) {
-        /* empty */
       }
-    }
-    this._opening = this.openInternal(databaseFile, mode, min, max, settings);
-    try {
-      await this._opening;
+      await this.openInternal(databaseFile, mode, min, max, settings);
     } catch (err) {
       return Promise.reject(err);
     } finally {
-      this._opening = undefined;
+      if (this._opening === opened) {
+        this._opening = undefined;
+      }
+      resolveOpen();
     }
     return;
   }
@@ -90,27 +95,26 @@ export class SqlConnectionPool {
     try {
       this.databaseFile = databaseFile;
       this.mode = mode;
-      this.min = min;
+      this.min = min < 1 ? 1 : min;
       this.max = max;
       this.settings = settings;
       this.inPool.length = 0;
 
+      // use local variables to open all connections: the pool may be closed or reopened
+      // while this open is still in progress
       const promises: Promise<void>[] = [];
-
-      if (this.min < 1) {
-        this.min = 1;
-      }
+      const openMode = mode & ~SQL_OPEN_CREATE;
       let sqldb = new SqlConnectionPoolDatabase();
-      await sqldb.openByPool(this, this.databaseFile, this.mode, this.settings);
+      await sqldb.openByPool(this, databaseFile, mode, settings);
       this.inPool.push(sqldb);
 
-      this.mode &= ~SQL_OPEN_CREATE;
       for (let i = 1; i < this.min; i++) {
         sqldb = new SqlConnectionPoolDatabase();
-        promises.push(sqldb.openByPool(this, this.databaseFile, this.mode, this.settings));
+        promises.push(sqldb.openByPool(this, databaseFile, openMode, settings));
         this.inPool.push(sqldb);
       }
       await Promise.all(promises);
+      this.mode = openMode;
       if (this.name.length) {
         SqlConnectionPool.openNamedPools.set(this.name, this);
       }
