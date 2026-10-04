@@ -49,7 +49,7 @@
     "@nx/workspace": "23.2.1",
     "@swc-node/register": "1.12.1",
     "@swc/cli": "0.8.1",
-    "@swc/core": "1.16.2",
+    "@swc/core": "1.16.13",
     "@swc/jest": "0.2.39",
     "@types/bcrypt": "^6.0.0",
     "@types/chmodr": "^1.0.3",
