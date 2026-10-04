@@ -32,7 +32,7 @@ jobs:
         run: "npm run ci"
 
       - name: Upload jsonpointerx coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           directory: ./coverage/packages/js/jsonpointerx
           flags: "jsonpointerx"
@@ -41,7 +41,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload asyncctx coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           directory: ./coverage/packages/node/asyncctx
           flags: "asyncctx"
@@ -50,7 +50,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload sqlite3orm coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           directory: ./coverage/packages/node/sqlite3orm
           flags: "sqlite3orm"
@@ -59,7 +59,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload node-utils coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           directory: ./coverage/packages/node/@homeofthings/node-utils
           flags: "node-utils"
@@ -68,7 +68,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload node-sys coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           directory: ./coverage/packages/node/@homeofthings/node-sys
           flags: "node-sys"
@@ -77,7 +77,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload nestjs-utils coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-utils
           flags: "nestjs-utils"
@@ -86,7 +86,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload nestjs-config coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-config
           flags: "nestjs-config"
@@ -95,7 +95,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload nestjs-logger coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-logger
           flags: "nestjs-logger"
@@ -104,7 +104,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload nestjs-sqlite3 coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           directory: ./coverage/packages/node/@homeofthings/nestjs-sqlite3
           flags: "nestjs-sqlite3"
