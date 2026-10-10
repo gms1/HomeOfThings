@@ -4,11 +4,13 @@ DN=$(dirname "$0")
 . "${DN}/common"
 #--------------------------------------------------------------
 
-git pull --rebase --autostash || die "git pull failed"
-
 REPO_WAS_CLEAN=true
 if [ -n "$(git status --porcelain)" ]; then
   REPO_WAS_CLEAN=false
+fi
+
+if [ "$REPO_WAS_CLEAN" = true ]; then
+  git pull --rebase --autostash || die "git pull failed"
 fi
 
 npx nx migrate latest --include=all || die "nx migrate failed"

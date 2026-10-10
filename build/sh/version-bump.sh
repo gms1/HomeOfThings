@@ -19,6 +19,10 @@ if [ -n "$(git status --porcelain)" ]; then
   REPO_WAS_CLEAN=false
 fi
 
+if [ "$REPO_WAS_CLEAN" = true ]; then
+  git pull --rebase --autostash || die "git pull failed"
+fi
+
 # Build so version-bump tool is available
 npm run build || die "build failed"
 
