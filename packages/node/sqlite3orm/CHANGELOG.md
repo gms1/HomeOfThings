@@ -1,5 +1,9 @@
 # CHANGELOG for sqlite3orm
 
+## 3.1.2
+
+- fix(sqlite3orm): serialize concurrent SqlConnectionPool opens
+
 ## 3.1.1
 
 - maintenance release

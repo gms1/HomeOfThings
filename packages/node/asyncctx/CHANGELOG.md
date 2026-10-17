@@ -1,5 +1,9 @@
 # CHANGELOG for asyncctx
 
+## 2.1.8
+
+- maintenance release
+
 ## 2.1.0 - 2.1.7
 
 - maintenance release

@@ -1,5 +1,9 @@
 # CHANGELOG for jsonpointerx
 
+## 1.2.8
+
+- maintenance release
+
 ## 1.2.1 - 1.2.7
 
 - maintenance release

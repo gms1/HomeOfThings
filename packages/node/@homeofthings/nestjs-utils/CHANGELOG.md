@@ -1,5 +1,9 @@
 # CHANGELOG for @homeofthings/nestjs-utils
 
+## 2.1.4
+
+- maintenance release
+
 ## 2.1.1 - 2.1.3
 
 - maintenance release

@@ -1,5 +1,9 @@
 # CHANGELOG for @homeofthings/node-utils
 
+## 1.0.8
+
+- maintenance release
+
 ## 1.0.7
 
 - maintenance release
