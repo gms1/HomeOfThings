@@ -141,14 +141,16 @@ for PROJECT in $SORTED_PROJECTS; do
     else
       echo "Bumping $PROJECT (dependency bumped)"
     fi
+    PROJECT_PKG="${WORKSPACE_DIR}/${PROJECT_ROOT}/package.json"
+    OLD_VER=$(jq -r '.version' "$PROJECT_PKG" 2>/dev/null)
+
     npx nx run "$PROJECT:version-bump" --ver increment || die "version-bump failed for $PROJECT"
 
     # In interactive mode, allow overwriting the incremented version
     if [ "$INTERACTIVE" = true ]; then
-      PROJECT_PKG="${WORKSPACE_DIR}/${PROJECT_ROOT}/package.json"
       CURRENT_VER=$(jq -r '.version' "$PROJECT_PKG" 2>/dev/null)
       echo ""
-      echo "  $PROJECT version bumped to: $CURRENT_VER"
+      echo "  $PROJECT version bumped from $OLD_VER to $CURRENT_VER"
       read -r -p "  Overwrite version? (leave empty to keep, or enter new version): " OVERWRITE_VER
       if [ -n "$OVERWRITE_VER" ]; then
         npx nx run "$PROJECT:version-bump" --ver "$OVERWRITE_VER" || die "version-bump overwrite failed for $PROJECT"

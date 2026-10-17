@@ -118,7 +118,7 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
       const [externalPackageVersions, externalPeerDependencyVersions] = await getAllExternalPackageVersions();
       const internalPackageVersions = await getAllInternalPackageVersions(graph, nxProject);
 
-      updatePackageDependencies(packageJson, externalPackageVersions, internalPackageVersions, externalPeerDependencyVersions);
+      updatePackageDependencies(packageJson, internalPackageVersions, externalPackageVersions, externalPeerDependencyVersions);
 
       packageJson.repository = {
         type: 'git',
@@ -192,30 +192,20 @@ async function getAllInternalPackageVersions(graph: ProjectGraph, nxProject: Pro
   return internalPackageVersions;
 }
 
-function updatePackageDependencies(packageJson: any, externalPackageVersions: Dictionary, internaPackageVersions: Dictionary, externalPeerDependencyVersions: Dictionary) {
+function updatePackageDependencies(packageJson: any, internalPackageVersions: Dictionary, externalPackageVersions: Dictionary, externalPeerDependencyVersions: Dictionary) {
   for (const depType of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
     if (!packageJson[depType]) {
       continue;
     }
     const dependencies: { [name: string]: string } = packageJson[depType];
     for (const depPackageName in dependencies) {
-      if (depType === 'peerDependencies') {
-        if (!externalPeerDependencyVersions[depPackageName]) {
-          die(`package '${depPackageName}' is not defined as '${depType}' in root package.json `);
-        }
-        dependencies[depPackageName] = externalPeerDependencyVersions[depPackageName] as string;
-        continue;
-      } else {
-        if (externalPeerDependencyVersions[depPackageName]) {
-          die(`package '${depPackageName}' should be defined as peer dependency but is defined as '${depType}'`);
-        }
-      }
-      if (internaPackageVersions[depPackageName]) {
-        dependencies[depPackageName] = '~' + internaPackageVersions[depPackageName];
+      if (internalPackageVersions[depPackageName]) {
+        dependencies[depPackageName] = '~' + internalPackageVersions[depPackageName];
         continue;
       }
-      if (externalPackageVersions[depPackageName]) {
-        dependencies[depPackageName] = externalPackageVersions[depPackageName] as string;
+      const externalVersion = (externalPeerDependencyVersions[depPackageName] || externalPackageVersions[depPackageName]) as string;
+      if (externalVersion) {
+        dependencies[depPackageName] = externalVersion;
         continue;
       }
       die(`no version found for package '${depPackageName}' in ${depType}`);
