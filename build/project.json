@@ -53,6 +53,15 @@
         "envFile": "build/.env"
       }
     },
+    "sync-deps": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node dist/build/src/sync-deps.js",
+        "envFile": "build/.env"
+      }
+    },
     "changelog": {
       "executor": "nx:run-commands",
       "dependsOn": ["build"],

@@ -183,6 +183,12 @@ npm install <package>@<version> --save-dev
 npm update
 ```
 
+After changing dependency versions in the root `package.json`, synchronize the workspace package manifests:
+
+```bash
+npm run sync-deps
+```
+
 ### Security Audits
 
 ```bash
@@ -214,12 +220,12 @@ This allows consumers to control the NestJS version.
 
 ### Workspace References
 
-Packages reference each other using workspace protocol:
+Packages reference each other by internal package name. The version ranges are kept in sync with the internal package versions by `npm run sync-deps`:
 
 ```json
 {
   "dependencies": {
-    "@homeofthings/nestjs-utils": "workspace:*"
+    "@homeofthings/nestjs-utils": "~1.0.8"
   }
 }
 ```

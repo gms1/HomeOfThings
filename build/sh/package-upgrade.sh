@@ -55,15 +55,19 @@ if [ -n "$(git status --porcelain package-lock.json)" ]; then
   npm audit fix
 fi
 
+# synchronize the dependency versions of all workspace packages
+# with the versions defined in the root package.json
+npm run sync-deps || die "npm run script 'sync-deps' failed after npm-upgrade"
+
 npm run all || die "npm run script 'all' failed after npm-upgrade"
 
-if [ -n "$(git status --porcelain package-lock.json)" ]; then
-  if [ "$REPO_WAS_CLEAN" = true -o "$FORCE_COMMIT" = true ]; then
-    git add package.json package-lock.json
+if [ -n "$(git status --porcelain)" ]; then
+  if [ "$REPO_WAS_CLEAN" = true ]; then
+    git add -A
     git commit -m 'chore: upgraded dependencies'
     git push || die "git push failed"
   else
-    echo "WARNING: package-lock.json has been changed due to upgrading, but the repo was not clean before the upgrade. Please review and commit manually."
+    echo "WARNING: dependencies have been changed due to upgrading, but the repo was not clean before the upgrade. Please review and commit manually."
   fi
 fi
 

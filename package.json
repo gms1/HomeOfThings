@@ -27,6 +27,7 @@
     "merge-coverage": "nx run build:merge-coverage --verbose",
     "validate-projects": "nx run build:validate-projects --verbose",
     "validate-projects:fix": "nx run build:validate-projects:fix --verbose",
+    "sync-deps": "nx run build:sync-deps --verbose",
     "changelogs": "nx run-many --target=changelog --output-style=static",
     "publish": "nx run-many --target=publish --nxBail --output-style=static",
     "prepare": "husky",

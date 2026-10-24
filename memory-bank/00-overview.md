@@ -79,6 +79,7 @@ node-utils (standalone)
 | `npm run all`                   | Full workflow (validate:fix + format + lint:fix + build + test) |
 | `npm run validate-projects`     | Validate project configs (check only)                           |
 | `npm run validate-projects:fix` | Validate project configs (auto-fix peerDependency mismatches)   |
+| `npm run sync-deps`             | Sync package dependency versions with the root package.json     |
 | `npm run changelogs`            | Print changelog commits for review                              |
 | `npm run changelogs:write`      | Write changelogs to CHANGELOG.md files                          |
 | `npm run version-bump`          | Automated version bump (detect, bump, propagate)                |
@@ -95,6 +96,7 @@ node-utils (standalone)
 | `build/sh/common`             | Shared shell script helpers (`die`, `succeeded`) |
 | `build/src/changelog.ts`      | Changelog generation tool (print + write modes)  |
 | `build/src/version-bump.ts`   | Version bump tool (increment versions + deps)    |
+| `build/src/sync-deps.ts`      | Dependency sync tool (sync package manifests)    |
 | `.roomodes`                   | AI assistant instructions                        |
 
 ## Context for AI Assistants

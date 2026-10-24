@@ -457,9 +457,10 @@ The project provides a fully automated upgrade script at [`build/sh/package-upgr
    - **Confirmation prompt** — Shows a diff of root `package.json` changes and asks the user to confirm or revert. If declined, `package.json` is reverted and the script aborts.
    - `npm run format:write` — Reformat files after changes
    - `npm install` — Install newly upgraded packages
+   - `npm run sync-deps` — Synchronize the dependency versions of all workspace packages with the root `package.json` (internal dependencies → `~<version>`, external/peer dependencies → root versions; private packages are skipped)
    - `npm run all` — Full validation again
 5. **Auto-commit (conditional):**
-   - If `package.json` or `package-lock.json` changed **and** the repo was clean before the upgrade: automatically commits with message `"chore: upgraded dependencies"` and pushes
+   - If any files changed (root `package.json`, `package-lock.json`, or package manifests updated by `sync-deps`) **and** the repo was clean before the upgrade: automatically commits with message `"chore: upgraded dependencies"` and pushes
    - If the repo was **not** clean before the upgrade: prints a warning to review and commit manually
 
 **Helper functions** are sourced from [`build/sh/common`](../build/sh/common):
@@ -472,6 +473,17 @@ The project provides a fully automated upgrade script at [`build/sh/package-upgr
 - Clean working tree recommended (for auto-commit to work)
 - [`npm-upgrade`](https://www.npmjs.com/package/npm-upgrade) must be available (`npx` will prompt to install if missing)
 - No uncommitted changes that could conflict with the upgrade
+
+#### Synchronize Dependency Versions
+
+`npm run sync-deps` synchronizes the dependency versions of all workspace packages with the versions defined in the root `package.json`:
+
+- Internal dependencies are pinned to `~<version>` of the referenced internal package
+- External and peer dependencies are set to the versions defined in the root `package.json` (peer versions preferred)
+- The root project and private packages are skipped
+- Dependencies that cannot be resolved are reported as warnings
+
+The tool is invoked automatically at the end of `package-upgrade.sh`, but can also be run manually after changing dependency versions in the root `package.json`.
 
 #### Manual Dependency Installation
 

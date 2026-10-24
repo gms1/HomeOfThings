@@ -5,7 +5,6 @@ import * as path from 'node:path';
 import * as process from 'node:process';
 
 import { setEcho } from '@homeofthings/node-sys';
-import { Dictionary } from '@homeofthings/node-utils';
 import { ProjectGraph, ProjectGraphProjectNode, readCachedProjectGraph } from '@nx/devkit';
 import { Command } from 'commander';
 
@@ -13,6 +12,7 @@ import { APPNAME, die, getWorkspaceDir, invariant, log, LogLevel, setApplication
 import { readJson, writeJson } from './utils/file';
 import { gitLogChanges, loadHashMap, logGitLogChanges } from './utils/git/log';
 import { GitCommit } from './utils/git/model/commit';
+import { getAllExternalPackageVersions, getAllInternalPackageVersions, updatePackageDependencies } from './utils/projects/deps';
 // -----------------------------------------------------------------------------------------
 // NOTE: call this script using `npx nx run <project>:version-bump --ver <new version>|increment|keep`
 
@@ -115,10 +115,13 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
     if (oldVersion !== newVersion) {
       packageJson.version = newVersion;
 
-      const [externalPackageVersions, externalPeerDependencyVersions] = await getAllExternalPackageVersions();
-      const internalPackageVersions = await getAllInternalPackageVersions(graph, nxProject);
+      const [externalPackageVersions, externalPeerDependencyVersions] = await getAllExternalPackageVersions(WORKSPACE_DIR);
+      const internalPackageVersions = await getAllInternalPackageVersions(WORKSPACE_DIR, graph, nxProject);
 
-      updatePackageDependencies(packageJson, internalPackageVersions, externalPackageVersions, externalPeerDependencyVersions);
+      const unresolvedPackages = updatePackageDependencies(packageJson, internalPackageVersions, externalPackageVersions, externalPeerDependencyVersions);
+      if (unresolvedPackages.length) {
+        die(`no version found for package(s) '${unresolvedPackages.join("', '")}'`);
+      }
 
       packageJson.repository = {
         type: 'git',
@@ -156,59 +159,5 @@ async function bumpPackageVersion(graph: ProjectGraph, nxProject: ProjectGraphPr
     return;
   } catch (err) {
     return Promise.reject(err);
-  }
-}
-
-async function getAllExternalPackageVersions(): Promise<[Dictionary, Dictionary]> {
-  const rootPackageJson = await readJson(path.resolve(WORKSPACE_DIR, 'package.json'));
-  const externalPeerDependencyVersions = Object.assign({}, rootPackageJson.peerDependencies);
-  const externalPackageVersions = Object.assign(
-    {},
-    rootPackageJson.optionalDependencies,
-    rootPackageJson.devDependencies,
-    rootPackageJson.dependencies,
-    rootPackageJson.peerDependencies,
-  );
-  return [externalPackageVersions, externalPeerDependencyVersions];
-}
-
-async function getAllInternalPackageVersions(graph: ProjectGraph, nxProject: ProjectGraphProjectNode): Promise<Dictionary> {
-  const internalPackageVersions: Dictionary = {};
-  for (const otherProjectName in graph.nodes) {
-    const otherNxProject = graph.nodes[otherProjectName] as ProjectGraphProjectNode;
-    if (otherNxProject.data.root === nxProject.data.root) {
-      continue;
-    }
-    const otherProjectPackageJson = path.resolve(WORKSPACE_DIR, otherNxProject.data.root, 'package.json');
-    if (!fs.existsSync(otherProjectPackageJson)) {
-      continue;
-    }
-    const otherPackageJson = await readJson(otherProjectPackageJson);
-    if (!otherPackageJson.name || !otherPackageJson.version || otherPackageJson.version === '0.0.0') {
-      continue;
-    }
-    internalPackageVersions[otherPackageJson.name] = otherPackageJson.version;
-  }
-  return internalPackageVersions;
-}
-
-function updatePackageDependencies(packageJson: any, internalPackageVersions: Dictionary, externalPackageVersions: Dictionary, externalPeerDependencyVersions: Dictionary) {
-  for (const depType of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
-    if (!packageJson[depType]) {
-      continue;
-    }
-    const dependencies: { [name: string]: string } = packageJson[depType];
-    for (const depPackageName in dependencies) {
-      if (internalPackageVersions[depPackageName]) {
-        dependencies[depPackageName] = '~' + internalPackageVersions[depPackageName];
-        continue;
-      }
-      const externalVersion = (externalPeerDependencyVersions[depPackageName] || externalPackageVersions[depPackageName]) as string;
-      if (externalVersion) {
-        dependencies[depPackageName] = externalVersion;
-        continue;
-      }
-      die(`no version found for package '${depPackageName}' in ${depType}`);
-    }
   }
 }

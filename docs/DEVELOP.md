@@ -173,7 +173,7 @@ Each package must be configured on npmjs.com to trust this repository:
 
 ### automated upgrade (recommended)
 
-A fully automated upgrade script is provided at `build/sh/package-upgrade.sh`. It handles Nx migration, npm package upgrades, validation, and auto-commit in one run:
+A fully automated upgrade script is provided at `build/sh/package-upgrade.sh`. It handles Nx migration, npm package upgrades, dependency-version synchronization, validation, and auto-commit in one run:
 
 ```bash
 ./build/sh/package-upgrade.sh
@@ -183,10 +183,12 @@ The script performs these steps in order:
 
 1. `git pull --rebase --autostash` — pull latest changes
 2. Nx migration: `npx nx migrate latest --include=all` → `npm install` → run migrations → `npm run all`
-3. npm-upgrade: `npx npm-upgrade` → format → `npm install` → `npm run all`
+3. npm-upgrade: `npx npm-upgrade` → format → `npm install` → `npm run sync-deps` → `npm run all`
 4. Auto-commit and push if the repo was clean before the upgrade (otherwise prints a warning to commit manually)
 
 > NOTE: the repo should be clean (no uncommitted changes) before running the script, otherwise auto-commit is skipped
+
+> NOTE: `npm run sync-deps` synchronizes the dependency versions of all workspace packages with the versions defined in the root `package.json` — internal dependencies are pinned to `~<version>` of the internal package, external and peer dependencies to the root versions; private packages are skipped
 
 ### manual upgrade
 
@@ -207,6 +209,7 @@ Then upgrade remaining packages:
 ```bash
 npx npm-upgrade
 npm install
+npm run sync-deps
 npm run all
 ```
 
