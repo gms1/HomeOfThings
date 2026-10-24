@@ -1,5 +1,9 @@
 # CHANGELOG for @homeofthings/nestjs-sqlite3
 
+## 3.0.4
+
+- maintenance release
+
 ## 3.0.3
 
 - maintenance release
