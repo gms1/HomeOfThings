@@ -12,6 +12,29 @@ import { Project } from './model/project';
 const debug = debugjs.default('build:projects:enrich');
 
 /*
+ * resolve the build output directory of a project
+ * NOTE: explicitly configured targets (e.g. @nx/js:tsc) provide the output path
+ *       in "options.outputPath", while targets inferred by plugins (e.g. @nx/rollup
+ *       with nx >= 24) only provide the resolved "outputs" in the project graph
+ */
+function getBuildOutputDir(project: Project): any {
+  const outputPath: string | undefined = project.data?.targets?.build?.options?.outputPath;
+  if (outputPath) {
+    return outputPath;
+  }
+  const outputs: string[] = project.data?.targets?.build?.outputs ?? [];
+  for (const output of outputs) {
+    const relative = output.replace(/^\{workspaceRoot\}\//, '');
+    // resolved outputs may also be file patterns (e.g. "{options.outputFile}"); we
+    // skip patterns still containing expressions and only accept plain directories
+    if (!relative.includes('{')) {
+      return relative;
+    }
+  }
+  return undefined;
+}
+
+/*
  * set source package.json
  */
 export async function setProjectSourcePackageJson(workspaceRootDir: string, project: Project): Promise<Project | undefined> {
@@ -25,8 +48,11 @@ export async function setProjectSourcePackageJson(workspaceRootDir: string, proj
     return undefined;
   }
 
-  project.outputDir = project.data?.targets?.build?.options?.outputPath;
-  invariant(project.outputDir, LogLevel.FATAL, `Could not find "build.options.outputPath" of project "${project.name}". Is project.json configured  correctly?`);
+  // NOTE: with nx >= 24, targets may be inferred by plugins (e.g. @nx/rollup) instead of
+  //       being defined explicitly in project.json; in that case there are no target options,
+  //       but the resolved outputs of the target are available in the project graph
+  project.outputDir = getBuildOutputDir(project);
+  invariant(project.outputDir, LogLevel.FATAL, `Could not resolve build output path of project "${project.name}". Is project.json or the inferred target configured  correctly?`);
 
   project.sourcePackageJsonPath = path.resolve(workspaceRootDir, project.data.root, 'package.json');
   if (!(await fs.exists(project.sourcePackageJsonPath))) {

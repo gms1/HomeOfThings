@@ -35,7 +35,7 @@ export default [
       '@nx/dependency-checks': [
         'error',
         {
-          ignoredFiles: ['{projectRoot}/rollup.config.{js,ts,mjs,mts}'],
+          ignoredFiles: ['{projectRoot}/rollup.config.{js,ts,mjs,mts,cjs,cts}'],
         },
       ],
     },

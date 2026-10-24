@@ -5,31 +5,9 @@
   "projectType": "library",
   "tags": [],
   "targets": {
-    "build": {
-      "executor": "@nx/rollup:rollup",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/packages/jsonpointerx",
-        "main": "packages/js/jsonpointerx/src/index.ts",
-        "tsConfig": "packages/js/jsonpointerx/tsconfig.lib.json",
-        "assets": [],
-        "project": "packages/js/jsonpointerx/package.json",
-        "compiler": "swc",
-        "format": [
-          "cjs",
-          "esm"
-        ],
-        "sourceMap": true
-      }
-    },
     "lint": {
       "options": {
-        "args": [
-          "**/*.ts",
-          "package.json"
-        ]
+        "args": ["**/*.ts", "package.json"]
       }
     },
     "test": {

@@ -154,9 +154,25 @@ async function validateProject(inputProject: Project) {
   }
 
   // validate targets.build command
+  // NOTE: with nx >= 24 the build target may be inferred by a plugin (e.g. @nx/rollup)
+  //       instead of being defined explicitly in project.json; in that case the
+  //       resolved output path is taken from the project graph
   const buildTarget = projectJson.targets?.build;
-  invariant(buildTarget, LogLevel.ERROR, `target named 'build' not in project.json '${projectJsonPath}'`);
-  if (buildTarget && project.sourcePackageJson) {
+  const inferredBuildTarget = !buildTarget && project.data?.targets?.build;
+  invariant(
+    buildTarget || inferredBuildTarget,
+    LogLevel.ERROR,
+    `target named 'build' not found in project.json '${projectJsonPath}' nor inferred in the project graph`,
+  );
+  if (inferredBuildTarget) {
+    const outputPath = project.outputDir;
+    const expectedOutputPath = project.name === 'build' ? `dist/build` : `dist/packages/${project.sourcePackageJson.name}`;
+    invariant(
+      outputPath === expectedOutputPath,
+      LogLevel.ERROR,
+      `build target resolves output path '${outputPath}' instead of '${expectedOutputPath}' of project '${projectJsonPath}'`,
+    );
+  } else if (buildTarget && project.sourcePackageJson) {
     const outputPath = buildTarget.options.outputPath;
     const expectedOutputPath = project.name === 'build' ? `dist/build` : `dist/packages/${project.sourcePackageJson.name}`;
     invariant(

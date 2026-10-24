@@ -102,8 +102,18 @@ JsonPointer.parse('/foo/bar').set(doc, 'qux');
 - Follows RFC6901 specification
 - High performance implementation
 
+## Nx Build Target (Inferred, since Nx 24)
+
+The `build` target is **inferred** by `@nx/rollup/plugin` (registered in [`nx.json`](../../../nx.json)); it is NOT defined in `project.json` anymore.
+
+- Build options (`outputPath`, `main`, `tsConfig`, `compiler: 'swc'`, `format: ['cjs', 'esm']`, `sourceMap`) live in [`rollup.config.cjs`](../../../packages/js/jsonpointerx/rollup.config.cjs)
+- The resolved output path is only visible in the project graph (`build.outputs`), not in `build.options.outputPath`
+- The build tooling (`build/src/utils/projects/enrich.ts`, `build/src/validate-projects.ts`) resolves the output path from `options.outputPath` **or** the graph's resolved `outputs`
+- The `@nx/dependency-checks` eslint rule in [`eslint.config.mjs`](../../../packages/js/jsonpointerx/eslint.config.mjs) ignores `rollup.config.{js,ts,mjs,mts,cjs,cts}` so `@nx/rollup` is not added to the runtime `dependencies`
+
 ## Related Files
 
 - [`README.md`](../../../packages/js/jsonpointerx/README.md) - Package documentation
 - [`CHANGELOG.md`](../../../packages/js/jsonpointerx/CHANGELOG.md) - Version history
 - [`project.json`](../../../packages/js/jsonpointerx/project.json) - Nx configuration
+- [`rollup.config.cjs`](../../../packages/js/jsonpointerx/rollup.config.cjs) - Inferred build target options

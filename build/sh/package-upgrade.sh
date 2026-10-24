@@ -58,7 +58,7 @@ fi
 npm run all || die "npm run script 'all' failed after npm-upgrade"
 
 if [ -n "$(git status --porcelain package-lock.json)" ]; then
-  if [ "$REPO_WAS_CLEAN" = true ]; then
+  if [ "$REPO_WAS_CLEAN" = true -o "$FORCE_COMMIT" = true ]; then
     git add package.json package-lock.json
     git commit -m 'chore: upgraded dependencies'
     git push || die "git push failed"
