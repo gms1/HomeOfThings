@@ -3,26 +3,26 @@
   "description": "HomeOfThings - hot-server",
   "version": "0.0.0",
   "dependencies": {
-    "@nestjs/passport": "*",
-    "@nestjs/swagger": "*",
-    "bcrypt": "*",
-    "class-transformer": "*",
-    "class-validator": "*",
-    "express": "*",
-    "express-session": "*",
-    "@homeofthings/nestjs-utils": "*",
-    "@homeofthings/nestjs-config": "*",
-    "@homeofthings/nestjs-logger": "*",
-    "@homeofthings/nestjs-sqlite3": "*",
-    "passport": "*",
-    "passport-local": "*",
-    "sqlite3orm": "*",
-    "tslib": "*",
-    "@homeofthings/node-utils": "*"
+    "@nestjs/passport": "^12.0.0",
+    "@nestjs/swagger": "^12.0.4",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "express": "5.3.0",
+    "express-session": "^1.19.0",
+    "@homeofthings/nestjs-utils": "~2.1.4",
+    "@homeofthings/nestjs-config": "~2.2.4",
+    "@homeofthings/nestjs-logger": "~2.1.4",
+    "@homeofthings/nestjs-sqlite3": "~3.0.3",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "sqlite3orm": "~3.1.2",
+    "tslib": "^2.8.1",
+    "@homeofthings/node-utils": "~1.0.8"
   },
   "peerDependencies": {
-    "@nestjs/common": "*",
-    "@nestjs/core": "*"
+    "@nestjs/common": "^12.2.0",
+    "@nestjs/core": "^12.2.0"
   },
   "engines": {
     "node": ">=22.22.2"

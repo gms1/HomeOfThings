@@ -3,23 +3,23 @@
   "description": "HomeOfThings - gateway",
   "version": "0.0.0",
   "dependencies": {
-    "@nestjs/swagger": "*",
-    "@homeofthings/nestjs-config": "*",
-    "@homeofthings/nestjs-logger": "*",
+    "@nestjs/swagger": "^12.0.4",
+    "@homeofthings/nestjs-config": "~2.2.4",
+    "@homeofthings/nestjs-logger": "~2.1.4",
     "@homeofthings/hot-server": "*",
-    "debug": "*",
-    "express": "*",
-    "nestjs-console": "*",
-    "commander": "*",
-    "helmet": "*",
-    "tslib": "*",
-    "@homeofthings/node-utils": "*",
+    "debug": "^4.4.3",
+    "express": "5.3.0",
+    "nestjs-console": "^10.0.0",
+    "commander": "^15.0.0",
+    "helmet": "^8.3.0",
+    "tslib": "^2.8.1",
+    "@homeofthings/node-utils": "~1.0.8",
     "escape-html": "^1.0.3"
   },
   "peerDependencies": {
-    "@nestjs/core": "*",
-    "@nestjs/common": "*",
-    "@nestjs/platform-express": "*"
+    "@nestjs/core": "^12.2.0",
+    "@nestjs/common": "^12.2.0",
+    "@nestjs/platform-express": "^12.2.0"
   },
   "engines": {
     "node": ">=22.22.2"
