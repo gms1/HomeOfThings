@@ -42,7 +42,7 @@
     "@nx/devkit": "24.0.2",
     "@nx/esbuild": "24.0.2",
     "@nx/eslint": "24.0.2",
-    "@nx/eslint-plugin": "24.0.2",
+    "@nx/eslint-plugin": "24.0.3",
     "@nx/jest": "24.0.2",
     "@nx/js": "24.0.2",
     "@nx/node": "24.0.2",
