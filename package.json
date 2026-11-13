@@ -46,7 +46,7 @@
     "@nx/jest": "24.0.5",
     "@nx/js": "24.0.5",
     "@nx/node": "24.0.5",
-    "@nx/rollup": "24.0.5",
+    "@nx/rollup": "24.0.6",
     "@nx/workspace": "24.0.5",
     "@swc-node/register": "1.12.1",
     "@swc/cli": "0.8.2",
