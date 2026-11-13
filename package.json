@@ -97,7 +97,7 @@
     "@commitlint/config-conventional": "^21.2.4",
     "@homeofthings/sqlite3": "7.0.7",
     "@nestjs/common": "^12.4.0",
-    "@nestjs/core": "^12.4.0",
+    "@nestjs/core": "^12.4.2",
     "@nestjs/passport": "^12.0.1",
     "@nestjs/platform-express": "^12.4.0",
     "@nestjs/swagger": "^12.1.1",
