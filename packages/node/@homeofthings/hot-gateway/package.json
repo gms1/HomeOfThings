@@ -3,7 +3,7 @@
   "description": "HomeOfThings - gateway",
   "version": "0.0.0",
   "dependencies": {
-    "@nestjs/swagger": "^12.1.1",
+    "@nestjs/swagger": "^12.1.2",
     "@homeofthings/nestjs-config": "~2.2.5",
     "@homeofthings/nestjs-logger": "~2.1.5",
     "@homeofthings/hot-server": "*",
@@ -17,9 +17,9 @@
     "escape-html": "^1.0.3"
   },
   "peerDependencies": {
-    "@nestjs/core": "^12.4.0",
-    "@nestjs/common": "^12.4.0",
-    "@nestjs/platform-express": "^12.4.0"
+    "@nestjs/core": "^12.5.0",
+    "@nestjs/common": "^12.5.0",
+    "@nestjs/platform-express": "^12.5.0"
   },
   "engines": {
     "node": ">=22.22.2"
