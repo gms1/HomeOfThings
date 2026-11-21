@@ -21,8 +21,8 @@
     "@homeofthings/node-utils": "~1.0.8"
   },
   "peerDependencies": {
-    "@nestjs/common": "^12.5.0",
-    "@nestjs/core": "^12.5.0"
+    "@nestjs/common": "^12.6.0",
+    "@nestjs/core": "^12.6.0"
   },
   "engines": {
     "node": ">=22.22.2"

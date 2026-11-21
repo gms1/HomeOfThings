@@ -22,7 +22,7 @@
   "dependencies": {
     "chalk": "^6.0.1",
     "config": "^5.0.1",
-    "type-fest": "^5.10.0",
+    "type-fest": "^6.0.3",
     "tslib": "^2.9.1",
     "debug": "^4.4.3"
   },
